@@ -1,0 +1,34 @@
+/* Finerio-logo */
+#finerio-img {
+    max-width: 20%;
+}
+/* Btn-social-media */
+.icon-social-media{
+	width: 40%;
+    height: auto;
+    margin-right: .5rem;
+}
+.btn-facebook{
+	background-color: #4267b2;
+	color: #E8EAF6;
+	border: none;
+}
+.btn-facebook:hover{
+	color: #4267b2;
+	background-color: #E8EAF6;
+}
+.btn-google-plus{
+	background-color: #d34836;
+	color: #FFEBEE;
+	border: none;
+}
+.btn-google-plus:hover{
+	background-color: #FFEBEE;
+	color: #d34836;
+}
+
+/* Responsive mobile devices */
+@media (min-width: 320px) and (max-width: 425px) {
+	#finerio-img{max-width: 60%;}
+	.btn-facebook, .btn-google-plus{margin-top: 1rem;}
+}
