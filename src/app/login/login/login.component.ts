@@ -62,6 +62,6 @@ export class LoginComponent implements OnInit {
       btn_facebook_blue.classList.add('d-none');
       btn_facebook_white.classList.remove('d-none');
     }
-    }
+
   }
 }
