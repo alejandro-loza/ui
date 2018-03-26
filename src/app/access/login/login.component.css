@@ -1,7 +1,3 @@
-/* Finerio-logo */
-#finerio-img {
-    max-width: 40%;
-}
 /* Btn-social-media */
 .icon-social-media{
 	width: 40%;
@@ -25,9 +21,4 @@
 .btn-google-plus:hover{
 	background-color: #FFEBEE;
 	color: #d34836;
-}
-
-/* Responsive mobile devices */
-@media (min-width: 320px) and (max-width: 425px) {
-	#finerio-img{max-width: 100%;}
 }

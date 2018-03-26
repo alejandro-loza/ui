@@ -1,0 +1,9 @@
+/* Finerio-logo */
+#finerio-img {
+    max-width: 30%;
+}
+
+/* Responsive mobile devices */
+@media (min-width: 320px) and (max-width: 425px) {
+	#finerio-img{max-width: 100%;}
+}
