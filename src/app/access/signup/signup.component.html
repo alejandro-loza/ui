@@ -1,58 +1,51 @@
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <img src="assets/media/img/finerio_logo/finerio_logo.png" class="img-fluid mx-auto d-block" id="finerio-img" />
-            <h1 class="text-center">Registrate con:</h1>
-            <div class="container-buttons text-center">
-                <a href="https://api.finerio.mx/oauth/authenticate/facebook?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dsignup%26from%3DFacebook%26accessToken%3D" class="btn btn-lg btn-secondary btn-facebook my-2 my-md-0" type="btn">
-                    <i class="material-icons">
-                        <img src="assets/media/img/social_media/facebook-white.png" alt="" class="icon-social-media icon-facebook-white">
-                        <img src="assets/media/img/social_media/facebook-blue.png" alt="" class="icon-social-media icon-facebook-blue d-none">
-                    </i>
-                    Facebook
-                </a>
-                <a href="https://api.finerio.mx/oauth/authenticate/google?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dsignup%26from%3DGoogle%26accessToken%3D" class="btn btn-lg btn-primary btn-google-plus" type="btn">
-                    <i class="material-icons">
-                        <img src="assets/media/img/social_media/google-plus-white.png" alt="" class="icon-social-media icon-google-plus-white">
-                        <img src="assets/media/img/social_media/google-plus-red.png" alt="" class="icon-social-media icon-google-plus-red d-none">
-                    </i>
-                    Google
-                </a>
+<h1 class="text-center">Registrate con:</h1>
+<div class="container-buttons text-center">
+    <a href="https://api.finerio.mx/oauth/authenticate/facebook?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dsignup%26from%3DFacebook%26accessToken%3D" class="btn btn-lg btn-secondary btn-facebook my-2 my-md-0" type="btn">
+        <i class="material-icons">
+            <img src="assets/media/img/social_media/facebook-white.png" alt="" class="icon-social-media icon-facebook-white">
+            <img src="assets/media/img/social_media/facebook-blue.png" alt="" class="icon-social-media icon-facebook-blue d-none">
+        </i>
+        Facebook
+    </a>
+    <a href="https://api.finerio.mx/oauth/authenticate/google?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dsignup%26from%3DGoogle%26accessToken%3D" class="btn btn-lg btn-primary btn-google-plus" type="btn">
+        <i class="material-icons">
+            <img src="assets/media/img/social_media/google-plus-white.png" alt="" class="icon-social-media icon-google-plus-white">
+            <img src="assets/media/img/social_media/google-plus-red.png" alt="" class="icon-social-media icon-google-plus-red d-none">
+        </i>
+        Google
+    </a>
+</div>
+<h3 class="text-center mt-3">Ó</h3>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-5">
+        <form>
+            <div class="form-group">
+                <label for="Input_email">Correo Electrónico</label>
+                <input type="email" class="form-control" id="Input_email" placeholder="Escrite tu correo electrónico" required pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"/>
             </div>
-            <h3 class="text-center mt-3">Ó</h3>
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-5">
-                    <form>
-                        <div class="form-group">
-                            <label for="Input_email">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="Input_email" placeholder="Escrite tu correo electrónico" required pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="InputPassword_1">Contraseña</label>
-                            <input type="password" class="form-control" id="Input_password_1" placeholder="Escribe tu contraseña" />
-                        </div>
-                        <div class="form-group">
-                            <label for="InputPassword_2">Confirmar Contraseña</label>
-                            <input type="password" class="form-control" id="Input_password_2" placeholder="Confirma tu contraseña" />
-                        </div>
-                        <div class="form-check my-3">
-                          <input class="form-check-input" type="checkbox" value="" id="Check1">
-                          <label class="form-check-label" for="Check1">
-                            Al crear una cuenta en Finerio confirmo que he leído, entiendo y acepto el <a href="https://www.finerio.mx/privacy" target="_blank">Aviso de Privacidad</a> y los <a href="https://www.finerio.mx/terms" target="_blank"> Terminos y Condiciones</a>
-                          </label>
-                        </div>
-                        <div class="form-check my-3">
-                          <input class="form-check-input" type="checkbox" value="" id="Check2">
-                          <label class="form-check-label" for="Check2">
-                            Al crear una cuenta en Finerio acepto suscribirme al blog de finanzas personales.
-                          </label>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn btn-secondary btn-lg justify-content-center">Registrar</button>
-                        </div>
-                    </form>
-                </div>
+            <div class="form-group">
+                <label for="InputPassword_1">Contraseña</label>
+                <input type="password" class="form-control" id="Input_password_1" placeholder="Escribe tu contraseña" />
             </div>
-        </div>
+            <div class="form-group">
+                <label for="InputPassword_2">Confirmar Contraseña</label>
+                <input type="password" class="form-control" id="Input_password_2" placeholder="Confirma tu contraseña" />
+            </div>
+            <div class="form-check my-3">
+              <input class="form-check-input" type="checkbox" value="" id="Check1">
+              <label class="form-check-label" for="Check1">
+                Al crear una cuenta en Finerio confirmo que he leído, entiendo y acepto el <a href="https://www.finerio.mx/privacy" target="_blank">Aviso de Privacidad</a> y los <a href="https://www.finerio.mx/terms" target="_blank"> Terminos y Condiciones</a>
+              </label>
+            </div>
+            <div class="form-check my-3">
+              <input class="form-check-input" type="checkbox" value="" id="Check2">
+              <label class="form-check-label" for="Check2">
+                Al crear una cuenta en Finerio acepto suscribirme al blog de finanzas personales.
+              </label>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-secondary btn-lg justify-content-center">Registrar</button>
+            </div>
+        </form>
     </div>
 </div>
