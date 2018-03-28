@@ -6,6 +6,8 @@ import { APP_ROUTES } from './app.route';
 import { AccessModule } from './access/access.module';
 import { PagesModule } from './pages/pages.module';
 
+import { ServicesModule } from './services/services.module';
+
 import { AppComponent } from './app.component';
 import { ComponentsComponent } from './components/components.component';
 
@@ -19,7 +21,8 @@ import { ComponentsComponent } from './components/components.component';
     BrowserModule,
     APP_ROUTES,
     AccessModule,
-    PagesModule
+    PagesModule,
+    ServicesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
