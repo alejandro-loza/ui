@@ -11,8 +11,10 @@ const ACCESS_ROUTING: Routes = [
     {path: 'access', component: AccessComponent, children:[
 		{path: 'login', component: LoginComponent},
 	    {path: 'signup', component: SignupComponent},
-	    {path: 'recovery/password', component: RecoverypasswordComponent},
-	    {path: 'forgot/password', component: ForgotpasswordComponent}
+	    {path: 'recovery-password', component: ForgotpasswordComponent},
+	    {path: 'new-password', component: RecoverypasswordComponent},
+	    {path: '', pathMatch: 'full', redirectTo: '/access/login'},
+	    {path: '**', redirectTo:'/access/login'}
     ]}
 ];
 
