@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'
 
 import { ACCESS_ROUTES } from './access.route';
 
@@ -22,7 +23,8 @@ import { RecoverypasswordComponent } from './recoverypassword/recoverypassword.c
   ],
   imports: [
     CommonModule,
-    ACCESS_ROUTES
+    ACCESS_ROUTES,
+    HttpClientModule
   ]
 })
 export class AccessModule { }
