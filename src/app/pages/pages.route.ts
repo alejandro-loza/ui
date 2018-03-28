@@ -9,6 +9,7 @@ const PAGES_ROUTING: Routes = [
 	{
 		path:'',
 		component: PagesComponent,
+		canActivate: [ AuthGuard ],
 		children: [
 			{path: 'dashboard', component: DashboardComponent},
 			{path: '', pathMatch:'full', redirectTo: '/dashboard'},
