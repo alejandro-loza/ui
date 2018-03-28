@@ -9,6 +9,10 @@ import {
   imports: [
     CommonModule
   ],
-  declarations: []
+  declarations: [
+  ],
+  providers: [
+  	AuthService
+  ]
 })
 export class ServicesModule { }

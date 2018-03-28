@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  backendUrl: 'https://app.finerio.mx/'
+  backendUrl: 'https://api.finerio.mx/'
 };
