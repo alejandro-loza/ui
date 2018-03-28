@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://13.92.139.240/'
+  backendUrl: 'https://api.finerio.mx/'
 };
