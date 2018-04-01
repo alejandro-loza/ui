@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { APP_ROUTES } from './app.route';
 
@@ -19,6 +20,7 @@ import { ComponentsComponent } from './components/components.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     APP_ROUTES,
     AccessModule,
     PagesModule,
