@@ -3,25 +3,30 @@ import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 
 import { environment } from './../../../environments/environment';
+import { User } from './../../shared/dto/authLoginDot';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+}
 
 @Injectable()
 export class AuthService {
-
   private backendUrl: string = `${environment.backendUrl}api`;
-  private headers = new HttpHeaders({'content-type':'application/json'});
   url:string;
-
-  constructor( private _httpClient: HttpClient) {
+  user: User;
+  constructor( private httpClient: HttpClient) {  
   }
 
   isAuth():boolean {
     return false;
   }
 
-  login(username:string, password:string){
+  login(user: User){
   	let url = `${this.backendUrl}/login`;
-  	this._httpClient.post(url, JSON.stringify);
-
-  	return true;
+    return this.httpClient.post<User>(
+        url,
+        JSON.stringify({username: user.username, password: user.password}),
+        httpOptions).subscribe(res => { console.log(res)});
+    
   }
 }
