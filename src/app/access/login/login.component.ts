@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { AuthService } from './../../services/services.index';
+import { User } from './../../shared/dto/authLoginDot';
+
 
 @Component({
   selector: 'app-login',
@@ -10,11 +13,24 @@ import { AuthService } from './../../services/services.index';
 
 export class LoginComponent implements OnInit {
 
-  constructor(private _authService: AuthService) {
+  user: User = {
+    username: '',
+    password: ''
+  }
+
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit() {
     this.hoverSocialMedia();
+  }
+
+  onSubmit(loginForm : NgForm){
+    let user_form = loginForm.form.controls.username.value;
+    let pass_form = loginForm.form.controls.password.value;
+    this.user.username = user_form;
+    this.user.password = pass_form;
+    this.authService.login(this.user);
   }
 
   hoverSocialMedia(){
