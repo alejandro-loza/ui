@@ -18,14 +18,16 @@
 <h3 class="text-center mt-3">Ó</h3>
 <div class="row justify-content-center">
     <div class="col-12 col-md-5">
-        <form>
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" novalidate >
             <div class="form-group">
                 <label for="Input_email">Correo Electrónico</label>
-                <input type="email" class="form-control" id="Input_email" placeholder="Escrite tu correo electrónico" required pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"/>
+                <input type="email" class="form-control" id="Input_email" placeholder="Escrite tu correo electrónico" required pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" name="username"
+                    [(ngModel)]="email" #username="ngModel" />
             </div>
             <div class="form-group">
                 <label for="InputPassword">Contraseña</label>
-                <input type="password" class="form-control" id="Input_password" placeholder="Escribe tu contraseña" />
+                <input type="password" class="form-control" id="Input_password" placeholder="Escribe tu contraseña"
+                         name="password" [(ngModel)]="pass" #password="ngModel" required />
             </div>
             <div class="text-center">
                 <button class="btn btn-secondary btn-lg justify-content-center">Acceder</button>
