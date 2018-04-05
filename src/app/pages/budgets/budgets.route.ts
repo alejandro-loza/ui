@@ -1,7 +1,7 @@
-import { RouterModule, Route } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { BudgetsComponent } from './components/budgets.component';
 
-const BUDGETS_ROUTING = [
+const BUDGETS_ROUTING: Routes = [
     { path: '', component: BudgetsComponent }
 ];
 
