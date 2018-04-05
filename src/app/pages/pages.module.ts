@@ -1,19 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http'
 
-import { PAGES_ROUTES } from './pages.route'
-
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { PagesComponent } from './pages.component'
+import { PAGES_ROUTES } from './pages.route';
 
 @NgModule({
-  declarations: [
-  	PagesComponent,
-  	DashboardComponent
-  ],
+  declarations: [],
   imports: [
     CommonModule,
-    PAGES_ROUTES
+    PAGES_ROUTES,
+    HttpClientModule
   ]
 })
 export class PagesModule { }

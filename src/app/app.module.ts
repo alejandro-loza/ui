@@ -10,13 +10,15 @@ import { HttpClientModule } from '@angular/common/http'
 import { AppComponent } from './app.component';
 import { ComponentsComponent } from './components/components.component';
 import { AccessComponent } from './access/access.component';
+import { PagesComponent } from './pages/pages.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ComponentsComponent,
-    AccessComponent
+    AccessComponent,
+    PagesComponent
   ],
   imports: [
     BrowserModule,
