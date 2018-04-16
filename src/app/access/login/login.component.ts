@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { AuthService } from './../../services/services.index';
-import { User } from './../../shared/dto/authLoginDot';
+import { User } from '../../shared/dto/authLoginDot';
 
 
 @Component({
@@ -13,41 +14,41 @@ import { User } from './../../shared/dto/authLoginDot';
 
 export class LoginComponent implements OnInit {
 
-  user: User = {
-    username: '',
-    password: ''
-  }
-
-  constructor(private authService: AuthService) {
+  constructor(
+    private router: Router,
+    private authService: AuthService) {
   }
 
   ngOnInit() {
     this.hoverSocialMedia();
   }
 
-  onSubmit(loginForm : NgForm){
-    let user_form = loginForm.form.controls.username.value;
-    let pass_form = loginForm.form.controls.password.value;
-    this.user.username = user_form;
-    this.user.password = pass_form;
-    this.authService.login(this.user);
+  ingresar(loginForm: NgForm) {
+    const usuario = new User(
+      loginForm.value.email,
+      loginForm.value.password
+    );
+    this.authService.login( usuario ).subscribe( res => { 
+      this.router.navigate(['/dashboard'])
+    }), error => {
+      console.error('Ha ocurrido un error:', error );
+    };
   }
 
   hoverSocialMedia(){
-    
-    var btn_facebook = document.querySelector('.btn-facebook');
-    var btn_google = document.querySelector('.btn-google-plus');
+    let btn_facebook = document.querySelector('.btn-facebook');
+    let btn_google = document.querySelector('.btn-google-plus');
 
-    btn_facebook.addEventListener("mouseover", this.overFacebook);
-    btn_facebook.addEventListener("mouseout", this.outFacebook);
-
-    btn_google.addEventListener("mouseover", this.overGoogle);
-    btn_google.addEventListener("mouseout", this.outGoogle);
+    btn_facebook.addEventListener('mouseover', this.overFacebook);
+    btn_facebook.addEventListener('mouseout', this.outFacebook);
+;
+    btn_google.addEventListener('mouseover', this.overGoogle);
+    btn_google.addEventListener('mouseover', this.outGoogle);
   }
 
   overFacebook(){
-    var btn_facebook_blue = document.querySelector('.icon-facebook-blue');
-    var btn_facebook_white = document.querySelector('.icon-facebook-white');
+    let btn_facebook_blue = document.querySelector('.icon-facebook-blue');
+    let btn_facebook_white = document.querySelector('.icon-facebook-white');
 
     btn_facebook_white.classList.add("d-none");
     btn_facebook_blue.classList.remove("d-none");

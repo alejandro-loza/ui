@@ -1,36 +1,32 @@
 <h1 class="text-center">Ingresa con:</h1>
 <div class="container-buttons text-center">
-	<a href="https://api.finerio.mx/oauth/authenticate/facebook?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dlogin%26from%3DFacebook%26accessToken%3D" class="btn btn-lg btn-secondary btn-facebook my-2 my-md-0" type="btn">
-		<i class="material-icons">
+    <a href="https://api.finerio.mx/oauth/authenticate/facebook?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dlogin%26from%3DFacebook%26accessToken%3D" class="btn btn-lg btn-secondary btn-facebook my-2 my-md-0" type="btn">
+        <i class="material-icons">
 			<img src="assets/media/img/social_media/facebook-white.png" alt="" class="icon-social-media icon-facebook-white">
 			<img src="assets/media/img/social_media/facebook-blue.png" alt="" class="icon-social-media icon-facebook-blue d-none">
-		</i>
-		Facebook
-	</a>
-	<a href="https://api.finerio.mx/oauth/authenticate/google?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dlogin%26from%3DGoogle%26accessToken%3D" class="btn btn-lg btn-primary btn-google-plus" type="btn">
-		<i class="material-icons">
+		</i> Facebook
+    </a>
+    <a href="https://api.finerio.mx/oauth/authenticate/google?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dlogin%26from%3DGoogle%26accessToken%3D" class="btn btn-lg btn-primary btn-google-plus" type="btn">
+        <i class="material-icons">
 			<img src="assets/media/img/social_media/google-plus-white.png" alt="" class="icon-social-media icon-google-plus-white">
 			<img src="assets/media/img/social_media/google-plus-red.png" alt="" class="icon-social-media icon-google-plus-red d-none">
-		</i>
-		Google
-	</a>
+		</i> Google
+    </a>
 </div>
 <h3 class="text-center mt-3">Ó</h3>
 <div class="row justify-content-center">
     <div class="col-12 col-md-5">
-        <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" novalidate >
+        <form #loginForm="ngForm" (ngSubmit)="ingresar(loginForm)" novalidate>
             <div class="form-group">
                 <label for="Input_email">Correo Electrónico</label>
-                <input type="email" class="form-control" id="Input_email" placeholder="Escrite tu correo electrónico" required pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" name="username"
-                    [(ngModel)]="email" #username="ngModel" />
+                <input ngModel name="email" type="email" class="form-control" id="Input_email" placeholder="Escrite tu correo electrónico" required pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" />
             </div>
             <div class="form-group">
                 <label for="InputPassword">Contraseña</label>
-                <input type="password" class="form-control" id="Input_password" placeholder="Escribe tu contraseña"
-                         name="password" [(ngModel)]="pass" #password="ngModel" required />
+                <input ngModel name="password" type="password" class="form-control" id="Input_password" placeholder="Escribe tu contraseña" required />
             </div>
             <div class="text-center">
-                <button class="btn btn-secondary btn-lg justify-content-center">Acceder</button>
+                <button class="btn btn-secondary btn-lg justify-content-center" type="submit">Acceder</button>
             </div>
         </form>
     </div>
@@ -53,4 +49,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
