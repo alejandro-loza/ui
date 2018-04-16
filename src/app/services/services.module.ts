@@ -4,7 +4,9 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import {
-	AuthService
+  FinerioService,
+  AuthService,
+  AuthGuard
 } from './services.index';
 
 @NgModule({
@@ -15,7 +17,9 @@ import {
   declarations: [
   ],
   providers: [
-  	AuthService
+    FinerioService,
+    AuthService,
+    AuthGuard
   ]
 })
 export class ServicesModule { }
