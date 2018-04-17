@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { AuthService } from './../../services/services.index';
 import { User } from '../../shared/dto/authLoginDot';
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,9 +13,12 @@ import { User } from '../../shared/dto/authLoginDot';
 
 export class LoginComponent implements OnInit {
 
+  errorMsg: string;
+
   constructor(
     private router: Router,
     private authService: AuthService) {
+      this.errorMsg =  '';
   }
 
   ngOnInit() {
@@ -24,15 +26,26 @@ export class LoginComponent implements OnInit {
   }
 
   ingresar(loginForm: NgForm) {
+    this.errorMsg = '';
+
     const usuario = new User(
       loginForm.value.email,
       loginForm.value.password
     );
-    this.authService.login( usuario ).subscribe( res => { 
-      this.router.navigate(['/dashboard'])
-    }), error => {
-      console.error('Ha ocurrido un error:', error );
-    };
+    this.authService.login( usuario ).subscribe(
+      res => {
+        this.router.navigate(['/dashboard']); },
+      err => {
+        console.error( 'Ooops. Houston, we got a trouble', err );
+        if ( err.status === 0 ) {
+          this.errorMsg = 'Verifique su conexión de internet';
+          console.error( 'Error.code.0', err );
+        }
+        if ( err.status === 401 ) {
+          this.errorMsg = 'Sin autorización, comprueba que sean correctos tus datos';
+          console.error( 'Error.code.401', err );
+        }
+      });
   }
 
   hoverSocialMedia(){
