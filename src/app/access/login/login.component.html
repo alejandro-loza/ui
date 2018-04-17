@@ -25,6 +25,9 @@
                 <label for="InputPassword">Contraseña</label>
                 <input ngModel name="password" type="password" class="form-control" id="Input_password" placeholder="Escribe tu contraseña" required />
             </div>
+            <div *ngIf="errorMsg.length > 0" class="alert alert-danger fade-in" role="alert">
+                {{errorMsg}}
+            </div>
             <div class="text-center">
                 <button class="btn btn-secondary btn-lg justify-content-center" type="submit">Acceder</button>
             </div>
