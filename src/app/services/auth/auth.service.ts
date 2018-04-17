@@ -42,7 +42,7 @@ export class AuthService {
     this.finerioService.setToken( refresh_token );
   }
 
-  login(user: User){
+  login(user: User) {
     const url = `${this.backendUrl}/login`;
     return this.httpClient.post(
       url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
