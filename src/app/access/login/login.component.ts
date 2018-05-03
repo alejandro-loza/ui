@@ -14,11 +14,13 @@ import { User } from '../../shared/dto/authLoginDot';
 export class LoginComponent implements OnInit {
 
   errorMsg: string;
+  formMsg: string;
 
   constructor(
     private router: Router,
     private authService: AuthService) {
       this.errorMsg =  '';
+      this.formMsg = '';
   }
 
   ngOnInit() {
@@ -27,11 +29,17 @@ export class LoginComponent implements OnInit {
 
   ingresar(loginForm: NgForm) {
     this.errorMsg = '';
+    this.formMsg = '';
 
     const usuario = new User(
       loginForm.value.email,
       loginForm.value.password
     );
+
+    if ( loginForm.controls.email.invalid === true && loginForm.controls.password.invalid === true ) {
+      this.formMsg = 'Datos incorrectos. Comprueba que sean correctos tus datos';
+    }
+
     this.authService.login( usuario ).subscribe(
       res => {
         this.router.navigate(['/dashboard']); },
@@ -42,7 +50,7 @@ export class LoginComponent implements OnInit {
           console.error( 'Error.code.0', err );
         }
         if ( err.status === 401 ) {
-          this.errorMsg = 'Sin autorización, comprueba que sean correctos tus datos';
+          this.errorMsg = 'Comprueba que sean correcto tu correo y contraseña';
           console.error( 'Error.code.401', err );
         }
       });

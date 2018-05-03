@@ -25,6 +25,9 @@
                 <label for="InputPassword">Contraseña</label>
                 <input ngModel name="password" type="password" class="form-control" id="Input_password" placeholder="Escribe tu contraseña" required />
             </div>
+            <div *ngIf="formMsg.length > 0" class="alert alert-warning fade-in" role="alert">
+                {{formMsg}}
+            </div>
             <div *ngIf="errorMsg.length > 0" class="alert alert-danger fade-in" role="alert">
                 {{errorMsg}}
             </div>
@@ -52,4 +55,3 @@
             </div>
         </div>
     </div>
-</div>
