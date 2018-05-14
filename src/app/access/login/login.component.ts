@@ -29,28 +29,26 @@ export class LoginComponent implements OnInit {
 
   ingresar(loginForm: NgForm) {
     this.errorMsg = '';
-    this.formMsg = '';
 
     const usuario = new User(
       loginForm.value.email,
       loginForm.value.password
     );
 
-    if ( loginForm.controls.email.invalid === true && loginForm.controls.password.invalid === true ) {
-      this.formMsg = 'Datos incorrectos. Comprueba que sean correctos tus datos';
-    }
-
     this.authService.login( usuario ).subscribe(
       res => {
         this.router.navigate(['/dashboard']); },
       err => {
-        console.error( 'Ooops. Houston, we got a trouble', err );
         if ( err.status === 0 ) {
           this.errorMsg = 'Verifique su conexión de internet';
           console.error( 'Error.code.0', err );
         }
+        if ( err.status === 400 ) {
+          this.errorMsg = 'Debes llenar los campos para ingresar a la aplicación';
+          console.error( 'Error.code.400', err );
+        }
         if ( err.status === 401 ) {
-          this.errorMsg = 'Comprueba que sean correcto tu correo y contraseña';
+          this.errorMsg = 'Datos incorrectos. Comprueba que sean correctos tus datos';
           console.error( 'Error.code.401', err );
         }
       });
