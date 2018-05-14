@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'https://api.finerio.mx/'
+  backendUrl: 'https://api.finerio.mx'
 };

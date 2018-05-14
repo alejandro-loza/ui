@@ -1,27 +1,56 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { environment } from './../../../environments/environment';
+import { FinerioService } from '../shared/config.service';
+
+import { User } from './../../shared/dto/authLoginDot';
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthService {
 
-  private backendUrl: string = `${environment.backendUrl}api`;
-  private headers = new HttpHeaders({'content-type':'application/json'});
-  url:string;
+  private api = `${environment.backendUrl}/api`;
 
-  constructor( private _httpClient: HttpClient) {
+  user: User;
+  token: string;
+  url = `${this.api}/login`;
+
+  constructor(
+    private httpClient: HttpClient,
+    private finerioService: FinerioService) {
+      this.getData();
+    }
+
+  isAuth() {
+    return (  this.token.length  > 0 ) ? true : false;
   }
 
-  isAuth():boolean {
-    return false;
+  getData() {
+    if ( localStorage.getItem('access token') ) {
+      this.token = localStorage.getItem('access token');
+    } else {
+      this.token = '';
+    }
   }
 
-  login(username:string, password:string){
-  	let url = `${this.backendUrl}/login`;
-  	this._httpClient.post(url, JSON.stringify);
+  saveData( access_token: string, refresh_token: string, username: string ) {
+    localStorage.setItem( 'access token', access_token );
+    localStorage.setItem( 'refresh token', refresh_token );
+    localStorage.setItem( 'username', username );
 
-  	return true;
+    this.finerioService.setToken( refresh_token );
+  }
+
+  login(user: User) {
+    return this.httpClient.post(
+      this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
+    ).map( (res: any ) => {
+      this.saveData( res.access_token, res.refresh_token, res.username );
+      this.getData();
+      return true;
+    });
   }
 }
