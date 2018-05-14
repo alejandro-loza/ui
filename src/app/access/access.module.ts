@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms'
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http'
 
@@ -11,8 +12,6 @@ import { SignupComponent } from './signup/signup.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { RecoverypasswordComponent } from './recoverypassword/recoverypassword.component';
 
-
-
 @NgModule({
   declarations: [
     AccessComponent,
@@ -23,6 +22,7 @@ import { RecoverypasswordComponent } from './recoverypassword/recoverypassword.c
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ACCESS_ROUTES,
     HttpClientModule
   ]
