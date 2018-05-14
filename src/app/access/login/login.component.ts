@@ -64,15 +64,15 @@ export class LoginComponent implements OnInit {
     btn_facebook.addEventListener('mouseout', this.outFacebook);
 ;
     btn_google.addEventListener('mouseover', this.overGoogle);
-    btn_google.addEventListener('mouseover', this.outGoogle);
+    btn_google.addEventListener('mouseout', this.outGoogle);
   }
 
   overFacebook(){
     let btn_facebook_blue = document.querySelector('.icon-facebook-blue');
     let btn_facebook_white = document.querySelector('.icon-facebook-white');
 
-    btn_facebook_white.classList.add("d-none");
-    btn_facebook_blue.classList.remove("d-none");
+    btn_facebook_white.classList.add('d-none');
+    btn_facebook_blue.classList.remove('d-none');
   }
 
   outFacebook(){
@@ -88,14 +88,14 @@ export class LoginComponent implements OnInit {
     let btn_google_white = document.querySelector('.icon-google-plus-white');
 
     btn_google_white.classList.add('d-none');
-    btn_google_red.classList.remove('d-none'); 
+    btn_google_red.classList.remove('d-none');
   }
 
   outGoogle(){
     let btn_google_red = document.querySelector('.icon-google-plus-red');
     let btn_google_white = document.querySelector('.icon-google-plus-white');
 
-    btn_google_white.classList.remove('d-none');
     btn_google_red.classList.add('d-none');
+    btn_google_white.classList.remove('d-none');
   }
 }
