@@ -12,10 +12,12 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class AuthService {
 
+  private api = `${environment.backendUrl}/api`;
+
   user: User;
   token: string;
+  url = `${this.api}/login`;
 
-  private backendUrl = `${environment.backendUrl}/api`;
   constructor(
     private httpClient: HttpClient,
     private finerioService: FinerioService) {
@@ -43,9 +45,8 @@ export class AuthService {
   }
 
   login(user: User) {
-    const url = `${this.backendUrl}/login`;
     return this.httpClient.post(
-      url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
+      this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
     ).map( (res: any ) => {
       this.saveData( res.access_token, res.refresh_token, res.username );
       this.getData();
