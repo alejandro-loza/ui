@@ -22,4 +22,4 @@ const APP_ROUTING: Routes = [
     { path: '**', redirectTo:'/access/login'}
 ];
 
-export const APP_ROUTES = RouterModule.forRoot(APP_ROUTING);
+export const APP_ROUTES = RouterModule.forRoot(APP_ROUTING, { preloadingStrategy: PreloadAllModules });
