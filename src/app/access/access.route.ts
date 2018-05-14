@@ -1,25 +1,12 @@
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 
-import { AccessComponent } from './access.component';
-
-import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
-import { RecoverypasswordComponent } from './recoverypassword/recoverypassword.component';
-import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
-
 const ACCESS_ROUTING: Routes = [
-    {
-    	path: 'access',
-    	component: AccessComponent,
-    	children:[
-			{path: 'login', component: LoginComponent},
-		    {path: 'signup', component: SignupComponent},
-		    {path: 'recovery-password', component: ForgotpasswordComponent},
-		    {path: 'new-password', component: RecoverypasswordComponent},
-		    {path: '', pathMatch: 'full', redirectTo: '/access/login'},
-		    {path: '**', redirectTo:'/access/login'}
-	    ]
-	}
+	{path: 'login', loadChildren: './login/login.module#LoginModule' },
+	{path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
+	{path: 'recovery', loadChildren: './recoverypassword/recoverypassword.module#RecoverypasswordModule' },
+	{path: 'forgot', loadChildren: './forgotpassword/forgotpassword.module#ForgotpasswordModule' },
+    {path: '', pathMatch: 'full', redirectTo: 'login'},
+	{path: '**', redirectTo: 'login'}
 ];
 
-export const ACCESS_ROUTES = RouterModule.forRoot(ACCESS_ROUTING, { preloadingStrategy: PreloadAllModules});
+export const ACCESS_ROUTES = RouterModule.forChild(ACCESS_ROUTING);
