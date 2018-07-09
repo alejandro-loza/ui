@@ -5,9 +5,8 @@ import { environment } from './../../../environments/environment';
 import { FinerioService } from '../shared/config.service';
 
 import { User } from './../../shared/dto/authLoginDot';
-import { Observable } from 'rxjs/Observable';
 
-import 'rxjs/add/operator/map';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
@@ -47,10 +46,12 @@ export class AuthService {
   login(user: User) {
     return this.httpClient.post(
       this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
-    ).map( (res: any ) => {
-      this.saveData( res.access_token, res.refresh_token, res.username );
-      this.getData();
-      return true;
-    });
+    ).pipe(
+      map( (res: any ) => {
+        this.saveData( res.access_token, res.refresh_token, res.username );
+        this.getData();
+        return true;
+      })
+    );
   }
 }
