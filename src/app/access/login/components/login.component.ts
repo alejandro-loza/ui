@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.hoverSocialMedia();
+    // this.hoverSocialMedia();
   }
 
   ingresar(loginForm: NgForm) {
@@ -54,13 +54,14 @@ export class LoginComponent implements OnInit {
       });
   }
 
+/*
   hoverSocialMedia(){
     let btn_facebook = document.querySelector('.btn-facebook');
     let btn_google = document.querySelector('.btn-google-plus');
 
     btn_facebook.addEventListener('mouseover', this.overFacebook);
     btn_facebook.addEventListener('mouseout', this.outFacebook);
-;
+
     btn_google.addEventListener('mouseover', this.overGoogle);
     btn_google.addEventListener('mouseout', this.outGoogle);
   }
@@ -96,4 +97,5 @@ export class LoginComponent implements OnInit {
     btn_google_red.classList.add('d-none');
     btn_google_white.classList.remove('d-none');
   }
+*/
 }

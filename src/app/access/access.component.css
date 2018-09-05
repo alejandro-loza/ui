@@ -1,9 +1,62 @@
-/* Finerio-logo */
-#finerio-img {
-    max-width: 30%;
+.background {
+    position: relative;
+    height: 100vh;
+    widows: 100%;
 }
 
-/* Responsive mobile devices */
-@media (min-width: 320px) and (max-width: 425px) {
-	#finerio-img{max-width: 100%;}
+.background .container {
+    position: relative;
+    z-index: 2;
+}
+
+.card {
+    position: relative;
+    margin-top: 10%;
+    opacity: 0.8;
+}
+
+.card .card-container {
+    position: relative;
+    z-index: 4;
+}
+
+.logo-white {
+    max-width: 25%;
+    margin: auto;
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    z-index: 3;
+}
+
+.card .card-container::after {
+    opacity: 1;
+    z-index: 4;
+}
+
+.background::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('../../assets/media/img/background/wallpaper.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    -webkit-filter: blur(2px);
+    filter: blur(2px);
+}
+
+@media (max-width: 600px) {
+    .card {
+        margin-top: .5rem;
+    }
+    .logo-white {
+        max-width: 50%;
+    }
 }

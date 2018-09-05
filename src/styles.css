@@ -1,2 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+    --Navyblue-color: #1D3865;
+    --orange-color: #EE883A;
+}
+
+.finerio-blue-text {
+    color: var(--Navyblue-color);
+}
+
+.finerio-blue {
+    background-color: var(--Navyblue-color) !important;
+    color: white;
+}
+
+.finerio-orange {
+    background-color: var(--orange-color) !important;
+    color: white;
+}
+
+.finerio-orange-text {
+    color: var(--orange-color);
+}

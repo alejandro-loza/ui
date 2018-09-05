@@ -1,24 +1,5 @@
-/* Btn-social-media */
-.icon-social-media{
-	width: 40%;
-    height: auto;
-    margin-right: .5rem;
-}
-.btn-facebook{
-	background-color: #4267b2;
-	color: #E8EAF6;
-	border: none;
-}
-.btn-facebook:hover{
-	color: #4267b2;
-	background-color: #E8EAF6;
-}
-.btn-google-plus{
-	background-color: #d34836;
-	color: #FFEBEE;
-	border: none;
-}
-.btn-google-plus:hover{
-	background-color: #FFEBEE;
-	color: #d34836;
+.formContainer {
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 1;
 }
