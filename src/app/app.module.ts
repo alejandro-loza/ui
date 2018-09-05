@@ -9,6 +9,7 @@ import { AppComponent } from                         './app.component';
 import { ComponentsComponent } from                  './components/components.component';
 import { AccessComponent } from                      './access/access.component';
 import { PagesComponent } from                       './pages/pages.component';
+import { MaterializeModule } from                    './shared/materialize.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PagesComponent } from                       './pages/pages.component';
     BrowserModule,
     APP_ROUTES,
     ServicesModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MaterializeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
