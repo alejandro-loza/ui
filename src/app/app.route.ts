@@ -18,8 +18,8 @@ const APP_ROUTING: Routes = [
       //  canActivate: [ AuthGuard ],
         loadChildren: './pages/pages.module#PagesModule'
     },
-    { path: '', pathMatch:'full', redirectTo:'/access/login'},
-    { path: '**', redirectTo:'/access/login'}
+    { path: '', pathMatch: 'full', redirectTo: '/access/login'},
+    { path: '**', redirectTo: '/access/login'}
 ];
 
 export const APP_ROUTES = RouterModule.forRoot(APP_ROUTING, { preloadingStrategy: PreloadAllModules });

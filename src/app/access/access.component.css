@@ -12,28 +12,15 @@
 .card {
     position: relative;
     margin-top: 10%;
-    opacity: 0.8;
 }
 
-.card .card-container {
-    position: relative;
-    z-index: 4;
+.white-opacity-8 {
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .logo-white {
     max-width: 25%;
     margin: auto;
-}
-
-.card::after {
-    content: "";
-    position: absolute;
-    z-index: 3;
-}
-
-.card .card-container::after {
-    opacity: 1;
-    z-index: 4;
 }
 
 .background::after {

@@ -6,16 +6,15 @@ import { HttpClientModule } from                     '@angular/common/http';
 import { LOGIN_ROUTES } from                         './login.route';
 // COMPONENT
 import { LoginComponent } from                       './components/login.component';
-import { MzInputModule, MzButtonModule } from        'ngx-materialize';
+import { MaterializeModule } from '../../shared/materialize.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     HttpClientModule,
-    MzInputModule,
-    MzButtonModule,
-    LOGIN_ROUTES
+    LOGIN_ROUTES,
+    MaterializeModule
   ],
   declarations: [
     LoginComponent
