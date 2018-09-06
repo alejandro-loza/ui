@@ -7,7 +7,7 @@ import { LOGIN_ROUTES } from                         './login.route';
 import { LoginComponent } from                       './components/login.component';
 import { RegisterLoginComponent } from               '../../components/register-login-button/register-login.component';
 import { SharedModule } from                         '../../shared/shared.module';
-import { SocialMediaComponent } from                 '../../components/social-media/social-media.component';
+import { SocialMediaComponent } from                 '../../components/social-media-button/social-media.component';
 
 
 @NgModule({
