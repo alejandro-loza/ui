@@ -15,7 +15,7 @@ const APP_ROUTING: Routes = [
     {
         path: 'app',
         component: PagesComponent,
-      //  canActivate: [ AuthGuard ],
+        canActivate: [ AuthGuard ],
         loadChildren: './pages/pages.module#PagesModule'
     },
     { path: '', pathMatch: 'full', redirectTo: '/access/login'},
