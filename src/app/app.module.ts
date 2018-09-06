@@ -6,22 +6,22 @@ import { ServicesModule } from                       './services/services.module
 import { APP_ROUTES } from                           './app.route';
 
 import { AppComponent } from                         './app.component';
-import { ComponentsComponent } from                  './components/components.component';
-import { AccessComponent } from                      './access/access.component';
 import { PagesComponent } from                       './pages/pages.component';
+import { AccessComponent } from                      './access/access.component';
+import { SharedModule } from                         './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ComponentsComponent,
     AccessComponent,
     PagesComponent
   ],
   imports: [
     BrowserModule,
-    APP_ROUTES,
+    SharedModule,
     ServicesModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    APP_ROUTES
   ],
   providers: [],
   bootstrap: [AppComponent]
