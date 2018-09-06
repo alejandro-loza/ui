@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ACCESS_ROUTES } from './access.route';
+import { NgModule } from           '@angular/core';
+import { ACCESS_ROUTES } from      './access.route';
+import { SharedModule } from       '../shared/shared.module';
 
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     ACCESS_ROUTES
   ]
 })
