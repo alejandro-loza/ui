@@ -3,3 +3,35 @@
     margin-right: auto;
     opacity: 1;
 }
+
+#divider {
+    position: absolute;
+    height: 1px;
+    top: 70%;
+    left: 40%;
+    width: 19%;
+    transform: rotate(90deg);
+}
+
+@media only screen and (max-width:600px) {
+    #divider {
+        left: 31%;
+        width: 38%;
+    }
+}
+
+@media only screen and (max-width:992px) {
+    #divider {
+        top: 67%;
+        left: 31%;
+        width: 37%;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    #divider {
+        top: 68%;
+        left: 34.5%;
+        width: 30%;
+    }
+}

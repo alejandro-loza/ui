@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
     this.authService.login( usuario ).subscribe(
       res => {
         this.router.navigate(['/app/dashboard']);
-      },err => {
+      }, err => {
         if ( err.status === 0 ) {
           this.errorMsg = 'Verifique su conexión de internet';
           console.error( 'Error.code.0', err );
