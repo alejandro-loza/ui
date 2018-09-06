@@ -1,7 +1,6 @@
 .background {
     position: relative;
-    height: 100vh;
-    widows: 100%;
+    height: 100%;
 }
 
 .background .container {
@@ -15,7 +14,7 @@
 }
 
 .white-opacity-8 {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(245, 245, 245, 0.8);
 }
 
 .logo-white {
@@ -32,14 +31,14 @@
     right: 0;
     bottom: 0;
     background: url('../../assets/media/img/background/wallpaper.jpg');
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    width: 100%;
-    -webkit-filter: blur(2px);
-    filter: blur(2px);
+    -webkit-filter: blur(3px);
+    filter: blur(3px);
 }
 
-@media (max-width: 600px) {
+@media only screen and (max-width: 600px) {
     .card {
         margin-top: .5rem;
     }
