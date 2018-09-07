@@ -1,41 +1,33 @@
 .formContainer {
-    margin-left: auto;
-    margin-right: auto;
-    opacity: 1;
+    margin-left: 10%;
 }
 
-#divider {
-    position: absolute;
-    height: 1px;
-    top: 70%;
-    left: 40%;
-    width: 19%;
-    transform: rotate(90deg);
+#rowForm {
+    margin: 3% 0%;
 }
 
 .red-opacity-08 {
     background-color: rgba(229, 57, 53, 0.7)
 }
 
+#registerResponsive {
+    margin-top: 4%;
+}
+
 @media only screen and (max-width:600px) {
-    #divider {
-        left: 31%;
-        width: 38%;
+    .formContainer {
+        margin-left: 0px;
     }
 }
 
 @media only screen and (max-width:992px) {
-    #divider {
-        top: 67%;
-        left: 31%;
-        width: 37%;
+    .formContainer {
+        margin-left: 0px;
     }
 }
 
 @media only screen and (max-width: 1200px) {
-    #divider {
-        top: 68%;
-        left: 34.5%;
-        width: 30%;
+    .formContainer {
+        margin-left: 0px;
     }
 }
