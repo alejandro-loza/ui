@@ -43,10 +43,10 @@ export class LoginComponent implements OnInit {
           this.toastService
           .show(
             this.errorMsg +
-            `<button class="transparent btn-flat white-text" onClick="var toastElement = $('.toast').first()[0];
+            `<button class="transparent btn-flat black-text" onClick="var toastElement = $('.toast').first()[0];
             var toastInstance = toastElement.M_Toast;
-            toastInstance.remove();">X</button>`,
-            3000, 'teal accent-3 black-text rounded'
+            toastInstance.remove();"><i class="large material-icons">close</i></button>`,
+            3000, 'cyan accent-4 black-text rounded'
           );
           console.error( 'Error.code.0', err );
         }
@@ -57,8 +57,8 @@ export class LoginComponent implements OnInit {
             this.errorMsg +
             `<button class="transparent btn-flat white-text" onClick="var toastElement = $('.toast').first()[0];
             var toastInstance = toastElement.M_Toast;
-            toastInstance.remove();">X</button>`,
-            3000, 'orange accent-3 rounded');
+            toastInstance.remove();"><i class="large material-icons">close</i></button>`,
+            3000, 'orange darken-2 rounded');
           console.error( 'Error.code.400', err );
         }
         if ( err.status === 401 ) {
@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
             this.errorMsg +
             `<button class="transparent btn-flat white-text" onClick="var toastElement = $('.toast').first()[0];
             var toastInstance = toastElement.M_Toast;
-            toastInstance.remove();">X</button>`,
+            toastInstance.remove();"><i class="large material-icons">close</i></button>`,
             3000, 'red accent-3 rounded');
           console.error( 'Error.code.401', err );
         }
