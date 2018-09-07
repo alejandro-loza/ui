@@ -1,14 +1,13 @@
 <div class="loginContainer">
     <h4 class="center">Iniciar Sesión</h4>
     <div class="row">
-        <div class="col s12 m4 offset-m1 center-align section">
+        <div class="col s12 m6 section center">
             <app-social-media [facebookText]="'Ingresar con Facebook'" [googleText]="'Ingresar con Google'"></app-social-media>
             <div class="createAccount hide-on-small-only">
                 <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
             </div>
         </div>
-        <div class="col s12 m1 hide-on-small-only grey darken-3 section" id="divider"></div>
-        <div class="col s12 m4 offset-m2">
+        <div class="col s12 m4 offset-m1 section center">
             <div class="formContainer center">
                 <form #loginForm="ngForm" (ngSubmit)="ingresar(loginForm)" method="POST">
                     <mz-input-container>
@@ -20,9 +19,9 @@
                     <button mz-button class="finerio-blue white-text waves-blue" type="submit">Entrar</button>
                 </form>
             </div>
-            <div class="createAccount hide-on-med-and-up section">
-                <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
-            </div>
+        </div>
+        <div class="col s12 createAccount hide-on-med-and-up section">
+            <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
         </div>
     </div>
 </div>

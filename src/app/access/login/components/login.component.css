@@ -13,6 +13,10 @@
     transform: rotate(90deg);
 }
 
+.red-opacity-08 {
+    background-color: rgba(229, 57, 53, 0.7)
+}
+
 @media only screen and (max-width:600px) {
     #divider {
         left: 31%;
