@@ -1,22 +1,27 @@
 <div class="loginContainer">
     <h4 class="center">Iniciar Sesión</h4>
-    <div class="row">
-        <div class="col s12 m5">
-            <div class="formContainer">
-                <form method="post">
+    <div class="row" id="rowForm">
+        <div class="col s12 m6 section center">
+            <app-social-media [facebookText]="'Ingresar con Facebook'" [googleText]="'Ingresar con Google'"></app-social-media>
+            <div class="createAccount hide-on-small-only">
+                <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
+            </div>
+        </div>
+        <div class="col s12 m4 offset-m1 section">
+            <div class="formContainer center">
+                <form #loginForm="ngForm" (ngSubmit)="ingresar(loginForm)" method="POST">
                     <mz-input-container>
-                        <input mz-input [label]="'Correo Electrónico'" [validate]="true" [dataError]="'Correo invalido. Ej: contacto@finerio.mx'" [dataSuccess]="'Correo Valido'" id="email-input" type="email">
+                        <input mz-input ngModel name="email" [label]="'Correo Electrónico'" [placeholder]="' '" [validate]="true" [dataError]="'Correo invalido. Ej: contacto@finerio.mx'" [dataSuccess]="'Correo Valido'" id="Input_email" type="email" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
                     </mz-input-container>
                     <mz-input-container>
-                        <input mz-input [label]="'Contraseña'" [validate]="true" [dataError]="'Ingresa tu Contraseña'" [dataSuccess]="'Valido'" id="password-input" type="password">
+                        <input mz-input ngModel name="password" [label]="'Contraseña'" [placeholder]="' '" [validate]="true" [dataError]="'Ingresa tu Contraseña'" [dataSuccess]="'Valido'" id="Input_password" type="password">
                     </mz-input-container>
-                    <button mz-button class="finerio-blue white-text">Entrar</button>
+                    <button mz-button class="finerio-blue white-text waves-blue" type="submit">Entrar</button>
                 </form>
             </div>
         </div>
-        <div class="col m12 hide-on-small-only divider"></div>
-        <div class="col s12 m5">
-
+        <div class="col s12 createAccount hide-on-med-and-up section" id="registerResponsive">
+            <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
         </div>
     </div>
 </div>
