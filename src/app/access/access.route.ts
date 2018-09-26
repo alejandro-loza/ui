@@ -5,6 +5,7 @@ const ACCESS_ROUTING: Routes = [
 {path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
 {path: 'recovery', loadChildren: './recoverypassword/recoverypassword.module#RecoverypasswordModule' },
 {path: 'forgot', loadChildren: './forgotpassword/forgotpassword.module#ForgotpasswordModule' },
+{path: 'welcome', loadChildren: './welcome/welcome.module#WelcomeModule'},
 {path: '', pathMatch: 'full', redirectTo: 'login'},
 {path: '**', redirectTo: 'login'}
 ];
