@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-import { environment } from './../../../environments/environment';
-import { FinerioService } from '../shared/config.service';
-
-import { User } from './../../shared/dto/authLoginDot';
-
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from   '@angular/common/http';
+import { environment } from               '@env/environment';
+import { FinerioService } from            '@services/config/config.service';
+import { User } from                      '@shared/dto/authLoginDot';
+import { map } from                       'rxjs/operators';
 
 @Injectable()
 export class AuthService {
@@ -28,17 +25,16 @@ export class AuthService {
   }
 
   getData() {
-    if ( localStorage.getItem('access token') ) {
-      this.token = localStorage.getItem('access token');
+    if ( sessionStorage.getItem('access token') ) {
+      this.token = sessionStorage.getItem('access token');
     } else {
       this.token = '';
     }
   }
 
   saveData( access_token: string, refresh_token: string, username: string ) {
-    localStorage.setItem( 'access token', access_token );
-    localStorage.setItem( 'refresh token', refresh_token );
-    localStorage.setItem( 'username', username );
+    sessionStorage.setItem( 'access token', access_token );
+    sessionStorage.setItem( 'refresh token', refresh_token );
 
     this.finerioService.setToken( refresh_token );
   }
@@ -48,6 +44,7 @@ export class AuthService {
       this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
     ).pipe(
       map( (res: any ) => {
+        console.log(res);
         this.saveData( res.access_token, res.refresh_token, res.username );
         this.getData();
         return true;
