@@ -2,8 +2,8 @@ import { Component, OnInit } from           '@angular/core';
 import { NgForm } from                      '@angular/forms';
 import { Router } from                      '@angular/router';
 
-import { AuthService } from                 './../../../services/services.index';
-import { User } from                        '../../../shared/dto/authLoginDot';
+import { AuthService } from                 '@services/services.index';
+import { User } from                        '@shared/dto/authLoginDot';
 import { MzToastService } from              'ngx-materialize';
 
 @Component({
