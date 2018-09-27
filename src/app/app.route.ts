@@ -6,7 +6,7 @@ import { PagesComponent } from './pages/pages.component';
 
 import { AuthGuard } from './services/guards/auth/auth.guard';
 
-const APP_ROUTING: Routes = [
+const AppRouting: Routes = [
     {
         path: 'access',
         component: AccessComponent,
@@ -22,4 +22,4 @@ const APP_ROUTING: Routes = [
     { path: '**', redirectTo: '/access/login'}
 ];
 
-export const APP_ROUTES = RouterModule.forRoot(APP_ROUTING, { preloadingStrategy: PreloadAllModules });
+export const AppRoutes = RouterModule.forRoot(AppRouting, { preloadingStrategy: PreloadAllModules });

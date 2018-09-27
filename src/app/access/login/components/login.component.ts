@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login( usuario ).subscribe(
       res => {
-        this.router.navigate(['/app/dashboard']);
+        this.router.navigate(['/access/welcome']);
       }, err => {
         if ( err.status === 0 ) {
           this.errorMsg = 'Verifique su conexión de internet';
@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
             toastInstance.remove();"><i class="large material-icons">close</i></button>`,
             3000, 'cyan accent-4 black-text rounded'
           );
-          console.error( 'Error.code.0', err );
         }
         if ( err.status === 400 ) {
           this.errorMsg = 'Debes llenar los campos para <br> ingresar a la aplicación';
@@ -59,7 +58,6 @@ export class LoginComponent implements OnInit {
             var toastInstance = toastElement.M_Toast;
             toastInstance.remove();"><i class="large material-icons">close</i></button>`,
             3000, 'orange darken-2 rounded');
-          console.error( 'Error.code.400', err );
         }
         if ( err.status === 401 ) {
           this.errorMsg = 'Datos incorrectos. Comprueba que <br> sean correctos tus datos';
@@ -70,7 +68,6 @@ export class LoginComponent implements OnInit {
             var toastInstance = toastElement.M_Toast;
             toastInstance.remove();"><i class="large material-icons">close</i></button>`,
             3000, 'red accent-3 rounded');
-          console.error( 'Error.code.401', err );
         }
       }
     );

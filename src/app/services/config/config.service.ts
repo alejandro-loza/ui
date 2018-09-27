@@ -8,11 +8,6 @@ export class FinerioService {
   constructor(
   ) {
     this.headers = new HttpHeaders();
-    this.headers.append('Content-Type', 'application/json');
-    this.headers.append('Accept', 'application/json');
-    if ( this.token_access !== null || this.token_access !== undefined ) {
-      this.headers.append('Authorization', `Bearer ${ this.token_access } `);
-    }
   }
 
   setToken(token) {
@@ -24,9 +19,11 @@ export class FinerioService {
   }
 
   getJsonHeaders() {
-    let headers = new HttpHeaders();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
-    return headers;
+    this.headers.set('Content-Type', 'application/json');
+    this.headers.set('Accept', 'application/json');
+    if ( this.token_access !== null || this.token_access !== undefined ) {
+      this.headers.set('Authorization', `Bearer ${this.token_access}`);
+    }
+    return this.headers;
   }
 }

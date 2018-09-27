@@ -1,1 +1,13 @@
-<router-outlet></router-outlet>
+<header>
+    <app-navbar></app-navbar>
+</header>
+<main class="grey lighten-4">
+    <div class="row">
+        <div class="col s12 m4">
+            <app-sidenav></app-sidenav>
+        </div>
+        <div class="col s12 m8">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</main>

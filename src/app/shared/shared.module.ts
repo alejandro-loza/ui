@@ -4,17 +4,25 @@ import { RouterModule } from               '@angular/router';
 
 import { MaterializeModule } from          './materialize/materialize.module';
 
+import { NavbarComponent } from            './navbar/navbar.component';
+import { SidenavComponent } from           './sidenav/sidenav.component';
+
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     MaterializeModule
   ],
-  declarations: [],
+  declarations: [
+    NavbarComponent,
+    SidenavComponent
+  ],
   exports: [
     CommonModule,
     RouterModule,
-    MaterializeModule
+    MaterializeModule,
+    NavbarComponent,
+    SidenavComponent
   ]
 })
 export class SharedModule { }
