@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MzMediaService } from 'ngx-materialize';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',

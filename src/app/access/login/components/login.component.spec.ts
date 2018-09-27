@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { async, ComponentFixture, TestBed } from   '@angular/core/testing';
+import { RouterTestingModule } from                '@angular/router/testing';
+import { HttpClientTestingModule } from            '@angular/common/http/testing'
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from                        '@angular/forms';
 
-import { LoginComponent } from './login.component';
-import { AuthService, FinerioService } from '../../services/services.index';
+import { LoginComponent } from                     './login.component';
+import { AuthService, FinerioService } from        '@services/services.index';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
