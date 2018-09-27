@@ -1,14 +1,12 @@
 import { NgModule } from                             '@angular/core';
 import { BrowserModule } from                        '@angular/platform-browser';
 import { BrowserAnimationsModule } from              '@angular/platform-browser/animations';
-import { ServicesModule } from                       './services/services.module';
-
-import { APP_ROUTES } from                           './app.route';
-
-import { AppComponent } from                         './app.component';
-import { PagesComponent } from                       './pages/pages.component';
-import { AccessComponent } from                      './access/access.component';
-import { SharedModule } from                         './shared/shared.module';
+import { AppRoutes } from                            '@app/app.route';
+import { AppComponent } from                         '@app/app.component';
+import { PagesComponent } from                       '@pages/pages.component';
+import { AccessComponent } from                      '@access/access.component';
+import { ServicesModule } from                       '@services/services.module';
+import { SharedModule } from                         '@shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,10 +16,10 @@ import { SharedModule } from                         './shared/shared.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     SharedModule,
     ServicesModule,
-    BrowserAnimationsModule,
-    APP_ROUTES
+    AppRoutes
   ],
   providers: [],
   bootstrap: [AppComponent]
