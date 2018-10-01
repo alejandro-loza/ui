@@ -7,8 +7,6 @@ import { LOGIN_ROUTES } from                         './login.route';
 import { LoginComponent } from                       './components/login.component';
 import { RegisterLoginComponent } from               '../../components/register-login-button/register-login.component';
 import { SharedModule } from                         '../../shared/shared.module';
-import { SocialMediaComponent } from                 '../../components/social-media-button/social-media.component';
-
 
 @NgModule({
   imports: [
@@ -19,8 +17,7 @@ import { SocialMediaComponent } from                 '../../components/social-me
   ],
   declarations: [
     LoginComponent,
-    RegisterLoginComponent,
-    SocialMediaComponent
+    RegisterLoginComponent
   ]
 })
 export class LoginModule { }

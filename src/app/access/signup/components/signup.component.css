@@ -1,23 +1,33 @@
-/* Btn-social-media */
-.icon-social-media{
-	width: 40%;
-    height: auto;
+.socialBtn{
+	border-bottom: 2px solid #e48d2b;
 }
-.btn-facebook{
-	background-color: #4267b2;
-	color: #E8EAF6;
-	border: none;
+
+#checkbox-blog:checked+label::after{
+    border: 2px solid red!important;
+    background-color: red!important;
+}	
+
+.d-none{
+	display: none;
 }
-.btn-facebook:hover{
-	color: #4267b2;
-	background-color: #E8EAF6;
+
+.pt-15{
+	padding-top: 15px;
 }
-.btn-google-plus{
-	background-color: #d34836;
-	color: #FFEBEE;
-	border: none;
+
+#passwordError{
+	color: red;
+	font-size: 12px;
 }
-.btn-google-plus:hover{
-	background-color: #FFEBEE;
-	color: #d34836;
+
+#tips-col h6, p{
+	padding-top: 30px;
+	margin: 10px!important;
+	font-size: 20px;
+}
+
+@media screen and (max-width: 600px){
+	#tips-col{
+		display: none;
+	}
 }

@@ -4,7 +4,10 @@ import {
     MzInputModule,
     MzIconModule,
     MzIconMdiModule,
-    MzToastModule } from 'ngx-materialize';
+    MzToastModule,
+    MzCheckboxModule,
+    MzModalModule 
+ } from 'ngx-materialize';
 
 @NgModule({
     imports: [
@@ -12,7 +15,9 @@ import {
         MzInputModule,
         MzIconMdiModule,
         MzIconModule,
-        MzToastModule
+        MzToastModule,
+        MzCheckboxModule,
+        MzModalModule
     ],
     exports: [
         MzButtonModule,
@@ -20,6 +25,8 @@ import {
         MzIconMdiModule,
         MzIconModule,
         MzToastModule,
+        MzCheckboxModule,
+        MzModalModule
     ],
     providers: [
     ]

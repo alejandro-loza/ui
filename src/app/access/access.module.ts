@@ -6,6 +6,8 @@ import { SharedModule } from       '../shared/shared.module';
   imports: [
     SharedModule,
     ACCESS_ROUTES
-  ]
+  ],
+  declarations : [
+  ],
 })
 export class AccessModule { }
