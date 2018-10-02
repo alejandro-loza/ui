@@ -1,10 +1,9 @@
-import { TestBed, inject, async } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { HttpClientModule, HttpRequest, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AuthService, FinerioService } from '../services.index';
 
-import { environment } from './../../../environments/environment';
 import { User } from './../../shared/dto/authLoginDot';
 
 interface UserMock {
@@ -13,6 +12,10 @@ interface UserMock {
   id?: string;
   name?: string;
   lastName?: string;
+}
+
+interface infoMock {
+  info: string;
 }
 
 describe('AuthService', () => {
@@ -59,6 +62,23 @@ describe('AuthService', () => {
       expect(req.request.method).toEqual('POST');
       console.log(req);
       expect(authService).toBeTruthy();
+    });
+  });
+
+  describe('#personalInfoFunction', () => {
+    it('should return an Observable', () => {
+      const dummyInfo = {
+        info: 'Dummy Info'
+      };
+
+      authService.personalInfo().subscribe( (userInfo: any) => {
+        userInfo = dummyInfo;
+        expect(userInfo).toEqual(dummyInfo);
+      });
+
+      const req = http.expectOne(`${authService.api}/me`);
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyInfo);
     });
   });
 });
