@@ -9,7 +9,6 @@ import { SharedModule } from                         '@shared/shared.module';
 // COMPONENT
 import { LoginComponent } from                       './components/login.component';
 import { RegisterLoginComponent } from               '@components/register-login-button/register-login.component';
-import { SocialMediaComponent } from                 '@components/social-media-button/social-media.component';
 
 
 @NgModule({
@@ -21,8 +20,7 @@ import { SocialMediaComponent } from                 '@components/social-media-b
   ],
   declarations: [
     LoginComponent,
-    RegisterLoginComponent,
-    SocialMediaComponent
+    RegisterLoginComponent
   ]
 })
 export class LoginModule { }

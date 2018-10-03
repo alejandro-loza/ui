@@ -7,7 +7,8 @@ import {
     MzIconMdiModule,
     MzToastModule,
     MzNavbarModule,
-    MzSidenavModule
+    MzSidenavModule,
+    MzCheckboxModule,
  } from                     'ngx-materialize';
 
 @NgModule({
@@ -19,7 +20,8 @@ import {
         MzIconModule,
         MzToastModule,
         MzNavbarModule,
-        MzSidenavModule
+        MzSidenavModule,
+        MzCheckboxModule
     ],
     exports: [
         MzMediaModule,
@@ -29,7 +31,8 @@ import {
         MzIconModule,
         MzToastModule,
         MzNavbarModule,
-        MzSidenavModule
+        MzSidenavModule,
+        MzCheckboxModule
     ],
     providers: [
     ]
