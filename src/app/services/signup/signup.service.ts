@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { FinerioService } from '../services.index';
-import { map, catchError } from 'rxjs/operators'; 
+import { environment } from '@env/environment.prod';
+import { map } from 'rxjs/operators'; 
 import { MzToastService } from 'ngx-materialize';
 
-
-const DATE_KEYS: string[] = ['date', 'lastupdated'];
-
 @Injectable()
-export class SignupService extends FinerioService {
+export class SignupService {
 
+  url:string = environment.backendUrl;
   constructor( private http:HttpClient, private toastService: MzToastService, ) {
-    super();
+    
    }
   
   signup( password:string, passwordConfirmation:string, 
@@ -27,9 +25,9 @@ export class SignupService extends FinerioService {
         headers.append('Content-Type', 'application/json');
         headers.append('Accept', 'application/json');
 
-        return this.http.post(`${ this.getUrl() }/users` , body, { headers:headers })  
+        return this.http.post(`${ this.url }/users` , body, { headers:headers })  
                           .pipe( map( res => {
-                            this.toastService.show('Registro exitoso', 5000, 'green');
+                            this.toastService.show('Registro exitoso', 2000, 'green');
                           }) );
   }
 }

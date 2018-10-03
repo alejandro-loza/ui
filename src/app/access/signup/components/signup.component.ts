@@ -1,4 +1,4 @@
-import { Component, OnInit } from           '@angular/core';
+import { Component } from           '@angular/core';
 import { SignupService } from               '../../../services/signup/signup.service';
 import { Router } from                      '@angular/router';
 import { isNullOrUndefined } from 'util';
@@ -11,7 +11,7 @@ import { isNullOrUndefined } from 'util';
   providers: [ SignupService ]
 })
 
-export class SignupComponent implements OnInit {
+export class SignupComponent {
 
   email:string;
   password:string;
@@ -22,10 +22,6 @@ export class SignupComponent implements OnInit {
 
   constructor( private _signupService: SignupService,
                private router:Router ) { }
-
-  ngOnInit() {
-  	
-  }
 
   signup() {
     this.limpiaErrorSpan();
