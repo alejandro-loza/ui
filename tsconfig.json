@@ -26,7 +26,8 @@
       "@components/*": ["app/components/*"],
       "@services/*": ["app/services/*"],
       "@pages/*": ["app/pages/*"],
-      "@shared/*": ["app/shared/*"]
+      "@shared/*": ["app/shared/*"],
+      "@img/": ["assets/media/img/*"]
     }
   }
 }
