@@ -8,9 +8,9 @@ import { map } from                       'rxjs/operators';
 @Injectable()
 export class AuthService {
 
-  private api = `${environment.backendUrl}/api`;
-
   private headers: HttpHeaders;
+  
+  api = `${environment.backendUrl}/api`;
   user: User;
   token: string;
   url = `${this.api}/login`;
@@ -55,8 +55,9 @@ export class AuthService {
 
   personalInfo() {
     const token: string = sessionStorage.getItem('access-token');
-    return this.httpClient.get(`https://api.finerio.mx/api/me`, {headers: this.headers.set('Authorization', `Bearer ${token}`)})
+    return this.httpClient.get(`${this.api}/me`, {headers: this.headers.set('Authorization', `Bearer ${token}`)})
       .pipe(map( (res: any) => {
+        console.log(res);
         sessionStorage.setItem('idUser', res.id);
       })
     );
