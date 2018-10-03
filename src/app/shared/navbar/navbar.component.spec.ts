@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { NavbarComponent } from './navbar.component';
 import { MaterializeModule } from 'ngx-materialize';
+import { NavbarComponent } from './navbar.component';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -24,8 +23,7 @@ describe('NavbarComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;
-    createCollapseButton('btn-collapse-sidenav');
-    fixture.detectChanges();
+    createCollapseButton('test');
   });
 
   it('should create', () => {

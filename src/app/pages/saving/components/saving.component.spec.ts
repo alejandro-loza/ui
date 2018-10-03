@@ -16,6 +16,9 @@ describe('SavingComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SavingComponent);
     component = fixture.componentInstance;
+  });
+
+  afterEach(() => {
     fixture.detectChanges();
   });
 

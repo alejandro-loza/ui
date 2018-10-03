@@ -58,7 +58,7 @@ describe('AuthService', () => {
         expectedData = data;
         expect(data).toEqual(expectedData);
       });
-      const req = http.expectOne('https://api.finerio.mx/api/login');
+      const req = http.expectOne(`${authService.api}/login`);
       expect(req.request.method).toEqual('POST');
       console.log(req);
       expect(authService).toBeTruthy();
