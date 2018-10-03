@@ -4,6 +4,7 @@ export class FinerioService {
 
   private token_access: string;
   private headers: HttpHeaders;
+  private deep = '?deep=true';
 
   constructor(
   ) {
