@@ -6,7 +6,7 @@ const PagesRouting: Routes = [
   {path: 'movements', loadChildren: './movements/movements.module#MovementsModule' },
   {path: 'saving', loadChildren: './saving/saving.module#SavingModule' },
   {path: 'category', loadChildren: './category/category.module#CategoryModule' },
-  {path: 'credential', loadChildren: './credential/credential.module#CredentialModule' },
+  {path: 'credentials', loadChildren: './credential/credential.module#CredentialModule' },
   {path: '', pathMatch:'full', redirectTo: '/app/dashboard'},
   {path: '**', redirectTo: '/app/dashboard'}
 ];

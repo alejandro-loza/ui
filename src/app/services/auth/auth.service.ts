@@ -57,7 +57,6 @@ export class AuthService {
     const token: string = sessionStorage.getItem('access-token');
     return this.httpClient.get(`${this.api}/me`, {headers: this.headers.set('Authorization', `Bearer ${token}`)})
       .pipe(map( (res: any) => {
-        console.log(res);
         sessionStorage.setItem('idUser', res.id);
       })
     );

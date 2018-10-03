@@ -1,10 +1,60 @@
-<mz-navbar [navbarClass]="'container'">
-    <a href="#" class="brand-logo center">Logo</a>
-    <mz-navbar-item-container [align]="'right'" *ngIf="smalltoLargeResolution | async">
-        <mz-navbar-item>
-            <button mz-button id="btn-sidenav-demo">
-                Open
-            </button>
-        </mz-navbar-item>
-    </mz-navbar-item-container>
-</mz-navbar>
+<header>
+    <div class="navbar-fixed">
+        <mz-navbar [navbarClass]="'finerio-blue'" [ngClass]="{'left-align': lowThanLargeResolution | async, 'center-align': moreThanMediumResoultion | async}">
+            <div class="container">
+                <img src="../../../assets/media/img/finerio_logo/finerio_white.svg" id="finerio-logo">
+                <mz-navbar-item-container [align]="'right'" *ngIf="lowThanLargeResolution | async">
+                    <mz-navbar-item>
+                        <button mz-button [flat]="true" class="button-collapse show-on-large" id="btn-collapse-sidenav">
+                            <i class="material-icons medium white-text">menu</i>
+                        </button>
+                    </mz-navbar-item>
+                </mz-navbar-item-container>
+            </div>
+        </mz-navbar>
+    </div>
+</header>
+<mz-sidenav #sidenav [id]="'sidenav'" [collapseButtonId]="'btn-collapse-sidenav'" [fixed]="true" [width]="300" [backgroundClass]="'finerio-blue white-text'">
+    <mz-sidenav-link>
+        <a routerLink="dashboard" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
+            <i mz-icon-mdi [align]="'left'" [icon]="'chart-donut'" [size]="'48px'" [class]="'icon-list white-text'"></i>Dashboard
+        </a>
+    </mz-sidenav-link>
+    <mz-sidenav-link>
+        <a routerLink="movements" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
+            <i mz-icon-mdi [align]="'left'" [icon]="'format-list-bulleted'" [size]="'48px'" [class]="'icon-list white-text'"></i>Movimientos
+        </a>
+    </mz-sidenav-link>
+    <mz-sidenav-link>
+        <a routerLink="budgets" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
+            <i mz-icon-mdi [align]="'left'" [icon]="'chart-bar'" [size]="'48px'" [class]="'icon-list white-text'"></i>Presupuestos
+        </a>
+    </mz-sidenav-link>
+    <mz-sidenav-link>
+        <a routerLink="credentials" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
+            <i mz-icon-mdi [align]="'left'" [icon]="'credit-card'" [size]="'48px'" [class]="'icon-list white-text'"></i>Cuentas Bancarias
+        </a>
+    </mz-sidenav-link>
+    <mz-sidenav-link>
+        <a routerLink="category" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
+            <i mz-icon-mdi [align]="'left'" [icon]="'label'" [size]="'48px'" [class]="'icon-list white-text'"></i>Categorías
+        </a>
+    </mz-sidenav-link>
+
+    <mz-sidenav-collapsible id="sidenav-collapsible">
+        <mz-sidenav-collapsible-header id="collapsible-header">
+            <div class=" white-text pages-list" id="collapsible-user">
+                <i mz-icon-mdi [align]="'left'" [icon]="'face'" [size]="'48px'" [class]="'icon-list white-text'"></i>
+                <i mz-icon-mdi [align]="'right'" [icon]="'plus'" [size]="'48px'" [class]="'icon-list white-text'" id="chevron"></i>Perfil
+            </div>
+        </mz-sidenav-collapsible-header>
+        <mz-sidenav-collapsible-content>
+            <mz-sidenav-link>
+                <a class="white-text waves-effect waves-blue user-list ">Cambiar Contraseña</a>
+            </mz-sidenav-link>
+            <mz-sidenav-link>
+                <a class="white-text waves-effect waves-blue user-list ">Cerrar Sesión</a>
+            </mz-sidenav-link>
+        </mz-sidenav-collapsible-content>
+    </mz-sidenav-collapsible>
+</mz-sidenav>
