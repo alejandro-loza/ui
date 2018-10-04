@@ -9,6 +9,13 @@ describe('PagesComponent', () => {
   let component: PagesComponent;
   let fixture: ComponentFixture<PagesComponent>;
 
+
+  function createCollapseButton(id: string): void {
+    const collapseButton = document.createElement('button');
+    collapseButton.setAttribute('id', id);
+    document.body.appendChild(collapseButton);
+  }
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -24,6 +31,7 @@ describe('PagesComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PagesComponent);
     component = fixture.componentInstance;
+    createCollapseButton('testCollapsable');
     fixture.detectChanges();
   });
 
