@@ -32,7 +32,6 @@ describe('PagesComponent', () => {
     fixture = TestBed.createComponent(PagesComponent);
     component = fixture.componentInstance;
     createCollapseButton('testCollapsable');
-    fixture.detectChanges();
   });
 
   it('should create', () => {
