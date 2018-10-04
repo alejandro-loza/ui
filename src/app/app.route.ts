@@ -1,25 +1,25 @@
-import { RouterModule, Routes, PreloadAllModules  } from '@angular/router';
-
-import { AccessComponent } from './access/access.component';
-import { PagesComponent } from './pages/pages.component';
-
-
+import { RouterModule, Routes  } from '@angular/router';
 import { AuthGuard } from './services/guards/auth/auth.guard';
 
 const AppRouting: Routes = [
     {
         path: 'access',
-        component: AccessComponent,
         loadChildren: './access/access.module#AccessModule'
     },
     {
         path: 'app',
-        component: PagesComponent,
         canActivate: [ AuthGuard ],
         loadChildren: './pages/pages.module#PagesModule'
     },
-    { path: '', pathMatch: 'full', redirectTo: '/access/login'},
-    { path: '**', redirectTo: '/access/login'}
+    {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: '/access/login'
+    },
+    {
+        path: '**',
+        redirectTo: '/access/login'
+    }
 ];
 
-export const AppRoutes = RouterModule.forRoot(AppRouting, { preloadingStrategy: PreloadAllModules });
+export const AppRoutes = RouterModule.forRoot(AppRouting);

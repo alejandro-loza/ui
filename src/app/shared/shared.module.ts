@@ -6,8 +6,9 @@ import { MaterializeModule } from          './materialize/materialize.module';
 import { SocialMediaComponent } from       '../components/social-media-button/social-media.component';
 
 
+import { RegisterLoginComponent } from     '@components/register-login-button/register-login.component';
 import { NavbarComponent } from            './navbar/navbar.component';
-import { SidenavComponent } from           './sidenav/sidenav.component';
+
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import { SidenavComponent } from           './sidenav/sidenav.component';
   ],
   declarations: [
     NavbarComponent,
-    SidenavComponent,
+    RegisterLoginComponent,
     SocialMediaComponent
   ],
   exports: [
@@ -25,7 +26,7 @@ import { SidenavComponent } from           './sidenav/sidenav.component';
     RouterModule,
     MaterializeModule,
     NavbarComponent,
-    SidenavComponent,
+    RegisterLoginComponent,
     SocialMediaComponent
   ]
 })

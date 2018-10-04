@@ -15,16 +15,31 @@ export class NavbarComponent implements OnInit {
   public xLargeResolution: Observable<boolean>;
 
   /** From 0px to MaxResolution */
-  public smalltoLargeResolution: Observable<boolean>;
+  public lowThanLargeResolution: Observable<boolean>;
+  public moreThanMediumResoultion: Observable<boolean>;
 
   constructor( private mediaService: MzMediaService ) {
     this.smallResolution = this.mediaService.isActive('s');
     this.mediumResolution = this.mediaService.isActive('m');
     this.largeResolution = this.mediaService.isActive('l');
     this.xLargeResolution = this.mediaService.isActive('xl');
-    this.smalltoLargeResolution = this.mediaService.isActive('lt-l');
+    this.lowThanLargeResolution = this.mediaService.isActive('lt-l');
+    this.moreThanMediumResoultion = this.mediaService.isActive('gt-m');
   }
 
   ngOnInit() {
+    this.collapsableFun();
+  }
+
+
+  collapsableFun() {
+    const chevron = document.querySelector('#chevron');
+    document.querySelector('#sidenav-collapsible').addEventListener('click', () => {
+      if (document.querySelector('.collapsible-header').classList.contains('active')) {
+        chevron.classList.replace('mdi-plus', 'mdi-chevron-down');
+      } else {
+        chevron.classList.replace('mdi-chevron-down', 'mdi-plus');
+      }
+    });
   }
 }

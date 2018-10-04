@@ -1,15 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-// Component
-import { SavingComponent } from './components/saving.component';
-
-// Routes
-import { SAVING_ROUTES } from './saving.route';
+import { NgModule } from           '@angular/core';
+import { SharedModule } from       '@shared/shared.module';
+import { SavingComponent } from    './components/saving.component';
+import { SAVING_ROUTES } from      './saving.route';
 
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     SAVING_ROUTES
   ],
   declarations:[ SavingComponent ]
