@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService, FinerioService } from '../services.index';
 
 import { User } from './../../shared/dto/authLoginDot';
+import { environment } from '@env/environment';
 
 interface UserMock {
   email: string;
@@ -58,7 +59,7 @@ describe('AuthService', () => {
         expectedData = data;
         expect(data).toEqual(expectedData);
       });
-      const req = http.expectOne(`${authService.api}/login`);
+      const req = http.expectOne(`${environment.backendUrl}/login`);
       expect(req.request.method).toEqual('POST');
       console.log(req);
       expect(authService).toBeTruthy();
@@ -76,7 +77,7 @@ describe('AuthService', () => {
         expect(userInfo).toEqual(dummyInfo);
       });
 
-      const req = http.expectOne(`${authService.api}/me`);
+      const req = http.expectOne(`${environment.backendUrl}/me`);
       expect(req.request.method).toBe('GET');
       req.flush(dummyInfo);
     });
