@@ -30,8 +30,8 @@ export class LoginComponent implements OnInit {
     this.errorMsg = '';
 
     const usuario = new User(
-      loginForm.value.email = 'jose.lopez@finerio.mx',
-      loginForm.value.password = 'Serlider11'
+      loginForm.value.email,
+      loginForm.value.password
     );
 
     this.authService.login( usuario ).subscribe(

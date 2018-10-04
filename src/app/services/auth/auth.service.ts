@@ -9,11 +9,10 @@ import { map } from                       'rxjs/operators';
 export class AuthService {
 
   private headers: HttpHeaders;
-  
-  api = `${environment.backendUrl}/api`;
+
+  url = `${environment.backendUrl}/login`;
   user: User;
   token: string;
-  url = `${this.api}/login`;
 
   constructor(
     private httpClient: HttpClient,
@@ -55,7 +54,7 @@ export class AuthService {
 
   personalInfo() {
     const token: string = sessionStorage.getItem('access-token');
-    return this.httpClient.get(`${this.api}/me`, {headers: this.headers.set('Authorization', `Bearer ${token}`)})
+    return this.httpClient.get(`${environment.backendUrl}/me`, {headers: this.headers.set('Authorization', `Bearer ${token}`)})
       .pipe(map( (res: any) => {
         sessionStorage.setItem('idUser', res.id);
       })
