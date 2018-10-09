@@ -3,7 +3,7 @@ import { NgForm } from                      '@angular/forms';
 import { Router } from                      '@angular/router';
 
 import { AuthService } from                 '@services/services.index';
-import { User } from                        '@shared/dto/authLoginDot';
+import { User } from                        '@app/shared/interfaces/authLogin.interface';
 import { MzToastService } from              'ngx-materialize';
 
 @Component({
@@ -15,6 +15,10 @@ import { MzToastService } from              'ngx-materialize';
 export class LoginComponent implements OnInit {
 
   errorMsg: string;
+  usuario: User = {
+    email: '',
+    password: ''
+  };
 
   constructor(
     private toastService: MzToastService,
@@ -27,14 +31,13 @@ export class LoginComponent implements OnInit {
   }
 
   ingresar(loginForm: NgForm) {
+
     this.errorMsg = '';
 
-    const usuario = new User(
-      loginForm.value.email,
-      loginForm.value.password
-    );
+    this.usuario.email = loginForm.value.email,
+    this.usuario.password = loginForm.value.password;
 
-    this.authService.login( usuario ).subscribe(
+    this.authService.login( this.usuario ).subscribe(
       res => {
         this.router.navigate(['/access/welcome']);
       }, err => {
