@@ -1,8 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from                '@angular/core';
 import { HttpClient, HttpHeaders } from   '@angular/common/http';
+
 import { environment } from               '@env/environment';
+
 import { FinerioService } from            '@services/config/config.service';
-import { User } from                      '@shared/dto/authLoginDot';
+
+import { User } from                      '@app/shared/interfaces/authLogin.interface';
+import { InfoUser } from                  '@interfaces/infoUser.interface';
+
 import { map } from                       'rxjs/operators';
 
 @Injectable()
@@ -28,8 +33,6 @@ export class AuthService {
   getData() {
     if ( sessionStorage.getItem('access-token') ) {
       this.token = sessionStorage.getItem('access-token');
-    } else {
-      this.token = '';
     }
   }
 
@@ -37,11 +40,11 @@ export class AuthService {
     sessionStorage.setItem( 'access-token', access_token );
     sessionStorage.setItem( 'refresh-token', refresh_token );
 
-    this.finerioService.setToken( access_token );
+    this.finerioService.setToken = access_token;
   }
 
   login(user: User) {
-    return this.httpClient.post(
+    return this.httpClient.post<User>(
       this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
     ).pipe(
       map( (res: any ) => {
@@ -54,9 +57,9 @@ export class AuthService {
 
   personalInfo() {
     const token: string = sessionStorage.getItem('access-token');
-    return this.httpClient.get(`${environment.backendUrl}/me`, {headers: this.headers.set('Authorization', `Bearer ${token}`)})
-      .pipe(map( (res: any) => {
-        sessionStorage.setItem('idUser', res.id);
+    return this.httpClient.get<InfoUser>(`${environment.backendUrl}/me`, {headers: this.headers.set('Authorization', `Bearer ${token}`)})
+      .pipe(map( (res: InfoUser) => {
+        sessionStorage.setItem( 'id-user', res.id );
       })
     );
   }

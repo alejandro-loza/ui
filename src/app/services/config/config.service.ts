@@ -2,21 +2,30 @@ import { HttpHeaders } from '@angular/common/http';
 
 export class FinerioService {
 
-  private token_access: string;
   private headers: HttpHeaders;
-  private deep = '?deep=true';
+  token_access: string;
+  idUser: string;
+  deep = true;
 
   constructor(
   ) {
     this.headers = new HttpHeaders();
   }
 
-  setToken(token) {
+  public set setToken(token: string) {
     this.token_access = token;
   }
 
-  getToken() {
+  public get getToken(): string {
     return this.token_access;
+  }
+
+  public set setId(id: string) {
+    this.idUser = id;
+  }
+
+  public get getId(): string {
+    return this.idUser;
   }
 
   getJsonHeaders() {
