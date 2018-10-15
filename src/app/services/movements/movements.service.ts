@@ -40,7 +40,6 @@ export class MovementsService {
       `&includeDuplicates=${this.queryMovements.getDuplicates}` +
       `&offset=`+ this.offset;
       this.offset = this.offset + this.queryMovements.getMovements;
-      console.log(this.offset);
     return this.httpClient.get(
              urlMovements,
              { headers: this.headers.set('Authorization', `Bearer ${this.token}`)}
