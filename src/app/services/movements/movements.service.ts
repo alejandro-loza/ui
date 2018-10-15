@@ -1,13 +1,13 @@
 import { Injectable } from             '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { FinerioService } from         '@services/config/config.service';
+
 import { environment } from            '@env/environment';
 
-import { FinerioService } from         '@services/config/config.service';
-import { AuthService } from            '@services/auth/auth.service';
+import { map } from                    'rxjs/operators';
 
 import { QueryMovements } from         '@classes/queryMovementsDto.class';
-import { InfoUser } from '@interfaces/infoUser.interface';
 
 @Injectable()
 export class MovementsService {
@@ -26,6 +26,7 @@ export class MovementsService {
   }
 
   allMovements () {
+    let offset = 0;
     this.id = sessionStorage.getItem('id-user');
     this.token = sessionStorage.getItem('access-token');
     const urlMovements =
@@ -36,7 +37,12 @@ export class MovementsService {
       `&includeCharges=${this.queryMovements.getCharges}` +
       `&tmz=${this.queryMovements.getTmz}` +
       `&max=${this.queryMovements.getMovements}` +
-      `&includeDuplicates=${this.queryMovements.getDuplicates}`;
-    return this.httpClient.get(urlMovements, { headers: this.headers.set('Authorization', `Bearer ${this.token}`)});
+      `&includeDuplicates=${this.queryMovements.getDuplicates}` +
+      `&offset=`+ offset;
+      offset = offset + this.queryMovements.getMovements + 1;
+    return this.httpClient.get(
+             urlMovements,
+             { headers: this.headers.set('Authorization', `Bearer ${this.token}`)}
+           ).pipe(map( res => res ));
   }
 }
