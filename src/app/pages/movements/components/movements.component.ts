@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MovementsService } from '@services/services.index';
+import { Movement } from '@interfaces/movements.interface';
 
 @Component({
   selector: 'app-movements',
@@ -7,7 +8,7 @@ import { MovementsService } from '@services/services.index';
   styleUrls: ['./movements.component.css']
 })
 export class MovementsComponent implements OnInit {
-  id: string;
+  movementList: Movement[] = [];
   constructor(
     private movementsService: MovementsService
   ) { }
@@ -17,7 +18,10 @@ export class MovementsComponent implements OnInit {
   }
 
   allMovements() {
-    this.movementsService.allMovements().subscribe(res => console.log('component: ', res));
+    this.movementsService.allMovements().subscribe((res:any) => {
+      res.data.forEach((movement: Movement) => {
+        this.movementList.push(movement);
+      });
+    });
   }
-
 }

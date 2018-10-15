@@ -16,23 +16,30 @@
 </div>
 <div class="center-align">
     <div class="row">
-        <div class="col s3 m2">
-            <p>Cuenta</p>
+        <div class="titleContainer">
+            <div class="col s3 m2">
+                <p>Cuenta</p>
+            </div>
+            <div class="col s3 m2 hide-on-small-only">
+                <p>Fecha</p>
+            </div>
+            <div class="col s3 m2">
+                <p>Descrición</p>
+            </div>
+            <div class="col s3 m2">
+                <p>Categoria</p>
+            </div>
+            <div class="col s3 m2">
+                <p>Monto</p>
+            </div>
+            <div class="col s3 m2 hide-on-small-only">
+                <p>Considerar</p>
+            </div>
         </div>
-        <div class="col m2 hide-on-small-only">
-            <p>Fecha</p>
-        </div>
-        <div class="col s3 m2">
-            <p>Descripción</p>
-        </div>
-        <div class="col s3 m2">
-            <p>Categoria</p>
-        </div>
-        <div class="col s3 m2">
-            <p>Monto</p>
-        </div>
-        <div class="col m2 hide-on-small-only">
-            <p>Considerar</p>
+    </div>
+    <div class="row">
+        <div class="bodyContainer" *ngFor="let movement of movementList">
+            <app-movement [account]="movement.account.institution.code" [date]="movement.customDate | date: 'dd / MMM'" [description]="movement.customDescription | uppercase" [category]="'Categoria'" [amount]="movement.amount" [considerar]="'Considerar'" [type]="movement.type"></app-movement>
         </div>
     </div>
 </div>
