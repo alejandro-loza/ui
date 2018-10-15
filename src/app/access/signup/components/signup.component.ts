@@ -1,8 +1,9 @@
-import { Component } from           '@angular/core';
+import { Component } from                   '@angular/core';
 import { SignupService } from               '../../../services/signup/signup.service';
 import { Router } from                      '@angular/router';
-import { isNullOrUndefined } from 'util';
-
+import { isNullOrUndefined } from           'util';
+import { SignupData } from                  '@shared/dto/signupDto';
+import { NgForm } from                      '@angular/forms';
 
 @Component({
   selector: 'app-signup',
@@ -13,31 +14,33 @@ import { isNullOrUndefined } from 'util';
 
 export class SignupComponent {
 
-  email:string;
-  password:string;
-  confirmPassword:string;
-  passwordValidate:boolean = true;
-  termsAndConditions:boolean = true;
-  blog:boolean = true;
-
+  passwordValidate:boolean = false;
+  
   constructor( private _signupService: SignupService,
                private router:Router ) { }
 
-  signup() {
-    this.limpiaErrorSpan();
-    if( !isNullOrUndefined(this.email) && !isNullOrUndefined(this.password) ){
-      console.log( isNullOrUndefined(this.password) );
-      this.passwordMatch();
-      if ( this.passwordValidate ) {
-        if( this.termsAndConditions ){
+  signup( SignupForm: NgForm ) {
 
-          this._signupService.signup(this.password, this.confirmPassword, this.email, this.termsAndConditions, this.blog)
-          .subscribe( user => {
+    const data = new SignupData(
+      SignupForm.value.email,
+      SignupForm.value.password,
+      SignupForm.value.confirmPassword,
+      SignupForm.value.termsAndConditions,
+      SignupForm.value.blog
+    );
+
+    this.limpiaErrorSpan();
+    if( !isNullOrUndefined(data.email) || !isNullOrUndefined(data.password) ){
+      this.passwordMatch( data.password, data.passwordConfirm );
+
+      if ( this.passwordValidate ) {
+        if( data.termsAndConditions ){
+
+          this._signupService.signup( data ).subscribe( res => {
              this.router.navigate(['/access/login']);
              
            }, error => {
                let errorMessage = error.error.message;
-           
                  $("#errorSpan").html( `${ errorMessage }` ).css({
                    'color':'red',
                    'font-size':'12px'
@@ -45,7 +48,6 @@ export class SignupComponent {
                
              }   
            );
-           
         } else {
           $("#errorSpan").html("Debes aceptar los término y condiciones para continuar").css({
             'color':'red',
@@ -66,8 +68,8 @@ export class SignupComponent {
     }
   }
 
-  passwordMatch(){
-    this.password == this.confirmPassword ?
+  passwordMatch( password, confirmPassword ){
+    password == confirmPassword ?
       this.passwordValidate = true : 
       this.passwordValidate = false
   }
@@ -75,6 +77,5 @@ export class SignupComponent {
   limpiaErrorSpan(){
     $("#errorSpan").html("");
   }
-
 }
 
