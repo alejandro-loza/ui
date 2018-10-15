@@ -17,6 +17,7 @@ export class MovementsService {
   id: string;
   token: string;
   queryMovements: QueryMovements = new QueryMovements( true, true, true, 35 );
+  offset = 0;
 
   constructor(
     private httpClient: HttpClient,
@@ -26,7 +27,6 @@ export class MovementsService {
   }
 
   allMovements () {
-    let offset = 0;
     this.id = sessionStorage.getItem('id-user');
     this.token = sessionStorage.getItem('access-token');
     const urlMovements =
@@ -38,8 +38,9 @@ export class MovementsService {
       `&tmz=${this.queryMovements.getTmz}` +
       `&max=${this.queryMovements.getMovements}` +
       `&includeDuplicates=${this.queryMovements.getDuplicates}` +
-      `&offset=`+ offset;
-      offset = offset + this.queryMovements.getMovements + 1;
+      `&offset=`+ this.offset;
+      this.offset = this.offset + this.queryMovements.getMovements;
+      console.log(this.offset);
     return this.httpClient.get(
              urlMovements,
              { headers: this.headers.set('Authorization', `Bearer ${this.token}`)}
