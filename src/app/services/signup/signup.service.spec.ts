@@ -6,7 +6,7 @@ import { HttpClientModule } from        '@angular/common/http';
 import { FinerioService } from          '@app/services/shared/config.service';
 import { MzToastService } from          'ngx-materialize';
 import { environment } from             '@env/environment';
-import { SignupData } from '@shared/dto/signupDto';
+import { SignupData } from              '@shared/dto/signupDto';
 
 describe('SignupService', () => {
   let _signupService: SignupService;
@@ -30,7 +30,7 @@ describe('SignupService', () => {
     expect(service).toBeTruthy();
   }));
 
-  describe (' #SignupFunction', () => {0
+  describe (' #SignupFunction', () => {
    let expectedData = new SignupData(
      "alanvhz.099@gmail.com",
      "contraseña",
@@ -48,7 +48,6 @@ describe('SignupService', () => {
                     .subscribe( res => {
                       console.log(res);
                     });
-        console.log( "signupTest "+ http);
         const req = http.expectOne(`${environment.backendUrl}/users`);
         expect(req.request.method).toEqual('POST');
         expect( _signupService ).toBeTruthy();

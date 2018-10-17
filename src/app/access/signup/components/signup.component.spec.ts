@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from   '@angular/core/testing';
 import { HttpClientTestingModule } from            '@angular/common/http/testing';
 import { SocialMediaComponent } from               '@components/social-media-button/social-media.component';
 import { MaterializeModule } from                  'ngx-materialize';
