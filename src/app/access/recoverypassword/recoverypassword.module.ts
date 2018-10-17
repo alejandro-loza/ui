@@ -6,11 +6,16 @@ import { RECOVERY_ROUTES } from './recoverypassword.route';
 
 // COMPONENT
 import { RecoverypasswordComponent } from './components/recoverypassword.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   imports: [
     CommonModule,
-    RECOVERY_ROUTES
+    RECOVERY_ROUTES,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     RecoverypasswordComponent
