@@ -5,6 +5,7 @@ import { HttpClient,
 import { environment } from                   '@env/environment';
 import { catchError } from                    'rxjs/operators';
 import { throwError } from                    'rxjs';
+import { PasswordResetRequest } from '@shared/dto/recoveryPasswordRequestDto';
 
 
 @Injectable({
@@ -13,19 +14,26 @@ import { throwError } from                    'rxjs';
 export class RecoveryService {
 
   private headers = new HttpHeaders();
+      
   url:string = environment.backendUrl;
 
-  constructor( private http: HttpClient ) { }
+  constructor( private http: HttpClient ) {
+    this.headers.append('Content-Type', 'application/json;charset=UTF-8');
+    this.headers.append('Accept', 'application/json;charset=UTF-8');
+   }
 
   passwordRecovery( email:string ){
-      this.headers.append('Content-Type', 'application/json;charset=UTF-8');
-      this.headers.append('Accept', 'application/json;charset=UTF-8');
-
       let body = JSON.stringify({ email: email });
 
       return this.http.post(`${this.url}/security/passwordrecovery`, body , ({ headers: this.headers })).pipe(
         catchError( this.handleError )
       );
+  }
+
+  resetPassword( passwordRequest: PasswordResetRequest ){
+    return this.http.post( `${this.url}/security/passwordrecovery`, JSON.stringify({ passwordRequest }), ({ headers: this.headers }) ).pipe(
+      catchError( this.handleError )
+    );
   }
 
   private handleError(error: HttpErrorResponse) {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { RecoveryService } from '../../../services/recovery-password/recovery.service';
+
+import { PasswordResetRequest } from '@shared/dto/recoveryPasswordRequestDto.ts';
 
 @Component({
   selector: 'app-recoverypassword',
@@ -9,28 +10,24 @@ import { RecoveryService } from '../../../services/recovery-password/recovery.se
 })
 export class RecoverypasswordComponent implements OnInit {
 
-  recoveryForm = new FormGroup({
-    email : new FormControl("")
-  });
-  success:boolean = false;
-  showErrorMessage:boolean = false;
-  iconCheck = "../../../../assets/media/img/recoveryPassIcon/checkCircle.svg";
-
-  constructor( private recovery: RecoveryService ) { }
+  constructor( ) {
+    //this.passwordReset = new PasswordResetRequest();
+   }
 
   ngOnInit() {
+    ///this.passwordReset.userId = this.route.snapshot.params.id;
+    //this.passwordReset.code = this.route.snapshot.params.code;
   }
 
-  onSubmit() {
-    this.recovery.passwordRecovery( this.recoveryForm.value.email  ).subscribe(
-      res => {
-         console.log("Bien: " + res );
-         this.success = true;
-      },
-      (e) => {
-          console.log("error ocurrido: " + e );
-          this.showErrorMessage = true;
-      }
-    );
-  }
+  /*validatePasswords(){
+    let password = this.forgotPasswordGroup.value.password;
+    let passwordConfirm = this.forgotPasswordGroup.value.passwordConfirm;
+
+    if( password == passwordConfirm ){
+      return true;
+    } else {
+      this.showErrorMessage = true;
+    }
+
+  }*/
 }
