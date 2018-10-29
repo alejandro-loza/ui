@@ -12,7 +12,7 @@ import { Movement } from            '@interfaces/movements.interface';
   styleUrls: ['./movements.component.css']
 })
 export class MovementsComponent implements OnInit {
-  scrollLimit = 770;
+  scrollLimit: number;
   movementList = [];
   offset = 0;
   charges = true;
@@ -32,13 +32,18 @@ export class MovementsComponent implements OnInit {
     });
     this.getMovements(this.offset);
     window.addEventListener('scroll', () => {
-      const scrollVertical = window.scrollY;
-      if ( scrollVertical >= this.scrollLimit ) {
-        this.scrollLimit += this.scrollLimit;
+      const scrollVertical = window.scrollY + 56;
+      this.scrollLimit = ($(document).height() - $(window).height());
+      if ( scrollVertical >= this.scrollLimit) {
+      console.log('%c Scroll Limit', 'color: orange;',  this.scrollLimit);
+      console.log('%c Scroll Vertical', 'color: yellow;', scrollVertical)
         $('.spinners .big').show();
-        console.log(this.scrollLimit);
         this.getMovements(this.offset);
+      } else {
+        console.log('%c Scroll Limit', 'color: red;',  this.scrollLimit);
+        console.log('%c Scroll Vertical', 'color: green;', scrollVertical)
       }
+
     }, true);
   }
   getMovements(offset: number) {
