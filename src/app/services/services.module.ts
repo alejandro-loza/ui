@@ -21,7 +21,7 @@ import {
   providers: [
     FinerioService,
     AuthService,
-    AuthGuard,
+    AuthGuard
   ]
 })
 export class ServicesModule { }
