@@ -1,12 +1,41 @@
 import { RouterModule, Routes } from '@angular/router';
+import { AccessComponent } from '@access/access.component';
 
-const ACCESS_ROUTING: Routes = [
-{path: 'login', loadChildren: './login/login.module#LoginModule' },
-{path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
-{path: 'recovery', loadChildren: './recoverypassword/recoverypassword.module#RecoverypasswordModule' },
-{path: 'forgot', loadChildren: './forgotpassword/forgotpassword.module#ForgotpasswordModule' },
-{path: '', pathMatch: 'full', redirectTo: 'login'},
-{path: '**', redirectTo: 'login'}
+const AcessRouting: Routes = [
+  {
+    path:  '',
+    component: AccessComponent,
+    children:[
+      {
+        path: 'login',
+        loadChildren: './login/login.module#LoginModule'
+      },
+      {
+        path: 'signup',
+        loadChildren: './signup/signup.module#SignupModule'
+      },
+      {
+        path: 'recovery/:token',
+        loadChildren: './recoverypassword/recoverypassword.module#RecoverypasswordModule'
+      },
+      {
+        path: 'forgot',
+        loadChildren: './forgotpassword/forgotpassword.module#ForgotpasswordModule'
+      },
+      {
+        path: 'welcome',
+        loadChildren: './welcome/welcome.module#WelcomeModule'
+      },
+      {
+        path: '',
+        pathMatch: 'full', redirectTo: 'login'
+      },
+      {
+        path: '**',
+        redirectTo: 'login'
+      }
+    ]
+  }
 ];
 
-export const ACCESS_ROUTES = RouterModule.forChild(ACCESS_ROUTING);
+export const AcessRoutes = RouterModule.forChild(AcessRouting);

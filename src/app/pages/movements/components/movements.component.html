@@ -1,3 +1,56 @@
-<p>
-  movements works!
-</p>
+<div class="row">
+    <div class="col s12 m4">
+        <mz-input-container>
+            <i mz-icon-mdi mz-input-prefix [icon]="'magnify'"></i>
+            <input mz-input [validate]="true" id="search-input" placeholder="Busca la descripción del movimiento" type="text">
+        </mz-input-container>
+    </div>
+    <div class="col s4 m2 push-s1 push-m4 container-search center-align">
+        <a mz-button id="btn-dropdown-demo">Filtrar</a>
+    </div>
+    <div class="col s7 m2 push-s1 push-m4 container-search">
+        <button mz-button>
+          Nuevo Movimiento
+        </button>
+    </div>
+</div>
+<div class="center-align" id="movementsContainer">
+    <div class="row">
+        <div class="titleContainer">
+            <div class="col s3 m2">
+                <p>Cuenta</p>
+            </div>
+            <div class="col s3 m2 hide-on-small-only">
+                <p>Fecha</p>
+            </div>
+            <div class="col s3 m2">
+                <p>Descrición</p>
+            </div>
+            <div class="col s3 m2">
+                <p>Categoria</p>
+            </div>
+            <div class="col s3 m2">
+                <p>Monto</p>
+            </div>
+            <div class="col s3 m2 hide-on-small-only">
+                <p>Considerar</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="bodyContainer" *ngFor="let movement of movementList">
+            <app-movement [account]="movement.account.institution.code" [date]="movement.customDate | date: 'dd / MMM'" [description]="movement.customDescription | uppercase" [category]="'Categoria'" [amount]="movement.amount" [considerar]="'Considerar'" [type]="movement.type"></app-movement>
+        </div>
+    </div>
+    <div class="center-align">
+        <mz-spinner [size]="'big'" class="spinners"></mz-spinner>
+    </div>
+</div>
+<div class="container-dropdown">
+    <mz-dropdown [id]="'dropdown-demo'" [align]="'left'" [belowOrigin]="true" [constrainWidth]="true" [dropdownButtonId]="'btn-dropdown-demo'" [gutter]="0" [inDuration]="300" [outDuration]="250" [stopPropagation]="true">
+        <mz-dropdown-item><a href="#!">One</a></mz-dropdown-item>
+        <mz-dropdown-item><a href="#!">Two</a></mz-dropdown-item>
+        <mz-dropdown-divider></mz-dropdown-divider>
+        <mz-dropdown-item><a href="#!">Three</a></mz-dropdown-item>
+    </mz-dropdown>
+</div>

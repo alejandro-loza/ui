@@ -1,0 +1,15 @@
+.container-search {
+    margin-top: 1.5%;
+}
+
+.titleContainer .col {
+    border: 1px solid lightgray;
+}
+
+.bodyContainer:first-child {
+    padding-top: 0%;
+}
+
+.bodyContainer {
+    padding-top: 2.5%;
+}

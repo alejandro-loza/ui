@@ -1,15 +1,20 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http'
+import { NgModule } from             '@angular/core';
+import { HttpClientModule } from     '@angular/common/http'
 
-import { PAGES_ROUTES } from './pages.route';
+import { SharedModule } from         '@shared/shared.module';
+
+import { PagesRoutes } from          './pages.route';
+
+import { PagesComponent } from       '@pages/pages.component';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
-    PAGES_ROUTES,
-    HttpClientModule
+    SharedModule,
+    HttpClientModule,
+    PagesRoutes 
+  ],
+  declarations: [
+    PagesComponent
   ]
 })
-export class PagesModule { }
+export class PagesModule {}

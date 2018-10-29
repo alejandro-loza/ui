@@ -9,13 +9,17 @@ export class FinerioService {
 
   constructor(
   ) {
-    this.server = `${ environment.backendUrl }/api `;
+    this.server = `${ environment.backendUrl }/api`;
     this.headers = new HttpHeaders();
     this.headers.append('Content-Type', 'application/json');
     this.headers.append('Accept', 'application/json');
     if ( this.token_access !== null || this.token_access !== undefined ) {
       this.headers.append('Authorization', `Bearer ${ this.token_access } `);
     }
+  }
+
+  getUrl(){
+    return this.server;
   }
 
   setToken(token) {

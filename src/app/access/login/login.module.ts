@@ -1,21 +1,23 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-// ROUTE
-import { LOGIN_ROUTES } from './login.route';
-// COMPONENT
-import { LoginComponent } from './components/login.component';
+import { NgModule } from                             '@angular/core';
+import { FormsModule } from                          '@angular/forms';
+import { HttpClientModule } from                     '@angular/common/http';
+import { SharedModule } from                         '@shared/shared.module';
+
+import { LoginRoutes } from                         './login.route';
+
+import { LoginComponent } from                       './components/login.component';
+import { RegisterLoginComponent } from               '@components/register-login-button/register-login.component';
 
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     FormsModule,
     HttpClientModule,
-    LOGIN_ROUTES
+    LoginRoutes
   ],
   declarations: [
-    LoginComponent
+    LoginComponent,
+    RegisterLoginComponent
   ]
 })
 export class LoginModule { }

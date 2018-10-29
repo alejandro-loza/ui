@@ -1,12 +1,16 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ACCESS_ROUTES } from './access.route';
+import { NgModule } from           '@angular/core';
+import { AcessRoutes } from      '@access/access.route';
+import { SharedModule } from       '@shared/shared.module';
+import { AccessComponent } from   '@access/access.component';
 
 @NgModule({
-  declarations: [],
   imports: [
-    CommonModule,
-    ACCESS_ROUTES
+    SharedModule,
+    AcessRoutes
+  ],
+  declarations: [
+    AccessComponent
   ]
 })
 export class AccessModule { }
+  

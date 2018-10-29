@@ -1,51 +1,98 @@
-<h1 class="text-center">Registrate con:</h1>
-<div class="container-buttons text-center">
-    <a href="https://api.finerio.mx/oauth/authenticate/facebook?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dsignup%26from%3DFacebook%26accessToken%3D" class="btn btn-lg btn-secondary btn-facebook my-2 my-md-0" type="btn">
-        <i class="material-icons">
-            <img src="assets/media/img/social_media/facebook-white.png" alt="" class="icon-social-media icon-facebook-white">
-            <img src="assets/media/img/social_media/facebook-blue.png" alt="" class="icon-social-media icon-facebook-blue d-none">
-        </i>
-        Facebook
-    </a>
-    <a href="https://api.finerio.mx/oauth/authenticate/google?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dsignup%26from%3DGoogle%26accessToken%3D" class="btn btn-lg btn-primary btn-google-plus" type="btn">
-        <i class="material-icons">
-            <img src="assets/media/img/social_media/google-plus-white.png" alt="" class="icon-social-media icon-google-plus-white">
-            <img src="assets/media/img/social_media/google-plus-red.png" alt="" class="icon-social-media icon-google-plus-red d-none">
-        </i>
-        Google
-    </a>
-</div>
-<h3 class="text-center mt-3">Ó</h3>
-<div class="row justify-content-center">
-    <div class="col-12 col-md-5">
-        <form>
-            <div class="form-group">
-                <label for="Input_email">Correo Electrónico</label>
-                <input type="email" class="form-control" id="Input_email" placeholder="Escrite tu correo electrónico" required pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"/>
+<div class="row">
+    <div class="col s12 m7 l6 offset-l1">
+        <h5 class="center">Regístrate, y comienza a tomar el control de tu dinero.</h5>
+        <div class="row center socialBtn">
+            <div class="col s12">
+                <app-social-media [facebookText]="'Ingresar con Facebook'" [googleText]="'Ingresar con Google'"></app-social-media>
             </div>
-            <div class="form-group">
-                <label for="InputPassword_1">Contraseña</label>
-                <input type="password" class="form-control" id="Input_password_1" placeholder="Escribe tu contraseña" />
+        </div>
+        <div class="row">
+            <div class="col s12 l8 offset-l2">
+                <form #signupForm="ngForm" (ngSubmit)="signup(signupForm)" method="POST" >
+                    <mz-input-container>
+                        <input mz-input
+                            [label]="'Correo Electrónico'"
+                            [validate]="true"
+                            [dataError]="'Correo Inválido'"
+                            name="email"
+                            class="form-control"
+                            ngModel
+                            id="email-input"
+                            pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" 
+                            type="email">
+                    </mz-input-container>     
+                    <mz-input-container>
+                        <input mz-input
+                            [label]="'Contraseña'"
+                            [validate]="true"
+                            [dataError]="'Contraseña Inválida (mínimo 8 caracteres)'"
+                            name="password"
+                            class="form-control"
+                            ngModel
+                            pattern=".{8,}"
+                            id="password-input"
+                            type="password">
+                    </mz-input-container>            
+                    <mz-input-container>
+                        <input mz-input
+                            [label]="'Confirmar contraseña'"
+                            [validate]="true"
+                            class="form-control"
+                            name="confirmPassword"
+                            ngModel
+                            id="confirm-password"
+                            type="password">
+                    </mz-input-container>   
+                    <span id="errorSpan"></span>
+                    <div class="row pt-15">    
+                        <mz-checkbox-container>
+                            <input mz-checkbox 
+                                filledIn="true"
+                                [label]="'Acepto subscribirme al blog de finanzas personales'"
+                                name="blog"
+                                ngModel
+                                id="checkbox-blog"
+                                type="checkbox"
+                                checked="checked">
+                        </mz-checkbox-container>
+                        <mz-checkbox-container>
+                            <input mz-checkbox
+                                filledIn="true"
+                                [label]="'Acepto los términos y condiciones'"
+                                name="termsAndConditions"
+                                ngModel
+                                id="checkbox-terms"
+                                type="checkbox"
+                                checked="checked">
+                        </mz-checkbox-container>
+                    </div>
+                    <div class="row">
+                        <div class="col-s6 center pt-15">
+                            <button mz-button
+                                type="submit">
+                                Entrar
+                            </button>
+                        </div>
+                        <div class="col-s6 center pt-15">
+                            <a mz-button
+                                [routerLink]="['/access/login']"
+                                flat="true">
+                                Iniciar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="InputPassword_2">Confirmar Contraseña</label>
-                <input type="password" class="form-control" id="Input_password_2" placeholder="Confirma tu contraseña" />
-            </div>
-            <div class="form-check my-3">
-              <input class="form-check-input" type="checkbox" value="" id="Check1">
-              <label class="form-check-label" for="Check1">
-                Al crear una cuenta en Finerio confirmo que he leído, entiendo y acepto el <a href="https://www.finerio.mx/privacy" target="_blank">Aviso de Privacidad</a> y los <a href="https://www.finerio.mx/terms" target="_blank"> Terminos y Condiciones</a>
-              </label>
-            </div>
-            <div class="form-check my-3">
-              <input class="form-check-input" type="checkbox" value="" id="Check2">
-              <label class="form-check-label" for="Check2">
-                Al crear una cuenta en Finerio acepto suscribirme al blog de finanzas personales.
-              </label>
-            </div>
-            <div class="text-center">
-                <button class="btn btn-secondary btn-lg justify-content-center">Registrar</button>
-            </div>
-        </form>
+        </div>
+    </div>
+    <div class="col m4 offset-m1" id="tips-col">
+        <div class="row center">
+            <h6><b>Vincula tus tarjetas y controla tus gastos, en un solo lugar.</b></h6>
+            <p>Clasifica tus gastos.</p>
+            <p>Crea tus presupuestos y controla tus gastos.</p>
+            <p>Vincula tus cuentas bancarias.</p>
+            <p>Toda tu información financiera en un sólo lugar.</p>
+            <p>Gratis.</p>
+        </div>
     </div>
 </div>
