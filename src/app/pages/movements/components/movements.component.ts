@@ -11,9 +11,8 @@ import { Movement } from            '@interfaces/movements.interface';
   templateUrl: './movements.component.html',
   styleUrls: ['./movements.component.css']
 })
-
 export class MovementsComponent implements OnInit {
-  scrollLimit = 1200;
+  scrollLimit = 770;
   movementList = [];
   offset = 0;
   charges = true;
@@ -31,12 +30,19 @@ export class MovementsComponent implements OnInit {
       $('.spinners .big').css('animation-duration', '1500ms');
       $('.spinners .big .spinner-layer').css('border-color', '#0091ea');
     });
-    this.getMovements();
-    window.addEventListener('scroll', this.scrollFunction, true);
+    this.getMovements(this.offset);
+    window.addEventListener('scroll', () => {
+      const scrollVertical = window.scrollY;
+      if ( scrollVertical >= this.scrollLimit ) {
+        this.scrollLimit += this.scrollLimit;
+        $('.spinners .big').show();
+        console.log(this.scrollLimit);
+        this.getMovements(this.offset);
+      }
+    }, true);
   }
-
-  getMovements() {
-    this.movementsService.allMovements(this.offset).subscribe(
+  getMovements(offset: number) {
+    this.movementsService.allMovements(offset).subscribe(
       (res: any) => {
         for (const iterator of res.data) {
           this.movementList.push(iterator);
@@ -66,17 +72,5 @@ export class MovementsComponent implements OnInit {
       });
     this.queryMovements = this.movementsService.queryMovements;
     this.offset = this.queryMovements.getOffset;
-  }
-
-  scrollFunction() {
-    const scrollY = window.scrollY;
-    if ( scrollY >= this.scrollLimit ) {
-      $('.spinners .big').show();
-      this.scrollLimit += this.scrollLimit;
-      console.log(this.scrollLimit);
-      // this.getMovements();
-    }else {
-      console.log(scrollY);
-    }
   }
 }
