@@ -5,7 +5,7 @@
                 <img src="../../../assets/media/img/finerio_logo/finerio_white.svg" id="finerio-logo">
                 <mz-navbar-item-container [align]="'right'" *ngIf="lowThanLargeResolution | async">
                     <mz-navbar-item>
-                        <button mz-button [flat]="true" class="button-collapse show-on-large" id="btn-collapse-sidenav">
+                        <button mz-button [flat]="true" class="button-collapse" id="btn-collapse-sidenav">
                             <i class="material-icons medium white-text">menu</i>
                         </button>
                     </mz-navbar-item>
@@ -58,7 +58,7 @@
                     <a class="white-text waves-effect waves-blue user-list ">Cambiar Contraseña</a>
                 </mz-sidenav-link>
                 <mz-sidenav-link>
-                    <a class="white-text waves-effect waves-blue user-list ">Cerrar Sesión</a>
+                    <a class="white-text waves-effect waves-blue user-list" (click)="logout()">Cerrar Sesión</a>
                 </mz-sidenav-link>
             </mz-sidenav-collapsible-content>
         </mz-sidenav-collapsible>

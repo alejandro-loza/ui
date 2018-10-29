@@ -1,72 +1,75 @@
 export class QueryMovements {
-    includeCharges: boolean;
-    includeDeposits: boolean;
-    movementsMax: number;
-    tmz = 'GMT-05:00';
-    includeDuplicates: boolean;
 
     constructor (
-        charges: boolean,
-        deposits: boolean,
-        duplicates: boolean,
-        max?: number) {
-            this.includeCharges = charges;
-            this.includeDeposits = deposits;
-            this.movementsMax = max;
-            this.includeDuplicates = duplicates;
+        public offset: number = 0,
+        public maxMovements: number = 35,
+        public charges?: boolean,
+        public deposits?: boolean,
+        public duplicates?: boolean,
+        public deep?: boolean,
+    ) {
+        this.offset = offset;
+        this.maxMovements = maxMovements;
+        this.charges = charges;
+        this.deposits = deposits;
+        this.duplicates = duplicates;
+        this.deep = deep;
     }
 
     // Charges start
     public set setCharges(charges: boolean) {
-        this.includeCharges = charges;
+        this.charges = charges;
     }
 
     public get getCharges(): boolean {
-        return this.includeCharges;
+        return this.charges;
     }
     // Charges End
 
     // Deposits start
     public set setDeposits(deposits: boolean) {
-        this.includeDeposits = deposits;
+        this.deposits = deposits;
     }
 
     public get getDeposits(): boolean {
-        return this.includeDeposits;
+        return this.deposits;
     }
     // Deposits end
 
-    // Movements start
-    public set setMovements(movements: number) {
-        this.movementsMax = movements;
-    }
-
-    public get getMovements(): number {
-        return this.movementsMax;
-    }
-    // Movements end
-
     // Duplicates start
     public set setDuplicates(duplicates: boolean) {
-        this.includeDuplicates = duplicates;
+        this.duplicates = duplicates;
     }
 
     public get getDuplicates(): boolean {
-        return this.includeDuplicates;
+        return this.duplicates;
     }
     // Duplicates end
 
-    // maxMovements start
-    public set setMax(max: number) {
-        this.movementsMax = max;
+    // Offset Start
+    public set setOffset( offset: number ) {
+        this.offset = offset;
     }
 
+    public get getOffset(): number {
+        return this.offset;
+    }
+    // Offset End
+
+    // Max movements Start
+    public set setMax( max: number ) {
+        this.maxMovements = max;
+    }
     public get getMax(): number {
-        return this.movementsMax;
+        return this.maxMovements;
     }
-    // maxMovements end
+    // Max movements End
 
-    public get getTmz(): string {
-        return this.tmz;
+    public set setDeep( deep: boolean ) {
+        this.deep = deep;
+    }
+
+    public get getDeep(): boolean {
+        return this.deep;
     }
 }

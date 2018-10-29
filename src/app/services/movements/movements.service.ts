@@ -1,48 +1,45 @@
 import { Injectable } from             '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { FinerioService } from         '@services/config/config.service';
-
 import { environment } from            '@env/environment';
-
-import { map } from                    'rxjs/operators';
-
 import { QueryMovements } from         '@classes/queryMovementsDto.class';
+import { Movement } from '@app/shared/interfaces/movements.interface';
 
 @Injectable()
 export class MovementsService {
 
   private headers: HttpHeaders;
-  url = `${environment.backendUrl}/users`;
-  id: string;
-  token: string;
-  queryMovements: QueryMovements = new QueryMovements( true, true, true, 35 );
-  offset = 0;
+  private url = `${environment.backendUrl}/users`;
+  private id = sessionStorage.getItem('id-user');
+  private token = sessionStorage.getItem('access-token');
+  public queryMovements: QueryMovements = new QueryMovements();
 
   constructor(
     private httpClient: HttpClient,
-    private finerioService: FinerioService
   ) {
     this.headers = new HttpHeaders();
+
+    this.queryMovements.setCharges = true;
+    this.queryMovements.setDeposits = true;
+    this.queryMovements.setDuplicates = true;
+    this.queryMovements.setDeep = true;
   }
 
-  allMovements () {
-    this.id = sessionStorage.getItem('id-user');
-    this.token = sessionStorage.getItem('access-token');
+  allMovements (offset: number) {
     const urlMovements =
       `${this.url}/` +
       `${this.id}/movements` +
-      `?deep=${this.finerioService.deep}` +
-      `&includeDeposits=${this.queryMovements.getDeposits}` +
+      `?deep=${this.queryMovements.getDeep}` +
+      `&offset=` + offset +
+      `&max=${this.queryMovements.getMax}` +
       `&includeCharges=${this.queryMovements.getCharges}` +
-      `&tmz=${this.queryMovements.getTmz}` +
-      `&max=${this.queryMovements.getMovements}` +
-      `&includeDuplicates=${this.queryMovements.getDuplicates}` +
-      `&offset=`+ this.offset;
-      this.offset = this.offset + this.queryMovements.getMovements;
-    return this.httpClient.get(
+      `&includeDeposit=${this.queryMovements.getDeposits}` +
+      `&includeDuplicates=${this.queryMovements.getDuplicates}`
+      ;
+    this.queryMovements.setOffset = offset + this.queryMovements.getMax;
+    return this.httpClient.get<Movement>(
              urlMovements,
              { headers: this.headers.set('Authorization', `Bearer ${this.token}`)}
-           ).pipe(map( res => res ));
+           );
   }
 }

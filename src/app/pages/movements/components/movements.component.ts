@@ -1,59 +1,82 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from   '@angular/core';
 
-import { Movement } from '@interfaces/movements.interface';
+import { MovementsService } from    '@services/services.index';
 
-import { MovementsService } from '@services/services.index';
-
-import { MzToastService } from 'ngx-materialize';
+import { MzToastService } from      'ngx-materialize';
+import { QueryMovements } from      '@classes/queryMovementsDto.class';
+import { Movement } from            '@interfaces/movements.interface';
 
 @Component({
   selector: 'app-movements',
   templateUrl: './movements.component.html',
   styleUrls: ['./movements.component.css']
 })
+
 export class MovementsComponent implements OnInit {
-  movementList: Movement[] = [];
+  scrollLimit = 1200;
+  movementList = [];
+  offset = 0;
+  charges = true;
+  deposit = true;
+  duplicates = true;
+  deep = true;
+  queryMovements: QueryMovements;
   constructor(
     private movementsService: MovementsService,
     private toastService: MzToastService,
-    private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.allMovements();
     $(function() {
       $('.spinners .big').css('animation-duration', '1500ms');
       $('.spinners .big .spinner-layer').css('border-color', '#0091ea');
     });
+    this.getMovements();
+    window.addEventListener('scroll', this.scrollFunction, true);
   }
 
-  allMovements() {
-    const errorMsg = 'Su token a expirado';
-    this.movementsService.allMovements().subscribe(
+  getMovements() {
+    this.movementsService.allMovements(this.offset).subscribe(
       (res: any) => {
-        res.data.forEach((movement: Movement) => {
-          this.movementList.push(movement);
-        });
-      },
-      (error: any) => {
-        if (error.status === 401) {
-          this.toastService.show(
-            `${errorMsg}` +
-              `<button class="transparent btn-flat white-text"
-              onClick="var toastElement = $('.toast').first()[0];
-              var toastInstance = toastElement.M_Toast;
-              toastInstance.remove();">
-              <i class="large material-icons">close</i></button>`,
-            3000,
-            'red accent-3 rounded'
-          );
-          this.router.navigate(['/access/login']);
+        for (const iterator of res.data) {
+          this.movementList.push(iterator);
         }
-      },
-      () => {
-        $('.spinners').css('display', 'none');
-      }
-    );
+      }, (err: any) => {
+        if ( err.status === 401 ) {
+          const errorMsg = 'Datos incorrectos. Comprueba que <br> sean correctos tus datos';
+          this.toastService
+          .show(
+            errorMsg +
+            `<button class="transparent btn-flat white-text" onClick="var toastElement = $('.toast').first()[0];
+            var toastInstance = toastElement.M_Toast;
+            toastInstance.remove();"><i class="large material-icons">close</i></button>`,
+            2500, 'orange darken-2 ');
+        } else {
+          const errorMsg = 'Ha ocurrido un error en nuestro servidor';
+          this.toastService
+          .show(
+            errorMsg +
+            `<button class="transparent btn-flat white-text" onClick="var toastElement = $('.toast').first()[0];
+            var toastInstance = toastElement.M_Toast;
+            toastInstance.remove();"><i class="large material-icons">close</i></button>`,
+            2500, 'red accent-3');
+        }
+      }, () => {
+        $('.spinners .big').hide();
+      });
+    this.queryMovements = this.movementsService.queryMovements;
+    this.offset = this.queryMovements.getOffset;
+  }
+
+  scrollFunction() {
+    const scrollY = window.scrollY;
+    if ( scrollY >= this.scrollLimit ) {
+      $('.spinners .big').show();
+      this.scrollLimit += this.scrollLimit;
+      console.log(this.scrollLimit);
+      // this.getMovements();
+    }else {
+      console.log(scrollY);
+    }
   }
 }

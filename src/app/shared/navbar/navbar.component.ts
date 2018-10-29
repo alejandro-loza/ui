@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MzMediaService } from 'ngx-materialize';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from       '@angular/core';
+import { Router } from                  '@angular/router';
+import { MzMediaService } from          'ngx-materialize';
+import { Observable } from              'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +19,10 @@ export class NavbarComponent implements OnInit {
   public lowThanLargeResolution: Observable<boolean>;
   public moreThanMediumResoultion: Observable<boolean>;
 
-  constructor( private mediaService: MzMediaService ) {
+  constructor( 
+      private mediaService: MzMediaService,
+      private router: Router
+    ) {
     this.smallResolution = this.mediaService.isActive('s');
     this.mediumResolution = this.mediaService.isActive('m');
     this.largeResolution = this.mediaService.isActive('l');
@@ -41,5 +45,11 @@ export class NavbarComponent implements OnInit {
         chevron.classList.replace('mdi-chevron-down', 'mdi-plus');
       }
     });
+  }
+  logout() {
+    sessionStorage.removeItem('access-token');
+    sessionStorage.removeItem('id-user');
+    sessionStorage.removeItem('refresh-token');
+    this.router.navigate(['/access/login']);
   }
 }

@@ -14,7 +14,7 @@
         </button>
     </div>
 </div>
-<div class="center-align">
+<div class="center-align" id="movementsContainer">
     <div class="row">
         <div class="titleContainer">
             <div class="col s3 m2">
@@ -42,9 +42,9 @@
             <app-movement [account]="movement.account.institution.code" [date]="movement.customDate | date: 'dd / MMM'" [description]="movement.customDescription | uppercase" [category]="'Categoria'" [amount]="movement.amount" [considerar]="'Considerar'" [type]="movement.type"></app-movement>
         </div>
     </div>
-</div>
-<div class="center-align">
-    <mz-spinner [size]="'big'" class="spinners"></mz-spinner>
+    <div class="center-align">
+        <mz-spinner [size]="'big'" class="spinners"></mz-spinner>
+    </div>
 </div>
 <div class="container-dropdown">
     <mz-dropdown [id]="'dropdown-demo'" [align]="'left'" [belowOrigin]="true" [constrainWidth]="true" [dropdownButtonId]="'btn-dropdown-demo'" [gutter]="0" [inDuration]="300" [outDuration]="250" [stopPropagation]="true">

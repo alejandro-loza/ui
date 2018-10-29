@@ -1,5 +1,5 @@
 <div class="col s3 m2">
-    <img src="../../../assets/media/img/movements/{{account}}.png" alt="{{account}}" class="imgMovement">
+    <img src="https://cdn.finerio.mx/banks/{{account}}_shield.png" srcset="../../../assets/media/img/movements/{{account}}.png" alt="{{account}}" class="imgMovement">
 </div>
 <div class="col s3 m2 hide-on-small-only">
     <p>{{ date }}</p>
@@ -11,7 +11,7 @@
     <p>{{ category }}</p>
 </div>
 <div class="col s3 m2" [ngClass]="{'green-text': type === 'DEPOSIT', 'red-text': type === 'CHARGE'}">
-    <p><strong>$ </strong>{{ amount }}</p>
+    <p class="right-align"><strong>$ </strong>{{ amount }}</p>
 </div>
 <div class="col s3 m2 hide-on-small-only">
     <p>{{ considerar }}</p>
