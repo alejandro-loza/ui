@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'https://api.finerio.mx/api'
+  backendUrl: 'https://api.finerio.mx/api',
+  newBackendUrl: 'https://api-v2.finerio.mx'
 };
 
 /*

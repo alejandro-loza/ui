@@ -8,7 +8,7 @@
         </div>
         <div class="row">
             <div class="col s12 l8 offset-l2">
-                <form #signupForm="ngForm">
+                <form #signupForm="ngForm" (ngSubmit)="signup(signupForm)" method="POST" >
                     <mz-input-container>
                         <input mz-input
                             [label]="'Correo Electrónico'"
@@ -16,7 +16,7 @@
                             [dataError]="'Correo Inválido'"
                             name="email"
                             class="form-control"
-                            [(ngModel)]="email"
+                            ngModel
                             id="email-input"
                             pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" 
                             type="email">
@@ -28,7 +28,7 @@
                             [dataError]="'Contraseña Inválida (mínimo 8 caracteres)'"
                             name="password"
                             class="form-control"
-                            [(ngModel)]="password"
+                            ngModel
                             pattern=".{8,}"
                             id="password-input"
                             type="password">
@@ -39,49 +39,49 @@
                             [validate]="true"
                             class="form-control"
                             name="confirmPassword"
-                            [(ngModel)]="confirmPassword"
+                            ngModel
                             id="confirm-password"
                             type="password">
                     </mz-input-container>   
                     <span id="errorSpan"></span>
-                    <div class="row pt-15">
+                    <div class="row pt-15">    
                         <mz-checkbox-container>
-                            <input mz-checkbox
-                                checked="checked"
+                            <input mz-checkbox 
                                 filledIn="true"
                                 [label]="'Acepto subscribirme al blog de finanzas personales'"
-                                [(ngModel)]="blog"
                                 name="blog"
+                                ngModel
                                 id="checkbox-blog"
-                                type="checkbox">
+                                type="checkbox"
+                                checked="checked">
                         </mz-checkbox-container>
                         <mz-checkbox-container>
                             <input mz-checkbox
-                                checked="checked"
                                 filledIn="true"
                                 [label]="'Acepto los términos y condiciones'"
-                                [(ngModel)]="termsAndConditions"
                                 name="termsAndConditions"
+                                ngModel
                                 id="checkbox-terms"
-                                type="checkbox">
+                                type="checkbox"
+                                checked="checked">
                         </mz-checkbox-container>
                     </div>
+                    <div class="row">
+                        <div class="col-s6 center pt-15">
+                            <button mz-button
+                                type="submit">
+                                Entrar
+                            </button>
+                        </div>
+                        <div class="col-s6 center pt-15">
+                            <a mz-button
+                                [routerLink]="['/access/login']"
+                                flat="true">
+                                Iniciar Sesión
+                            </a>
+                        </div>
+                    </div>
                 </form>
-                <div class="row">
-                    <div class="col-s6 center pt-15">
-                        <button mz-button
-                            (click)="signup()">
-                            Entrar
-                        </button>
-                    </div>
-                    <div class="col-s6 center pt-15">
-                        <a mz-button
-                            [routerLink]="['/access/login']"
-                            flat="true">
-                            Iniciar Sesión
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
