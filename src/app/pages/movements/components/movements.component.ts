@@ -35,15 +35,9 @@ export class MovementsComponent implements OnInit {
       const scrollVertical = window.scrollY + 56;
       this.scrollLimit = ($(document).height() - $(window).height());
       if ( scrollVertical >= this.scrollLimit) {
-      console.log('%c Scroll Limit', 'color: orange;',  this.scrollLimit);
-      console.log('%c Scroll Vertical', 'color: yellow;', scrollVertical)
         $('.spinners .big').show();
         this.getMovements(this.offset);
-      } else {
-        console.log('%c Scroll Limit', 'color: red;',  this.scrollLimit);
-        console.log('%c Scroll Vertical', 'color: green;', scrollVertical)
       }
-
     }, true);
   }
   getMovements(offset: number) {
