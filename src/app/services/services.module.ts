@@ -7,7 +7,8 @@ import { MaterializeModule } from '../shared/materialize/materialize.module';
 import {
   FinerioService,
   AuthService,
-  AuthGuard
+  AuthGuard,
+  MovementsService
 } from './services.index';
 
 @NgModule({
@@ -21,7 +22,8 @@ import {
   providers: [
     FinerioService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    MovementsService
   ]
 })
 export class ServicesModule { }

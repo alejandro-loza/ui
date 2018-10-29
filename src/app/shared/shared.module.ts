@@ -3,10 +3,8 @@ import { CommonModule } from               '@angular/common';
 import { RouterModule } from               '@angular/router';
 
 import { MaterializeModule } from          './materialize/materialize.module';
-import { SocialMediaComponent } from       '../components/social-media-button/social-media.component';
+import { SocialMediaComponent } from       '@shared/social-media-button/social-media.component';
 
-
-import { RegisterLoginComponent } from     '@components/register-login-button/register-login.component';
 import { NavbarComponent } from            './navbar/navbar.component';
 
 
@@ -18,7 +16,6 @@ import { NavbarComponent } from            './navbar/navbar.component';
   ],
   declarations: [
     NavbarComponent,
-    RegisterLoginComponent,
     SocialMediaComponent
   ],
   exports: [
@@ -26,7 +23,6 @@ import { NavbarComponent } from            './navbar/navbar.component';
     RouterModule,
     MaterializeModule,
     NavbarComponent,
-    RegisterLoginComponent,
     SocialMediaComponent
   ]
 })

@@ -9,6 +9,8 @@ import {
     MzNavbarModule,
     MzSidenavModule,
     MzCheckboxModule,
+    MzDropdownModule,
+    MzSpinnerModule
  } from                     'ngx-materialize';
 
 @NgModule({
@@ -21,7 +23,9 @@ import {
         MzToastModule,
         MzNavbarModule,
         MzSidenavModule,
-        MzCheckboxModule
+        MzCheckboxModule,
+        MzDropdownModule,
+        MzSpinnerModule
     ],
     exports: [
         MzMediaModule,
@@ -32,9 +36,10 @@ import {
         MzToastModule,
         MzNavbarModule,
         MzSidenavModule,
-        MzCheckboxModule
+        MzCheckboxModule,
+        MzDropdownModule,
+        MzSpinnerModule
     ],
-    providers: [
-    ]
+    providers: [ ]
 })
 export class MaterializeModule {}

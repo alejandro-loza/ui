@@ -4,7 +4,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService, FinerioService } from '../services.index';
 
-import { User } from './../../shared/dto/authLoginDot';
+import { User } from '@app/shared/interfaces/authLogin.interface';
 import { environment } from '@env/environment';
 
 interface UserMock {
@@ -51,7 +51,8 @@ describe('AuthService', () => {
 
     beforeEach( () => {
       authService = TestBed.get( AuthService );
-      expectedUser = new User( 'mock@email.com', 'passMock1.' );
+      expectedUser.email = 'mock@email.com';
+      expectedUser.password = 'passMock1.';
     });
 
     it('should return 200, OK', () => {

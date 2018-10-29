@@ -1,17 +1,20 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from                   '@angular/core';
+import { SharedModule } from               '@shared/shared.module';
 
-// Components
-import { MovementsComponent } from './components/movements.component';
+import { MovementsRoutes } from            './movements.route';
 
-// Routes
-import { MOVEMENTS_ROUTES } from './movements.route';
+import { MovementsComponent } from         './components/movements.component';
+
+import { MovementComponent } from          '@components/movement/movement.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-    MOVEMENTS_ROUTES
+    SharedModule,
+    MovementsRoutes
   ],
-  declarations: [ MovementsComponent ]
+  declarations: [ 
+    MovementsComponent,
+    MovementComponent,
+  ]
 })
 export class MovementsModule { }
