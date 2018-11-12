@@ -41,7 +41,7 @@ export class MovementsService {
       `&offset=` + offset +
       `&max=${this.queryMovements.getMax}` +
       `&includeCharges=${this.queryMovements.getCharges}` +
-      `&includeDeposit=${this.queryMovements.getDeposits}` +
+      `&includeDeposits=${this.queryMovements.getDeposits}` +
       `&includeDuplicates=${this.queryMovements.getDuplicates}`
       ;
     this.queryMovements.setOffset = offset + this.queryMovements.getMax;
@@ -58,7 +58,6 @@ export class MovementsService {
                   `${ new Date(movement.customDate).getMonth() + 1} - ` +
                   `${ new Date(movement.customDate).getFullYear() }`
                 ] = this.movementOrder;
-
                 if ( movement === res.data[res.data.length - 1] ) {
                   this.lastMovement = res.data[res.data.length - 1];
                   console.log('%c Servicio log', 'color: yellow', this.movementsOrderByDate);
