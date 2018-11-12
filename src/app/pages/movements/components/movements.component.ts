@@ -4,7 +4,7 @@ import { MovementsService } from    '@services/services.index';
 
 import { MzToastService } from      'ngx-materialize';
 import { QueryMovements } from      '@classes/queryMovementsDto.class';
-import { Movement } from            '@interfaces/movements.interface';
+import { Movement } from            '@app/shared/interfaces/movement.interface';
 
 @Component({
   selector: 'app-movements',
@@ -12,8 +12,9 @@ import { Movement } from            '@interfaces/movements.interface';
   styleUrls: ['./movements.component.css']
 })
 export class MovementsComponent implements OnInit {
+  dateList: string[] = [];
   scrollLimit: number;
-  movementList = [];
+  movementList: any = {};
   offset = 0;
   charges = true;
   deposit = true;
@@ -42,9 +43,13 @@ export class MovementsComponent implements OnInit {
   }
   getMovements(offset: number) {
     this.movementsService.allMovements(offset).subscribe(
-      (res: any) => {
-        for (const iterator of res.data) {
-          this.movementList.push(iterator);
+      res => {
+        this.movementList = res;
+        for (const i in res) {
+          if (res.hasOwnProperty(i)) {
+            const movements = res[i];
+            this.dateList.push(i);
+          }
         }
       }, (err: any) => {
         if ( err.status === 401 ) {
@@ -65,6 +70,7 @@ export class MovementsComponent implements OnInit {
             var toastInstance = toastElement.M_Toast;
             toastInstance.remove();"><i class="large material-icons">close</i></button>`,
             2500, 'red accent-3');
+            console.error(err);
         }
       }, () => {
         $('.spinners .big').hide();

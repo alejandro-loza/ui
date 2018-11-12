@@ -20,13 +20,10 @@
             <div class="col s3 m2">
                 <p>Cuenta</p>
             </div>
-            <div class="col s3 m2 hide-on-small-only">
-                <p>Fecha</p>
-            </div>
-            <div class="col s3 m2">
+            <div class="col s3">
                 <p>Descrición</p>
             </div>
-            <div class="col s3 m2">
+            <div class="col s3">
                 <p>Categoria</p>
             </div>
             <div class="col s3 m2">
@@ -38,8 +35,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="bodyContainer" *ngFor="let movement of movementList">
-            <app-movement [account]="movement.account.institution.code" [date]="movement.customDate | date: 'dd / MMM'" [description]="movement.customDescription | uppercase" [category]="'Categoria'" [amount]="movement.amount" [considerar]="'Considerar'" [type]="movement.type"></app-movement>
+        <div class="bodyContainer" *ngFor="let i of dateList">
+            <div class="col s12 light-blue lighten-5 light-blue-text text-darken-4">
+                <h5>{{ i }} </h5>
+            </div>
+            <div *ngFor="let movement of movementList[i]">
+                <app-movement [account]="movement.account.institution.code" [description]="movement.customDescription | uppercase" [amount]="movement.amount" [considerar]="'Considerar'" [type]="movement.type" [bckgrndColor]="movement.concepts[0].category.color" [frgrndColor]="movement.concepts[0].category.textColor"
+                    [categoryName]="movement.concepts[0].category.name"></app-movement>
+            </div>
         </div>
     </div>
     <div class="center-align">
@@ -50,7 +53,6 @@
     <mz-dropdown [id]="'dropdown-demo'" [align]="'left'" [belowOrigin]="true" [constrainWidth]="true" [dropdownButtonId]="'btn-dropdown-demo'" [gutter]="0" [inDuration]="300" [outDuration]="250" [stopPropagation]="true">
         <mz-dropdown-item><a href="#!">One</a></mz-dropdown-item>
         <mz-dropdown-item><a href="#!">Two</a></mz-dropdown-item>
-        <mz-dropdown-divider></mz-dropdown-divider>
         <mz-dropdown-item><a href="#!">Three</a></mz-dropdown-item>
     </mz-dropdown>
 </div>
