@@ -49,7 +49,8 @@ export class MovementsService {
              urlMovements,
              { headers: this.headers.set('Authorization', `Bearer ${this.token}`)}
            ).pipe(
-             map((res: any) => { // Es de tipo Movements
+             map((res: any) => { //- Es de tipo Movements
+              this.movementOrder = new Array;
               for (let i = 0; i < res.data.length; i++) {
                 const movement: Movement = res.data[i];
 

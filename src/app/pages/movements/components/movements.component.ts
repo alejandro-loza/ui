@@ -44,6 +44,7 @@ export class MovementsComponent implements OnInit {
   getMovements(offset: number) {
     this.movementsService.allMovements(offset).subscribe(
       res => {
+        this.dateList = new Array;
         this.movementList = res;
         for (const i in res) {
           if (res.hasOwnProperty(i)) {
