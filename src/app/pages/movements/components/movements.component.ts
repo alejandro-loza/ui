@@ -21,6 +21,7 @@ export class MovementsComponent implements OnInit {
   duplicates = true;
   deep = true;
   queryMovements: QueryMovements;
+  
   constructor(
     private movementsService: MovementsService,
     private toastService: MzToastService,
@@ -44,11 +45,10 @@ export class MovementsComponent implements OnInit {
   getMovements(offset: number) {
     this.movementsService.allMovements(offset).subscribe(
       res => {
-        this.dateList = new Array;
         this.movementList = res;
         for (const i in res) {
           if (res.hasOwnProperty(i)) {
-            const movements = res[i];
+            const movements:Movement = res[i];
             this.dateList.push(i);
           }
         }

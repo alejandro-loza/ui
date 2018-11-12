@@ -1,13 +1,14 @@
 import { Injectable } from             '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { map, groupBy, mergeMap, reduce } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { environment } from            '@env/environment';
 
 import { QueryMovements } from         '@classes/queryMovementsDto.class';
 import { Movement } from               '@interfaces/movement.interface';
 import { Movements } from              '@interfaces/movements.interface';
+import { browser } from 'protractor';
 
 
 @Injectable()
@@ -22,6 +23,7 @@ export class MovementsService {
   movementOrder: Movement[] = [];
   lastMovement: Movement;
   movementsOrderByDate: any = {};
+  options = { day: 'numeric', month: 'narrow', year: 'numeric' };
   constructor(
     private httpClient: HttpClient,
   ) {
@@ -49,15 +51,12 @@ export class MovementsService {
              urlMovements,
              { headers: this.headers.set('Authorization', `Bearer ${this.token}`)}
            ).pipe(
-             map((res: any) => { //- Es de tipo Movements
-              this.movementOrder = new Array;
+             map((res: any) => {
+ 1
               for (let i = 0; i < res.data.length; i++) {
                 const movement: Movement = res.data[i];
-
                 this.movementsOrderByDate[
-                  `${ new Date(movement.customDate).getDate() } - ` +
-                  `${ new Date(movement.customDate).getMonth() + 1} - ` +
-                  `${ new Date(movement.customDate).getFullYear() }`
+                  new Date(movement.customDate).toLocaleDateString( navigator.language , {year: 'numeric', month: 'long', day: 'numeric'})
                 ] = this.movementOrder;
                 if ( movement === res.data[res.data.length - 1] ) {
                   this.lastMovement = res.data[res.data.length - 1];

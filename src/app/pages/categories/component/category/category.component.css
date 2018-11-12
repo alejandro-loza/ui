@@ -4,3 +4,9 @@
     font-size: 18px;
     width: 70%;
 }
+
+@media only screen (max-width: 600px) {
+    .category-container {
+        font-size: 10px;
+    }
+}
