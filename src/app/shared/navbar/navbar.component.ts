@@ -3,7 +3,10 @@ import { Component,
          ViewChild,
          ElementRef } from              '@angular/core';
 import { Router } from                  '@angular/router';
+<<<<<<< Updated upstream
 import * as M from                      'materialize-css/dist/js/materialize';
+=======
+>>>>>>> Stashed changes
 
 @Component({
   selector: 'app-navbar',
@@ -11,10 +14,15 @@ import * as M from                      'materialize-css/dist/js/materialize';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+<<<<<<< Updated upstream
   @ViewChild('sidenav') elemSidenav: ElementRef;
   constructor(
     private router: Router
   ) { }
+=======
+  
+  constructor( private router: Router ) { }
+>>>>>>> Stashed changes
 
   ngOnInit() {
     const instanceSidenav = new M.Sidenav(this.elemSidenav.nativeElement, {});

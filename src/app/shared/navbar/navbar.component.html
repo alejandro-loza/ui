@@ -1,4 +1,23 @@
+<<<<<<< Updated upstream
 <!-- 
+=======
+<header>
+    <div class="navbar-fixed">
+        <mz-navbar [navbarClass]="'finerio-blue'" [ngClass]="{'left-align': lowThanLargeResolution | async, 'center-align': moreThanMediumResoultion | async}">
+            <div class="container">
+                <img src="../../../assets/media/img/finerio_logo/finerio_white.svg" id="finerio-logo">
+                <mz-navbar-item-container [align]="'right'" class="hide-on-large-only">
+                    <mz-navbar-item>
+                        <button mz-button [flat]="true" class="button-collapse" id="btn-collapse-sidenav">
+                            <i class="material-icons medium white-text">menu</i>
+                        </button>
+                    </mz-navbar-item>
+                </mz-navbar-item-container>
+            </div>
+        </mz-navbar>
+    </div>
+</header>
+>>>>>>> Stashed changes
 <mz-sidenav #sidenav [id]="'sidenav'" [collapseButtonId]="'btn-collapse-sidenav'" [fixed]="true" [width]="300" [backgroundClass]="'finerio-blue white-text'">
     <mz-sidenav-link>
         <mz-sidenav-collapsible id="sidenav-collapsible">
