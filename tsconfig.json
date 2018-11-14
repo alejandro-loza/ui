@@ -11,14 +11,7 @@
     "experimentalDecorators": true,
     "target": "es5",
     "typeRoots": [
-<<<<<<< Updated upstream
       "node_modules/@types"
-=======
-      "node_modules/@types",
-      "jquery",
-      "materialize-css",
-      "M"
->>>>>>> Stashed changes
     ],
     "lib": [
       "es2017",
