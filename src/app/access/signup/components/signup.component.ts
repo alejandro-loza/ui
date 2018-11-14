@@ -4,7 +4,7 @@ import { Router } from                      '@angular/router';
 import { isNullOrUndefined } from           'util';
 import { SignupData } from                  '@shared/dto/signupDto';
 import { NgForm } from                      '@angular/forms';
-
+declare const $: any;
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
@@ -20,7 +20,7 @@ export class SignupComponent {
                private router:Router ) { }
 
   signup( SignupForm: NgForm ) {
-
+    console.log(SignupForm.value);
     const data = new SignupData(
       SignupForm.value.email,
       SignupForm.value.password,
@@ -37,6 +37,7 @@ export class SignupComponent {
         if( data.termsAndConditions ){
 
           this._signupService.signup( data ).subscribe( res => {
+            console.log(res);
              this.router.navigate(['/access/login']);
              
            }, error => {
@@ -69,7 +70,7 @@ export class SignupComponent {
   }
 
   passwordMatch( password, confirmPassword ){
-    password == confirmPassword ?
+    password   == confirmPassword ?
       this.passwordValidate = true : 
       this.passwordValidate = false
   }

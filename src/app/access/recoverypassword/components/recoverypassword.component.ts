@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from          '@angular/forms';
 import { ActivatedRoute, Router, Params } from  '@angular/router';
 import { PasswordResetRequest } from            '@shared/dto/recoveryPasswordRequestDto.ts';
 import { PasswordService } from                 '@services/password/password.service';
-import { MzToastService } from                  'ngx-materialize';
+import * as M from                              'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-recoverypassword',
@@ -24,8 +24,8 @@ export class RecoverypasswordComponent implements OnInit {
   successCode:string = "forgotPasswordService_setNewPassword_success";
   failedProcess:boolean = false;
 
-  constructor( private router:Router, private activated:ActivatedRoute, 
-               private passwordService:PasswordService, private toast:MzToastService ) {
+  constructor( private router: Router, private activated: ActivatedRoute,
+               private passwordService: PasswordService ) {
     this.passwordReset = new PasswordResetRequest();
    }
 
@@ -49,9 +49,11 @@ export class RecoverypasswordComponent implements OnInit {
     if( this.validatePasswords() ){
       this.passwordService.resetPassword( this.passwordReset ).subscribe( res => {
         if (res['code'] == this.successCode) {
-          this.router.navigate(['/access']) 
-          this.toast.show("Cambo de contraseña exitoso", 3000, 'green');
-
+          this.router.navigate(['/access']);
+          M.toast({
+            html: 'Cambo de contraseña exitoso',
+            classes: 'green'
+          });
         } else{ this.failedProcess = true; }
       });
     }
