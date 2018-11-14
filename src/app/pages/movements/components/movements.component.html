@@ -1,3 +1,4 @@
+<!-- Busqueda y filtrado -->
 <div class="row">
     <div class="col s12 m4">
         <mz-input-container>
@@ -5,15 +6,11 @@
             <input mz-input [validate]="true" id="search-input" placeholder="Busca la descripción del movimiento" type="text">
         </mz-input-container>
     </div>
-    <div class="col s4 m2 push-s1 push-m2 container-search center-align">
-        <a mz-button id="btn-dropdown-demo">Filtrar</a>
-    </div>
-    <div class="col s7 m4 push-s1 push-m2 container-search">
-        <button mz-button>
-          Nuevo Movimiento
-        </button>
+    <div class="col s12 center-align">
+        <a href="#" class="waves-effect waves-light btn"><i class="material-icons left">filter_list</i>Filtrar</a>
     </div>
 </div>
+<!-- Lista de Movimientos -->
 <div class="center-align" id="movementsContainer">
     <div class="row">
         <div class="titleContainer">
@@ -21,7 +18,7 @@
                 <p>Cuenta</p>
             </div>
             <div class="col s3">
-                <p>Descrición</p>
+                <p>Descripción</p>
             </div>
             <div class="col s3">
                 <p>Categoria</p>
@@ -29,7 +26,7 @@
             <div class="col s3 m2">
                 <p>Monto</p>
             </div>
-            <div class="col s3 m2 hide-on-small-only">
+            <div class="col m2 hide-on-small-only">
                 <p>Considerar</p>
             </div>
         </div>
@@ -40,8 +37,15 @@
                 <h5>{{ i }} </h5>
             </div>
             <div *ngFor="let movement of movementList[i]">
-                <app-movement [account]="movement.account.institution.code" [description]="movement.customDescription | uppercase" [amount]="movement.amount" [considerar]="'Considerar'" [type]="movement.type" [bckgrndColor]="movement.concepts[0].category.color" [frgrndColor]="movement.concepts[0].category.textColor"
-                    [categoryName]="movement.concepts[0].category.name"></app-movement>
+                <ul class="collapsible" #collapsible>
+                    <li>
+                        <div class="collapsible-header">
+                            <app-movement [account]="movement.account.institution.code" [description]="movement.customDescription | uppercase" [amount]="movement.amount" [considerar]="'Considerar'" [type]="movement.type" [bckgrndColor]="movement.concepts[0].category.color" [frgrndColor]="movement.concepts[0].category.textColor"
+                                [categoryName]="movement.concepts[0].category.name"></app-movement>
+                        </div>
+                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -49,10 +53,9 @@
         <mz-spinner [size]="'big'" class="spinners"></mz-spinner>
     </div>
 </div>
-<div class="container-dropdown">
-    <mz-dropdown [id]="'dropdown-demo'" [align]="'left'" [belowOrigin]="true" [constrainWidth]="true" [dropdownButtonId]="'btn-dropdown-demo'" [gutter]="0" [inDuration]="300" [outDuration]="250" [stopPropagation]="true">
-        <mz-dropdown-item><a href="#!">One</a></mz-dropdown-item>
-        <mz-dropdown-item><a href="#!">Two</a></mz-dropdown-item>
-        <mz-dropdown-item><a href="#!">Three</a></mz-dropdown-item>
-    </mz-dropdown>
+<!-- Nuevo Movimiento -->
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large blue waves-circle waves-effect waves-light">
+        <i class="large material-icons large">add</i>
+    </a>
 </div>

@@ -14,7 +14,9 @@
     </div>
 </div>
 <div class="col s3 m2" [ngClass]="{'green-text': type === 'DEPOSIT', 'red-text': type === 'CHARGE'}">
-    <app-monto [amount]="amount"></app-monto>
+    <div class="valign-wrapper">
+        <app-monto [amount]="amount"></app-monto>
+    </div>
 </div>
 <div class="col s3 m2 hide-on-small-only">
     <app-considerar></app-considerar>
