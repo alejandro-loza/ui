@@ -1,39 +1,6 @@
-<header>
-    <div class="navbar-fixed">
-        <mz-navbar [navbarClass]="'finerio-blue'" [ngClass]="{'left-align': lowThanLargeResolution | async, 'center-align': moreThanMediumResoultion | async}">
-            <div class="container">
-                <img src="../../../assets/media/img/finerio_logo/finerio_white.svg" id="finerio-logo">
-                <mz-navbar-item-container [align]="'right'" *ngIf="lowThanLargeResolution | async">
-                    <mz-navbar-item>
-                        <button mz-button [flat]="true" class="button-collapse" id="btn-collapse-sidenav">
-                            <i class="material-icons medium white-text">menu</i>
-                        </button>
-                    </mz-navbar-item>
-                </mz-navbar-item-container>
-            </div>
-        </mz-navbar>
-    </div>
-</header>
+<!-- 
 <mz-sidenav #sidenav [id]="'sidenav'" [collapseButtonId]="'btn-collapse-sidenav'" [fixed]="true" [width]="300" [backgroundClass]="'finerio-blue white-text'">
-    <mz-sidenav-link>
-        <a routerLink="dashboard" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
-            <i mz-icon-mdi [align]="'left'" [icon]="'chart-donut'" [size]="'48px'" [class]="'icon-list white-text'"></i>Dashboard
-        </a>
-    </mz-sidenav-link>
-    <mz-sidenav-link>
-        <a routerLink="movements" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
-            <i mz-icon-mdi [align]="'left'" [icon]="'format-list-bulleted'" [size]="'48px'" [class]="'icon-list white-text'"></i>Movimientos
-        </a>
-    </mz-sidenav-link>
-    <mz-sidenav-link>
-        <a routerLink="budgets" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
-            <i mz-icon-mdi [align]="'left'" [icon]="'chart-bar'" [size]="'48px'" [class]="'icon-list white-text'"></i>Presupuestos
-        </a>
-    </mz-sidenav-link>
-    <mz-sidenav-link>
-        <a routerLink="credentials" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
-            <i mz-icon-mdi [align]="'left'" [icon]="'credit-card'" [size]="'48px'" [class]="'icon-list white-text'"></i>Cuentas Bancarias
-        </a>
+
     </mz-sidenav-link>
     <mz-sidenav-link>
         <a routerLink="categories" routerLinkActive="active finerio-orange" class="white-text waves-effect waves-blue pages-list">
@@ -63,4 +30,26 @@
             </mz-sidenav-collapsible-content>
         </mz-sidenav-collapsible>
     </mz-sidenav-link>
-</mz-sidenav>
+</mz-sidenav> -->
+<header>
+    <div class="navbar-fixed">
+        <nav class="finerio-blue">
+            <div class="nav-wrapper container center-align">
+                <img src="../../../assets/media/img/finerio_logo/finerio_white.svg" id="finerio-logo">
+                <ul id="nav-mobile" class="right hide-on-large-only">
+                    <li>
+                        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+<ul id="slide-out" class="sidenav sidenav-fixed finerio-blue white-text" #sidenav>
+    <app-link [icon]="'chart-donut'" [route]="'Dashboard'" [nombre]="'Dashboard'"></app-link>
+    <app-link [icon]="'format-list-bulleted'" [route]="'Movements'" [nombre]="'Movimientos'"></app-link>
+    <app-link [icon]="'chart-bar'" [route]="'Budgets'" [nombre]="'Presupuestos'"></app-link>
+    <app-link [icon]="'credit-card'" [route]="'Credentials'" [nombre]="'Cuentas Bancarias'"></app-link>
+    <app-link [icon]="'label'" [route]="'Category'" [nombre]="'Categorías'"></app-link>
+    <app-link [icon]="'cash'" [route]="'Saving'" [nombre]="'Ahorros'"></app-link>
+</ul>
