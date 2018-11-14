@@ -55,6 +55,5 @@ export class PasswordService {
     let errMsg = (error.message) ? error.message :
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     return errMsg
-    
   }
 }
