@@ -1,14 +1,3 @@
-.pages-list {
-    height: 64px;
-    line-height: 64px;
-    font-size: 16px;
-}
-
-.icon-list {
-    line-height: 64px !important;
-    margin-right: 40px;
-}
-
 .user-list {
     background-color: #1D3856;
 }
@@ -29,15 +18,5 @@
 @media (max-width: 600px) {
     #finerio-logo {
         height: 56px;
-    }
-}
-
-@media (max-width: 992px) {
-    .pages-list {
-        height: 56px;
-        line-height: 56px;
-    }
-    .icon-list {
-        line-height: 56px;
     }
 }

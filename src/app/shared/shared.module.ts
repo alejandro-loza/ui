@@ -2,26 +2,25 @@ import { NgModule } from                   '@angular/core';
 import { CommonModule } from               '@angular/common';
 import { RouterModule } from               '@angular/router';
 
-import { MaterializeModule } from          './materialize/materialize.module';
 import { SocialMediaComponent } from       '@shared/social-media-button/social-media.component';
 
 import { NavbarComponent } from            './navbar/navbar.component';
+import { LinkComponent } from './navbar/link/link.component';
 
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    MaterializeModule
   ],
   declarations: [
     NavbarComponent,
-    SocialMediaComponent
+    SocialMediaComponent,
+    LinkComponent
   ],
   exports: [
     CommonModule,
     RouterModule,
-    MaterializeModule,
     NavbarComponent,
     SocialMediaComponent
   ]

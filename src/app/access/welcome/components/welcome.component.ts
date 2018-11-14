@@ -1,41 +1,47 @@
-import { Component, OnInit } from         '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { Router } from                    '@angular/router';
 import { AuthService } from               '@services/services.index';
-import { MzToastService } from            'ngx-materialize';
-
+import * as M from                        'materialize-css/dist/js/materialize';
+declare const $: any;
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
-
+  message: string;
   constructor(
     private router: Router,
     private authService: AuthService,
-    public toastService: MzToastService
+    private renderer: Renderer2
   ) {
-    this.authService.personalInfo().subscribe(res => res);
+    this.authService.personalInfo().subscribe(
+      res => res,
+      err => console.log(err));
   }
 
   ngOnInit() {
-    $(function () {
-      $('img.logo-white').css({
-        'display': 'none'
-      });
-    });
+    this.loading();
+  }
+
+  loading() {
+    this.message = '';
+    const buttonToast =
+    ` <button class="transparent btn-flat white-text" onClick="` +
+    `${M.Toast.dismissAll()}` + `var toastElement = document.querySelector('.toast');` +
+    `var toastInstance = M.Toast.getInstance(toastElement);  toastInstance.dismiss();"><i class="large material-icons">close</i></button>'`;
+    this.renderer.addClass(document.querySelector('img.logo-white'), 'hide');
     if ( sessionStorage.getItem('idUser') !== null || sessionStorage.getItem('idUser') !== undefined) {
       setTimeout( () => {
         this.router.navigate(['/app/dashboard']);
       }, 2500);
     } else {
-      const message = 'Ocurrió un error al obtener tus datos';
-      this.toastService.show(
-        message +
-        `<button class="transparent btn-flat white-text" onClick="var toastElement = $('.toast').first()[0];
-        var toastInstance = toastElement.M_Toast;
-        toastInstance.remove();"><i class="large material-icons">close</i></button>`, 2000, 'red accent-3 rounded'
-      );
+      this.message = 'Ocurrió un error al obtener tus datos';
+      M.toast({
+        html: this.message + buttonToast,
+        classes: 'red accent-3'
+      });
+      this.renderer.removeClass(document.querySelector('img.logo-white'), 'hide');
       this.router.navigate(['access/login']);
     }
   }
