@@ -1,0 +1,30 @@
+import { Component, OnInit } from '@angular/core';
+import { InstitutionService } from '@services/institution/institution.service';
+import { FinancialInstitution } from '@shared/dto/credentials/financialInstitution';
+
+@Component({
+  selector: 'app-banks',
+  templateUrl: './banks.component.html',
+  styleUrls: ['./banks.component.css'],
+  providers: [ InstitutionService ]
+})
+export class BanksComponent implements OnInit {
+
+  institutions:FinancialInstitution [] = [];
+
+  constructor( private intitutionService:InstitutionService) { }
+
+  ngOnInit() {
+    this.getInstitutions();
+  }
+
+  getInstitutions(){
+    this.intitutionService.getAllInstitutions().subscribe( (res:any) => {
+     res.data.forEach(element => {
+       element.code != "DINERIO" ?  this.institutions.push( element ) : null
+     });
+     console.log( this.institutions );
+    });
+  }
+
+}
