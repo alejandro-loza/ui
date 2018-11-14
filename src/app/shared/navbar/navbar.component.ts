@@ -1,7 +1,9 @@
-import { Component, OnInit } from       '@angular/core';
+import { Component,
+         OnInit,
+         ViewChild,
+         ElementRef } from              '@angular/core';
 import { Router } from                  '@angular/router';
-import { MzMediaService } from          'ngx-materialize';
-import { Observable } from              'rxjs';
+import * as M from                      'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-navbar',
@@ -9,29 +11,13 @@ import { Observable } from              'rxjs';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  /* Onlu the resolution indicated */
-  public smallResolution: Observable<boolean>;
-  public mediumResolution: Observable<boolean>;
-  public largeResolution: Observable<boolean>;
-  public xLargeResolution: Observable<boolean>;
-
-  /** From 0px to MaxResolution */
-  public lowThanLargeResolution: Observable<boolean>;
-  public moreThanMediumResoultion: Observable<boolean>;
-
-  constructor( 
-      private mediaService: MzMediaService,
-      private router: Router
-    ) {
-    this.smallResolution = this.mediaService.isActive('s');
-    this.mediumResolution = this.mediaService.isActive('m');
-    this.largeResolution = this.mediaService.isActive('l');
-    this.xLargeResolution = this.mediaService.isActive('xl');
-    this.lowThanLargeResolution = this.mediaService.isActive('lt-l');
-    this.moreThanMediumResoultion = this.mediaService.isActive('gt-m');
-  }
+  @ViewChild('sidenav') elemSidenav: ElementRef;
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    const instanceSidenav = new M.Sidenav(this.elemSidenav.nativeElement, {});
     this.collapsableFun();
   }
 
