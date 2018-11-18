@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-// import * as M from 'materialize-css/dist/js/materialize';
+import { Component, OnInit, Input } from '@angular/core';
 @Component({
   selector: 'app-movement',
   templateUrl: './movement.component.html',
@@ -14,12 +13,10 @@ export class MovementComponent implements OnInit {
   @Input() bckgrndColor: string;
   @Input() frgrndColor: string;
   @Input() categoryName: string;
-  @ViewChild('collapsible') elemCollapsible: ElementRef;
 
-  constructor(public renderer: Renderer2) { }
+  constructor( ) { }
 
   ngOnInit() {
-    const instanceCollapsible = 0;
   }
 
 }
