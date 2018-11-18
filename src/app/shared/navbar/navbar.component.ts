@@ -4,6 +4,7 @@ import { Component,
          ElementRef } from              '@angular/core';
 import { Router } from                  '@angular/router';
 import * as M from                      'materialize-css/dist/js/materialize';
+import { Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -13,8 +14,10 @@ import * as M from                      'materialize-css/dist/js/materialize';
 export class NavbarComponent implements OnInit {
   @ViewChild('sidenav') elemSidenav: ElementRef;
   @ViewChild('collapsible') elemCollapsible: ElementRef;
+  @ViewChild('chevronRight') elemIcon: ElementRef;
   constructor(
-    private router: Router
+    private router: Router,
+    private renderer: Renderer2
   ) { }
 
   ngOnInit() {
@@ -22,10 +25,16 @@ export class NavbarComponent implements OnInit {
     const instancesCollapsible = new M.Collapsible(this.elemCollapsible.nativeElement, {});
   }
 
-  // logout() {
-  //   sessionStorage.removeItem('access-token');
-  //   sessionStorage.removeItem('id-user');
-  //   sessionStorage.removeItem('refresh-token');
-  //   this.router.navigate(['/access/login']);
-  // }
+  iconCollapsible() {
+    this.renderer.selectRootElement(this.elemCollapsible).click(() => {
+      this.renderer.setStyle(this.elemIcon.nativeElement, 'animation', 'rotateIcon 1s ease-in-out 0 1 normal forwards')
+    });
+  }
+
+  logout() {
+    sessionStorage.removeItem('access-token');
+    sessionStorage.removeItem('id-user');
+    sessionStorage.removeItem('refresh-token');
+    this.router.navigate(['/access/login']);
+  }
 }
