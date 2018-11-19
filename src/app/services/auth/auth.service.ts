@@ -39,6 +39,7 @@ export class AuthService {
     sessionStorage.setItem( 'refresh-token', refresh_token );
 
     this.configService.setToken = access_token;
+    this.configService.setRefreshToken = refresh_token;
   }
 
   login(user: User) {

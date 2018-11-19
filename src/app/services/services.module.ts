@@ -15,8 +15,6 @@ import {
     CommonModule,
     HttpClientModule,
   ],
-  declarations: [
-  ],
   providers: [
     ConfigService,
     AuthService,

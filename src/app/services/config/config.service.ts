@@ -1,10 +1,16 @@
-import { HttpHeaders } from '@angular/common/http';
-import { isNullOrUndefined } from 'util';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { environment } from             '@env/environment.prod';
+import { RefreshToken } from            '@interfaces/refreshToken.interface';
+import { isNullOrUndefined } from       'util';
+import { map } from 'rxjs/operators';
 
 export class ConfigService {
 
   private headers: HttpHeaders;
+  private httpClient: HttpClient;
+  private url = `${environment.apiUrl}/oauth/access_token`;
   token_access: string;
+  token_refresh: string;
   idUser: string;
   deep = true;
 
@@ -19,6 +25,14 @@ export class ConfigService {
 
   public get getToken(): string {
     return this.token_access;
+  }
+
+  public set setRefreshToken(refreshToken: string) {
+    this.token_refresh = refreshToken;
+  }
+
+  public get getRefreshToken(): string {
+    return this.token_refresh;
   }
 
   public set setId(id: string) {
@@ -42,6 +56,18 @@ export class ConfigService {
   }
 
   refreshToken() {
-    
+    this.httpClient.post(
+      this.url,
+      {grant_type: 'refresh_token', refresh_token: this.getRefreshToken},
+      { headers: this.getJsonHeaders() }
+    ).pipe(
+      map( (res: RefreshToken) => {
+        sessionStorage.setItem( 'access-token', res.access_token );
+        sessionStorage.setItem( 'refresh-token', res.refresh_token );
+
+        this.setToken = res.access_token;
+        this.setRefreshToken = res.refresh_token;
+      })
+    );
   }
 }

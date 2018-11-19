@@ -32,9 +32,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    sessionStorage.removeItem('access-token');
-    sessionStorage.removeItem('id-user');
-    sessionStorage.removeItem('refresh-token');
+    sessionStorage.clear();
     this.router.navigate(['/access/login']);
   }
 }
