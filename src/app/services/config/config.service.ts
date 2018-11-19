@@ -11,8 +11,6 @@ export class ConfigService {
   constructor(
   ) {
     this.headers = new HttpHeaders();
-    this.token_access = '';
-    this.idUser = '';
   }
 
   public set setToken(token: string) {
@@ -35,6 +33,9 @@ export class ConfigService {
     this.headers = this.headers.append('Content-Type', 'application/json');
     this.headers = this.headers.append('Accept', 'application/json');
     if ( !isNullOrUndefined(this.token_access) ) {
+      this.headers = this.headers.set('Authorization', `Bearer ${this.token_access}`);
+    } else if (sessionStorage.getItem('access-token')) {
+      this.setToken = sessionStorage.getItem('access-token');
       this.headers = this.headers.set('Authorization', `Bearer ${this.token_access}`);
     }
     return this.headers;
