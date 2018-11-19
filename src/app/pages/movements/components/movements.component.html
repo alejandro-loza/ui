@@ -1,61 +1,58 @@
 <!-- Busqueda y filtrado -->
-<div class="row">
-    <div class="col s12 m4">
-        <mz-input-container>
-            <i mz-icon-mdi mz-input-prefix [icon]="'magnify'"></i>
-            <input mz-input [validate]="true" id="search-input" placeholder="Busca la descripción del movimiento" type="text">
-        </mz-input-container>
+<div class="row valign-wrapper">
+  <div class="col s12 m4 offset-m1">
+    <div class="input-field">
+      <input id="email_inline" type="email" class="validate" />
+      <label for="email_inline">Email</label>
+      <span class="helper-text" data-error="wrong" data-success="right"
+        >Helper text</span
+      >
     </div>
-    <div class="col s12 center-align">
-        <a href="#" class="waves-effect waves-light btn"><i class="material-icons left">filter_list</i>Filtrar</a>
-    </div>
+  </div>
+  <div class="col s12 m6 center-align">
+    <a href="#" class="waves-effect waves-light btn"
+      ><i class="material-icons left">filter_list</i>Filtrar</a
+    >
+  </div>
 </div>
 <!-- Lista de Movimientos -->
-<div class="center-align" id="movementsContainer">
-    <div class="row">
-        <div class="titleContainer">
-            <div class="col s3 m2">
-                <p>Cuenta</p>
-            </div>
-            <div class="col s3">
-                <p>Descripción</p>
-            </div>
-            <div class="col s3">
-                <p>Categoria</p>
-            </div>
-            <div class="col s3 m2">
-                <p>Monto</p>
-            </div>
-            <div class="col m2 hide-on-small-only">
-                <p>Considerar</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="bodyContainer" *ngFor="let i of dateList">
-            <div class="col s12 light-blue lighten-5 light-blue-text text-darken-4">
-                <h5>{{ i }} </h5>
-            </div>
-            <div *ngFor="let movement of movementList[i]">
-                <ul class="collapsible" #collapsible>
-                    <li>
-                        <div class="collapsible-header">
-                            <app-movement [account]="movement.account.institution.code" [description]="movement.customDescription | uppercase" [amount]="movement.amount" [considerar]="'Considerar'" [type]="movement.type" [bckgrndColor]="movement.concepts[0].category.color" [frgrndColor]="movement.concepts[0].category.textColor"
-                                [categoryName]="movement.concepts[0].category.name"></app-movement>
-                        </div>
-                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="center-align">
-        <mz-spinner [size]="'big'" class="spinners"></mz-spinner>
-    </div>
+<div class="row bodyContainer" *ngFor="let i of dateList">
+  <div class="col s12 light-blue lighten-5 light-blue-text text-darken-4 ">
+    <h5 class="center-align">{{ i }}</h5>
+  </div>
+  <mat-accordion *ngFor="let movement of movementList[i]">
+    <mat-expansion-panel class="collapsible ">
+      <mat-expansion-panel-header>
+        <mat-panel-description>
+                <div class="col s2 m2 l1 paddingCol">
+                    <app-cuenta [account]="movement.account.institution.code"></app-cuenta>
+                </div>
+                <div class="col s6 l4">
+                    <app-description [description]="movement.description | uppercase"></app-description>
+                    <app-category [bckgrndColor]="movement.concepts[0].category.color"
+                                  [frgrndColor]="movement.concepts[0].category.textColor"
+                                  [categoryName]="movement.concepts[0].category.name"></app-category>
+                </div>
+                <div class="col l3 hide-on-med-and-down">
+                  Test
+                </div>
+                <div class="col s4 m2 paddingCol" [ngClass]="{'green-text': movement.type === 'DEPOSIT', 'red-text': movement.type === 'CHARGE'}">
+                    <app-monto [amount]="movement.amount"></app-monto>
+                </div>
+                <div class="col m2 hide-on-small-only center-align">
+                    <p class="noMargin">No Considerar Movimiento</p>
+                    <app-considerar [switch]="movement.duplicated"></app-considerar>
+                </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>I'm visible because I am open</p>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
+<div class="center-align "><app-spinner></app-spinner></div>
 <!-- Nuevo Movimiento -->
-<div class="fixed-action-btn">
-    <a class="btn-floating btn-large blue waves-circle waves-effect waves-light">
-        <i class="large material-icons large">add</i>
-    </a>
+<div class="fixed-action-btn ">
+  <a class="btn-floating btn-large blue waves-circle waves-effect waves-light ">
+    <i class="large material-icons large ">add</i>
+  </a>
 </div>

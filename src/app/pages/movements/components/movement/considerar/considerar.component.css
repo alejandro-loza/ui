@@ -1,13 +1,14 @@
-@media only screen and (min-width: 1201px) {
-    .switch {
-        margin-top: 9%;
-        margin-bottom: 14%;
-    }
+.switch {
+    margin-top: 15%;
 }
 
-@media only screen and (min-width: 1441px) {
+@media only screen and (min-width: 1025px )and (min-width: 1200px ) {
     .switch {
-        margin-top: 4%;
-        margin-bottom: 9%;
+        margin-top: 10%;
+    }
+}
+@media only screen and (min-width: 1201px ) {
+    .switch {
+        margin-top: 6%;
     }
 }

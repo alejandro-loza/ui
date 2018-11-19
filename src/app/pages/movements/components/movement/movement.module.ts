@@ -1,8 +1,8 @@
 import { NgModule } from                     '@angular/core';
 import { CommonModule } from                 '@angular/common';
+import { MatSlideToggleModule } from           '@angular/material/slide-toggle';
 import { CategoryComponent } from            '@pages/categories/component/category/category.component';
 
-import { MovementComponent } from            './movement.component';
 import { DescriptionComponent } from         './description/description.component';
 import { CuentaComponent } from              './cuenta/cuenta.component';
 import { MontoComponent } from               './monto/monto.component';
@@ -10,7 +10,6 @@ import { ConsiderarComponent } from          './considerar/considerar.component'
 
 @NgModule({
   declarations: [
-    MovementComponent,
     CategoryComponent,
     DescriptionComponent,
     CuentaComponent,
@@ -18,14 +17,15 @@ import { ConsiderarComponent } from          './considerar/considerar.component'
     ConsiderarComponent,
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatSlideToggleModule
   ], exports: [
-    MovementComponent,
     CategoryComponent,
     DescriptionComponent,
     CuentaComponent,
     MontoComponent,
     ConsiderarComponent,
+    MatSlideToggleModule
   ]
 })
 export class MovementModule { }
