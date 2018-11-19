@@ -54,7 +54,6 @@ export class AuthService {
   }
 
   personalInfo() {
-    const token: string = sessionStorage.getItem('access-token');
     return this.httpClient.get<InfoUser>(`${environment.backendUrl}/me`, {headers: this.configService.getJsonHeaders()})
       .pipe(map( (res: InfoUser) => {
         sessionStorage.setItem( 'id-user', res.id );
