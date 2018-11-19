@@ -9,6 +9,10 @@ declare const $: any;
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
+  buttonToast =
+    ` <button class="transparent btn-flat white-text" onClick="` +
+    `${M.Toast.dismissAll()}` + `var toastElement = document.querySelector('.toast');` +
+    `var toastInstance = M.Toast.getInstance(toastElement);  toastInstance.dismiss();"><i class="large material-icons">close</i></button>'`;
   message: string;
   constructor(
     private router: Router,
@@ -17,7 +21,15 @@ export class WelcomeComponent implements OnInit {
   ) {
     this.authService.personalInfo().subscribe(
       res => res,
-      err => console.log(err));
+      err => {
+        this.message = 'Ocurrió un error al obtener tus datos';
+        M.toast({
+          html: this.message + this.buttonToast,
+          classes: 'red accent-3'
+        });
+        this.router.navigate(['access/login']);
+      }
+    );
   }
 
   ngOnInit() {
@@ -26,10 +38,6 @@ export class WelcomeComponent implements OnInit {
 
   loading() {
     this.message = '';
-    const buttonToast =
-    ` <button class="transparent btn-flat white-text" onClick="` +
-    `${M.Toast.dismissAll()}` + `var toastElement = document.querySelector('.toast');` +
-    `var toastInstance = M.Toast.getInstance(toastElement);  toastInstance.dismiss();"><i class="large material-icons">close</i></button>'`;
     this.renderer.addClass(document.querySelector('img.logo-white'), 'hide');
     if ( sessionStorage.getItem('idUser') !== null || sessionStorage.getItem('idUser') !== undefined) {
       setTimeout( () => {
@@ -38,7 +46,7 @@ export class WelcomeComponent implements OnInit {
     } else {
       this.message = 'Ocurrió un error al obtener tus datos';
       M.toast({
-        html: this.message + buttonToast,
+        html: this.message + this.buttonToast,
         classes: 'red accent-3'
       });
       this.renderer.removeClass(document.querySelector('img.logo-white'), 'hide');
