@@ -1,9 +1,9 @@
 import { Injectable } from                '@angular/core';
-import { HttpClient, HttpHeaders } from   '@angular/common/http';
+import { HttpClient } from   '@angular/common/http';
 
 import { environment } from               '@env/environment';
 
-import { FinerioService } from            '@services/config/config.service';
+import { ConfigService } from            '@services/config/config.service';
 
 import { User } from                      '@app/shared/interfaces/authLogin.interface';
 import { InfoUser } from                  '@interfaces/infoUser.interface';
@@ -13,18 +13,16 @@ import { map } from                       'rxjs/operators';
 @Injectable()
 export class AuthService {
 
-  private headers: HttpHeaders;
-
   url = `${environment.backendUrl}/login`;
   user: User;
   token: string;
 
   constructor(
     private httpClient: HttpClient,
-    private finerioService: FinerioService) {
-      this.getData();
-      this.headers = new HttpHeaders();
-    }
+    private configService: ConfigService
+  ) {
+    this.getData();
+  }
 
   isAuth() {
     return (  this.token.length  > 0 ) ? true : false;
@@ -36,19 +34,19 @@ export class AuthService {
     }
   }
 
-  saveData( access_token: string, refresh_token: string, username: string ) {
+  saveData( access_token: string, refresh_token: string ) {
     sessionStorage.setItem( 'access-token', access_token );
     sessionStorage.setItem( 'refresh-token', refresh_token );
 
-    this.finerioService.setToken = access_token;
+    this.configService.setToken = access_token;
   }
 
   login(user: User) {
     return this.httpClient.post<User>(
-      this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
+      this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.configService.getJsonHeaders()}
     ).pipe(
       map( (res: any ) => {
-        this.saveData( res.access_token, res.refresh_token, res.username );
+        this.saveData( res.access_token, res.refresh_token);
         this.getData();
         return true;
       })
@@ -57,9 +55,10 @@ export class AuthService {
 
   personalInfo() {
     const token: string = sessionStorage.getItem('access-token');
-    return this.httpClient.get<InfoUser>(`${environment.backendUrl}/me`, {headers: this.headers.set('Authorization', `Bearer ${token}`)})
+    return this.httpClient.get<InfoUser>(`${environment.backendUrl}/me`, {headers: this.configService.getJsonHeaders()})
       .pipe(map( (res: InfoUser) => {
         sessionStorage.setItem( 'id-user', res.id );
+        this.configService.setId = res.id;
       })
     );
   }

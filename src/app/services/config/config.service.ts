@@ -1,6 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
+import { isNullOrUndefined } from 'util';
 
-export class FinerioService {
+export class ConfigService {
 
   private headers: HttpHeaders;
   token_access: string;
@@ -10,6 +11,8 @@ export class FinerioService {
   constructor(
   ) {
     this.headers = new HttpHeaders();
+    this.token_access = '';
+    this.idUser = '';
   }
 
   public set setToken(token: string) {
@@ -29,11 +32,15 @@ export class FinerioService {
   }
 
   getJsonHeaders() {
-    this.headers.set('Content-Type', 'application/json');
-    this.headers.set('Accept', 'application/json');
-    if ( this.token_access !== null || this.token_access !== undefined ) {
-      this.headers.set('Authorization', `Bearer ${this.token_access}`);
+    this.headers = this.headers.append('Content-Type', 'application/json');
+    this.headers = this.headers.append('Accept', 'application/json');
+    if ( !isNullOrUndefined(this.token_access) ) {
+      this.headers = this.headers.set('Authorization', `Bearer ${this.token_access}`);
     }
     return this.headers;
+  }
+
+  refreshToken() {
+    
   }
 }
