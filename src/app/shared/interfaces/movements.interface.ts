@@ -1,8 +1,6 @@
 import { Movement } from '@interfaces/movement.interface';
 
 export interface Movements {
-    data: {
-        [index: number]:  Movement
-    };
+    data: Movement[];
     size: number;
 }
