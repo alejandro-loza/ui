@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col s4">
+      <app-fecha [fecha]="fecha"></app-fecha>
+    </div>
+    <div class="right-align">
+      <div class="col s8" *ngIf="name === 'Efectivo'">
+        <app-ingreso-gasto [type]="type"></app-ingreso-gasto>
+      </div>
+      <div class="col s8" *ngIf="name !== 'Efectivo'">
+        <a class="btn btn-small btn-flat finerio-orange btn-info">
+          Información Original
+        </a>
+      </div>
+    </div>
+</div>
+<div class="row">
+  <div class="col s8">
+    <a class="btn btn-small btn-flat btn-division">
+      <i class="mdi mdi-24px mdi-plus left"></i>Dividir Movimiento
+    </a>
+  </div>
+  <div class="col s4 btn btn-small red darken-3">
+      <i class="mdi mdi-24px mdi-delete right"></i>Eliminar
+  </div>
+</div>
