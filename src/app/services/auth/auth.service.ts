@@ -1,9 +1,9 @@
 import { Injectable } from                '@angular/core';
-import { HttpClient } from   '@angular/common/http';
+import { HttpClient } from                '@angular/common/http';
 
 import { environment } from               '@env/environment';
 
-import { ConfigService } from            '@services/config/config.service';
+import { ConfigService } from             '@services/config/config.service';
 
 import { User } from                      '@app/shared/interfaces/authLogin.interface';
 import { InfoUser } from                  '@interfaces/infoUser.interface';
@@ -15,7 +15,6 @@ export class AuthService {
 
   url = `${environment.backendUrl}/login`;
   user: User;
-  token: string;
 
   constructor(
     private httpClient: HttpClient,
@@ -25,12 +24,12 @@ export class AuthService {
   }
 
   isAuth() {
-    return (  this.token.length  > 0 ) ? true : false;
+    return (  this.configService.getToken.length  > 0 ) ? true : false;
   }
 
   getData() {
     if ( sessionStorage.getItem('access-token') ) {
-      this.token = sessionStorage.getItem('access-token');
+      this.configService.setToken = sessionStorage.getItem('access-token');
     }
   }
 
@@ -56,10 +55,11 @@ export class AuthService {
 
   personalInfo() {
     return this.httpClient.get<InfoUser>(`${environment.backendUrl}/me`, {headers: this.configService.getJsonHeaders()})
-      .pipe(map( (res: InfoUser) => {
-        sessionStorage.setItem( 'id-user', res.id );
-        this.configService.setId = res.id;
-      })
-    );
+      .pipe(
+        map( (res: InfoUser) => {
+          sessionStorage.setItem( 'id-user', res.id );
+          this.configService.setId = res.id;
+        })
+      );
   }
 }
