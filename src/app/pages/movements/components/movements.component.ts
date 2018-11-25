@@ -1,9 +1,10 @@
-import { Component, OnInit } from   '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 
 import { MovementsService } from    '@services/services.index';
+import { ConfigService } from       '@services/config/config.service';
 
-import { QueryMovements } from      '@classes/queryMovementsDto.class';
-import { Movements } from           '@interfaces/movements.interface';
+import { QueryMovements } from      '@interfaces/queryMovements.interface';
+import { Movement } from            '@interfaces/movement.interface';
 
 import * as M from                  'materialize-css/dist/js/materialize';
 declare const $: any;
@@ -13,63 +14,78 @@ declare const $: any;
   templateUrl: './movements.component.html',
   styleUrls: ['./movements.component.css']
 })
-export class MovementsComponent implements OnInit {
-  dateList = [];
+export class MovementsComponent implements OnInit, AfterViewInit {
+  @ViewChild('collapsible') elcollapsible: ElementRef;
+  @ViewChild('spinner') elSpinner: ElementRef;
+  movementsList: Movement[];
   scrollLimit: number;
-  movementList = {};
-  offset = 0;
-  charges = true;
-  deposit = true;
-  duplicates = true;
-  deep = true;
-  queryMovements: QueryMovements;
+  navigatorLenguage = navigator.language;
+  queryMovements: QueryMovements = {
+    charges: true,
+    deep: true,
+    deposits: true,
+    duplicates: true,
+    offset: 0,
+    maxMovements: 35,
+  };
+
 
   constructor(
     private movementsService: MovementsService,
-  ) {}
+    private configService: ConfigService,
+    public renderer: Renderer2
+  ) { }
 
   ngOnInit() {
-    this.getMovements(this.offset);
+    this.getMovements(this.queryMovements);
     this.offsetMovement();
   }
 
-  getMovements(offset: number) {
-    this.movementsService.allMovements(offset).subscribe(
+  ngAfterViewInit() {
+    const initCollapsible = new M.Collapsible(this.elcollapsible.nativeElement, {});
+    const instanceCollapsible = M.Collapsible.getInstance(this.elcollapsible.nativeElement);
+  }
+
+  getMovements(queryMovements: QueryMovements) {
+    this.movementsService.allMovements(queryMovements).subscribe(
       res => {
-        this.movementList = res;
-        for (const i in res) {
-          if (res.hasOwnProperty(i)) {
-            const movements: Movements = res[i];
-            this.dateList.push(i);
-          }
-        }
-      }, (err: any) => {
+        this.movementsList = res;
+      },
+      (err: any) => {
         if ( err.status === 401 ) {
-          const buttonToast =
-            ` <button class="transparent btn-flat white-text" onClick="`+
-            `${M.Toast.dismissAll()}` + `var toastElement = document.querySelector('.toast');` +
-            `var toastInstance = M.Toast.getInstance(toastElement);  toastInstance.dismiss();"><i class="large material-icons">close</i></button>'`;
-          const errorMsg = 'Expiro el token, renovar';
+          this.configService.refreshToken();
+          const toastHTML =
+            `<span>Hemos actualizado tu sesión, ¡Bienvenido de nuevo!</span>
+            <button class="btn-flat toast-action" onClick="
+              const toastElement = document.querySelector('.toast');
+              const toastInstance = M.Toast.getInstance(toastElement);
+              toastInstance.dismiss();">
+              <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+            </button>`;
           M.toast({
-            html: errorMsg + buttonToast,
-            classes: 'purple darken-2'
+            html: toastHTML,
+            classes: 'light-blue darken-4',
+            displayLength: 2000
           });
         } else {
-          const buttonToast =
-            ` <button class="transparent btn-flat white-text" onClick="`+
-            `${M.Toast.dismissAll()}` + `var toastElement = document.querySelector('.toast');` +
-            `var toastInstance = M.Toast.getInstance(toastElement);  toastInstance.dismiss();"><i class="large material-icons">close</i></button>'`;
-          const errorMsg = 'Ha ocurrido un error en nuestro servidor';
+          const toastHTML =
+            `<span>¡Ha ocurrido un error al obterner tus movimiento!</span>
+            <button class="btn-flat toast-action" onClick="
+              const toastElement = document.querySelector('.toast');
+              const toastInstance = M.Toast.getInstance(toastElement);
+              toastInstance.dismiss();">
+            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+            </button>`;
           M.toast({
-            html: errorMsg + buttonToast,
-            classes: 'red accent-3'
+            html: toastHTML,
+            classes: 'red darken-4',
+            displayLength: 2000
           });
         }
       }, () => {
-        $('.spinners .big').hide();
+        this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'none');
       });
-    this.queryMovements = this.movementsService.queryMovements;
-    this.offset = this.queryMovements.getOffset;
+      this.queryMovements.offset = this.queryMovements.offset + this.queryMovements.maxMovements;
   }
 
   offsetMovement() {
@@ -77,8 +93,8 @@ export class MovementsComponent implements OnInit {
       const scrollVertical = window.scrollY + 56;
       this.scrollLimit = ($(document).height() - $(window).height());
       if ( scrollVertical >= this.scrollLimit) {
-        $('.spinners .big').show();
-        this.getMovements(this.offset);
+        this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'block');
+        this.getMovements(this.queryMovements);
       }
     }, true);
   }
