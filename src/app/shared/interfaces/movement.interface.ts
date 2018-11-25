@@ -2,17 +2,17 @@ import { Account } from './account.interfaces';
 import { Concept } from './concept.interface';
 
 export interface Movement {
-    id: string;
+    account: Account;
     amount: number;
     balance: number;
+    concepts: Concept[];
     customDate: Date;
     customDescription: string;
     date: Date;
     dateCreated: Date;
     description: string;
     duplicated: true;
+    id: string;
     lastUpdated: Date;
     type: string;
-    account: Account;
-    concept: Concept;
 }
