@@ -1,0 +1,6 @@
+<div class="btn-type">
+    <button class="btn btn-small btn-deposit"
+    [ngClass]="{ 'btn-flat': type !== 'DEPOSIT', 'light-green darken-3': type === 'DEPOSIT' }">Ingreso</button>
+<button class="btn btn-small btn-charge"
+    [ngClass]="{ 'btn-flat': type !== 'CHARGE', 'red darken-4': type === 'CHARGE'}">Gasto</button>
+</div>

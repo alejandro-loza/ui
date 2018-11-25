@@ -1,0 +1,23 @@
+.btn-charge {
+  border: 1px solid rgb(213, 0, 0, 0.8);
+}
+
+.btn-flat:hover.btn-charge {
+  background-color: rgb(213, 0, 0, 0.8);
+  color: white;
+}
+
+.btn-deposit {
+  border: 1px solid rgb(85, 139, 47, 0.8);
+}
+
+.btn-flat:hover.btn-deposit {
+  background-color: rgb(85, 139, 47, 0.8);
+  color: white;
+}
+
+@media only screen and (max-width: 600px ) {
+  .btn-type {
+    margin-top: 10%;
+  }
+}
