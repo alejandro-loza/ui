@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row">
+    <form action="" method="POST">
+      <div class="valign-wrapper">
+        <div class="col s12 m5">
+          <h6>Descripción del Movimiento:</h6>
+        </div>
+        <div class="col s12 m7">
+          <div class="input-field">
+            <input class="validate" id="description" placeholder="Nombre del Movimiento" required type="text">
+            <label for="description"></label>
+            <span class="helper-text" data-error="Ingresa una descripción para tu movimiento" data-success="Perfecto">Ej: Startbucks</span>
+          </div>
+        </div>
+      </div>
+      <div class="valign-wrapper">
+        <div class="col s12 m5">
+          <h6>Monto del Movimiento:</h6>
+        </div>
+        <div class="col s1">
+          <div class="h6">$</div>
+        </div>
+        <div class="col s11 m6">
+          <div class="input-field">
+            <input class="validate" id="monto" min="1" value="1" placeholder="Monto del Movimiento" type="number">
+            <label for="monto"></label>
+            <span class="helper-text" data-error="Ingresa un valo numérico y mínimo de 1" data-success="Perfecto">Debes ingresar un valor numérico</span>
+          </div>
+        </div>
+      </div>
+      <div class="valign-wrapper">
+        <div class="col s12 m5">
+          <h6>Fecha del movimiento:</h6>
+        </div>
+        <div class="col s12 m7">
+          <app-fecha [fecha]="date"></app-fecha>
+        </div>
+      </div>
+      <div class="valign-wrapper">
+        <div class="col s12 m5">
+          <h6>Tipo de movimiento:</h6>
+        </div>
+        <div class="col s12 m7">
+          <app-ingreso-gasto></app-ingreso-gasto>
+        </div>
+      </div>
+      <div class="valign-wrapper">
+        <div class="col s12 center-align">
+          <button class="btn btn-large finerio-blue waves-effect waves-light" type="submit" name="action">Crear Movimiento
+            <i class="material-icons right">send</i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

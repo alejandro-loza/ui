@@ -1,0 +1,14 @@
+.finerio-blue:hover {
+  background-color: transparent !important;
+  color: var(--Navyblue-color) !important;
+}
+
+.valign-wrapper {
+  margin: 6.5% 0%;
+}
+
+@media only screen and (max-width: 600px) {
+  .valign-wrapper {
+    margin: 8.5% 0%;
+  } 
+}
