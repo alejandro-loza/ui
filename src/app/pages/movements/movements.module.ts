@@ -17,7 +17,7 @@ import { MovementDetailMedAndUpComponent } from    './components/movement-detail
     ReactiveFormsModule,
     SharedModule,
     MovementModule,
-    MovementsRoutes
+    MovementsRoutes,
   ],
   declarations: [
     MovementsComponent,
