@@ -12,6 +12,7 @@ export interface Movement {
     dateCreated: Date;
     description: string;
     duplicated: true;
+    hasConcepts: boolean;
     id: string;
     lastUpdated: Date;
     type: string;
