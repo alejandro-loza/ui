@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild, ElementRef, Renderer2, AfterViewInit } fr
 import { MovementsService } from    '@services/services.index';
 import { ConfigService } from       '@services/config/config.service';
 
-import { QueryMovements } from      '@interfaces/queryMovements.interface';
+import { ParamsMovements } from      '@app/shared/interfaces/paramsMovements.interface';
 import { Movement } from            '@interfaces/movement.interface';
 
 import * as M from                  'materialize-css/dist/js/materialize';
@@ -20,7 +20,7 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   movementsList: Movement[];
   scrollLimit: number;
   navigatorLenguage = navigator.language;
-  queryMovements: QueryMovements = {
+  paramsMovements: ParamsMovements = {
     charges: true,
     deep: true,
     deposits: true,
@@ -37,7 +37,7 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.getMovements(this.queryMovements);
+    this.getMovements(this.paramsMovements);
     this.offsetMovement();
   }
 
@@ -46,10 +46,11 @@ export class MovementsComponent implements OnInit, AfterViewInit {
     const instanceCollapsible = M.Collapsible.getInstance(this.elcollapsible.nativeElement);
   }
 
-  getMovements(queryMovements: QueryMovements) {
-    this.movementsService.allMovements(queryMovements).subscribe(
+  getMovements(paramsMovements: ParamsMovements) {
+    this.movementsService.allMovements(paramsMovements).subscribe(
       res => {
         this.movementsList = res;
+        // console.log(this.movementsList[0]);
       },
       (err: any) => {
         if ( err.status === 401 ) {
@@ -68,6 +69,7 @@ export class MovementsComponent implements OnInit, AfterViewInit {
             displayLength: 2000
           });
         } else {
+          console.error(err);
           const toastHTML =
             `<span>¡Ha ocurrido un error al obterner tus movimiento!</span>
             <button class="btn-flat toast-action" onClick="
@@ -85,17 +87,18 @@ export class MovementsComponent implements OnInit, AfterViewInit {
       }, () => {
         this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'none');
       });
-      this.queryMovements.offset = this.queryMovements.offset + this.queryMovements.maxMovements;
+      this.paramsMovements.offset = this.paramsMovements.offset + this.paramsMovements.maxMovements;
   }
 
   offsetMovement() {
     window.addEventListener('scroll', () => {
-      const scrollVertical = window.scrollY + 56;
+      const scrollVertical = window.scrollY;
       this.scrollLimit = ($(document).height() - $(window).height());
       if ( scrollVertical >= this.scrollLimit) {
         this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'block');
-        this.getMovements(this.queryMovements);
+        this.getMovements(this.paramsMovements);
       }
     }, true);
+    this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'none');
   }
 }
