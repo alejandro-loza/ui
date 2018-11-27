@@ -1,78 +1,90 @@
-<!-- Busqueda y filtrado -->
-<div class="row valign-wrapper">
-  <div class="col s12 m4 offset-m1">
-    <div class="input-field">
-      <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
-      <label for="first_name"></label>
-      <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+<div class="stickyOptions">
+  <!-- Busqueda y filtrado -->
+  <div class="containerMovement">
+    <div class="row valign-wrapper">
+      <div class="col s12 m4">
+        <div class="input-field">
+          <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
+          <label for="first_name"></label>
+          <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+        </div>
+      </div>
+      <div class="col s12 m3 right-align">
+        <a href="#" class="waves-effect waves-light btn btn-filter">
+          <i class="material-icons left">filter_list</i>Filtrar
+        </a>
+      </div>
+      <div class="col s12 m4 center-align">
+        <a href="#" class="waves-effect waves-light btn finerio-orange" routerLink="newMovement">
+          <i class="material-icons right">add</i>Nuevo Movimiento
+        </a>
+      </div>
     </div>
   </div>
-  <div class="col s12 m6 center-align">
-    <a href="#" class="waves-effect waves-light btn">
-      <i class="material-icons left">filter_list</i>Filtrar
-    </a>
+
+  <!-- Encabezado de movimientos -->
+  <div class="containerMovement">
+    <div class="row center-align" id="header">
+      <div class="col m1 movementheader">Cuenta</div>
+      <div class="col m2 movementheader">Fecha</div>
+      <div class="col m3 movementheader">Categoria</div>
+      <div class="col m3 movementheader">Descripción</div>
+      <div class="col m1 movementheader">Monto</div>
+      <div class="col m2 movementheader">Considerar</div>
+    </div>
   </div>
 </div>
+
 <!-- Lista de Movimientos -->
-<div class="row bodyContainer">
-  <ul class="collapsible" #collapsible>
-    <li *ngFor="let movement of movementsList">
+<div class="containerMovement">
+  <div class="row center-align">
+    <ul class="collapsible" #collapsible>
+      <li *ngFor="let movement of movementsList">
 
-      <!-- Encabezado del collapsible -->
-      <div class="collapsible-header" [ngClass]="{'grey lighten-2': movement.duplicated}">
+        <!-- Encabezado del collapsible -->
+        <div class="collapsible-header valign-wrapper" [ngClass]="{'grey lighten-2': movement.duplicated}">
 
-        <!-- Imagen de la cuenta -->
-        <div class="col s2 m1">
-          <app-cuenta [account]="movement.account.institution.code"></app-cuenta>
-        </div>
+          <!-- Imagen de la cuenta -->
+          <div class="col m1">
+            <app-cuenta [account]="movement.account.institution.code"></app-cuenta>
+          </div>
 
-        <!-- Fecha del movimiento -->
-        <div class="col m2 hide-on-small-and-down">
-          <app-fecha [fecha]="movement.customDate"></app-fecha>
-        </div>
+          <!-- Fecha del movimiento -->
+          <div class="col m2">
+            <app-fecha [fecha]="movement.customDate"></app-fecha>
+          </div>
 
-        <!-- Descripción y Categoria -->
-        <div class="col s6 m4">
-          <app-description [description]="movement.customDescription | uppercase"></app-description>
-          <app-category [bckgrndColor]="movement.concepts[0].category.color" [categoryName]="movement.concepts[0].category.name" [frgrndColor]="movement.concepts[0].category.textColor"></app-category>
-        </div>
+          <!-- Descripción -->
+          <div class="col m3">
+            <app-description [description]="movement.customDescription | uppercase"></app-description>
+          </div>
 
-        <!-- Monto del movimiento -->
-        <div class="col s4 m2" [ngClass]="
+          <!-- Categoria -->
+          <div class="col m3">
+            <app-category [bckgrndColor]="movement.concepts[0].category.color" [categoryName]="movement.concepts[0].category.name" [frgrndColor]="movement.concepts[0].category.textColor" [categoryParent]="movement.concepts[0].category.parent.id"></app-category>
+          </div>
+
+          <!-- Monto del movimiento -->
+          <div class="col m1" [ngClass]="
                    {'green-text': movement.type === 'DEPOSIT',
                    'red-text': movement.type === 'CHARGE'}">
-          <app-monto [amount]="movement.amount"></app-monto>
-        </div>
+            <app-monto [amount]="movement.amount"></app-monto>
+          </div>
 
-        <!-- Considerar el movimiento -->
-        <div class="col s3 center-align hide-on-small-and-down">
-          <p>No considerar movimiento</p>
-          <app-considerar [switch]="movement.duplicated"></app-considerar>
+          <!-- Considerar el movimiento -->
+          <div class="col m2 center-align hide-on-small-and-down">
+            <app-considerar [switch]="movement.duplicated"></app-considerar>
+          </div>
         </div>
-      </div>
-      <div class="collapsible-body">
-        <div class="show-on-small hide-on-med-and-up">
-          <app-movement-detail-mobile
-              [fecha]="movement.customDate"
-              [type]="movement.type"
-              [name]="movement.account.name"></app-movement-detail-mobile>
+        <div class="collapsible-body">
+          <div class="hide-on-small-and-down show-on-medium-and-up">
+            <app-movement-detail-med-and-up [fecha]="movement.customDate" [type]="movement.type" [name]="movement.account.name"></app-movement-detail-med-and-up>
+          </div>
         </div>
-        <div class="hide-on-small-and-down show-on-medium-and-up">
-          <app-movement-detail-med-and-up
-              [fecha]="movement.customDate"
-              [type]="movement.type"
-              [name]="movement.account.name"></app-movement-detail-med-and-up>
-        </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 </div>
 <div class="center-align" #spinner>
   <app-spinner></app-spinner>
-</div>
-<!-- Nuevo Movimiento -->
-<div class="fixed-action-btn ">
-  <a class="btn-floating btn-large blue waves-circle waves-effect waves-light ">
-    <i class="large material-icons large ">add</i>
-  </a>
 </div>
