@@ -6,7 +6,7 @@ import { ConfigService } from           '../config/config.service';
 
 import { map } from                     'rxjs/operators';
 
-import { QueryMovements } from          '@app/shared/interfaces/queryMovements.interface';
+import { ParamsMovements } from          '@app/shared/interfaces/paramsMovements.interface';
 import { Movement } from                '@interfaces/movement.interface';
 import { Movements } from               '@interfaces/movements.interface';
 
@@ -35,20 +35,20 @@ export class MovementsService {
    * @param duplicate : Para incluir los movimientos duplicaods
    */
 
-  allMovements ( queryMovements: QueryMovements ) {
-    if ( queryMovements.offset === 0 ) {
+  allMovements ( paramsMovements: ParamsMovements ) {
+    if ( paramsMovements.offset === 0 ) {
       this.movementsList = new Array();
     }
     const id = sessionStorage.getItem('id-user');
     const urlMovements =
       `${ this.url }/` +
       `${ id }/movements` +
-      `?deep=${ queryMovements.deep }` +
-      `&offset=` + queryMovements.offset +
-      `&max=${ queryMovements.maxMovements }` +
-      `&includeCharges=${ queryMovements.charges }` +
-      `&includeDeposits=${ queryMovements.deposits }` +
-      `&includeDuplicates=${ queryMovements.duplicates }`;
+      `?deep=${ paramsMovements.deep }` +
+      `&offset=` + paramsMovements.offset +
+      `&max=${ paramsMovements.maxMovements }` +
+      `&includeCharges=${ paramsMovements.charges }` +
+      `&includeDeposits=${ paramsMovements.deposits }` +
+      `&includeDuplicates=${ paramsMovements.duplicates }`;
     return this.httpClient.get<Movements>(
       urlMovements,
       { headers: this.configService.getJsonHeaders()}
