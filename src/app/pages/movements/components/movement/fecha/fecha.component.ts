@@ -26,7 +26,7 @@ export class FechaComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     const initDatepicker = new M.Datepicker(this.elDatePickker.nativeElement, {
-      format: 'dd-mmmm',
+      format: 'dd / mmmm',
       showClearBtn: true,
       showDaysInNextAndPreviousMonths: true,
       i18n: {
@@ -36,8 +36,8 @@ export class FechaComponent implements OnInit, AfterContentInit {
         weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
         weekdaysAbbrev: ['D', 'L', 'M', 'M', 'J', 'V', 'S']
       },
+      defaultDate: this.fecha,
       setDefaultDate: true,
-      defaultDate: this.fecha
     });
     const instanceDatePicker = M.Datepicker.getInstance(this.elDatePickker.nativeElement);
   }
