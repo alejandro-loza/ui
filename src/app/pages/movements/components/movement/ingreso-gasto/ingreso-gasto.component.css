@@ -1,23 +1,41 @@
-.btn-charge {
-  border: 1px solid rgb(213, 0, 0, 0.8);
+.btn {
+  margin: 0% 1%;
 }
 
-.btn-flat:hover.btn-charge {
-  background-color: rgb(213, 0, 0, 0.8);
-  color: white;
+.btn-charge {
+  border: 1px solid rgb(198, 40, 40);
+  background-color: rgb(198, 40, 40, 0.1);
 }
 
 .btn-deposit {
-  border: 1px solid rgb(85, 139, 47, 0.8);
+  border: 1px solid #2e7d32;
+  background-color: rgb(67, 160, 71, 0.1);
 }
 
-.btn-flat:hover.btn-deposit {
-  background-color: rgb(85, 139, 47, 0.8);
-  color: white;
+
+.btn:hover {
+  color: #f5f5f5;
+  transition: 0.3s;
 }
 
-@media only screen and (max-width: 600px ) {
-  .btn-type {
-    margin-top: 10%;
-  }
+.btn-charge:hover {
+  border: none;
+  background-color: rgb(198, 40, 40);
+}
+
+.btn-deposit:hover {
+  border: none;
+  background-color: rgb(67, 160, 71);
+}
+
+.btn-charge.active {
+  background-color: rgb(198, 40, 40);
+}
+
+.btn-deposit.active {
+  background-color: rgb(67, 160, 71);
+}
+
+.active {
+  color: #f5f5f5;  
 }
