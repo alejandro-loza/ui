@@ -4,11 +4,9 @@
 }
 
 .valign-wrapper {
-  margin: 6.5% 0%;
+  margin: 7% 0%;
 }
 
-@media only screen and (max-width: 600px) {
-  .valign-wrapper {
-    margin: 8.5% 0%;
-  } 
+#newMovementBtn {
+  margin-top: 3%;
 }

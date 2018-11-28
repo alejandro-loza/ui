@@ -11,5 +11,4 @@ export class NewMovementComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }
