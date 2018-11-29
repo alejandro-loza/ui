@@ -1,5 +1,6 @@
 import { NgModule } from                '@angular/core';
 import { CommonModule } from            '@angular/common';
+import { ReactiveFormsModule } from     '@angular/forms';
 
 import { MovementModule } from          '../components/movement/movement.module';
 
@@ -9,6 +10,7 @@ import { NewMovementsRoutes } from      './new-movement.routes';
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     MovementModule,
     NewMovementsRoutes
   ],
