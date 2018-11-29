@@ -4,8 +4,8 @@
  *
  * @param amount - La propiedad es de tipo number y es el monto que lleva el movimiento
  * @param balance - La propiedad es legacy code
- * @param customDate - Lleva el mismo valor de la propiedad @param date
- * @param customDescription - Lleva el mismo valor de la propiedad @param description
+ * @param customDate - Lleva el mismo valor de la propiedad date
+ * @param customDescription - Lleva el mismo valor de la propiedad description
  * @param date - La propiedad es de tipo Date, y es la fecha que se le asigno al movimiento
  * @param description - La propiedad es de tipo string
  * @param duplicated - La propiedad es de tipo boolean y nos dirá si queremos que se vea reflejado en los grafos del Dashboard
