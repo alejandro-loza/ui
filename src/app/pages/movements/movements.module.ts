@@ -8,7 +8,6 @@ import { MovementsRoutes } from                    './movements.route';
 
 import { SpinnerComponent } from                   '@components/spinner/spinner.component';
 import { MovementsComponent } from                 './components/movements.component';
-import { MovementDetailMobileComponent } from      './components/movement-detail-mobile/movement-detail-mobile.component';
 import { MovementDetailMedAndUpComponent } from    './components/movement-detail-med-and-up/movement-detail-med-and-up.component';
 
 
@@ -22,7 +21,6 @@ import { MovementDetailMedAndUpComponent } from    './components/movement-detail
   declarations: [
     MovementsComponent,
     SpinnerComponent,
-    MovementDetailMobileComponent,
     MovementDetailMedAndUpComponent,
   ]
 })
