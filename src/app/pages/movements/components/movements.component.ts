@@ -50,7 +50,6 @@ export class MovementsComponent implements OnInit, AfterViewInit {
     this.movementsService.allMovements(paramsMovements).subscribe(
       res => {
         this.movementsList = res;
-        // console.log(this.movementsList[0]);
       },
       (err: any) => {
         if ( err.status === 401 ) {
