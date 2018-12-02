@@ -3,7 +3,9 @@ import { Component,
          Input,
          OnInit,
          Renderer2,
-         ViewChild, } from '@angular/core';
+         ViewChild,
+         Output,
+         EventEmitter, } from '@angular/core';
 
 @Component({
   selector: 'app-ingreso-gasto',
@@ -12,15 +14,20 @@ import { Component,
 })
 export class IngresoGastoComponent implements OnInit {
   @Input() type: string;
+  @Output() valueType: EventEmitter<string>;
   @ViewChild('charge') btnCharge: ElementRef;
   @ViewChild('deposit') btnDeposit: ElementRef;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2) {
+    this.valueType = new EventEmitter();
+  }
 
   ngOnInit() {
   }
 
   tipoIngresoGasto(type: string) {
+    this.type = type;
+    this.valueType.emit(this.type);
     if ( type === 'DEPOSIT' ) {
       this.renderer.removeClass(this.btnCharge.nativeElement, 'active');
       this.renderer.addClass(this.btnDeposit.nativeElement, 'active');
