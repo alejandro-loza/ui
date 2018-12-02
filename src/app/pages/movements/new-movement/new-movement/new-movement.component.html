@@ -1,13 +1,20 @@
 <div class="container containerNewMovement">
   <div class="row">
-    <form>
+    <form ngNativeValidate #forma="ngForm" (ngSubmit)="createMovement(forma)">
       <div class="valign-wrapper">
         <div class="col s12 m5">
           <h6>Descripción del Movimiento:</h6>
         </div>
         <div class="col s12 m7">
           <div class="input-field">
-            <input class="validate" id="description" placeholder="Nombre del Movimiento" required type="text">
+            <input
+              class="validate"
+              id="description"
+              name="description"
+              ngModel
+              placeholder="Nombre del Movimiento"
+              required
+              type="text" />
             <label for="description"></label>
             <span class="helper-text" data-error="Ingresa una descripción para tu movimiento" data-success="Perfecto">Ej: Startbucks</span>
           </div>
@@ -18,11 +25,20 @@
           <h6>Monto del Movimiento:</h6>
         </div>
         <div class="col s1">
-          <div class="h6">$</div>
+          <span id="signo" #monto>$</span>
         </div>
         <div class="col s11 m6">
           <div class="input-field">
-            <input class="validate" id="monto" min="1" value="1" placeholder="Monto del Movimiento" type="number">
+            <input
+              class="validate"
+              id="monto"
+              name="amount"
+              ngModel
+              min="1"
+              placeholder="Monto del Movimiento"
+              required
+              type="number"
+              value="0" />
             <label for="monto"></label>
             <span class="helper-text" data-error="Ingresa un valo numérico y mínimo de 1" data-success="Perfecto">Debes ingresar un valor numérico</span>
           </div>
@@ -33,7 +49,13 @@
           <h6>Fecha del movimiento:</h6>
         </div>
         <div class="col s12 m7">
-          <app-fecha [fecha]="date"></app-fecha>
+          <app-fecha
+            (valueDate)="valueDate($event)"
+            [date]="date"
+            name="date"
+            ngDefaultControl
+            [(ngModel)]="date"
+            required></app-fecha>
         </div>
       </div>
       <div class="valign-wrapper">
@@ -41,12 +63,32 @@
           <h6>Tipo de movimiento:</h6>
         </div>
         <div class="col s12 m7">
-          <app-ingreso-gasto></app-ingreso-gasto>
+          <app-ingreso-gasto
+            name="typeAmmount"
+            ngDefaultControl
+            [(ngModel)]="typeIngresoGasto"
+            (valueType)="valueIngresoGasto($event)"
+            required></app-ingreso-gasto>
+        </div>
+      </div>
+      <div class="valign-wrapper">
+        <div class="col s12 center-align">
+          <p>
+            <label>
+              <input
+                type="checkbox"
+                class="filled-in"
+                name="duplicated"
+                [(ngModel)]="checkboxDuplicate.nativeElement.checked"
+                #duplicated/>
+              <span>No tomar en cuenta en gráficas y presupuestos</span>
+            </label>
+          </p>
         </div>
       </div>
       <div class="valign-wrapper" id="newMovementBtn">
         <div class="col s12 center-align">
-          <button class="btn btn-large finerio-blue waves-effect waves-light">Crear Movimiento
+          <button class="btn btn-large finerio-blue" [disabled]="forma.invalid" type="submit" name="action">Crear Movimiento
             <i class="material-icons right">send</i>
           </button>
         </div>
