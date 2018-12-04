@@ -15,20 +15,18 @@
         </a>
       </div>
       <div class="col s12 m4 center-align">
-        <a href="#" class="waves-effect waves-light btn finerio-orange" routerLink="newMovement">
-          <i class="material-icons right">add</i>Nuevo Movimiento
-        </a>
+        <app-new-movement (createMovementStatus)="movementActionEmit($event)"></app-new-movement>
       </div>
     </div>
   </div>
 
   <!-- Encabezado de movimientos -->
   <div class="containerMovement">
-    <div class="row center-align" id="header">
+    <div class="row center-align z-depth-1 white" id="header">
       <div class="col m1 movementheader">Cuenta</div>
       <div class="col m2 movementheader">Fecha</div>
-      <div class="col m3 movementheader">Categoria</div>
       <div class="col m3 movementheader">Descripción</div>
+      <div class="col m3 movementheader">Categoria</div>
       <div class="col m1 movementheader">Monto</div>
       <div class="col m2 movementheader">Considerar</div>
     </div>
@@ -50,7 +48,7 @@
           </div>
 
           <!-- Fecha del movimiento -->
-          <div class="col m2">
+          <div class="col m2 valign-wrapper">
             <app-fecha [date]="movement.customDate"></app-fecha>
           </div>
 
@@ -61,7 +59,58 @@
 
           <!-- Categoria -->
           <div class="col m3">
-            <app-category [bckgrndColor]="movement.concepts[0].category.color" [categoryName]="movement.concepts[0].category.name" [frgrndColor]="movement.concepts[0].category.textColor" [categoryParent]="movement.concepts[0].category.parent.id"></app-category>
+            <!--
+              Se recorren las conceptos de los movimientos
+            -->
+            <div *ngFor="let concept of movement.concepts; let i = index">
+              <!--
+                Se valida si existe más de un concepto en cada movimiento
+              -->
+              <ng-container *ngIf="movement.concepts?.length > 1; then multicategorias; else simplecategoria"></ng-container>
+              <!--
+                Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría.
+                Esto genera un pequeño bug donde se pinta dos veces, esto se debe por los multiples conceptos.
+                Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
+              -->
+              <ng-template #multicategorias>
+                <app-category
+                  [hidden]="i > 0"
+                  [bckgrndColor]="'#212121'"
+                  [categoryName]="'Multi Categorías'"
+                  [frgrndColor]="'#fafafa'"
+                  [categoryParent]="'multi'">
+                </app-category>
+              </ng-template>
+              <ng-template #simplecategoria>
+                <!--
+                  Si solo tiene un concepto, se verifica si ese concepto tiene una categoria
+                -->
+                <ng-container *ngIf="concept.category; then conCategoria; else sinCategoria"></ng-container>
+                <!-- 
+                  Si tiene una categoría se pinta con sus respectivos parametros
+                -->
+                <ng-template #conCategoria>
+                  <app-category
+                    [bckgrndColor]="concept.category.color"
+                    [categoryName]="concept.category.name"
+                    [frgrndColor]="concept.category.textColor"
+                    [categoryParent]="concept.category.parent.id">
+                  </app-category>
+                </ng-template>
+                <ng-template #sinCategoria>
+                  <!-- 
+                    Caso contrario se mandan los parametros definidos para los movimientos sin categoria
+                   -->
+                  <app-category
+                    [bckgrndColor]="'#757575'"
+                    [categoryName]="'Sin Categoría'"
+                    [frgrndColor]="'#fafafa'"
+                    [categoryParent]="'finerio-icon'">
+                  </app-category>
+                </ng-template>
+              </ng-template>
+
+            </div>
           </div>
 
           <!-- Monto del movimiento -->
@@ -78,7 +127,7 @@
         </div>
         <div class="collapsible-body">
           <div class="hide-on-small-and-down show-on-medium-and-up">
-            <app-movement-detail-med-and-up [fecha]="movement.customDate" [type]="movement.type" [name]="movement.account.name"></app-movement-detail-med-and-up>
+            <app-movement-detail-med-and-up (deleteMovementStatus)="movementActionEmit($event)" [idMovement]="movement.id" [fecha]="movement.customDate" [type]="movement.type" [name]="movement.account.name"></app-movement-detail-med-and-up>
           </div>
         </div>
       </li>
