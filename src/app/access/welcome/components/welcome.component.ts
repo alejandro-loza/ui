@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/co
 import { Router } from                    '@angular/router';
 import { AuthService } from               '@services/services.index';
 import * as M from                        'materialize-css/dist/js/materialize';
-declare const $: any;
+import { isNullOrUndefined } from 'util';
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
@@ -22,6 +22,7 @@ export class WelcomeComponent implements OnInit {
     this.authService.personalInfo().subscribe(
       res => res,
       err => {
+        console.error(err);
         this.message = 'Ocurrió un error al obtener tus datos';
         M.toast({
           html: this.message + this.buttonToast,
@@ -39,7 +40,7 @@ export class WelcomeComponent implements OnInit {
   loading() {
     this.message = '';
     this.renderer.addClass(document.querySelector('img.logo-white'), 'hide');
-    if ( sessionStorage.getItem('idUser') !== null || sessionStorage.getItem('idUser') !== undefined) {
+    if ( isNullOrUndefined(sessionStorage.getItem('idUser')) ) {
       setTimeout( () => {
         this.router.navigate(['/app/dashboard']);
       }, 2500);
