@@ -2,14 +2,14 @@ import { Injectable } from              '@angular/core';
 import { HttpClient } from              '@angular/common/http';
 import { environment } from             '@env/environment';
 
-import { ConfigService } from           '../config/config.service';
+import { ConfigService } from           '@services/config/config.service';
 
-import { map } from                     'rxjs/operators';
-
-import { ParamsMovements } from          '@app/shared/interfaces/paramsMovements.interface';
+import { ParamsMovements } from         '@interfaces/paramsMovements.interface';
 import { Movement } from                '@interfaces/movement.interface';
 import { Movements } from               '@interfaces/movements.interface';
+import { NewMovement } from             '@interfaces/newMovement.interface';
 
+import { map } from                     'rxjs/operators';
 
 @Injectable()
 export class MovementsService {
@@ -63,6 +63,30 @@ export class MovementsService {
         }
         return this.movementsList;
       })
+    );
+  }
+
+  newMovement( movement: NewMovement ) {
+    return this.httpClient.post<NewMovement>(
+      `${this.url}/${ this.configService.getId }/movements`,
+      JSON.stringify  ({
+        amount: movement.amount,
+        balance: movement.balance,
+        customDate: movement.customDate,
+        customDescription: movement.customDescription,
+        date: movement.date,
+        description: movement.description,
+        duplicate: movement.duplicated,
+        type: movement.type.toUpperCase()
+      }),
+      { headers: this.configService.getJsonHeaders() }
+    );
+  }
+
+  deleteMovement( idMovement: string ) {
+    return this.httpClient.delete<string>(
+      `${environment.backendUrl}/movements/${idMovement}`,
+      { headers: this.configService.getJsonHeaders() }
     );
   }
 }
