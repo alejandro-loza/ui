@@ -31,7 +31,7 @@ export class FechaComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit() {
     const initDatepicker = new M.Datepicker(this.elDatePickker.nativeElement, {
-      format: 'dd-mmmm'.toLowerCase(),
+      format: `dd - mmmm`,
       showClearBtn: true,
       showDaysInNextAndPreviousMonths: true,
       i18n: {
@@ -47,11 +47,10 @@ export class FechaComponent implements OnInit, AfterContentInit {
       onDraw: datepicker => {
         this.date = datepicker.date;
       },
-      onClose: datepicker => {
+      onClose: () => {
         this.valueDate.emit(this.date);
       }
     });
-    const instanceDatePicker = M.Datepicker.getInstance(this.elDatePickker.nativeElement);
   }
 
   setDate() {
