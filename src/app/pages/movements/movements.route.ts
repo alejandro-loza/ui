@@ -5,10 +5,6 @@ const MovementsRouting: Routes = [
     {
         path: '',
         component: MovementsComponent
-    },
-    {
-        path: 'newMovement',
-        loadChildren: './new-movement/new-movement.module#NewMovementModule'
     }
 ];
 
