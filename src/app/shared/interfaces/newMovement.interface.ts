@@ -6,17 +6,18 @@
  * @param balance - La propiedad es legacy code
  * @param customDate - Lleva el mismo valor de la propiedad date
  * @param customDescription - Lleva el mismo valor de la propiedad description
- * @param date - La propiedad es de tipo Date, y es la fecha que se le asigno al movimiento
+ * @param date - La propiedad es de tipo String, y es la fecha que se le asigno al movimiento, este debe ser de fomato ISO-8601
+ * y el formato es: YYYY-MM-DDTHH:mm:ss.sssZ
  * @param description - La propiedad es de tipo string
  * @param duplicated - La propiedad es de tipo boolean y nos dirá si queremos que se vea reflejado en los grafos del Dashboard
- * @param type - La propiedad es de tipo string y también es una constante que solo puede llevar dos valores 
+ * @param type - La propiedad es de tipo string y también es una constante que solo puede llevar dos valores
  *               CHARGE o DEPOSIT, cualquier otro valor mandará un error status 22 - Unprocessable Entity
  */
 export interface NewMovement {
   amount: number;
   balance: number;
-  customDate: NewMovement['date'];
-  customDescription: NewMovement['description'];
+  customDate: string;
+  customDescription: string;
   date: string;
   description: string;
   duplicated: boolean;
