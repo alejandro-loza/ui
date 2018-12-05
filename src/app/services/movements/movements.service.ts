@@ -76,7 +76,7 @@ export class MovementsService {
         customDescription: movement.customDescription,
         date: movement.date,
         description: movement.description,
-        duplicate: movement.duplicated,
+        duplicated: movement.duplicated,
         type: movement.type.toUpperCase()
       }),
       { headers: this.configService.getJsonHeaders() }
