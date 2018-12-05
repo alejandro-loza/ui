@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit {
   @ViewChild('sidenav') elemSidenav: ElementRef;
   @ViewChild('collapsible') elemCollapsible: ElementRef;
   @ViewChild('chevronRight') elemIcon: ElementRef;
+
   constructor(
     private router: Router,
     private renderer: Renderer2
