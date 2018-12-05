@@ -23,8 +23,8 @@ const PagesRouting: Routes = [
         loadChildren: './saving/saving.module#SavingModule'
       },
       {
-        path: 'category',
-        loadChildren: './category/category.module#CategoryModule'
+        path: 'categories',
+        loadChildren: './categories/categories.module#CategoriesModule'
       },
       {
         path: 'credentials',

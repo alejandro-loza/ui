@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import {
-  FinerioService,
+  ConfigService,
   AuthService,
   AuthGuard,
   MovementsService
@@ -15,10 +15,8 @@ import {
     CommonModule,
     HttpClientModule,
   ],
-  declarations: [
-  ],
   providers: [
-    FinerioService,
+    ConfigService,
     AuthService,
     AuthGuard,
     MovementsService

@@ -11,7 +11,7 @@ import { PagesComponent } from       '@pages/pages.component';
   imports: [
     SharedModule,
     HttpClientModule,
-    PagesRoutes 
+    PagesRoutes
   ],
   declarations: [
     PagesComponent

@@ -2,13 +2,17 @@ import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/co
 import { Router } from                    '@angular/router';
 import { AuthService } from               '@services/services.index';
 import * as M from                        'materialize-css/dist/js/materialize';
-declare const $: any;
+import { isNullOrUndefined } from 'util';
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
+  buttonToast =
+    ` <button class="transparent btn-flat white-text" onClick="` +
+    `${M.Toast.dismissAll()}` + `var toastElement = document.querySelector('.toast');` +
+    `var toastInstance = M.Toast.getInstance(toastElement);  toastInstance.dismiss();"><i class="large material-icons">close</i></button>'`;
   message: string;
   constructor(
     private router: Router,
@@ -17,7 +21,16 @@ export class WelcomeComponent implements OnInit {
   ) {
     this.authService.personalInfo().subscribe(
       res => res,
-      err => console.log(err));
+      err => {
+        console.error(err);
+        this.message = 'Ocurrió un error al obtener tus datos';
+        M.toast({
+          html: this.message + this.buttonToast,
+          classes: 'red accent-3'
+        });
+        this.router.navigate(['access/login']);
+      }
+    );
   }
 
   ngOnInit() {
@@ -26,19 +39,15 @@ export class WelcomeComponent implements OnInit {
 
   loading() {
     this.message = '';
-    const buttonToast =
-    ` <button class="transparent btn-flat white-text" onClick="` +
-    `${M.Toast.dismissAll()}` + `var toastElement = document.querySelector('.toast');` +
-    `var toastInstance = M.Toast.getInstance(toastElement);  toastInstance.dismiss();"><i class="large material-icons">close</i></button>'`;
     this.renderer.addClass(document.querySelector('img.logo-white'), 'hide');
-    if ( sessionStorage.getItem('idUser') !== null || sessionStorage.getItem('idUser') !== undefined) {
+    if ( isNullOrUndefined(sessionStorage.getItem('idUser')) ) {
       setTimeout( () => {
         this.router.navigate(['/app/dashboard']);
       }, 2500);
     } else {
       this.message = 'Ocurrió un error al obtener tus datos';
       M.toast({
-        html: this.message + buttonToast,
+        html: this.message + this.buttonToast,
         classes: 'red accent-3'
       });
       this.renderer.removeClass(document.querySelector('img.logo-white'), 'hide');

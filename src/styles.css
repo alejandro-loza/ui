@@ -18,12 +18,12 @@ html {
 
 .finerio-blue {
     background-color: var(--Navyblue-color) !important;
-    color: white;
+    color: white !important;
 }
 
 .finerio-orange {
     background-color: var(--orange-color) !important;
-    color: white;
+    color: white !important;
 }
 
 .finerio-orange-text {
@@ -42,9 +42,6 @@ input[type=password]:not(.browser-default):focus:not([readonly]),
 input[type=email]:not(.browser-default):focus:not([readonly]),
 input[type=url]:not(.browser-default):focus:not([readonly]),
 input[type=time]:not(.browser-default):focus:not([readonly]),
-input[type=date]:not(.browser-default):focus:not([readonly]),
-input[type=datetime]:not(.browser-default):focus:not([readonly]),
-input[type=datetime-local]:not(.browser-default):focus:not([readonly]),
 input[type=tel]:not(.browser-default):focus:not([readonly]),
 input[type=number]:not(.browser-default):focus:not([readonly]),
 input[type=search]:not(.browser-default):focus:not([readonly]),
@@ -59,9 +56,6 @@ input[type=password]:not(.browser-default):focus:not([readonly])+label,
 input[type=email]:not(.browser-default):focus:not([readonly])+label,
 input[type=url]:not(.browser-default):focus:not([readonly])+label,
 input[type=time]:not(.browser-default):focus:not([readonly])+label,
-input[type=date]:not(.browser-default):focus:not([readonly])+label,
-input[type=datetime]:not(.browser-default):focus:not([readonly])+label,
-input[type=datetime-local]:not(.browser-default):focus:not([readonly])+label,
 input[type=tel]:not(.browser-default):focus:not([readonly])+label,
 input[type=number]:not(.browser-default):focus:not([readonly])+label,
 input[type=search]:not(.browser-default):focus:not([readonly])+label,
@@ -73,3 +67,21 @@ textarea.materialize-textarea:focus:not([readonly])+label {
     border: 2px solid var(--orange-color) !important;
     background-color: var(--orange-color) !important;
 }
+
+.material-icons.md-18 {
+    font-size: 18px;
+}
+
+.material-icons.md-24 {
+    font-size: 24px;
+}
+
+.material-icons.md-36 {
+    font-size: 36px;
+}
+
+.material-icons.md-48 {
+    font-size: 48px;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

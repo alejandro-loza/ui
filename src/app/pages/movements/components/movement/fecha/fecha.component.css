@@ -1,0 +1,12 @@
+.datepicker-controls .select-month input{
+  width: 100px;
+}
+
+.rowFecha {
+  margin-bottom: 0px;
+}
+
+#fechaMovimiento {
+  border-bottom: none;
+  height: 100%;
+}

@@ -4,9 +4,6 @@ export interface Category {
     name: string;
     textColor: string;
     parent?: {
-        id: string
+        id: string;
     };
-    [ index: number ]: {
-        id: string
-    }
 }

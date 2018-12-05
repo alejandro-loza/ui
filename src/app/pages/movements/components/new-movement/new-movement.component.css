@@ -1,0 +1,23 @@
+.modal.bottom-sheet {
+  max-height: 50%;
+}
+
+.finerio-blue:hover {
+  background-color: transparent !important;
+  color: var(--Navyblue-color) !important;
+}
+
+.charge {
+  color: rgb(198, 40, 40);
+}
+
+.deposit {
+  color: rgb(67, 160, 71);
+}
+
+#signo {
+  font-size: x-large;
+}
+.modal {
+  padding-left: 300px;
+}

@@ -1,0 +1,10 @@
+<div class="btn-type">
+    <a class="btn btn-flat btn-small btn-deposit"
+        (click)="tipoIngresoGasto('DEPOSIT')"
+        [ngClass]="{ 'active': type === 'DEPOSIT' }"
+        #deposit>Ingreso</a>
+    <a class="btn btn-flat btn-small btn-charge"
+        (click)="tipoIngresoGasto('CHARGE')"
+        [ngClass]="{ 'active': type === 'CHARGE'}"
+        #charge>Gasto</a>
+</div>
