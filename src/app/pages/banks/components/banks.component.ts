@@ -23,7 +23,6 @@ export class BanksComponent implements OnInit {
      res.data.forEach(element => {
        element.code != "DINERIO" ?  this.institutions.push( element ) : null
      });
-     console.log( this.institutions );
     });
   }
 

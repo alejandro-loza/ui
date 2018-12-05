@@ -29,10 +29,10 @@ export class FinerioService {
   }
 
   getJsonHeaders() {
-    this.headers.set('Content-Type', 'application/json');
-    this.headers.set('Accept', 'application/json');
+    this.headers = this.headers.append('Content-Type', 'application/json');
+    this.headers = this.headers.append('Accept', 'application/json');
     if ( this.token_access !== null || this.token_access !== undefined ) {
-      this.headers.set('Authorization', `Bearer ${this.token_access}`);
+      this.headers = this.headers.set('Authorization', `Bearer ${this.token_access}`);
     }
     return this.headers;
   }

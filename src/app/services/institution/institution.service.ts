@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from '../auth/auth.service';
+import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Response } from '@shared/dto/credentials/response';
-
+import { FinerioService } from '../config/config.service';
+import { FinancialInstitution } from '@shared/dto/credentials/financialInstitution';
 
 @Injectable()
 export class InstitutionService {
 
-  headers = new HttpHeaders();
-  constructor( private http:HttpClient, private auth:AuthService ) { 
-    let token = this.auth.token;
-    this.headers = this.headers.append('Content-Type', 'application/json;charset=UTF-8');
-    this.headers = this.headers.append('Accept', 'application/json;charset=UTF-8');
-    this.headers = this.headers.append('Authorization', `Bearer ${ token }`);
-  }
+  institutions:FinancialInstitution [] = []
+
+  constructor( private http:HttpClient, private finerio:FinerioService ) { 
+    }
 
   getAllInstitutions() {
-    return this.http.get(`${ environment.backendUrl }/institutions`, ({headers: this.headers}))
-                    .pipe( map( res => {
+    return this.http.get(`${ environment.backendUrl }/institutions`, ({headers: this.finerio.getJsonHeaders() }))
+                    .pipe( map( (res:any) => {
+                      res.data.forEach(element => {
+                        element.code != "DINERIO" ?  this.institutions.push( element ) : null
+                      });
                       return res as Response
                       })
                     );

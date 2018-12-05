@@ -3,7 +3,7 @@ import { Credential } from '@shared/dto/credentials/credential';
 import { Account } from '@shared/dto/account';
 import { AccountService } from '@services/account/account.service';
 import { CredentialService } from '@services/credentials/credential.service';
-
+declare const $:any;
 @Component({
   selector: 'app-credential',
   templateUrl: './credential.component.html',
@@ -12,7 +12,7 @@ import { CredentialService } from '@services/credentials/credential.service';
 export class CredentialComponent implements OnInit {
 
   credentials: Credential[] = [];
-  selectedCredential: Credential;
+  selectedCredential: Credential = null;
   accounts: Account[] = [];
   selectedAccount: Account;
   userId = sessionStorage.getItem("id-user");
@@ -21,16 +21,13 @@ export class CredentialComponent implements OnInit {
   totalBalance:number = 0;
 
     constructor( private accountService: AccountService, private credentialService: CredentialService ) { 
-      $(document).ready(function(){
-        $('.collapsible').collapsible();
-        $('.modal').modal();
-      });
+  
     }
 
   ngOnInit() {
     this.getAccounts();
     this.getCredentials();
-
+    document.getElementById("pagescontainer").classList.remove("row");
   }
 
   getAccounts(){  
@@ -51,23 +48,9 @@ export class CredentialComponent implements OnInit {
   }
 
   getBalance( accountsArray:Account[] ){
-
     accountsArray.forEach(element => {
       element.nature != "Crédito" ? this.debitBalance += element.balance : this.creditBalance += element.balance;
     });
     this.totalBalance = this.debitBalance + this.creditBalance;
   }
-
-  markToDelete( credential:Credential ){
-    console.log( credential );
-  }
-
-  deleteCredential(  ){
-
-  }
-
-  markToDeleteAccount( account ){
-
-  }
-
 }

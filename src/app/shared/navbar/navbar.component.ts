@@ -18,24 +18,5 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     const instanceSidenav = new M.Sidenav(this.elemSidenav.nativeElement, {});
-    this.collapsableFun();
-  }
-
-
-  collapsableFun() {
-    const chevron = document.querySelector('#chevron');
-    document.querySelector('#sidenav-collapsible').addEventListener('click', () => {
-      if (document.querySelector('.collapsible-header').classList.contains('active')) {
-        chevron.classList.replace('mdi-plus', 'mdi-chevron-down');
-      } else {
-        chevron.classList.replace('mdi-chevron-down', 'mdi-plus');
-      }
-    });
-  }
-  logout() {
-    sessionStorage.removeItem('access-token');
-    sessionStorage.removeItem('id-user');
-    sessionStorage.removeItem('refresh-token');
-    this.router.navigate(['/access/login']);
   }
 }

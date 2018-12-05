@@ -6,6 +6,11 @@
     padding-top: 30px;
 }
 
+.backBtn{
+    background-color: #1D3865;
+    margin-left: 40px;
+}
+
 .background{
     background-color: #1D3865;
 }
