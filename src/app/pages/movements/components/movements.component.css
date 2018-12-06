@@ -35,3 +35,7 @@
   transition: background-color .2s ease-in-out;
   background-color: rgb(189,189,189, .2);
 }
+
+.input-field {
+  margin:  0%;
+}
