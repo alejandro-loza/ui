@@ -1,4 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  Renderer2} from         '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-description',
@@ -7,9 +14,15 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class DescriptionComponent implements OnInit {
   @Input() description: string;
-  constructor() { }
+  @ViewChild('descripcion') elementDescription: ElementRef;
+
+  descriptionInput = new FormControl();
+
+  constructor( private renderer: Renderer2 ) { }
 
   ngOnInit() {
+    this.renderer.setStyle(this.elementDescription.nativeElement, 'text-align', 'center');
+    this.descriptionInput.setValue(this.description);
   }
 
 }
