@@ -44,17 +44,17 @@
 
           <!-- Imagen de la cuenta -->
           <div class="col m1">
-            <app-cuenta [account]="movement.account.institution.code"></app-cuenta>
+            <app-cuenta [account]="movement.account.institution.code" class="input-field"></app-cuenta>
           </div>
 
           <!-- Fecha del movimiento -->
-          <div class="col m2 valign-wrapper">
-            <app-fecha [date]="movement.customDate"></app-fecha>
+          <div class="col m2 valign-wrapper customComponent">
+            <app-fecha [date]="movement.customDate" class="input-field"></app-fecha>
           </div>
 
           <!-- Descripción -->
-          <div class="col m3">
-            <app-description [description]="movement.customDescription | uppercase"></app-description>
+          <div class="col m3 customComponent">
+            <app-description [description]="movement.customDescription | uppercase" class="input-field"></app-description>
           </div>
 
           <!-- Categoria -->
@@ -117,12 +117,14 @@
           <div class="col m1" [ngClass]="
                    {'green-text': movement.type === 'DEPOSIT',
                    'red-text': movement.type === 'CHARGE'}">
-            <app-monto [amount]="movement.amount"></app-monto>
+            <div class="customComponent">
+              <app-monto [amount]="movement.amount" class="input-field"></app-monto>
+            </div>
           </div>
 
           <!-- Considerar el movimiento -->
           <div class="col m2 center-align hide-on-small-and-down">
-            <app-considerar [switch]="movement.duplicated"></app-considerar>
+            <app-considerar [switch]="movement.duplicated" class="input-field"></app-considerar>
           </div>
         </div>
         <div class="collapsible-body">
