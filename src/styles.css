@@ -1,14 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
-body,
-html {
-    height: 100%;
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
 :root {
   --Navyblue-color: #1D3865;
   --orange-color: #EE883A;
+  --padding-left: 128px;
+}
+
+header,
+main,
+footer {
+    padding-left: var(--padding-left);
+}
+
+main {
+    padding-bottom: 20px;
 }
 
 .finerio-blue-text {
@@ -31,7 +35,7 @@ html {
 
 .waves-effect.waves-blue .waves-ripple {
   /* The alpha value allows the text and background color
-    of the button to still show through. */
+  of the button to still show through. */
   background-color: rgba(30, 136, 229, 0.65);
 }
 
@@ -86,4 +90,12 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 .inputMovement {
   border-bottom: none !important;
   height: 100% !important;
+}
+
+@media only screen and (max-width: 992px) {
+    header,
+    main,
+    footer {
+        padding-left: 0;
+    }
 }
