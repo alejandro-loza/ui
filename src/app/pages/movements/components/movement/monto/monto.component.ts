@@ -14,6 +14,7 @@ import { FormControl } from       '@angular/forms';
 })
 export class MontoComponent implements OnInit {
   @Input() amount: number;
+  @Input() type: string;
   @ViewChild('monto') elementAmount: ElementRef;
 
   montoInput = new FormControl();
@@ -21,6 +22,11 @@ export class MontoComponent implements OnInit {
   constructor( private renderer: Renderer2) { }
 
   ngOnInit() {
+    if ( this.type === 'DEPOSIT') {
+      this.renderer.setStyle(this.elementAmount.nativeElement, 'color', '#4CAF50');
+    } else {
+      this.renderer.setStyle(this.elementAmount.nativeElement, 'color', '#F44336');
+    }
     this.renderer.setStyle(this.elementAmount.nativeElement, 'text-align', 'right');
     this.montoInput.setValue(this.amount);
   }

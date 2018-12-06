@@ -48,13 +48,8 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const initCollapsible = new M.Collapsible(
-      this.elcollapsible.nativeElement,
-      {}
-    );
-    const instanceCollapsible = M.Collapsible.getInstance(
-      this.elcollapsible.nativeElement
-    );
+    const initCollapsible = new M.Collapsible(this.elcollapsible.nativeElement,{});
+    const instanceCollapsible = M.Collapsible.getInstance(this.elcollapsible.nativeElement);
   }
 
   getMovements(paramsMovements: ParamsMovements) {

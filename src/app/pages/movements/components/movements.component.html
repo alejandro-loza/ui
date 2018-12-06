@@ -60,52 +60,39 @@
           <!-- Categoria -->
           <div class="col m3">
             <!--
-              Se recorren las conceptos de los movimientos
-            -->
+                  Se recorren las conceptos de los movimientos
+                -->
             <div *ngFor="let concept of movement.concepts; let i = index">
               <!--
-                Se valida si existe más de un concepto en cada movimiento
-              -->
+                    Se valida si existe más de un concepto en cada movimiento
+                  -->
               <ng-container *ngIf="movement.concepts?.length > 1; then multicategorias; else simplecategoria"></ng-container>
               <!--
-                Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría.
-                Esto genera un pequeño bug donde se pinta dos veces, esto se debe por los multiples conceptos.
-                Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
-              -->
+                    Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría.
+                    Esto genera un pequeño bug donde se pinta dos veces, esto se debe por los multiples conceptos.
+                    Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
+                  -->
               <ng-template #multicategorias>
-                <app-category
-                  [hidden]="i > 0"
-                  [bckgrndColor]="'#212121'"
-                  [categoryName]="'Multi Categorías'"
-                  [frgrndColor]="'#fafafa'"
-                  [categoryParent]="'multi'">
+                <app-category [hidden]="i > 0" [bckgrndColor]="'#212121'" [categoryName]="'Multi Categorías'" [frgrndColor]="'#fafafa'" [categoryParent]="'multi'">
                 </app-category>
               </ng-template>
               <ng-template #simplecategoria>
                 <!--
-                  Si solo tiene un concepto, se verifica si ese concepto tiene una categoria
-                -->
+                      Si solo tiene un concepto, se verifica si ese concepto tiene una categoria
+                    -->
                 <ng-container *ngIf="concept.category; then conCategoria; else sinCategoria"></ng-container>
                 <!-- 
-                  Si tiene una categoría se pinta con sus respectivos parametros
-                -->
+                      Si tiene una categoría se pinta con sus respectivos parametros
+                    -->
                 <ng-template #conCategoria>
-                  <app-category
-                    [bckgrndColor]="concept.category.color"
-                    [categoryName]="concept.category.name"
-                    [frgrndColor]="concept.category.textColor"
-                    [categoryParent]="concept.category.parent.id">
+                  <app-category [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.parent.id">
                   </app-category>
                 </ng-template>
                 <ng-template #sinCategoria>
                   <!-- 
-                    Caso contrario se mandan los parametros definidos para los movimientos sin categoria
-                   -->
-                  <app-category
-                    [bckgrndColor]="'#757575'"
-                    [categoryName]="'Sin Categoría'"
-                    [frgrndColor]="'#fafafa'"
-                    [categoryParent]="'finerio-icon'">
+                        Caso contrario se mandan los parametros definidos para los movimientos sin categoria
+                       -->
+                  <app-category [bckgrndColor]="'#757575'" [categoryName]="'Sin Categoría'" [frgrndColor]="'#fafafa'" [categoryParent]="'finerio-icon'">
                   </app-category>
                 </ng-template>
               </ng-template>
@@ -115,10 +102,10 @@
 
           <!-- Monto del movimiento -->
           <div class="col m1" [ngClass]="
-                   {'green-text': movement.type === 'DEPOSIT',
-                   'red-text': movement.type === 'CHARGE'}">
+                       {'green-text': movement.type === 'DEPOSIT',
+                       'red-text': movement.type === 'CHARGE'}">
             <div class="customComponent">
-              <app-monto [amount]="movement.amount" class="input-field"></app-monto>
+              <app-monto [amount]="movement.amount" [type]="movement.type" class="input-field"></app-monto>
             </div>
           </div>
 
