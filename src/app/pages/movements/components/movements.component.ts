@@ -45,6 +45,7 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getMovements(this.paramsMovements);
     this.offsetMovement();
+    this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'block' );
   }
 
   ngAfterViewInit() {
@@ -102,11 +103,7 @@ export class MovementsComponent implements OnInit, AfterViewInit {
         const scrollVertical = window.scrollY;
         this.scrollLimit = $(document).height() - $(window).height();
         if (scrollVertical >= this.scrollLimit) {
-          this.renderer.setStyle(
-            this.elSpinner.nativeElement,
-            'display',
-            'block'
-          );
+          this.renderer.setStyle( this.elSpinner.nativeElement, 'display', 'block' );
           this.getMovements(this.paramsMovements);
         }
       },
