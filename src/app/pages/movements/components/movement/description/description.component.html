@@ -1,1 +1,7 @@
-<input type="text" [formControl]="descriptionInput" class="inputMovement" #descripcion>
+<input
+  [(ngModel)]="description"
+  [ngModelOptions]="{name: 'description'}"
+  type="text"
+  class="inputMovement"
+  #inputDescription="ngModel"
+  #descripcion>

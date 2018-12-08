@@ -23,7 +23,9 @@ declare const $: any;
 })
 export class MovementsComponent implements OnInit, AfterViewInit {
   @ViewChild('collapsible') elcollapsible: ElementRef;
+  @ViewChild('collapsibleBody') eleCollapsibleBody: ElementRef;
   @ViewChild('spinner') elSpinner: ElementRef;
+
   movementsList: Movement[];
   scrollLimit: number;
   navigatorLenguage = navigator.language;

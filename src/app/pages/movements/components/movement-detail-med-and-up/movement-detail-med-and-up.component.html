@@ -13,10 +13,24 @@
     </a>
   </div>
   <div class="col m4">
-    <button
-      class="btn btn-small red darken-3"
-      (click)="deleteMovement(idMovement)">
-      <i class="mdi mdi-24px mdi-delete right"></i>Eliminar
-    </button>
+    <div class="row">
+      <div class="hide">
+        <div class="col m4">
+          <button class="btn btn-small">
+                <i class="mdi mdi-24px mdi-check right"></i>Aceptar
+              </button>
+        </div>
+        <div class="col m4">
+          <button class="btn btn-small">
+                <i class="mdi mdi-24px mdi-close right"></i>Cancelar
+              </button>
+        </div>
+      </div>
+      <div class="col m12">
+        <button class="btn btn-small red darken-3" (click)="deleteMovement(idMovement)">
+            <i class="mdi mdi-24px mdi-delete right"></i>Eliminar
+          </button>
+      </div>
+    </div>
   </div>
 </div>

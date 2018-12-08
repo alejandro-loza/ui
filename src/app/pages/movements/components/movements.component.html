@@ -73,7 +73,12 @@
                     Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
                   -->
               <ng-template #multicategorias>
-                <app-category [hidden]="i > 0" [bckgrndColor]="'#212121'" [categoryName]="'Multi Categorías'" [frgrndColor]="'#fafafa'" [categoryParent]="'multi'">
+                <app-category
+                  [hidden]="i > 0"
+                  [bckgrndColor]="'#212121'"
+                  [categoryName]="'Multi Categorías'"
+                  [frgrndColor]="'#fafafa'"
+                  [categoryParent]="'multi'">
                 </app-category>
               </ng-template>
               <ng-template #simplecategoria>
@@ -85,14 +90,22 @@
                       Si tiene una categoría se pinta con sus respectivos parametros
                     -->
                 <ng-template #conCategoria>
-                  <app-category [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.parent.id">
+                  <app-category
+                  [bckgrndColor]="concept.category.color"
+                  [categoryName]="concept.category.name"
+                  [frgrndColor]="concept.category.textColor"
+                  [categoryParent]="concept.category.parent.id">
                   </app-category>
                 </ng-template>
                 <ng-template #sinCategoria>
                   <!-- 
                         Caso contrario se mandan los parametros definidos para los movimientos sin categoria
                        -->
-                  <app-category [bckgrndColor]="'#757575'" [categoryName]="'Sin Categoría'" [frgrndColor]="'#fafafa'" [categoryParent]="'finerio-icon'">
+                  <app-category
+                  [bckgrndColor]="'#757575'"
+                  [categoryName]="'Sin Categoría'"
+                  [frgrndColor]="'#fafafa'"
+                  [categoryParent]="'finerio-icon'">
                   </app-category>
                 </ng-template>
               </ng-template>
@@ -114,9 +127,15 @@
             <app-considerar [switch]="movement.duplicated" class="input-field"></app-considerar>
           </div>
         </div>
-        <div class="collapsible-body">
+        <div class="collapsible-body" #collapsibleBody >
           <div class="hide-on-small-and-down show-on-medium-and-up">
-            <app-movement-detail-med-and-up (deleteMovementStatus)="movementActionEmit($event)" [idMovement]="movement.id" [fecha]="movement.customDate" [type]="movement.type" [name]="movement.account.name"></app-movement-detail-med-and-up>
+            <app-movement-detail-med-and-up
+              (deleteMovementStatus)="movementActionEmit($event)"
+              [idMovement]="movement.id"
+              [fecha]="movement.customDate"
+              [type]="movement.type"
+              [name]="movement.account.name">
+            </app-movement-detail-med-and-up>
           </div>
         </div>
       </li>

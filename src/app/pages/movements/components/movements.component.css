@@ -21,6 +21,10 @@
   padding: 0%;
 }
 
+.collapsible-body {
+  padding-bottom: 0rem;
+}
+
 .containerMovement{
   margin: 0 auto;
   width: 90%;
