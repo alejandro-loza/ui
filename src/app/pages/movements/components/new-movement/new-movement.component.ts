@@ -12,7 +12,7 @@ import { NgForm } from '@angular/forms';
 
 import { MovementsService } from '@services/movements/movements.service';
 
-import { NewMovement } from '@interfaces/newMovement.interface';
+import { ParamsMovement } from '@app/shared/interfaces/paramsMovement.interface';
 import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
@@ -29,7 +29,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   date: Date;
   typeIngresoGasto: string;
   duplicated: boolean;
-  movement: NewMovement = {
+  movement: ParamsMovement = {
     amount: 0,
     balance: 0,
     customDate: '',
@@ -76,7 +76,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 
     console.log(this.movement);
 
-    this.movementService.newMovement(this.movement).subscribe(
+    this.movementService.createMovement(this.movement).subscribe(
       res => {
         this.createMovementStatus.emit(true);
       },
