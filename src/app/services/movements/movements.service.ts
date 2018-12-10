@@ -5,9 +5,9 @@ import { environment } from             '@env/environment';
 import { ConfigService } from           '@services/config/config.service';
 
 import { ParamsMovements } from         '@interfaces/paramsMovements.interface';
+import { ParamsMovement } from          '@interfaces/paramsMovement.interface';
 import { Movement } from                '@interfaces/movement.interface';
 import { Movements } from               '@interfaces/movements.interface';
-import { NewMovement } from             '@interfaces/newMovement.interface';
 
 import { map } from                     'rxjs/operators';
 
@@ -35,7 +35,7 @@ export class MovementsService {
    * @param duplicate : Para incluir los movimientos duplicaods
    */
 
-  allMovements ( paramsMovements: ParamsMovements ) {
+  getMovements ( paramsMovements: ParamsMovements ) {
     if ( paramsMovements.offset === 0 ) {
       this.movementsList = new Array();
     }
@@ -66,10 +66,27 @@ export class MovementsService {
     );
   }
 
-  newMovement( movement: NewMovement ) {
-    return this.httpClient.post<NewMovement>(
+  createMovement( movement: ParamsMovement ) {
+    return this.httpClient.post<ParamsMovement>(
       `${this.url}/${ this.configService.getId }/movements`,
       JSON.stringify  ({
+        amount: movement.amount,
+        balance: movement.balance,
+        customDate: movement.customDate,
+        customDescription: movement.customDescription,
+        date: movement.date,
+        description: movement.description,
+        duplicated: movement.duplicated,
+        type: movement.type.toUpperCase()
+      }),
+      { headers: this.configService.getJsonHeaders() }
+    );
+  }
+
+  updateMovement ( movement: ParamsMovement) {
+    return this.httpClient.put<ParamsMovement>(
+      `${ environment.backendUrl }/movements/${ movement.id }`,
+      JSON.stringify({
         amount: movement.amount,
         balance: movement.balance,
         customDate: movement.customDate,
