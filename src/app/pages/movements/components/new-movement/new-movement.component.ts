@@ -11,6 +11,7 @@ import {
 import { NgForm } from '@angular/forms';
 
 import { MovementsService } from '@services/movements/movements.service';
+import { DateApiService } from   '@services/date-api/date-api.service';
 
 import { ParamsMovement } from '@app/shared/interfaces/paramsMovement.interface';
 import * as M from 'materialize-css/dist/js/materialize';
@@ -42,7 +43,8 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 
   constructor(
     private renderer: Renderer2,
-    private movementService: MovementsService
+    private movementService: MovementsService,
+    public dateApi: DateApiService
   ) {
     this.date = new Date();
     this.createMovementStatus = new EventEmitter();
@@ -58,18 +60,10 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   createMovement(form: NgForm) {
-    const date = new Date(form.value.date).getDate();
-    const datevalue = (Array(2 + 1).join('0') + date).slice(-2);
     this.movement.amount = form.value.amount;
-    this.movement.customDate =
-      `${form.value.date.getFullYear()}-${form.value.date.getMonth() + 1}-${datevalue}T` +
-      `${form.value.date.getHours()}:${form.value.date.getMinutes()}:${form.value.date.getSeconds()}` +
-      this.timezone();
+    this.movement.customDate = this.dateApi.dateApi(form.value.date);
     this.movement.customDescription = form.value.description;
-    this.movement.date =
-      `${form.value.date.getFullYear()}-${form.value.date.getMonth() + 1}-${datevalue}T` +
-      `${form.value.date.getHours()}:${form.value.date.getMinutes()}:${form.value.date.getSeconds()}` +
-      this.timezone();
+    this.movement.date = this.dateApi.dateApi(form.value.date);
     this.movement.description = form.value.description;
     this.movement.duplicated = form.value.duplicated;
     this.movement.type = form.value.typeAmmount;
@@ -120,12 +114,4 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.date = date;
   }
 
-  timezone() {
-    const tmzOffset = new Date().getTimezoneOffset() / 60;
-    const str = '' + tmzOffset;
-    const hour = (Array(2 + 1).join('0') + str).slice(-2);
-    const tmz = (tmzOffset > 0 ? '-' : '+') + hour + '00';
-
-    return tmz;
-  }
 }
