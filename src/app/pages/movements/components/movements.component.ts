@@ -1,19 +1,23 @@
 import {
+  AfterViewInit,
   Component,
-  OnInit,
-  ViewChild,
   ElementRef,
+  OnInit,
   Renderer2,
-  AfterViewInit
-} from '@angular/core';
+  ViewChild,
+} from                           '@angular/core';
+import { NgModel } from          '@angular/forms';
 
-import { MovementsService } from '@services/services.index';
-import { ConfigService } from '@services/config/config.service';
+import { ConfigService } from    '@services/config/config.service';
+import { DateApiService } from   '@services/date-api/date-api.service';
+import { MovementsService } from '@services/movements/movements.service';
 
-import { ParamsMovements } from '@app/shared/interfaces/paramsMovements.interface';
-import { Movement } from '@interfaces/movement.interface';
+import { Movement } from         '@interfaces/movement.interface';
+import { ParamsMovement } from   '@interfaces/paramsMovement.interface';
+import { ParamsMovements } from  '@interfaces/paramsMovements.interface';
 
-import * as M from 'materialize-css/dist/js/materialize';
+import * as M from               'materialize-css/dist/js/materialize';
+
 declare const $: any;
 
 @Component({
@@ -25,23 +29,29 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   @ViewChild('collapsible') elcollapsible: ElementRef;
   @ViewChild('collapsibleBody') eleCollapsibleBody: ElementRef;
   @ViewChild('spinner') elSpinner: ElementRef;
+  @ViewChild('inputDescription') inputDescription: NgModel;
+
+  description: string;
+  editMovement: ParamsMovement;
+  ingresogasto: string;
+  instance: any;
+  scrollLimit: number;
 
   movementsList: Movement[];
-  scrollLimit: number;
-  navigatorLenguage = navigator.language;
   paramsMovements: ParamsMovements = {
     charges: true,
     deep: true,
     deposits: true,
     duplicates: true,
+    maxMovements: 35,
     offset: 0,
-    maxMovements: 35
   };
 
   constructor(
+    public renderer: Renderer2,
     private movementsService: MovementsService,
     private configService: ConfigService,
-    public renderer: Renderer2
+    private dateApiService: DateApiService,
   ) {}
 
   ngOnInit() {
@@ -52,10 +62,11 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const initCollapsible = new M.Collapsible(this.elcollapsible.nativeElement,{});
     const instanceCollapsible = M.Collapsible.getInstance(this.elcollapsible.nativeElement);
+    this.instance = instanceCollapsible;
   }
 
   getMovements(paramsMovements: ParamsMovements) {
-    this.movementsService.allMovements(paramsMovements).subscribe(
+    this.movementsService.getMovements(paramsMovements).subscribe(
       res => {
         this.movementsList = res;
       },
@@ -123,5 +134,28 @@ export class MovementsComponent implements OnInit, AfterViewInit {
       this.movementsList = [];
       this.getMovements(this.paramsMovements);
     }
+  }
+
+  movementTypeEmit(type: string) {
+    this.ingresogasto = type;
+    this.editMovement.type = type;
+  }
+
+  editDateMovement(date: Date) {
+    this.editMovement.date = this.dateApiService.dateApi(date);
+    this.editMovement.customDate = this.dateApiService.dateApi(date);
+  }
+
+  editDescriptionMovement(description: string) {
+    this.editMovement.description = description;
+    this.editMovement.customDescription = description;
+  }
+
+  editAmountMovement(amount: number) {
+    this.editMovement.amount = amount;
+  }
+
+  editDuplicatedMovement(duplicated: boolean) {
+    this.editMovement.duplicated = duplicated;
   }
 }

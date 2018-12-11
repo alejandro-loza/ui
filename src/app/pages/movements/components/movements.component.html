@@ -41,7 +41,6 @@
 
         <!-- Encabezado del collapsible -->
         <div class="collapsible-header valign-wrapper" [ngClass]="{'grey lighten-2': movement.duplicated}">
-
           <!-- Imagen de la cuenta -->
           <div class="col m1">
             <app-cuenta [account]="movement.account.institution.code" class="input-field"></app-cuenta>
@@ -49,12 +48,12 @@
 
           <!-- Fecha del movimiento -->
           <div class="col m2 valign-wrapper customComponent">
-            <app-fecha [date]="movement.customDate" class="input-field"></app-fecha>
+            <app-fecha (valueDate)="editDateMovement($event)" [date]="movement.customDate" class="input-field"></app-fecha>
           </div>
 
           <!-- Descripción -->
           <div class="col m3 customComponent">
-            <app-description [description]="movement.customDescription | uppercase" class="input-field"></app-description>
+            <app-description (valueDescription)="editDescriptionMovement($event)" [description]="movement.customDescription | uppercase" class="input-field"></app-description>
           </div>
 
           <!-- Categoria -->
@@ -71,7 +70,7 @@
                     Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría.
                     Esto genera un pequeño bug donde se pinta dos veces, esto se debe por los multiples conceptos.
                     Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
-                  -->
+              -->
               <ng-template #multicategorias>
                 <app-category
                   [hidden]="i > 0"
@@ -114,28 +113,28 @@
           </div>
 
           <!-- Monto del movimiento -->
-          <div class="col m1" [ngClass]="
-                       {'green-text': movement.type === 'DEPOSIT',
-                       'red-text': movement.type === 'CHARGE'}">
+          <div class="col m1">
             <div class="customComponent">
-              <app-monto [amount]="movement.amount" [type]="movement.type" class="input-field"></app-monto>
+              <app-monto (valueAmount)="editAmountMovement($event)" [amount]="movement.amount" [type]="movement.type" class="input-field"></app-monto>
             </div>
           </div>
 
           <!-- Considerar el movimiento -->
           <div class="col m2 center-align hide-on-small-and-down">
-            <app-considerar [switch]="movement.duplicated" class="input-field"></app-considerar>
+            <app-considerar (valueConsider)="editDuplicatedMovement($event)" [switch]="movement.duplicated" class="input-field"></app-considerar>
           </div>
         </div>
         <div class="collapsible-body" #collapsibleBody >
           <div class="hide-on-small-and-down show-on-medium-and-up">
-            <app-movement-detail-med-and-up
+            <app-movement-detail
               (deleteMovementStatus)="movementActionEmit($event)"
+              (ingresogastoStatus)="movementTypeEmit($event)"
+              [editMovement]="editMovement"
               [idMovement]="movement.id"
               [fecha]="movement.customDate"
-              [type]="movement.type"
-              [name]="movement.account.name">
-            </app-movement-detail-med-and-up>
+              [name]="movement.account.name"
+              [type]="movement.type">
+            </app-movement-detail>
           </div>
         </div>
       </li>
