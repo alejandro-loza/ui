@@ -6,7 +6,7 @@ import { Component,
          Input,
          Renderer2,
          Output,
-         EventEmitter, } from       '@angular/core';
+         EventEmitter, } from   '@angular/core';
 import { FormControl } from     '@angular/forms';
 import * as M from              'materialize-css/dist/js/materialize';
 
