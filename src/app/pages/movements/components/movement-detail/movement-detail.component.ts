@@ -1,28 +1,40 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MovementsService } from '@services/movements/movements.service';
-import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from                           '@angular/core';
 
-import * as M from 'materialize-css/dist/js/materialize';
+import { MovementsService } from '@services/movements/movements.service';
+
+import { ParamsMovement } from   '@interfaces/paramsMovement.interface';
+
+import * as M from               'materialize-css/dist/js/materialize';
+
 
 @Component({
-  selector: 'app-movement-detail-med-and-up',
-  templateUrl: './movement-detail-med-and-up.component.html',
-  styleUrls: ['./movement-detail-med-and-up.component.css']
+  selector: 'app-movement-detail',
+  templateUrl: './movement-detail.component.html',
+  styleUrls: ['./movement-detail.component.css']
 })
-export class MovementDetailMedAndUpComponent implements OnInit {
+export class MovementDetailComponent implements OnInit {
   @Input() fecha: Date;
-  @Input() type: string;
-  @Input() name: string;
   @Input() idMovement: string;
+  @Input() name: string;
+  @Input() type: string;
+  @Input() editMovement: ParamsMovement;
+
+  @Output() ingresogastoStatus: EventEmitter<string>;
   @Output() deleteMovementStatus: EventEmitter<boolean>;
 
-  constructor(
-    private movementService: MovementsService
-  ) {
+  constructor(private movementService: MovementsService) {
     this.deleteMovementStatus = new EventEmitter();
+    this.ingresogastoStatus = new EventEmitter();
   }
 
   ngOnInit() {
+    console.log(this.editMovement);
   }
 
   deleteMovement(id: string) {
@@ -57,7 +69,11 @@ export class MovementDetailMedAndUpComponent implements OnInit {
           </button>`,
           classes: 'grey darken-2 grey-text text-lighten-5'
         });
-      });
+      }
+    );
   }
 
+  ingresogastoValue(type: string) {
+    this.ingresogastoStatus.emit(type.toUpperCase());
+  }
 }
