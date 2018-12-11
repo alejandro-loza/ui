@@ -7,7 +7,8 @@ import {
   ConfigService,
   AuthService,
   AuthGuard,
-  MovementsService
+  MovementsService,
+  DateApiService
 } from './services.index';
 
 @NgModule({
@@ -19,7 +20,8 @@ import {
     ConfigService,
     AuthService,
     AuthGuard,
-    MovementsService
+    MovementsService,
+    DateApiService
   ]
 })
 export class ServicesModule { }

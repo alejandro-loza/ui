@@ -1,3 +1,4 @@
+export { DateApiService } from './date-api/date-api.service';
 export { ConfigService } from './config/config.service';
 export { AuthService } from './auth/auth.service';
 export { AuthGuard } from './guards/auth/auth.guard';
