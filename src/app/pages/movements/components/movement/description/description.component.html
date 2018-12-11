@@ -1,6 +1,6 @@
 <input
   [(ngModel)]="description"
-  [ngModelOptions]="{name: 'description'}"
+  [ngModelOptions]="{ description: currentValue }"
   type="text"
   class="inputMovement"
   #inputDescription="ngModel"

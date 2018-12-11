@@ -4,10 +4,12 @@ import { Component,
          ElementRef,
          ViewChild,
          Input,
-         Renderer2,
          Output,
          EventEmitter, } from   '@angular/core';
 import { FormControl } from     '@angular/forms';
+
+import { DateApiService } from  '@services/date-api/date-api.service';
+
 import * as M from              'materialize-css/dist/js/materialize';
 
 @Component({
@@ -21,7 +23,7 @@ export class FechaComponent implements OnInit, AfterContentInit {
   @ViewChild('datepicker') elDatePickker: ElementRef;
   dateMovement = new FormControl();
 
-  constructor( private renderer: Renderer2 ) {
+  constructor( ) {
     this.valueDate = new EventEmitter();
   }
 

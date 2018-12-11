@@ -6,8 +6,10 @@ import {
   OnChanges,
   Renderer2,
   SimpleChanges,
-  ViewChild, } from     '@angular/core';
+  ViewChild,
+  Output, } from        '@angular/core';
 import { NgModel } from '@angular/forms';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-description',
@@ -16,10 +18,17 @@ import { NgModel } from '@angular/forms';
 })
 export class DescriptionComponent implements OnInit, OnChanges {
   @Input() description: string;
+  @Output() valueDescription: EventEmitter<string>;
+
   @ViewChild('descripcion') elementDescription: ElementRef;
   @ViewChild('inputDescription') inputDescription: NgModel;
 
-  constructor( private renderer: Renderer2 ) { }
+  currentValue: string;
+  defaultValue: string;
+
+  constructor( private renderer: Renderer2 ) {
+    this.valueDescription = new EventEmitter;
+  }
 
   ngOnInit() {
     this.renderer.setStyle(this.elementDescription.nativeElement, 'text-align', 'center');
@@ -30,12 +39,20 @@ export class DescriptionComponent implements OnInit, OnChanges {
     for (const i in changes) {
       if (changes.hasOwnProperty(i)) {
         const element = changes[i];
-        console.log(
-          'Current Value:', element.currentValue,
-          ',\nFisrt Change: ', element.firstChange,
-          ',\nPrevious Value: ', element.previousValue,
-          ',\nFirst Change: ', element.isFirstChange());
+        this.defaultValue = element.currentValue;
+        this.inputDescription.valueChanges.subscribe( res => {
+          if ( this.defaultValue !== res ) {
+            element.firstChange = false;
+            this.currentValue = res;
+          } else {
+            element.firstChange = true;
+          }
+        });
       }
     }
+  }
+
+  setDescriptionOutput( ) {
+    this.valueDescription.emit( this.currentValue );
   }
 }

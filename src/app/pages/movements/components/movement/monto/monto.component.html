@@ -1,8 +1,16 @@
 <div class="row valign-wrapper">
   <div class="col s2">
-    <p>$</p>
+    <p #signo>$</p>
   </div>
   <div class="col s10 right-align">
-    <input type="number" [formControl]="montoInput" class="inputMovement" #monto>
+    <input
+      [(ngModel)]="amount"
+      [ngModelOptions]="{ amount: currentValue }"
+      class="inputMovement"
+      min="0"
+      step="10"
+      type="number"
+      #inputAmount="ngModel"
+      #monto>
   </div>
 </div>
