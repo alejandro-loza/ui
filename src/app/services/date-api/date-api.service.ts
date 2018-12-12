@@ -13,9 +13,7 @@ export class DateApiService {
     const newdate = new Date(date).getDate();
     const datevalue = (Array(2 + 1).join('0') + newdate).slice(-2);
 
-    const dateAPI =
-      `${date.getFullYear()}-${date.getMonth() + 1}-${datevalue}T` +
-      `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}` +
+    const dateAPI = `${date.getFullYear()}-${date.getMonth() + 1}-${datevalue}T` + `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}` +
       this.timezone();
 
     return dateAPI;
