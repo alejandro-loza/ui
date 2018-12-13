@@ -23,35 +23,28 @@ export class PasswordService {
   createForgotPasswordToken( email:string ){
     return this.http.get(`${ this.url }/password/createForgotPasswordToken?email=${email}`).pipe(
       map( res => {
-          console.log(res);
           return res as PasswordResponse
       }), catchError( this.handleError )
     );
   }
 
   validateToken(token:string){
-
     return this.http.get(`${ this.url }/password/getEmailAndValidateToken?token=${token}`).pipe(
       map( res =>{
-        console.log(res);  
         return res as EmailObj
       }),catchError( this.handleError )
-
     );
   }   
   
   resetPassword( passwordReset:PasswordResetRequest ){
-    
     return this.http.post(`${this.url}/password/setNewPassword`, passwordReset , ({ headers: this.headers})).pipe(
           map( res => {
-            console.log(res);
             return res as PasswordResetRequest
           }), catchError( this.handleError )
         );      
   }
 
   handleError(error: any) {
-    console.error(error);
     let errMsg = (error.message) ? error.message :
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     return errMsg
