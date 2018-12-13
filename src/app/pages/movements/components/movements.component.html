@@ -1,24 +1,24 @@
 <div class="stickyOptions">
-  <!-- Busqueda y filtrado -->
-  <div class="containerMovement">
-    <div class="row valign-wrapper">
-      <div class="col s12 m4">
-        <div class="input-field">
-          <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
-          <label for="first_name"></label>
-          <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+    <!-- Busqueda y filtrado -->
+    <div class="containerMovement">
+        <div class="row valign-wrapper">
+            <div class="col s12 m4">
+                <div class="input-field">
+                    <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
+                    <label for="first_name"></label>
+                    <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+                </div>
+            </div>
+            <div class="col s12 m3 right-align">
+                <a href="#" class="waves-effect waves-light btn btn-filter">
+                    <i class="material-icons left">filter_list</i>Filtrar
+                </a>
+            </div>
+            <div class="col s12 m4 center-align">
+                <app-new-movement (createMovementStatus)="movementActionEmit($event)"></app-new-movement>
+            </div>
         </div>
-      </div>
-      <div class="col s12 m3 right-align">
-        <a href="#" class="waves-effect waves-light btn btn-filter">
-          <i class="material-icons left">filter_list</i>Filtrar
-        </a>
-      </div>
-      <div class="col s12 m4 center-align">
-        <app-new-movement (createMovementStatus)="movementActionEmit($event)"></app-new-movement>
-      </div>
     </div>
-  </div>
 
   <!-- Encabezado de movimientos -->
   <div class="containerMovement">
@@ -30,9 +30,7 @@
       <div class="col m2 movementheader">Monto</div>
       <div class="col m2 movementheader">Considerar</div>
     </div>
-  </div>
 </div>
-
 <!-- Lista de Movimientos -->
 <div class="containerMovement">
   <div class="row center-align">
@@ -137,10 +135,5 @@
             [type]="movement.type">
           </app-movement-detail>
         </div>
-      </li>
-    </ul>
-  </div>
-</div>
-<div class="center-align" #spinner>
-  <app-spinner></app-spinner>
+    </div>
 </div>
