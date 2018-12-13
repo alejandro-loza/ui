@@ -1,0 +1,37 @@
+<!--<div *ngIf="!fields.length > 0" class="container">
+    <div class="row">
+        <div class="col s12 center">
+            <app-spinner></app-spinner>
+        </div>
+    </div>
+</div>-->
+<app-back-button [ruta]="'/app/banks'"></app-back-button>
+<div *ngIf="fields.length > 1" class="container">
+    <div class="row">
+        <div class="col s8 offset-s2 center">
+            <h5>Nueva cuenta bancaria</h5>
+            <img width="100px" height="100px" src="https://cdn.finerio.mx/banks/{{institutionCode}}.png" alt="Bank Logo">
+            <p>Introduce tus claves de acceso a <b>banca en línea</b></p>
+        </div>
+    </div>
+    <div class="col s10 offset-s m6 offset-m3 center">
+        <form #bank="ngForm" (ngSubmit)="submit(bank)">
+            <div class="input-field s10 m6" *ngFor="let field of fields; let i = index">
+                    <input
+                    ngModel
+                    type="{{ field.type }}"
+                    class="{{ field.institutionId }}"
+                    placeholder="{{ field.friendlyName }}"
+                    name="{{ field.name }}">
+            </div>
+            <p>
+                <a class="py-10" href="">
+                   ¿Qué claves de acceso y porqué las pedimos?
+                </a>
+            </p>
+            <button class="btn background" type="submit">
+                Agregar
+            </button>
+        </form>
+    </div>
+</div>
