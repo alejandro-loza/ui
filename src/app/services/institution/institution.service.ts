@@ -3,7 +3,7 @@ import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Response } from '@shared/dto/credentials/response';
-import { FinerioService } from '../config/config.service';
+import { ConfigService } from '../config/config.service';
 import { FinancialInstitution } from '@shared/dto/credentials/financialInstitution';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class InstitutionService {
 
   institutions:FinancialInstitution [] = []
 
-  constructor( private http:HttpClient, private finerio:FinerioService ) { 
+  constructor( private http:HttpClient, private finerio:ConfigService ) { 
     }
 
   getAllInstitutions() {

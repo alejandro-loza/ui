@@ -31,6 +31,10 @@ const PagesRouting: Routes = [
         loadChildren: './credential/credential.module#CredentialModule'
       },
       {
+        path: 'credentials/:credencialId',
+        loadChildren: './credential-details/credential-details.module#CredentialDetailsModule'
+      },
+      {
         path: 'banks',
         loadChildren: './banks/banks.module#BanksModule'
       },
