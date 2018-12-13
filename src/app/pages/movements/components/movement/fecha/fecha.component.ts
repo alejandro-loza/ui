@@ -6,7 +6,7 @@ import { Component,
          Input,
          Output,
          EventEmitter, } from   '@angular/core';
-import { FormControl } from     '@angular/forms';
+import { NgModel } from         '@angular/forms';
 
 import { DateApiService } from  '@services/date-api/date-api.service';
 
@@ -21,19 +21,17 @@ export class FechaComponent implements OnInit, AfterContentInit {
   @Input() date: Date;
   @Output() valueDate: EventEmitter<Date>;
   @ViewChild('datepicker') elDatePickker: ElementRef;
-  dateMovement = new FormControl();
+  @ViewChild('inputDatepicker') inputDatepicker: NgModel;
 
-  constructor( ) {
+  constructor( private dateApiService: DateApiService ) {
     this.valueDate = new EventEmitter();
   }
 
-  ngOnInit() {
-    this.dateMovement.setValue(new Date(this.date).toLocaleDateString(navigator.language, {day: '2-digit', month: 'long'}));
-  }
+  ngOnInit() { }
 
   ngAfterContentInit() {
     const initDatepicker = new M.Datepicker(this.elDatePickker.nativeElement, {
-      format: `dd - mmmm`,
+      format: `dd - mmm`,
       showClearBtn: true,
       showDaysInNextAndPreviousMonths: true,
       i18n: {
@@ -44,19 +42,12 @@ export class FechaComponent implements OnInit, AfterContentInit {
         weekdaysAbbrev: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
       },
       setDefaultDate: true,
-      defaultDate: this.date,
+      defaultDate: new Date(),
       maxDate: new Date(),
       onDraw: datepicker => {
-        this.date = datepicker.date;
-      },
-      onClose: () => {
-        this.valueDate.emit(this.date);
+        this.valueDate.emit(datepicker.date);
       }
     });
-  }
-
-  setDate() {
-    this.valueDate.emit(this.date);
   }
 
 }

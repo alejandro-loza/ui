@@ -43,7 +43,7 @@ export class DescriptionComponent implements OnInit, OnChanges {
         this.inputDescription.valueChanges.subscribe( res => {
           if ( this.defaultValue !== res ) {
             element.firstChange = false;
-            this.currentValue = res;
+            this.valueDescription.emit( res );
           } else {
             element.firstChange = true;
           }
@@ -52,7 +52,4 @@ export class DescriptionComponent implements OnInit, OnChanges {
     }
   }
 
-  setDescriptionOutput( ) {
-    this.valueDescription.emit( this.currentValue );
-  }
 }

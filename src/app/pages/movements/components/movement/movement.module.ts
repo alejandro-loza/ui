@@ -1,8 +1,10 @@
 import { NgModule } from                     '@angular/core';
 import { CommonModule } from                 '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { CategoryComponent } from            '@pages/categories/component/category/category.component';
+import { FormsModule } from                  '@angular/forms';
 
+import { DateApiService } from               '@services/date-api/date-api.service';
+
+import { CategoryComponent } from            '@pages/categories/component/category/category.component';
 import { DescriptionComponent } from         './description/description.component';
 import { CuentaComponent } from              './cuenta/cuenta.component';
 import { MontoComponent } from               './monto/monto.component';
@@ -22,7 +24,6 @@ import { FechaComponent } from               './fecha/fecha.component';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FormsModule
   ], exports: [
     CategoryComponent,
@@ -32,6 +33,8 @@ import { FechaComponent } from               './fecha/fecha.component';
     ConsiderarComponent,
     IngresoGastoComponent,
     FechaComponent,
+  ], providers: [
+    DateApiService
   ]
 })
 export class MovementModule { }

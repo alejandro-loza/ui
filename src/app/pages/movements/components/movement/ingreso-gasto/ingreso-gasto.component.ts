@@ -13,7 +13,7 @@ import { Component,
   styleUrls: ['./ingreso-gasto.component.css']
 })
 export class IngresoGastoComponent implements OnInit {
-  @Input() type: string;
+  @Input() type:string;
   @Output() valueType: EventEmitter<string>;
   @ViewChild('charge') btnCharge: ElementRef;
   @ViewChild('deposit') btnDeposit: ElementRef;
@@ -22,8 +22,7 @@ export class IngresoGastoComponent implements OnInit {
     this.valueType = new EventEmitter();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   tipoIngresoGasto(type: string) {
     this.type = type;

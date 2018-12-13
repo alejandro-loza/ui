@@ -52,13 +52,10 @@ export class MontoComponent implements OnInit, OnChanges {
           } else {
             element.firstChange = true;
           }
+          this.valueAmount.emit( res );
         });
       }
     }
-  }
-
-  setAmountOutput() {
-    this.valueAmount.emit(this.currentValue);
   }
 
   ingresoGastoColor(type: string) {

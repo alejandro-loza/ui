@@ -9,7 +9,7 @@ import {
   Renderer2,
   SimpleChanges,
   ViewChild
-} from '@angular/core';
+} from                  '@angular/core';
 import { NgModel } from '@angular/forms';
 
 @Component({
@@ -47,18 +47,14 @@ export class ConsiderarComponent implements OnInit, OnChanges {
         const element = changes[i];
         this.defaultValue = element.currentValue;
         this.inputConsiderar.valueChanges.subscribe(res => {
-          this.currentValue = res;
           if ( this.currentValue !== res ) {
             element.firstChange = true;
+            this.valueConsider.emit(res);
           } else {
             element.firstChange = false;
           }
         });
       }
     }
-  }
-
-  setConsiderOuput() {
-    this.valueConsider.emit(this.currentValue);
   }
 }

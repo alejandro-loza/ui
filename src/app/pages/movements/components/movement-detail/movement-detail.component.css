@@ -1,3 +1,7 @@
+  .btn {
+    margin: 0% 1%;
+  }
+
 .btn-division {
   border: 1px solid var(--orange-color);
 }

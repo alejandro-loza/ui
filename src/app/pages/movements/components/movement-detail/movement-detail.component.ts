@@ -19,27 +19,30 @@ import * as M from               'materialize-css/dist/js/materialize';
   styleUrls: ['./movement-detail.component.css']
 })
 export class MovementDetailComponent implements OnInit {
+  @Input() editMovement: ParamsMovement;
+  @Input() flag: boolean;
   @Input() fecha: Date;
   @Input() idMovement: string;
   @Input() name: string;
   @Input() type: string;
-  @Input() editMovement: ParamsMovement;
+  @Input() descriptionOriginal: any;
+  @Input() dateOriginal: any;
 
   @Output() ingresogastoStatus: EventEmitter<string>;
-  @Output() deleteMovementStatus: EventEmitter<boolean>;
+  @Output() movementStatus: EventEmitter<boolean>;
+
+  flagInfo: boolean;
 
   constructor(private movementService: MovementsService) {
-    this.deleteMovementStatus = new EventEmitter();
+    this.movementStatus = new EventEmitter();
     this.ingresogastoStatus = new EventEmitter();
   }
 
-  ngOnInit() {
-    console.log(this.editMovement);
-  }
+  ngOnInit() { }
 
   deleteMovement(id: string) {
     this.movementService.deleteMovement(id).subscribe(
-      res => this.deleteMovementStatus.emit(true),
+      res => this.movementStatus.emit(true),
       err => {
         M.toast({
           html: `
@@ -75,5 +78,40 @@ export class MovementDetailComponent implements OnInit {
 
   ingresogastoValue(type: string) {
     this.ingresogastoStatus.emit(type.toUpperCase());
+  }
+
+  updateMovement(movement: ParamsMovement) {
+    this.movementService.updateMovement(movement).subscribe(
+      res => this.movementStatus.emit(true),
+      err => {
+        M.toast({
+          html: `
+          <span>Ocurrió un error al actualizar tu movimiento</span>
+          <button
+            class="btn-flat toast-action"
+            onClick="
+            const toastElement = document.querySelector('.toast');
+            const toastInstance = M.Toast.getInstance(toastElement);
+            toastInstance.dismiss();">
+            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+          </button>`,
+          classes: 'red darken-3 grey-text text-lighten-5'
+        });
+      }, () => {
+        M.toast({
+          html: `
+          <span>Se actualizó su movimiento exitosamente</span>
+          <button
+            class="btn-flat toast-action"
+            onClick="
+            const toastElement = document.querySelector('.toast');
+            const toastInstance = M.Toast.getInstance(toastElement);
+            toastInstance.dismiss();">
+            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+          </button>`,
+          classes: 'grey darken-2 grey-text text-lighten-5'
+        });
+      }
+    );
   }
 }

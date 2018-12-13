@@ -34,35 +34,39 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   description: string;
   editMovement: ParamsMovement;
   ingresogasto: string;
-  instance: any;
   scrollLimit: number;
+  instanceCollapsible;
+  editMovementFlag: boolean;
 
   movementsList: Movement[];
-  paramsMovements: ParamsMovements = {
-    charges: true,
-    deep: true,
-    deposits: true,
-    duplicates: true,
-    maxMovements: 35,
-    offset: 0,
-  };
+  paramsMovements: ParamsMovements;
 
   constructor(
     public renderer: Renderer2,
     private movementsService: MovementsService,
     private configService: ConfigService,
     private dateApiService: DateApiService,
-  ) {}
+  ) {
+    this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0, };
+    this.editMovement = {
+      amount: 0, balance: 0, customDate: this.dateApiService.dateApi(new Date()), customDescription: '',
+      date: this.dateApiService.dateApi(new Date()), description: '', duplicated: false, type: '' };
+    this.editMovementFlag = false;
+  }
 
   ngOnInit() {
     this.getMovements(this.paramsMovements);
     this.offsetMovement();
+    this.renderer.setStyle(
+      this.elSpinner.nativeElement,
+      'display',
+      'block'
+    );
   }
 
   ngAfterViewInit() {
     const initCollapsible = new M.Collapsible(this.elcollapsible.nativeElement,{});
-    const instanceCollapsible = M.Collapsible.getInstance(this.elcollapsible.nativeElement);
-    this.instance = instanceCollapsible;
+    this.instanceCollapsible = M.Collapsible.getInstance(this.elcollapsible.nativeElement);
   }
 
   getMovements(paramsMovements: ParamsMovements) {
@@ -128,6 +132,37 @@ export class MovementsComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'none');
   }
 
+  collapsibleOpen(index: number) {
+    this.instanceCollapsible.destroy();
+    this.instanceCollapsible.open(index);
+
+    if ( this.editMovementFlag === false ) {
+      this.editMovement = {
+        amount: this.movementsList[index].amount,
+        balance: this.movementsList[index].balance,
+        customDate: this.movementsList[index].customDate.toString(),
+        customDescription: this.movementsList[index].customDescription,
+        date: this.movementsList[index].date.toString(),
+        description: this.movementsList[index].description,
+        duplicated: this.movementsList[index].duplicated,
+        id: this.movementsList[index].id,
+        type: this.movementsList[index].type
+      };
+    }
+
+    if (this.editMovement.type === '' || this.editMovement.customDescription === '' ) {
+      this.editMovement.customDescription = this.movementsList[index].customDescription;
+      this.editMovement.description = this.movementsList[index].description;
+      this.editMovement.type =  this.movementsList[index].type;
+    }
+  }
+
+  collapsibleClose(index: number) {
+    this.instanceCollapsible.destroy();
+    this.instanceCollapsible.close(index);
+    this.editMovementFlag = false;
+  }
+
   movementActionEmit(flag: boolean) {
     if (flag === true) {
       this.paramsMovements.offset = 0;
@@ -139,23 +174,26 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   movementTypeEmit(type: string) {
     this.ingresogasto = type;
     this.editMovement.type = type;
+    this.editMovementFlag = true;
   }
 
   editDateMovement(date: Date) {
-    this.editMovement.date = this.dateApiService.dateApi(date);
     this.editMovement.customDate = this.dateApiService.dateApi(date);
+    this.editMovementFlag = true;
   }
 
   editDescriptionMovement(description: string) {
-    this.editMovement.description = description;
     this.editMovement.customDescription = description;
+    this.editMovementFlag = true;
   }
 
   editAmountMovement(amount: number) {
     this.editMovement.amount = amount;
+    this.editMovementFlag = true;
   }
 
   editDuplicatedMovement(duplicated: boolean) {
     this.editMovement.duplicated = duplicated;
+    this.editMovementFlag = true;
   }
 }
