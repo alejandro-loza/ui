@@ -35,6 +35,27 @@ html {
   background-color: rgba(30, 136, 229, 0.65);
 }
 
+.material-icons.md-18 {
+  font-size: 18px;
+}
+
+.material-icons.md-24 {
+  font-size: 24px;
+}
+
+.material-icons.md-36 {
+  font-size: 36px;
+}
+
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+.inputMovement {
+  border-bottom: none !important;
+  height: 100% !important;
+}
+
 input:not([type]):focus:not([readonly]),
 input[type=text]:not(.browser-default):focus:not([readonly]),
 input[type=password]:not(.browser-default):focus:not([readonly]),
@@ -65,27 +86,6 @@ textarea.materialize-textarea:focus:not([readonly])+label {
 [type="checkbox"].filled-in:checked+label:after {
   border: 2px solid var(--orange-color) !important;
   background-color: var(--orange-color) !important;
-}
-
-.material-icons.md-18 {
-  font-size: 18px;
-}
-
-.material-icons.md-24 {
-  font-size: 24px;
-}
-
-.material-icons.md-36 {
-  font-size: 36px;
-}
-
-.material-icons.md-48 {
-  font-size: 48px;
-}
-
-.inputMovement {
-  border-bottom: none !important;
-  height: 100% !important;
 }
 
 input::-webkit-outer-spin-button,
