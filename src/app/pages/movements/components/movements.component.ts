@@ -57,15 +57,11 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getMovements(this.paramsMovements);
     this.offsetMovement();
-<<<<<<< HEAD
     this.renderer.setStyle(
       this.elSpinner.nativeElement,
       'display',
       'block'
     );
-=======
-    this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'block' );
->>>>>>> 7033cf7e0b1ccfe2ec12908800844afca530d3c1
   }
 
   ngAfterViewInit() {
