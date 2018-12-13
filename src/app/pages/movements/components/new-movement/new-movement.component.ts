@@ -60,6 +60,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   createMovement(form: NgForm) {
+    this.movement.type = 'CHARGE'
     this.movement.amount = form.value.amount;
     this.movement.customDate = this.dateApi.dateApi(form.value.date);
     this.movement.customDescription = form.value.description;
@@ -67,8 +68,6 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.movement.description = form.value.description;
     this.movement.duplicated = form.value.duplicated;
     this.movement.type = form.value.typeAmmount;
-
-    console.log(this.movement);
 
     this.movementService.createMovement(this.movement).subscribe(
       res => {
@@ -99,8 +98,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     );
   }
 
-  valueIngresoGasto(type: string) {
-    this.typeIngresoGasto = type;
+  valueIngresoGasto(type: string = 'CHARGE') {
     if (type === 'CHARGE') {
       this.renderer.removeClass(this.montoSigno.nativeElement, 'deposit');
       this.renderer.addClass(this.montoSigno.nativeElement, 'charge');
@@ -108,6 +106,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
       this.renderer.removeClass(this.montoSigno.nativeElement, 'charge');
       this.renderer.addClass(this.montoSigno.nativeElement, 'deposit');
     }
+    this.typeIngresoGasto = type;
   }
 
   valueDate(date: Date) {

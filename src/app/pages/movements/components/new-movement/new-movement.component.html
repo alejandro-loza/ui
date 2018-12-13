@@ -40,7 +40,7 @@
             <h6>Fecha del movimiento:</h6>
           </div>
           <div class="col s12 m7">
-            <app-fecha (valueDate)="valueDate($event)" [date]="date" name="date" ngDefaultControl [(ngModel)]="date" required></app-fecha>
+            <app-fecha (valueDate)="valueDate($event)" [date]="date | date: 'dd - MMMM'" name="date" ngDefaultControl [(ngModel)]="date" required></app-fecha>
           </div>
         </div>
         <div class="valign-wrapper">
@@ -48,7 +48,7 @@
             <h6>Tipo de movimiento:</h6>
           </div>
           <div class="col s12 m7">
-            <app-ingreso-gasto name="typeAmmount" ngDefaultControl [(ngModel)]="typeIngresoGasto" (valueType)="valueIngresoGasto($event)" required></app-ingreso-gasto>
+            <app-ingreso-gasto [type]="'CHARGE'" name="typeAmmount" ngDefaultControl [(ngModel)]="typeIngresoGasto" (valueType)="valueIngresoGasto($event)" required></app-ingreso-gasto>
           </div>
         </div>
         <div class="valign-wrapper">
