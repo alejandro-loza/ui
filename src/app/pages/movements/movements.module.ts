@@ -10,7 +10,6 @@ import { SpinnerComponent } from                   '@components/spinner/spinner.
 import { MovementsComponent } from                 './components/movements.component';
 import { NewMovementComponent } from               './components/new-movement/new-movement.component';
 import { MovementDetailComponent } from            './components/movement-detail/movement-detail.component';
-import { EditMovementComponent } from              './components/edit-movement/edit-movement.component';
 
 
 @NgModule({
@@ -25,7 +24,6 @@ import { EditMovementComponent } from              './components/edit-movement/e
     SpinnerComponent,
     NewMovementComponent,
     MovementDetailComponent,
-    EditMovementComponent
   ]
 })
 export class MovementsModule { }
