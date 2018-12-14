@@ -5,18 +5,22 @@ import {
   OnInit,
   Renderer2,
   ViewChild,
-} from                           '@angular/core';
-import { NgModel } from          '@angular/forms';
+  OnDestroy
+} from '@angular/core';
+import { NgModel } from '@angular/forms';
 
-import { ConfigService } from    '@services/config/config.service';
-import { DateApiService } from   '@services/date-api/date-api.service';
+import { ConfigService } from '@services/config/config.service';
+import { DateApiService } from '@services/date-api/date-api.service';
 import { MovementsService } from '@services/movements/movements.service';
 
-import { Movement } from         '@interfaces/movement.interface';
-import { ParamsMovement } from   '@interfaces/paramsMovement.interface';
-import { ParamsMovements } from  '@interfaces/paramsMovements.interface';
+import { Movements } from '@interfaces/movements.interface';
+import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 
-import * as M from               'materialize-css/dist/js/materialize';
+import { Movement } from '@interfaces/movement.interface';
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+
+import { map } from 'rxjs/operators';
+import * as M from 'materialize-css/dist/js/materialize';
 
 declare const $: any;
 
@@ -25,7 +29,7 @@ declare const $: any;
   templateUrl: './movements.component.html',
   styleUrls: ['./movements.component.css']
 })
-export class MovementsComponent implements OnInit, AfterViewInit {
+export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('collapsible') elcollapsible: ElementRef;
   @ViewChild('collapsibleBody') eleCollapsibleBody: ElementRef;
   @ViewChild('spinner') elSpinner: ElementRef;
@@ -34,7 +38,6 @@ export class MovementsComponent implements OnInit, AfterViewInit {
   description: string;
   editMovement: ParamsMovement;
   ingresogasto: string;
-  scrollLimit: number;
   instanceCollapsible;
   editMovementFlag: boolean;
 
@@ -45,94 +48,118 @@ export class MovementsComponent implements OnInit, AfterViewInit {
     public renderer: Renderer2,
     private movementsService: MovementsService,
     private configService: ConfigService,
-    private dateApiService: DateApiService,
+    private dateApiService: DateApiService
   ) {
-    this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0, };
+    this.paramsMovements = {
+      charges: true,
+      deep: true,
+      deposits: true,
+      duplicates: true,
+      maxMovements: 35,
+      offset: 0
+    };
     this.editMovement = {
-      amount: 0, balance: 0, customDate: this.dateApiService.dateApi(new Date()), customDescription: '',
-      date: this.dateApiService.dateApi(new Date()), description: '', duplicated: false, type: '' };
+      amount: 0,
+      balance: 0,
+      customDate: this.dateApiService.dateApi(new Date()),
+      customDescription: '',
+      date: this.dateApiService.dateApi(new Date()),
+      description: '',
+      duplicated: false,
+      type: ''
+    };
     this.editMovementFlag = false;
+    this.movementsList = [];
   }
 
   ngOnInit() {
     this.getMovements(this.paramsMovements);
-    this.offsetMovement();
-    this.renderer.setStyle(
-      this.elSpinner.nativeElement,
-      'display',
-      'block'
-    );
+    this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'block');
+    window.addEventListener('scroll', this.offsetMovement, true);
   }
 
   ngAfterViewInit() {
-    const initCollapsible = new M.Collapsible(this.elcollapsible.nativeElement,{});
-    this.instanceCollapsible = M.Collapsible.getInstance(this.elcollapsible.nativeElement);
+    const initCollapsible = new M.Collapsible(
+      this.elcollapsible.nativeElement,
+      {}
+    );
+    this.instanceCollapsible = M.Collapsible.getInstance(
+      this.elcollapsible.nativeElement
+    );
   }
 
+  ngOnDestroy() {
+    window.removeEventListener('scroll', this.offsetMovement, true);
+  }
+
+  /**
+   * @function offsetMovement() - It's anonymous functions, its used for eventListener Scroll
+   */
+
+  offsetMovement = () => {
+    const scrollVertical = window.scrollY;
+    let scrollLimit: number;
+    scrollLimit = $(document).height() - $(window).height();
+    if (scrollVertical >= scrollLimit) {
+      this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'block');
+      this.getMovements(this.paramsMovements);
+    }
+  };
+
   getMovements(paramsMovements: ParamsMovements) {
-    this.movementsService.getMovements(paramsMovements).subscribe(
-      res => {
-        this.movementsList = res;
-      },
-      (err: any) => {
-        if (err.status === 401) {
-          this.configService.refreshToken();
-          const toastHTML = `<span>Hemos actualizado tu sesión, ¡Bienvenido de nuevo!</span>
+    this.movementsService
+      .getMovements(paramsMovements)
+      .subscribe(
+        res => this.movementsList = res,
+        err => {
+          if (err.status === 401) {
+            this.configService.refreshToken();
+            const toastHTML = `<span>Hemos actualizado tu sesión, ¡Bienvenido de nuevo!</span>
             <button class="btn-flat toast-action" onClick="
               const toastElement = document.querySelector('.toast');
               const toastInstance = M.Toast.getInstance(toastElement);
               toastInstance.dismiss();">
               <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
             </button>`;
-          M.toast({
-            html: toastHTML,
-            classes: 'light-blue darken-4',
-            displayLength: 2000
-          });
-        } else {
-          const toastHTML = `<span>¡Ha ocurrido un error al obterner tus movimiento!</span>
+            M.toast({
+              html: toastHTML,
+              classes: 'light-blue darken-4',
+              displayLength: 2000
+            });
+          } else {
+            const toastHTML = `<span>¡Ha ocurrido un error al obterner tus movimiento!</span>
             <button class="btn-flat toast-action" onClick="
               const toastElement = document.querySelector('.toast');
               const toastInstance = M.Toast.getInstance(toastElement);
               toastInstance.dismiss();">
               <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
             </button>`;
-          M.toast({
-            html: toastHTML,
-            classes: 'red darken-4',
-            displayLength: 2000
-          });
+            M.toast({
+              html: toastHTML,
+              classes: 'red darken-4',
+              displayLength: 2000
+            });
+          }
+        },
+        () => {
+          this.renderer.setStyle(
+            this.elSpinner.nativeElement,
+            'display',
+            'none'
+          );
         }
-      },
-      () => {
-        this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'none');
-      }
-    );
+      );
     this.paramsMovements.offset =
       this.paramsMovements.offset + this.paramsMovements.maxMovements;
   }
 
-  offsetMovement() {
-    window.addEventListener(
-      'scroll',
-      () => {
-        const scrollVertical = window.scrollY;
-        this.scrollLimit = $(document).height() - $(window).height();
-        if (scrollVertical >= this.scrollLimit) {
-          this.renderer.setStyle( this.elSpinner.nativeElement, 'display', 'block' );
-          this.getMovements(this.paramsMovements);
-        }
-      },
-      true
-    );
-    this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'none');
-  }
+  /* Collapsible methods  */
 
   collapsibleOpen(index: number) {
     this.instanceCollapsible.destroy();
     this.instanceCollapsible.open(index);
 
-    if ( this.editMovementFlag === false ) {
+    if (this.editMovementFlag === false) {
       this.editMovement = {
         amount: this.movementsList[index].amount,
         balance: this.movementsList[index].balance,
@@ -146,10 +173,15 @@ export class MovementsComponent implements OnInit, AfterViewInit {
       };
     }
 
-    if (this.editMovement.type === '' || this.editMovement.customDescription === '' ) {
-      this.editMovement.customDescription = this.movementsList[index].customDescription;
+    if (
+      this.editMovement.type === '' ||
+      this.editMovement.customDescription === ''
+    ) {
+      this.editMovement.customDescription = this.movementsList[
+        index
+      ].customDescription;
       this.editMovement.description = this.movementsList[index].description;
-      this.editMovement.type =  this.movementsList[index].type;
+      this.editMovement.type = this.movementsList[index].type;
     }
   }
 
@@ -158,6 +190,8 @@ export class MovementsComponent implements OnInit, AfterViewInit {
     this.instanceCollapsible.close(index);
     this.editMovementFlag = false;
   }
+
+  /* EventsEmitter for components */
 
   movementActionEmit(flag: boolean) {
     if (flag === true) {

@@ -26,18 +26,18 @@
   background-color: rgb(211, 211, 211, 0.4);
 }
 
-.containerMovement{
+.containerMovement {
   margin: 0 auto;
   width: 90%;
 }
 
 .customComponent:hover {
   transition: background-color .2s ease-in-out;
-  background-color: rgb(189,189,189, .2);
+  background-color: rgb(189, 189, 189, .2);
 }
 
 .input-field {
-  margin:  0%;
+  margin: 0%;
 }
 
 .movementheader {
