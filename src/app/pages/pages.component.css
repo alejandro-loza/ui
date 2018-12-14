@@ -1,7 +1,7 @@
 header,
 main,
 footer {
-    padding-left: 300px;
+    padding-left: var(--paddingPages);
 }
 
 main {

@@ -6,16 +6,17 @@ html {
 }
 
 :root {
-  --Navyblue-color: #18537b;
+  --navyblue-color: #18537b;
   --orange-color: #EE883A;
+  --paddingPages: 300px;
 }
 
 .finerio-blue-text {
-  color: var(--Navyblue-color);
+  color: var(--navyblue-color);
 }
 
 .finerio-blue {
-  background-color: var(--Navyblue-color) !important;
+  background-color: var(--navyblue-color) !important;
   color: white !important;
 }
 

@@ -1,3 +1,6 @@
+.nav-wrapper {
+    padding-left: var(--paddingPages);
+}
 .pages-list {
     height: 64px;
     line-height: 64px;
