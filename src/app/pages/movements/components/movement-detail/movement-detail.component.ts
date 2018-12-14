@@ -1,17 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from                           '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { MovementsService } from '@services/movements/movements.service';
 
-import { ParamsMovement } from   '@interfaces/paramsMovement.interface';
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
 
-import * as M from               'materialize-css/dist/js/materialize';
-
+import * as M from 'materialize-css/dist/js/materialize';
+import { retry } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movement-detail',
@@ -19,7 +13,7 @@ import * as M from               'materialize-css/dist/js/materialize';
   styleUrls: ['./movement-detail.component.css']
 })
 export class MovementDetailComponent implements OnInit {
-  @Input() editMovement: ParamsMovement;
+  @Input() movement: ParamsMovement;
   @Input() flag: boolean;
   @Input() fecha: Date;
   @Input() idMovement: string;
@@ -38,25 +32,27 @@ export class MovementDetailComponent implements OnInit {
     this.ingresogastoStatus = new EventEmitter();
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   deleteMovement(id: string) {
     this.movementService.deleteMovement(id).subscribe(
       res => this.movementStatus.emit(true),
       err => {
-        M.toast({
-          html: `
-          <span>Ocurrió un error al borrar tu movimiento</span>
-          <button
-            class="btn-flat toast-action"
-            onClick="
-            const toastElement = document.querySelector('.toast');
-            const toastInstance = M.Toast.getInstance(toastElement);
-            toastInstance.dismiss();">
-            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-          </button>`,
-          classes: 'red darken-3 grey-text text-lighten-5'
-        });
+        if (err.status === 500) {
+          M.toast({
+            html: `
+            <span>Ocurrió un error al borrar tu movimiento</span>
+            <button
+              class="btn-flat toast-action"
+              onClick="
+              const toastElement = document.querySelector('.toast');
+              const toastInstance = M.Toast.getInstance(toastElement);
+              toastInstance.dismiss();">
+              <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+            </button>`,
+            classes: 'red darken-3 grey-text text-lighten-5'
+          });
+        }
       },
       () => {
         M.toast({
@@ -81,37 +77,44 @@ export class MovementDetailComponent implements OnInit {
   }
 
   updateMovement(movement: ParamsMovement) {
-    this.movementService.updateMovement(movement).subscribe(
-      res => this.movementStatus.emit(true),
-      err => {
-        M.toast({
-          html: `
-          <span>Ocurrió un error al actualizar tu movimiento</span>
-          <button
-            class="btn-flat toast-action"
-            onClick="
-            const toastElement = document.querySelector('.toast');
-            const toastInstance = M.Toast.getInstance(toastElement);
-            toastInstance.dismiss();">
-            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-          </button>`,
-          classes: 'red darken-3 grey-text text-lighten-5'
-        });
-      }, () => {
-        M.toast({
-          html: `
-          <span>Se actualizó su movimiento exitosamente</span>
-          <button
-            class="btn-flat toast-action"
-            onClick="
-            const toastElement = document.querySelector('.toast');
-            const toastInstance = M.Toast.getInstance(toastElement);
-            toastInstance.dismiss();">
-            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-          </button>`,
-          classes: 'grey darken-2 grey-text text-lighten-5'
-        });
-      }
-    );
+    console.log(movement);
+    this.movementService
+      .updateMovement(movement)
+      .pipe(retry(2))
+      .subscribe(
+        res => this.movementStatus.emit(true),
+        err => {
+          if (err.status === 500) {
+            M.toast({
+              html: `
+              <span>Ocurrió un error al borrar tu movimiento</span>
+              <button
+                class="btn-flat toast-action"
+                onClick="
+                const toastElement = document.querySelector('.toast');
+                const toastInstance = M.Toast.getInstance(toastElement);
+                toastInstance.dismiss();">
+                <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+              </button>`,
+              classes: 'red darken-3 grey-text text-lighten-5'
+            });
+          }
+        },
+        () => {
+          M.toast({
+            html: `
+            <span>Se actualizó su movimiento exitosamente</span>
+            <button
+              class="btn-flat toast-action"
+              onClick="
+              const toastElement = document.querySelector('.toast');
+              const toastInstance = M.Toast.getInstance(toastElement);
+              toastInstance.dismiss();">
+              <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+            </button>`,
+            classes: 'grey darken-2 grey-text text-lighten-5'
+          });
+        }
+      );
   }
 }
