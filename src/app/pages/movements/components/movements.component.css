@@ -1,4 +1,5 @@
 .btn-filter {
+  margin-left: 7%;
   background-color: transparent;
   color: #212121;
   border: 1px solid var(--orange-color);
@@ -46,7 +47,7 @@
 }
 
 .stickyOptions {
-  position: -webkit-sticky;
+  position: -webkit-sticky; /* Safari */
   position: sticky;
   padding-top: 1%;
   top: 64px;
