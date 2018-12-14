@@ -24,6 +24,15 @@ export class AccountService {
     );
   }
 
+  deleteAccount( accountId:string ) {
+    let url = `${ environment.backendUrl }/accounts/`+accountId;
+    return this.http.delete( url, ({ headers:this.finerio.getJsonHeaders() }) ).pipe(
+      map( res => {
+        return res;
+      })
+    );
+  }
+
   handleError(error: any) {
     let errMsg = (error.message) ? error.message :
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
