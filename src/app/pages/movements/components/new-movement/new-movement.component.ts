@@ -70,11 +70,22 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.movement.type = form.value.typeAmmount;
 
     this.movementService.createMovement(this.movement).subscribe(
-      res => {
-        this.createMovementStatus.emit(true);
-      },
+      res => this.createMovementStatus.emit(true),
       err => {
-        console.log(err);
+        M.toast({
+          html: `
+          <span>Ocurrió un error al crear tu movimiento</span>
+          <button
+            class="btn-flat toast-action"
+            onClick="
+            const toastElement = docu  ment.querySelector('.toast');
+            const toastInstance = M.Toast.getInstance(toastElement);
+            toastInstance.dismiss();">
+            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+          </button>`,
+          classes: 'red darken-2',
+          displayLength: 1500
+        });
       },
       () => {
         form.reset();
