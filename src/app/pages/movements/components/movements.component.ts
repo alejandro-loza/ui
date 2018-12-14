@@ -19,7 +19,7 @@ import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { ParamsMovement } from '@interfaces/paramsMovement.interface';
 
-import { map } from 'rxjs/operators';
+import { map, retry } from 'rxjs/operators';
 import * as M from 'materialize-css/dist/js/materialize';
 
 declare const $: any;
@@ -40,6 +40,7 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
   ingresogasto: string;
   instanceCollapsible;
   editMovementFlag: boolean;
+  filterflag: boolean;
 
   movementsList: Movement[];
   paramsMovements: ParamsMovements;
@@ -66,9 +67,11 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
       date: this.dateApiService.dateApi(new Date()),
       description: '',
       duplicated: false,
+      id: '',
       type: ''
     };
     this.editMovementFlag = false;
+    this.filterflag = false;
     this.movementsList = [];
   }
 
@@ -104,36 +107,44 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.renderer.setStyle(this.elSpinner.nativeElement, 'display', 'block');
       this.getMovements(this.paramsMovements);
     }
-  };
+  }
 
   getMovements(paramsMovements: ParamsMovements) {
     this.movementsService
       .getMovements(paramsMovements)
+      .pipe(
+        retry(2)
+      )
       .subscribe(
         res => this.movementsList = res,
         err => {
           if (err.status === 401) {
             this.configService.refreshToken();
-            const toastHTML = `<span>Hemos actualizado tu sesión, ¡Bienvenido de nuevo!</span>
+            const toastHTML =
+            `<span>Hemos actualizado tu sesión, ¡Bienvenido de nuevo!</span>
             <button class="btn-flat toast-action" onClick="
               const toastElement = document.querySelector('.toast');
               const toastInstance = M.Toast.getInstance(toastElement);
               toastInstance.dismiss();">
               <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
             </button>`;
+            M.Toast.dismissAll();
             M.toast({
               html: toastHTML,
               classes: 'light-blue darken-4',
               displayLength: 2000
             });
-          } else {
-            const toastHTML = `<span>¡Ha ocurrido un error al obterner tus movimiento!</span>
+          }
+          if (err.status === 500) {
+            const toastHTML =
+            `<span>¡Ha ocurrido un error al obterner tus movimiento!</span>
             <button class="btn-flat toast-action" onClick="
               const toastElement = document.querySelector('.toast');
               const toastInstance = M.Toast.getInstance(toastElement);
               toastInstance.dismiss();">
               <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
             </button>`;
+            M.Toast.dismissAll();
             M.toast({
               html: toastHTML,
               classes: 'red darken-4',
@@ -159,36 +170,30 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.instanceCollapsible.destroy();
     this.instanceCollapsible.open(index);
 
-    if (this.editMovementFlag === false) {
-      this.editMovement = {
-        amount: this.movementsList[index].amount,
-        balance: this.movementsList[index].balance,
-        customDate: this.movementsList[index].customDate.toString(),
-        customDescription: this.movementsList[index].customDescription,
-        date: this.movementsList[index].date.toString(),
-        description: this.movementsList[index].description,
-        duplicated: this.movementsList[index].duplicated,
-        id: this.movementsList[index].id,
-        type: this.movementsList[index].type
-      };
+    if ( this.editMovementFlag === false ) {
+        this.editMovement.amount = this.movementsList[index].amount;
+        this.editMovement.balance = this.movementsList[index].balance;
+        this.editMovement.date = this.movementsList[index].date.toString();
+        this.editMovement.description = this.movementsList[index].description;
+        this.editMovement.duplicated = this.movementsList[index].duplicated;
+        this.editMovement.type = this.movementsList[index].type;
+        this.editMovementFlag = false;
     }
 
-    if (
-      this.editMovement.type === '' ||
-      this.editMovement.customDescription === ''
-    ) {
-      this.editMovement.customDescription = this.movementsList[
-        index
-      ].customDescription;
+    if ( this.editMovement.type === '' || this.editMovement.customDescription === '' ) {
+      this.editMovement.id = this.movementsList[index].id;
+      this.editMovement.customDate = this.movementsList[index].customDate.toString();
+      this.editMovement.customDescription = this.movementsList[index].customDescription;
       this.editMovement.description = this.movementsList[index].description;
       this.editMovement.type = this.movementsList[index].type;
+      this.editMovementFlag = false;
     }
   }
 
   collapsibleClose(index: number) {
+    this.editMovementFlag = false;
     this.instanceCollapsible.destroy();
     this.instanceCollapsible.close(index);
-    this.editMovementFlag = false;
   }
 
   /* EventsEmitter for components */
