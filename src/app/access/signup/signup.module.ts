@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // ROUTE
 import { SIGNUP_ROUTES } from './signup.route';
@@ -15,7 +15,8 @@ import { SignupService } from '../../services/signup/signup.service';
   imports: [
     FormsModule,
     SharedModule,
-    SIGNUP_ROUTES
+    SIGNUP_ROUTES,
+    ReactiveFormsModule
   ],
   declarations: [
     SignupComponent

@@ -23,8 +23,10 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   fields:institutionField[] = [];
   accounts: Account[] = [];
   userId = sessionStorage.getItem("id-user");
+  accountId:string;
 
   @ViewChild('modal') elModal: ElementRef;
+  @ViewChild('modal') elModal2: ElementRef;
   constructor( private credentialService: CredentialService, private activated:ActivatedRoute,
                private fieldService:FieldService, private accountService:AccountService, private router:Router ) { 
                }
@@ -39,6 +41,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(){
     const modal = new M.Modal( this.elModal.nativeElement );
+    const modal2 = new M.Modal( this.elModal2.nativeElement );
   }
 
   getDetails(){
@@ -74,11 +77,15 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     );
   }
 
+  // fata pulir ========================================================================
   updateCredential( credential ){
     this.credentialService.updateCredential( credential ).subscribe( res => {
       this.router.navigateByUrl("/app/credentials");
-      console.log( res );
-    });
+      M.toast({
+        html: 'Sincronización en proceso...',
+        displayLength: 1500
+      })
+    })
   }
 
   deleteCredential( ){
@@ -86,11 +93,29 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       this.router.navigateByUrl("/app/credentials");
       M.toast({
         html:"Credencial elminada correctamente",
-        displayLength: 3000,
-        classes: 'green'
+        displayLength: 1500
       })
     }, error => {
-      console.log( error );
+      M.toast({
+        html: 'Ocurrió un error al elminar la credencial, inténtalo mas tarde',
+        displayLength: 1500,
+      });
+    });
+  }
+
+  deleteAccountConfirmed( account:Account ){
+    this.accountService.deleteAccount( account.id ).subscribe( res => {
+     M.toast({
+       html: 'Cuenta eliminada correctamente',
+       displayLength: 1500,
+     })
+     this.accounts = [];
+     this.getAccounts();
+    }, error => {
+      M.toast({
+        html: 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde',
+        displayLength: 1500,
+      });
     });
   }
 

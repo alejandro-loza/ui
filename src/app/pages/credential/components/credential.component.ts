@@ -36,7 +36,7 @@ export class CredentialComponent implements OnInit {
       res.data.forEach( element => {
         this.accounts.push( element );
       });
-      //this.getBalance( this.accounts );
+      this.getBalance( this.accounts );
     });
   }
 
@@ -50,9 +50,15 @@ export class CredentialComponent implements OnInit {
 
   getBalance( accountsArray:Account[] ){
     accountsArray.forEach(element => {
-      element.nature != "Crédito" ? this.debitBalance += element.balance : this.creditBalance += element.balance;
+      if( element.nature != "Crédito"){
+        // Saldo en débito o chequera
+        this.debitBalance += element.balance
+      } else {
+        // Saldo en crédito
+        this.creditBalance += element.balance;
+      }
     });
-    this.totalBalance = this.debitBalance;
+    this.totalBalance = this.debitBalance + this.creditBalance;
   }
 
   loadInstitutions(){
