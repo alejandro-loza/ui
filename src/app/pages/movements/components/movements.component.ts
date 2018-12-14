@@ -173,9 +173,12 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
     if ( this.editMovementFlag === false ) {
         this.editMovement.amount = this.movementsList[index].amount;
         this.editMovement.balance = this.movementsList[index].balance;
+        this.editMovement.customDate = this.movementsList[index].customDate.toString();
+        this.editMovement.customDescription = this.movementsList[index].customDescription;
         this.editMovement.date = this.movementsList[index].date.toString();
         this.editMovement.description = this.movementsList[index].description;
         this.editMovement.duplicated = this.movementsList[index].duplicated;
+        this.editMovement.id = this.movementsList[index].id;
         this.editMovement.type = this.movementsList[index].type;
         this.editMovementFlag = false;
     }
