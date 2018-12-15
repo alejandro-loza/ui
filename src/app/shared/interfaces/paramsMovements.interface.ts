@@ -3,6 +3,6 @@ export interface ParamsMovements {
     deposits: boolean;
     duplicates: boolean;
     offset: number;
-    deep: boolean;
-    maxMovements: number;
+    deep?: boolean;
+    maxMovements?: number;
 }

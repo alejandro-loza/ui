@@ -62,4 +62,8 @@ export class ParamsService {
   public set setOffset( offset: number ) {
     this.paramsMovements.offset = offset;
   }
+
+  public get getOffset() : number {
+    return this.paramsMovements.offset;
+  }
 }

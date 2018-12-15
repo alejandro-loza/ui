@@ -6,21 +6,21 @@ import {
   Renderer2,
   ViewChild,
   OnDestroy
-} from '@angular/core';
-import { NgModel } from '@angular/forms';
+} from                           '@angular/core';
+import { NgModel } from          '@angular/forms';
 
-import { ConfigService } from '@services/config/config.service';
-import { DateApiService } from '@services/date-api/date-api.service';
+import { ConfigService } from    '@services/config/config.service';
+import { DateApiService } from   '@services/date-api/date-api.service';
 import { MovementsService } from '@services/movements/movements.service';
+import { ParamsService } from    '@services/movements/params/params.service';
 
-import { Movements } from '@interfaces/movements.interface';
-import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import { Movement } from         '@interfaces/movement.interface';
+import { ParamsMovement } from   '@interfaces/paramsMovement.interface';
+import { ParamsMovements } from  '@interfaces/paramsMovements.interface';
 
-import { Movement } from '@interfaces/movement.interface';
-import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import { retry } from            'rxjs/operators';
 
-import { map, retry } from 'rxjs/operators';
-import * as M from 'materialize-css/dist/js/materialize';
+import * as M from               'materialize-css/dist/js/materialize';
 
 declare const $: any;
 
@@ -49,16 +49,10 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
     public renderer: Renderer2,
     private movementsService: MovementsService,
     private configService: ConfigService,
-    private dateApiService: DateApiService
+    private dateApiService: DateApiService,
+    private paramsService: ParamsService
   ) {
-    this.paramsMovements = {
-      charges: true,
-      deep: true,
-      deposits: true,
-      duplicates: true,
-      maxMovements: 35,
-      offset: 0
-    };
+    this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0 };
     this.editMovement = {
       amount: 0,
       balance: 0,
@@ -171,24 +165,26 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.instanceCollapsible.open(index);
 
     if ( this.editMovementFlag === false ) {
-        this.editMovement.amount = this.movementsList[index].amount;
-        this.editMovement.balance = this.movementsList[index].balance;
-        this.editMovement.customDate = this.movementsList[index].customDate.toString();
-        this.editMovement.customDescription = this.movementsList[index].customDescription;
-        this.editMovement.date = this.movementsList[index].date.toString();
-        this.editMovement.description = this.movementsList[index].description;
-        this.editMovement.duplicated = this.movementsList[index].duplicated;
-        this.editMovement.id = this.movementsList[index].id;
-        this.editMovement.type = this.movementsList[index].type;
+        this.editMovement = {
+          amount:             this.movementsList[index].amount,
+          balance:            this.movementsList[index].balance,
+          customDate:         this.movementsList[index].customDate.toString(),
+          customDescription:  this.movementsList[index].customDescription,
+          date:               this.movementsList[index].date.toString(),
+          description:        this.movementsList[index].description,
+          duplicated:         this.movementsList[index].duplicated,
+          id:                 this.movementsList[index].id,
+          type:               this.movementsList[index].type
+        };
         this.editMovementFlag = false;
     }
 
     if ( this.editMovement.type === '' || this.editMovement.customDescription === '' ) {
-      this.editMovement.id = this.movementsList[index].id;
-      this.editMovement.customDate = this.movementsList[index].customDate.toString();
+      this.editMovement.id =                this.movementsList[index].id;
+      this.editMovement.customDate =        this.movementsList[index].customDate.toString();
       this.editMovement.customDescription = this.movementsList[index].customDescription;
-      this.editMovement.description = this.movementsList[index].description;
-      this.editMovement.type = this.movementsList[index].type;
+      this.editMovement.description =       this.movementsList[index].description;
+      this.editMovement.type =              this.movementsList[index].type;
       this.editMovementFlag = false;
     }
   }
@@ -203,7 +199,14 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   movementActionEmit(flag: boolean) {
     if (flag === true) {
-      this.paramsMovements.offset = 0;
+      this.paramsMovements = {
+        charges:      this.paramsService.getCharges,
+        deep:         this.paramsService.getDeep,
+        deposits:     this.paramsService.getDeposits,
+        duplicates:   this.paramsService.getDuplicates,
+        maxMovements: this.paramsService.getMaxMovements,
+        offset:       this.paramsService.getOffset
+      };
       this.movementsList = [];
       this.getMovements(this.paramsMovements);
     }
