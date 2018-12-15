@@ -63,7 +63,7 @@ export class ParamsService {
     this.paramsMovements.offset = offset;
   }
 
-  public get getOffset() : number {
+  public get getOffset(): number {
     return this.paramsMovements.offset;
   }
 }
