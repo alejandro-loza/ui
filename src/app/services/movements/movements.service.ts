@@ -55,7 +55,7 @@ export class MovementsService {
     ).pipe(
       map( (res: Movements) => {
         if ( this.movementsList.length === res.size) {
-          return;
+          return this.movementsList;
         }
         for (let i = 0; i < res.data.length; i++) {
           const movement: Movement = res.data[i];

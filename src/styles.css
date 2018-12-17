@@ -1,38 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
+
 body,
 html {
-    height: 100%;
     margin: 0;
+    padding: 0;
     overflow-x: hidden;
+    min-height: 100%;
 }
 
 :root {
-  --Navyblue-color: #18537b;
-  --orange-color: #EE883A;
+    --navyblue-color: #18537b;
+    --orange-color: #EE883A;
+    --paddingPages: 300px;
 }
 
 .finerio-blue-text {
-  color: var(--Navyblue-color);
+    color: var(--navyblue-color);
 }
 
 .finerio-blue {
-  background-color: var(--Navyblue-color) !important;
-  color: white !important;
+    background-color: var(--navyblue-color) !important;
+    color: white !important;
 }
 
 .finerio-orange {
-  background-color: var(--orange-color) !important;
-  color: white !important;
+    background-color: var(--orange-color) !important;
+    color: white !important;
 }
 
 .finerio-orange-text {
-  color: var(--orange-color);
+    color: var(--orange-color);
 }
 
 .waves-effect.waves-blue .waves-ripple {
-  /* The alpha value allows the text and background color
+    /* The alpha value allows the text and background color
     of the button to still show through. */
-  background-color: rgba(30, 136, 229, 0.65);
+    background-color: rgba(30, 136, 229, 0.65);
+}
+
+.material-icons.md-18 {
+    font-size: 18px;
+}
+
+.material-icons.md-24 {
+    font-size: 24px;
+}
+
+.material-icons.md-36 {
+    font-size: 36px;
+}
+
+.material-icons.md-48 {
+    font-size: 48px;
+}
+
+.inputMovement {
+    border-bottom: none !important;
+    height: 100% !important;
 }
 
 input:not([type]):focus:not([readonly]),
@@ -45,8 +69,8 @@ input[type=tel]:not(.browser-default):focus:not([readonly]),
 input[type=number]:not(.browser-default):focus:not([readonly]),
 input[type=search]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid var(--orange-color) !important;
-  box-shadow: 0 1px 0 0 var(--orange-color) !important;
+    border-bottom: 1px solid var(--orange-color) !important;
+    box-shadow: 0 1px 0 0 var(--orange-color) !important;
 }
 
 input:not([type]):focus:not([readonly])+label,
@@ -59,38 +83,18 @@ input[type=tel]:not(.browser-default):focus:not([readonly])+label,
 input[type=number]:not(.browser-default):focus:not([readonly])+label,
 input[type=search]:not(.browser-default):focus:not([readonly])+label,
 textarea.materialize-textarea:focus:not([readonly])+label {
-  color: var(--orange-color) !important;
+    color: var(--orange-color) !important;
 }
 
 [type="checkbox"].filled-in:checked+label:after {
-  border: 2px solid var(--orange-color) !important;
-  background-color: var(--orange-color) !important;
-}
-
-.material-icons.md-18 {
-  font-size: 18px;
-}
-
-.material-icons.md-24 {
-  font-size: 24px;
-}
-
-.material-icons.md-36 {
-  font-size: 36px;
-}
-
-.material-icons.md-48 {
-  font-size: 48px;
-}
-
-.inputMovement {
-  border-bottom: none !important;
-  height: 100% !important;
+    border: 2px solid var(--orange-color) !important;
+    background-color: var(--orange-color) !important;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
 }

@@ -1,64 +1,55 @@
+.nav-wrapper {
+  padding-left: var(--paddingPages);
+}
+
 .pages-list {
-    height: 64px;
-    line-height: 64px;
-    font-size: 16px;
+  height: 64px;
+  line-height: 64px;
+  font-size: 16px;
 }
 
 .icon-list {
-    line-height: 64px !important;
-    margin-right: 40px;
-    margin-left: 16px;
-}
-
-#chevron-right {
-    margin-left: 64px;
+  line-height: 64px !important;
+  margin-right: 40px;
+  margin-left: 16px;
 }
 
 .user-list {
-    background-color: #1D3856;
+  background-color: rgb(29, 56, 86);
 }
 
 .user-list:hover {
-    background-color: #1A204E;
+  background-color: rgb(26, 49, 77)
 }
 
-#collapsible-user {
-    margin-left: 15px;
+.collapsible-accordion .mdi-chevron-up {
+  margin-left: 87px;
+  transition: .3s transform ease-in-out;
+}
+
+.collapsible-accordion .active .mdi-chevron-up {
+  transform: rotate(180deg);
 }
 
 #finerio-logo {
-    max-width: auto;
-    height: 64px;
+  max-width: auto;
+  height: 64px;
 }
 
-@media (max-width: 600px) {
-    #finerio-logo {
-        height: 56px;
-    }
+@media only screen and (max-width: 600px) {
+  #finerio-logo {
+    height: 56px;
+  }
 }
 
-@media (max-width: 992px) {
-    .pages-list {
-        height: 56px;
-        line-height: 56px;
-    }
-    .icon-list {
-        line-height: 56px;
-    }
-}
-
-#chevron-right {
-    animation: rotateIcon 1s ease-in-out 0 1 normal forwards;
-}
-
-@keyframes rotateIcon {
-    0% {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(22deg);
-    }
-    100% {
-        transform: rotate(45deg);
-    }
+@media only screen and (max-width: 992px) {
+  .nav-wrapper {
+    padding-left: 0;
+  }
+  .pages-list {
+    line-height: 56px;
+  }
+  .icon-list {
+    line-height: 56px;
+  }
 }

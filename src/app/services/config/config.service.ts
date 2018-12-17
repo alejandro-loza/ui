@@ -65,8 +65,9 @@ export class ConfigService {
   }
 
   refreshToken() {
-    if ( this.token_refresh === undefined ) {
+    if ( isNullOrUndefined(this.token_refresh) || isNullOrUndefined(this.idUser)) {
       this.setRefreshToken = sessionStorage.getItem('refresh-token');
+      this.setId = sessionStorage.getItem('id-user');
     }
     this.httpClient.post(
       this.url,

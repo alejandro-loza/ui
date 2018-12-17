@@ -1,15 +1,11 @@
 header,
 main,
 footer {
-    padding-left: 300px;
+    padding-left: var(--paddingPages);
 }
 
 main {
     padding-bottom: 20px;
-}
-
-.row {
-    margin-bottom: 0px;
 }
 
 @media only screen and (max-width: 992px) {

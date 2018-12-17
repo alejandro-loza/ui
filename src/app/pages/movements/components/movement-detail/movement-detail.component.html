@@ -11,12 +11,20 @@
     </div>
     <!-- Diseño para editar movimientos -->
     <div class="col m4">
-      <button class="btn btn-small finerio-blue" (click)="deleteMovement(idMovement)">
-        <i class="mdi mdi-24px mdi-check right"></i>Guardar
-      </button>
-      <button class="btn btn-small red darken-3" (click)="deleteMovement(idMovement)">
-        <i class="mdi mdi-24px mdi-delete right"></i>Eliminar
-      </button>
+      <ng-container *ngIf="flag === true; else elseFlag">
+        <button class="btn btn-small finerio-blue" (click)="updateMovement(movement)">
+          <i class="mdi mdi-24px mdi-check right"></i>Guardar
+        </button>
+        <button class="btn btn-small red darken-3" (click)="deleteMovement(idMovement)">
+          <i class="mdi mdi-24px mdi-delete right"></i>Eliminar
+        </button>
+      </ng-container>
+      <ng-template #elseFlag>
+        <button class="btn btn-small red darken-3" (click)="deleteMovement(idMovement)">
+          <i class="mdi mdi-24px mdi-delete right"></i>Eliminar
+        </button>
+      </ng-template>
+
     </div>
   </ng-container>
   <!-- Diseño para movimientos de tarjetas -->

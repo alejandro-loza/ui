@@ -1,123 +1,129 @@
 <div class="stickyOptions">
-  <!-- Busqueda y filtrado -->
-  <div class="containerMovement">
-    <div class="row valign-wrapper">
-      <div class="col s12 m4">
-        <div class="input-field">
-          <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
-          <label for="first_name"></label>
-          <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+    <!-- Busqueda y filtrado -->
+    <div class="containerMovement">
+        <div class="row valign-wrapper">
+            <div class="col s12 m4">
+                <div class="input-field">
+                    <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
+                    <label for="first_name"></label>
+                    <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+                </div>
+            </div>
+            <div class="col s12 m3 left-align">
+                <a class="btn btn-filter" (click)="filterflag = !filterflag">
+                    <i class="material-icons left">filter_list</i>Filtrar
+                </a>
+            </div>
+            <div class="col s12 m4 right-align">
+                <app-new-movement (createMovementStatus)="movementActionEmit($event)"></app-new-movement>
+            </div>
         </div>
-      </div>
-      <div class="col s12 m3 right-align">
-        <a href="#" class="waves-effect waves-light btn btn-filter">
-          <i class="material-icons left">filter_list</i>Filtrar
-        </a>
-      </div>
-      <div class="col s12 m4 center-align">
-        <app-new-movement (createMovementStatus)="movementActionEmit($event)"></app-new-movement>
-      </div>
     </div>
-  </div>
+    <app-params (paramsMovementStatus)="movementActionEmit($event)" [hidden]="filterflag !== true" [charges]="paramsMovements.charges" [deposits]="paramsMovements.deposits" [duplicates]="paramsMovements.duplicates" class="params-movement"></app-params>
 
-  <!-- Encabezado de movimientos -->
-  <div class="containerMovement">
-    <div class="row center-align z-depth-1 white" id="header">
-      <div class="col m1 movementheader">Cuenta</div>
-      <div class="col m1 movementheader">Fecha</div>
-      <div class="col m3 movementheader">Descripción</div>
-      <div class="col m3 movementheader">Categoria</div>
-      <div class="col m2 movementheader">Monto</div>
-      <div class="col m2 movementheader">Considerar</div>
+    <!-- Encabezado de movimientos -->
+    <div class="containerMovement">
+        <div class="row center-align z-depth-1 white" id="header">
+            <div class="col m1 movementheader">Cuenta</div>
+            <div class="col m1 movementheader">Fecha</div>
+            <div class="col m3 movementheader">Descripción</div>
+            <div class="col m3 movementheader">Categoria</div>
+            <div class="col m2 movementheader">Monto</div>
+            <div class="col m2 movementheader">Considerar</div>
+        </div>
     </div>
-  </div>
-  <!-- Lista de Movimientos -->
-  <div class="containerMovement">
+</div>
+
+<!-- Lista de Movimientos -->
+<div class="containerMovement">
     <div class="row center-align">
-      <ul class="collapsible" #collapsible>
-        <li *ngFor="let movement of movementsList; let i = index">
-          <!-- Encabezado del collapsible -->
-          <div class="collapsible-header valign-wrapper" [ngClass]="{'grey lighten-2': movement.duplicated}">
-            <!-- Imagen de la cuenta -->
-            <div class="col m1">
-              <app-cuenta [account]="movement.account.institution.code" class="input-field"></app-cuenta>
-            </div>
+        <ul class="collapsible" #collapsible>
+            <li *ngFor="let movement of movementsList; let i = index">
+                <!-- Encabezado del collapsible -->
+                <div class="collapsible-header valign-wrapper" [ngClass]="{'grey lighten-2': movement.duplicated}">
+                    <!-- Imagen de la cuenta -->
+                    <div class="col m1">
+                        <app-cuenta [account]="movement.account.institution.code" class="input-field"></app-cuenta>
+                    </div>
 
-            <!-- Fecha del movimiento -->
-            <div class="col m1 valign-wrapper customComponent">
-              <app-fecha (valueDate)="editDateMovement($event)" [date]="movement.customDate | date: 'dd - MMM'" class="input-field" (click)="collapsibleOpen(i)">
-              </app-fecha>
-            </div>
+                    <!-- Fecha del movimiento -->
+                    <div class="col m1 valign-wrapper customComponent">
+                        <app-fecha (valueDate)="editDateMovement($event)" [date]="movement.customDate | date: 'dd - MMM'" class="input-field" (click)="collapsibleOpen(i)">
+                        </app-fecha>
+                    </div>
 
-            <!-- Descripción -->
-            <div class="col m3 customComponent">
-              <app-description (valueDescription)="editDescriptionMovement($event)" [description]="movement.customDescription | uppercase" class="input-field" (click)="collapsibleOpen(i)">
-              </app-description>
-            </div>
+                    <!-- Descripción -->
+                    <div class="col m3 customComponent">
+                        <app-description (valueDescription)="editDescriptionMovement($event)" [description]="movement.customDescription | uppercase" class="input-field" (click)="collapsibleOpen(i)">
+                        </app-description>
+                    </div>
 
-            <!-- Categoria -->
-            <div class="col m3">
-              <!--
+                    <!-- Categoria -->
+                    <div class="col m3">
+                        <!--
                   Se recorren las conceptos de los movimientos
                 -->
-              <div *ngFor="let concept of movement.concepts; let i = index">
-                <!--
+                        <div *ngFor="let concept of movement.concepts; let i = index">
+                            <!--
                     Se valida si existe más de un concepto en cada movimiento
                   -->
-                <ng-container *ngIf="movement.concepts?.length > 1; then multicategorias; else simplecategoria"></ng-container>
-                <!--
+                            <ng-container *ngIf="movement.concepts?.length > 1; then multicategorias; else simplecategoria"></ng-container>
+                            <!--
                     Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría.
                     Esto genera un pequeño bug donde se pinta dos veces, esto se debe por los multiples conceptos.
                     Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
               -->
-                <ng-template #multicategorias>
-                  <app-category [hidden]="i > 0" [bckgrndColor]="'#212121'" [categoryName]="'Multi Categorías'" [frgrndColor]="'#fafafa'" [categoryParent]="'multi'">
-                  </app-category>
-                </ng-template>
-                <ng-template #simplecategoria>
-                  <!--
+                            <ng-template #multicategorias>
+                                <app-category [hidden]="i > 0" [bckgrndColor]="'#212121'" [categoryName]="'Multi Categorías'" [frgrndColor]="'#fafafa'" [categoryParent]="'multi'">
+                                </app-category>
+                            </ng-template>
+                            <ng-template #simplecategoria>
+                                <!--
                       Si solo tiene un concepto, se verifica si ese concepto tiene una categoria
                     -->
-                  <ng-container *ngIf="concept.category; then conCategoria; else sinCategoria"></ng-container>
-                  <!-- 
+                                <ng-container *ngIf="concept.category; then conCategoria; else sinCategoria"></ng-container>
+                                <!-- 
                       Si tiene una categoría se pinta con sus respectivos parametros
                     -->
-                  <ng-template #conCategoria>
-                    <app-category [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.parent.id">
-                    </app-category>
-                  </ng-template>
-                  <ng-template #sinCategoria>
-                    <!-- 
+                                <ng-template #conCategoria>
+                                    <app-category [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.parent.id">
+                                    </app-category>
+                                </ng-template>
+                                <ng-template #sinCategoria>
+                                    <!-- 
                         Caso contrario se mandan los parametros definidos para los movimientos sin categoria
                        -->
-                    <app-category [bckgrndColor]="'#757575'" [categoryName]="'Sin Categoría'" [frgrndColor]="'#fafafa'" [categoryParent]="'finerio-icon'">
-                    </app-category>
-                  </ng-template>
-                </ng-template>
+                                    <app-category [bckgrndColor]="'#757575'" [categoryName]="'Sin Categoría'" [frgrndColor]="'#fafafa'" [categoryParent]="'finerio-icon'">
+                                    </app-category>
+                                </ng-template>
+                            </ng-template>
 
-              </div>
-            </div>
+                        </div>
+                    </div>
 
-            <!-- Monto del movimiento -->
-            <div class="col m2">
-              <div class="customComponent">
-                <app-monto (valueAmount)="editAmountMovement($event)" (click)="collapsibleOpen(i)" [amount]="movement.amount" [type]="movement.type" class="input-field">
-                </app-monto>
-              </div>
-            </div>
+                    <!-- Monto del movimiento -->
+                    <div class="col m2">
+                        <div class="customComponent">
+                            <app-monto (valueAmount)="editAmountMovement($event)" (click)="collapsibleOpen(i)" [amount]="movement.amount" [type]="movement.type" class="input-field">
+                            </app-monto>
+                        </div>
+                    </div>
 
-            <!-- Considerar el movimiento -->
-            <div class="col m2 center-align hide-on-small-and-down">
-              <app-considerar (click)="collapsibleOpen(i)" (valueConsider)="editDuplicatedMovement($event)" [switch]="movement.duplicated" class="input-field">
-              </app-considerar>
-            </div>
-          </div>
-          <div class="collapsible-body" #collapsibleBody>
-            <app-movement-detail (movementStatus)="movementActionEmit($event)" (ingresogastoStatus)="movementTypeEmit($event)" [dateOriginal]="movement.date" [descriptionOriginal]="movement.description" [editMovement]="editMovement" [fecha]="movement.customDate"
-              [flag]="editMovementFlag" [idMovement]="movement.id" [name]="movement.account.name" [type]="movement.type">
-            </app-movement-detail>
-          </div>
-        </li>
-      </ul>
+                    <!-- Considerar el movimiento -->
+                    <div class="col m2 center-align hide-on-small-and-down">
+                        <app-considerar (click)="collapsibleOpen(i)" (valueConsider)="editDuplicatedMovement($event)" [switch]="movement.duplicated" class="input-field">
+                        </app-considerar>
+                    </div>
+                </div>
+                <div class="collapsible-body" #collapsibleBody>
+                    <app-movement-detail (movementStatus)="movementActionEmit($event)" (ingresogastoStatus)="movementTypeEmit($event)" [dateOriginal]="movement.date" [descriptionOriginal]="movement.description" [movement]="editMovement" [fecha]="movement.customDate" [flag]="editMovementFlag"
+                        [idMovement]="movement.id" [name]="movement.account.name" [type]="movement.type">
+                    </app-movement-detail>
+                </div>
+            </li>
+        </ul>
+        <div class="center-align" #spinner>
+            <app-spinner></app-spinner>
+        </div>
     </div>
-  </div>
+</div>
