@@ -1,8 +1,9 @@
 import { NgModule } from                           '@angular/core';
 import { FormsModule } from                        '@angular/forms';
 
-import { MovementModule } from                     './components/movement/movement.module';
 import { SharedModule } from                       '@shared/shared.module';
+import { MovementModule } from                     './components/movement/movement.module';
+import { CategoryModule } from                     '../categories/component/category/category.module';
 
 import { MovementsRoutes } from                    './movements.route';
 
@@ -18,6 +19,7 @@ import { ParamsComponent } from './components/params/params.component';
     FormsModule,
     SharedModule,
     MovementModule,
+    CategoryModule,
     MovementsRoutes,
   ],
   declarations: [
