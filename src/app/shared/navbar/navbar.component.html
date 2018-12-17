@@ -3,7 +3,10 @@
         <nav class="finerio-blue">
             <div class="nav-wrapper container center-align">
                 <img src="assets/media/img/finerio_logo/finerio_white.svg" id="finerio-logo">
-                <ul id="nav-mobile" class="right hide-on-large-only">
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a class="white-text" (click)="logout()">Cerrar Sesion</a></li>
+                </ul>
+                <ul id="nav-mobile" class="right show-on-medium-and-down">
                     <li>
                         <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     </li>
@@ -30,7 +33,7 @@
                 <div class="collapsible-body">
                     <ul>
                         <li><a class="white-text waves-effect waves-blue user-list sidenav-close" routerLink="#!">Cambiar Contraseña</a></li>
-                        <li><a class="white-text waves-effect waves-blue user-list" (click)="logout()">Cerrar Sesion</a></li>
+                        <li><a class="white-text waves-effect waves-blue user-list sidenav-close" (click)="logout()">Cerrar Sesion</a></li>
                     </ul>
                 </div>
             </li>

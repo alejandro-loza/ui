@@ -45,7 +45,6 @@ export class BankComponent implements OnInit {
   }
 
   submit(form: NgForm) {
-    let test: Credential;
     this.credential.username = form.value.username;
     this.credential.password = form.value.password;
     this.credential.securityCode = form.value.sec_code;
@@ -54,6 +53,10 @@ export class BankComponent implements OnInit {
     this.credentialService.createCredential(this.credential).subscribe(
       (res: Credential) => {
         this.router.navigateByUrl("/app/credentials");
+        M.toast({
+          html:'Recuperando información...',
+          displayLength: 3000
+        });
       })
   }
 
