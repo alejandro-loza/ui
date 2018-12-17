@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class BackButtonComponent implements OnInit {
 
-  @Input() ruta:string;
+  @Input() ruta: string;
 
   constructor() { }
 
