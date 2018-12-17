@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import {
-  FinerioService,
+  ConfigService,
   AuthService,
   AuthGuard,
-  MovementsService
+  MovementsService,
+  DateApiService
 } from './services.index';
 
 @NgModule({
@@ -15,13 +16,12 @@ import {
     CommonModule,
     HttpClientModule,
   ],
-  declarations: [
-  ],
   providers: [
-    FinerioService,
+    ConfigService,
     AuthService,
     AuthGuard,
-    MovementsService
+    MovementsService,
+    DateApiService
   ]
 })
 export class ServicesModule { }

@@ -6,6 +6,7 @@ import { SocialMediaComponent } from       '@shared/social-media-button/social-m
 
 import { NavbarComponent } from            './navbar/navbar.component';
 import { LinkComponent } from './navbar/link/link.component';
+import { BackButtonComponent } from "./back-button/back-button.component";
 
 
 @NgModule({
@@ -16,13 +17,15 @@ import { LinkComponent } from './navbar/link/link.component';
   declarations: [
     NavbarComponent,
     SocialMediaComponent,
-    LinkComponent
+    LinkComponent,
+    BackButtonComponent
   ],
   exports: [
     CommonModule,
     RouterModule,
     NavbarComponent,
-    SocialMediaComponent
+    SocialMediaComponent,
+    BackButtonComponent
   ]
 })
 export class SharedModule { }

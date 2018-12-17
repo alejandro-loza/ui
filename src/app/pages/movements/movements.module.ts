@@ -1,20 +1,29 @@
-import { NgModule } from                   '@angular/core';
-import { SharedModule } from               '@shared/shared.module';
+import { NgModule } from                           '@angular/core';
+import { FormsModule } from                        '@angular/forms';
 
-import { MovementsRoutes } from            './movements.route';
+import { MovementModule } from                     './components/movement/movement.module';
+import { SharedModule } from                       '@shared/shared.module';
 
-import { MovementsComponent } from         './components/movements.component';
+import { MovementsRoutes } from                    './movements.route';
 
-import { MovementComponent } from          '@components/movement/movement.component';
+import { SpinnerComponent } from                   '@components/spinner/spinner.component';
+import { MovementsComponent } from                 './components/movements.component';
+import { NewMovementComponent } from               './components/new-movement/new-movement.component';
+import { MovementDetailComponent } from            './components/movement-detail/movement-detail.component';
+
 
 @NgModule({
   imports: [
+    FormsModule,
     SharedModule,
-    MovementsRoutes
+    MovementModule,
+    MovementsRoutes,
   ],
-  declarations: [ 
+  declarations: [
     MovementsComponent,
-    MovementComponent,
+    SpinnerComponent,
+    NewMovementComponent,
+    MovementDetailComponent,
   ]
 })
 export class MovementsModule { }

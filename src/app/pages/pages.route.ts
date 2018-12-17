@@ -23,12 +23,24 @@ const PagesRouting: Routes = [
         loadChildren: './saving/saving.module#SavingModule'
       },
       {
-        path: 'category',
-        loadChildren: './category/category.module#CategoryModule'
+        path: 'categories',
+        loadChildren: './categories/categories.module#CategoriesModule'
       },
       {
         path: 'credentials',
         loadChildren: './credential/credential.module#CredentialModule'
+      },
+      {
+        path: 'credentials/:credencialId',
+        loadChildren: './credential-details/credential-details.module#CredentialDetailsModule'
+      },
+      {
+        path: 'banks',
+        loadChildren: './banks/banks.module#BanksModule'
+      },
+      {
+        path: 'bank/:bankCode',
+        loadChildren: './bank/bank.module#BankModule'
       },
       {
         path: '',

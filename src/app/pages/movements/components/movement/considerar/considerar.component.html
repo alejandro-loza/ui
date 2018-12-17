@@ -1,0 +1,13 @@
+<div class="switch">
+    <label>
+      Si
+      <input
+        [(ngModel)]="switch"
+        [ngModelOptions]="{ duplicated: currentValue }"
+        type="checkbox"
+        #inputSwitch="ngModel"
+        #considerar>
+      <span class="lever"></span>
+      No  
+    </label>
+  </div>

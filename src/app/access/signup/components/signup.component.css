@@ -20,6 +20,11 @@
 	font-size: 12px;
 }
 
+#termsError{
+	color: red;
+	font-size: 12px;
+}
+
 #tips-col h6, p{
 	padding-top: 30px;
 	margin: 10px!important;
