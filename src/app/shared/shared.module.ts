@@ -5,8 +5,9 @@ import { RouterModule } from               '@angular/router';
 import { SocialMediaComponent } from       '@shared/social-media-button/social-media.component';
 
 import { NavbarComponent } from            './navbar/navbar.component';
-import { LinkComponent } from './navbar/link/link.component';
-
+import { LinkComponent } from              './navbar/link/link.component';
+import { BackButtonComponent } from        './back-button/back-button.component';
+import { SpinnerComponent } from           './spinner/spinner.component'
 
 @NgModule({
   imports: [
@@ -14,15 +15,19 @@ import { LinkComponent } from './navbar/link/link.component';
     RouterModule,
   ],
   declarations: [
+    BackButtonComponent,
+    LinkComponent,
     NavbarComponent,
     SocialMediaComponent,
-    LinkComponent
+    SpinnerComponent,
   ],
   exports: [
     CommonModule,
     RouterModule,
+    BackButtonComponent,
     NavbarComponent,
-    SocialMediaComponent
+    SocialMediaComponent,
+    SpinnerComponent,
   ]
 })
 export class SharedModule { }

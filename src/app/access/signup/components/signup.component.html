@@ -8,40 +8,38 @@
         </div>
         <div class="row">
             <div class="col s12 l8 offset-l2">
-                <form #signupForm="ngForm" (ngSubmit)="signup(signupForm)" method="POST">
+                <form [formGroup]="signupData" (ngSubmit)="signup()" method="POST">
                     <div class="input-field">
-                        <input ngModel name="email" class="form-control" id="email-input" type="email" class="validate" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
+                        <input required formControlName="email" name="email" class="form-control" id="email-input" type="email" class="validate" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
                         <label for="email-input">Correo Electrónico</label>
-                        <span class="helper-text" data-error="Correo Inválido" data-success="Correo Válido">Ej. contacto@finerio.mx</span>
+                        <span class="helper-text" data-error="Correo Inválido">Ej. contacto@finerio.mx</span>
                     </div>
                     <div class="input-field">
-                        <input ngModel name="password" minlength="8" class="form-control" id="password-input" type="password" class="validate">
+                        <input required formControlName="password" name="password" minlength="8" class="form-control" id="password-input" type="password" class="validate">
                         <label for="password-input">Contraseña</label>
-                        <span class="helper-text" data-error="Contraseña Inválida (mínimo 8 caracteres)" data-success="Constraseña Valida"></span>
+                        <span class="helper-text" data-error="Contraseña Inválida (mínimo 8 caracteres)"></span>
                     </div>
                     <div class="input-field">
-                        <input ngModel name="confirmPassword" minlength="8" class="form-control" id="confirm-input" type="password" class="validate">
+                        <input required formControlName="passwordConfirm" name="confirmPassword" minlength="8" class="form-control" id="confirm-input" type="password" class="validate">
                         <label for="confirm-input">Confirmar contraseña</label>
-                        <span class="helper-text" data-error="Las contraseñas no coinciden" data-success="Constraseña Valida"></span>
+                        <span id="passwordError" *ngIf="!passwordValidate">Las contraseñas no coinciden</span>
                     </div>
-                    <span id="errorSpan"></span>
-                    <div class="row pt-15">
-                        <p>
+                    <div class="row">
+                        <div class="col s12 m10 offset-m1">
                             <label>
-                                <input name="blog" type="checkbox" class="filled-in" checked="checked" id="checkbox-blog" ngModel />
+                                <input name="blog" type="checkbox" class="filled-in" checked="checked" id="checkbox-blog" formControlName="blog" />
                                 <span>Acepto subscribirme al blog de finanzas personales</span>
                             </label>
-                        </p>
-                        <p>
                             <label>
-                                <input name="termsAndConditions" type="checkbox" class="filled-in" checked="checked" id="checkbox-terms" ngModel />
+                                <input name="termsAndConditions" type="checkbox" class="filled-in" checked id="checkbox-terms" formControlName="terms" />
                                 <span>Acepto los términos y condiciones</span>
-                            </label>
-                        </p>
+                            </label><br>    
+                            <span id="termsError" *ngIf="!termsAccepted">Debes aceptar los términos y condiciones</span>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-s6 center pt-15">
-                            <button class="btn waves-effect waves-blue finerio-blue white-text" type="submit" name="action">Entrar
+                            <button [disabled]="!signupData.valid" class="btn waves-effect waves-blue finerio-blue white-text" type="submit" name="action">Entrar
                                 <i class="material-icons right">send</i>
                             </button>
                         </div>

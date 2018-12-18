@@ -1,15 +1,17 @@
 import { NgModule } from                           '@angular/core';
-import { FormsModule } from                '@angular/forms';
-import { SharedModule } from                       '@shared/shared.module';
+import { FormsModule } from                        '@angular/forms';
 
+import { SharedModule } from                       '@shared/shared.module';
 import { MovementModule } from                     './components/movement/movement.module';
+import { CategoryModule } from                     '../categories/component/category/category.module';
 
 import { MovementsRoutes } from                    './movements.route';
 
-import { SpinnerComponent } from                   '@components/spinner/spinner.component';
 import { MovementsComponent } from                 './components/movements.component';
-import { MovementDetailMedAndUpComponent } from    './components/movement-detail-med-and-up/movement-detail-med-and-up.component';
 import { NewMovementComponent } from               './components/new-movement/new-movement.component';
+import { MovementDetailComponent } from            './components/movement-detail/movement-detail.component';
+import { ParamsService } from                      '@services/movements/params/params.service';
+import { ParamsComponent } from './components/params/params.component';
 
 
 @NgModule({
@@ -17,13 +19,17 @@ import { NewMovementComponent } from               './components/new-movement/ne
     FormsModule,
     SharedModule,
     MovementModule,
+    CategoryModule,
     MovementsRoutes,
   ],
   declarations: [
     MovementsComponent,
-    SpinnerComponent,
-    MovementDetailMedAndUpComponent,
     NewMovementComponent,
+    MovementDetailComponent,
+    ParamsComponent,
+  ],
+  providers: [
+    ParamsService
   ]
 })
 export class MovementsModule { }

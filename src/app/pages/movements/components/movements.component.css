@@ -1,41 +1,57 @@
-.stickyOptions {
-  position: -webkit-sticky;
-  position: sticky;
-  padding-top: 1%;
-  top: 64px;
-  background-color: #f5f5f5;
-  z-index: 2;
-}
 .btn-filter {
-  background-color: transparent;
-  color: #212121;
-  border: 1px solid var(--orange-color);
+    margin-left: 7%;
+    background-color: transparent;
+    color: #212121;
+    border: 1px solid var(--orange-color);
 }
 
 .btn-filter:hover {
-  background-color: var(--orange-color);
-  color: #f5f5f5;
+    background-color: var(--orange-color);
+    color: #f5f5f5;
 }
 
 .collapsible-header {
-  padding: 0%;
+    padding: 0%;
+    border-bottom: 1px solid #757575;
 }
 
-.containerMovement{
-  margin: 0 auto;
-  width: 90%;
+.collapsible-body {
+    padding-bottom: 0rem;
 }
 
-.movementheader {
-  padding: 1% 0%;
-  border: 1px solid #757575;
+.btn-collapsible {
+    width: 100%;
+}
+
+.btn-collapsible:hover {
+    background-color: rgb(211, 211, 211, 0.4);
+}
+
+.containerMovement {
+    margin: 0 auto;
+    width: 90%;
 }
 
 .customComponent:hover {
-  transition: background-color .2s ease-in-out;
-  background-color: rgb(189,189,189, .2);
+    transition: background-color .2s ease-in-out;
+    background-color: rgb(189, 189, 189, .2);
 }
 
 .input-field {
-  margin:  0%;
+    margin: 0%;
+}
+
+.movementheader {
+    padding: 1% 0%;
+    border: 1px solid #757575;
+}
+
+.stickyOptions {
+    position: -webkit-sticky;
+    /* Safari */
+    position: sticky;
+    padding-top: 1%;
+    top: 64px;
+    background-color: #f5f5f5;
+    z-index: 2;
 }

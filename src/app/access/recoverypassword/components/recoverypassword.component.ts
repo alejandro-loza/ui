@@ -51,8 +51,8 @@ export class RecoverypasswordComponent implements OnInit {
         if (res['code'] == this.successCode) {
           this.router.navigate(['/access']);
           M.toast({
-            html: 'Cambo de contraseña exitoso',
-            classes: 'green'
+            html: 'Cambio de contraseña exitoso',
+            displayLength: 1500
           });
         } else{ this.failedProcess = true; }
       });
