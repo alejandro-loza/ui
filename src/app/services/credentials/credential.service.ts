@@ -23,11 +23,7 @@ export class CredentialService {
 
   getCredential( credentialId ){
     let url:string = `${ environment.backendUrl}/credentials/${ credentialId + this.DEEP_PARAM }`
-    return this.http.get( url,({ headers: this.finerio.getJsonHeaders() }) ).pipe(
-      map( res => {
-        return res as FinancialInstitution;
-      })
-    );
+    return this.http.get( url,({ headers: this.finerio.getJsonHeaders() }));
   }
 
   getAllCredentials( userId:String ){
@@ -43,29 +39,17 @@ export class CredentialService {
     let url = `${this.url }/${ userId }/credentials`;
     let postBody = JSON.stringify(credential);
     
-    return this.http.post(url, postBody, ({headers: this.finerio.getJsonHeaders() })).pipe(
-      map( res => {
-        return res;
-      })
-    );
+    return this.http.post(url, postBody, ({headers: this.finerio.getJsonHeaders() }));
   }
 
   updateCredential( credential ){
     let url = `${ environment.backendUrl }/credentials/${ credential.id }`;
-    return this.http.put( url, credential, ({ headers:this.finerio.getJsonHeaders() })).pipe(
-      map( res => {
-        return res;
-      })
-    );
+    return this.http.put( url, credential, ({ headers:this.finerio.getJsonHeaders() }));
   }
 
   deleteCredential( credentialId:string ){
     let url = `${ environment.backendUrl }/credentials/${ credentialId }`;
-    return this.http.delete( url , ({ headers: this.finerio.getJsonHeaders() })).pipe(
-      map( res => {
-        return res;
-      })
-    );
+    return this.http.delete( url , ({ headers: this.finerio.getJsonHeaders() }));
   }
 
   handleError(error: any) {

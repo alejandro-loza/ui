@@ -6,6 +6,11 @@
         <p>Para tener toda tu información financiera en un solo lugar.</p>
       </div>
   </div>
+  <div *ngIf="!institutions.length > 0" class="row">
+    <div class="col s12 center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
   <div class="row">
     <div class="col s4 m3 l2 center intitutionCol" *ngFor="let institution of institutions;">
         <a [routerLink]="['/app/bank/', institution.code ]">
