@@ -2,9 +2,10 @@ import { NgModule } from                     '@angular/core';
 import { CommonModule } from                 '@angular/common';
 import { FormsModule } from                  '@angular/forms';
 
+import { CategoriesModule } from             '@pages/categories/categories.module';
+
 import { DateApiService } from               '@services/date-api/date-api.service';
 
-import { CategoryComponent } from            '@pages/categories/component/category/category.component';
 import { DescriptionComponent } from         './description/description.component';
 import { CuentaComponent } from              './cuenta/cuenta.component';
 import { MontoComponent } from               './monto/monto.component';
@@ -14,7 +15,6 @@ import { FechaComponent } from               './fecha/fecha.component';
 
 @NgModule({
   declarations: [
-    CategoryComponent,
     DescriptionComponent,
     CuentaComponent,
     MontoComponent,
@@ -26,7 +26,6 @@ import { FechaComponent } from               './fecha/fecha.component';
     CommonModule,
     FormsModule
   ], exports: [
-    CategoryComponent,
     DescriptionComponent,
     CuentaComponent,
     MontoComponent,
