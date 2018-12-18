@@ -1,19 +1,21 @@
-import { Component,
+import { AfterContentInit,
+         Component,
+         ElementRef,
          OnInit,
+         Renderer2,
          ViewChild,
-         ElementRef, 
-         AfterContentInit} from              '@angular/core';
+         DoCheck, } from              '@angular/core';
 import { Router } from                  '@angular/router';
 import * as M from                      'materialize-css/dist/js/materialize';
-import { Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, AfterContentInit{
+export class NavbarComponent implements OnInit, DoCheck, AfterContentInit{
   @ViewChild('sidenav') elemSidenav: ElementRef;
+  @ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
   @ViewChild('collapsible') elemCollapsible: ElementRef;
   @ViewChild('chevronRight') elemIcon: ElementRef;
   value: boolean;
@@ -25,6 +27,15 @@ export class NavbarComponent implements OnInit, AfterContentInit{
   ) { }
 
   ngOnInit() { }
+
+  ngDoCheck(): void {
+    // Called every time that the input properties of a component or a directive are checked.
+    // Use it to extend change detection by performing a custom check.
+    // Add 'implements DoCheck' to the class.
+    this.renderer.listen(this.elemSidenavtrigger.nativeElement, 'click', () => {
+      this.value = true;
+    });
+  }
 
   ngAfterContentInit() {
     const initSidenav = new M.Sidenav(this.elemSidenav.nativeElement, {
