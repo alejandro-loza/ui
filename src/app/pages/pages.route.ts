@@ -31,16 +31,8 @@ const PagesRouting: Routes = [
         loadChildren: './credential/credential.module#CredentialModule'
       },
       {
-        path: 'credentials/:credencialId',
-        loadChildren: './credential-details/credential-details.module#CredentialDetailsModule'
-      },
-      {
         path: 'banks',
-        loadChildren: './banks/banks.module#BanksModule'
-      },
-      {
-        path: 'bank/:bankCode',
-        loadChildren: './bank/bank.module#BankModule'
+        loadChildren: './banks-list/banks.module#BanksModule'
       },
       {
         path: '',
