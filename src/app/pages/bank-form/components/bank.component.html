@@ -7,7 +7,7 @@
             <p>Introduce tus claves de acceso a <b>banca en línea</b></p>
         </div>
     </div>
-    <div *ngIf="!fields.length > 0 || showSpinner" class="container">
+    <div *ngIf="showSpinner" class="container">
         <div class="row">
             <div class="col s12 center">
                 <app-spinner></app-spinner>
