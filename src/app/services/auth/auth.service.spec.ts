@@ -62,7 +62,6 @@ describe('AuthService', () => {
       });
       const req = http.expectOne(`${environment.backendUrl}/login`);
       expect(req.request.method).toEqual('POST');
-      console.log(req);
       expect(authService).toBeTruthy();
     });
   });
