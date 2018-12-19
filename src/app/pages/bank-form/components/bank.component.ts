@@ -41,6 +41,7 @@ export class BankComponent implements OnInit {
         res.forEach(fieldBank => {
           this.fields.push(fieldBank);
         });
+        console.log( res  );
       }
     );
   }

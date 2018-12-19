@@ -23,10 +23,11 @@
                         type="{{ field.type }}"
                         class="{{ field.institutionId }}"
                         placeholder="{{ field.friendlyName }}"
-                        name="{{ field.name }}" required>
+                        name="{{ field.name }}"
+                        [required]="field.name != 'sec_code'">
                 </div>
                 <p>
-                    <a class="py-10" href="">
+                    <a class="py-10">
                         ¿Qué claves de acceso y porqué las pedimos?
                     </a>
                 </p>

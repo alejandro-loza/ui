@@ -5,7 +5,6 @@ import { Response } from '@shared/dto/credentials/response';
 import { ConfigService } from '../config/config.service';
 import { map, catchError } from 'rxjs/operators';
 import { Credential } from '@shared/dto/credentials/credential';
-import { FinancialInstitution } from '@shared/dto/credentials/financialInstitution';
 
 
 @Injectable({
@@ -43,8 +42,10 @@ export class CredentialService {
   }
 
   updateCredential( credential ){
+    let postBody = JSON.stringify( credential );
+    console.log( credential );
     let url = `${ environment.backendUrl }/credentials/${ credential.id }`;
-    return this.http.put( url, credential, ({ headers:this.finerio.getJsonHeaders() }));
+    return this.http.put( url, postBody, ({ headers:this.finerio.getJsonHeaders() }));
   }
 
   deleteCredential( credentialId:string ){

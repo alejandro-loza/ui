@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Credential } from "@shared/dto/credentials/credential";
 import { environment } from '@env/environment';
 import { ConfigService } from "@services/config/config.service";
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class InteractiveFieldService {
@@ -15,17 +14,8 @@ export class InteractiveFieldService {
     let params:HttpParams = new HttpParams();
     params = params.append("credentialId", `${ credential.id }` );
     
-    return this.http.get( url, ({ headers: this.finerioService.getJsonHeaders(), params: params }) ).pipe(
-      map( res => {
-        return res;
-      })
-    );
+    return this.http.get( url, ({ headers: this.finerioService.getJsonHeaders(), params: params }) );
   }
-  //{ "credentialId":"0e148771-09d5-4088-be4a-ea4d608ef1d1",
-  //  "interactiveFields":{
-  //            "token":"askldañlsdñalsdñalskd"
-  //   }
-  // }
 
   sendToken( credential:Credential, data:any ){
     let url = `${environment.backendUrl}/interactiveField/send`;  

@@ -13,9 +13,9 @@ import { CREDENTIAL_ROUTES } from './credential.route';
 @NgModule({
   imports: [
     CommonModule,
-    CREDENTIAL_ROUTES,
     SharedModule,
-    FormsModule
+    FormsModule,
+    CREDENTIAL_ROUTES,
   ],
   declarations: [ CredentialComponent ]
 })
