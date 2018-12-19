@@ -20,7 +20,7 @@ export class BankComponent implements OnInit {
   institutions: FinancialInstitution[] = [];
   credential: Credential;
   fields: institutionField[];
-  showSpinner:boolean = false
+  showSpinner:boolean = true;
 
   constructor(private field: FieldService, private activated: ActivatedRoute,
     private credentialService: CredentialService, private router: Router) {
@@ -41,6 +41,7 @@ export class BankComponent implements OnInit {
         res.forEach(fieldBank => {
           this.fields.push(fieldBank);
         });
+        res.length > 0 ? this.showSpinner = false : null
       }
     );
   }
