@@ -2,54 +2,45 @@ import { AfterContentInit,
          Component,
          ElementRef,
          OnInit,
-         Renderer2,
          ViewChild,
-         DoCheck, } from              '@angular/core';
-import { Router } from                  '@angular/router';
-import * as M from                      'materialize-css/dist/js/materialize';
+         Renderer2, } from      '@angular/core';
+import { ActivationEnd,
+         Router, } from         '@angular/router';
+import { filter,
+         map } from             'rxjs/operators';
+import * as M from              'materialize-css/dist/js/materialize';
+
+declare var $: any;
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, DoCheck, AfterContentInit{
+export class NavbarComponent implements OnInit, AfterContentInit{
   @ViewChild('sidenav') elemSidenav: ElementRef;
   @ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
   @ViewChild('collapsible') elemCollapsible: ElementRef;
   @ViewChild('chevronRight') elemIcon: ElementRef;
   value: boolean;
+  titlePage: string;
 
 
   constructor(
+    private renderer: Renderer2,
     private router: Router,
-    private renderer: Renderer2
-  ) { }
+  ) {
+    this.getDataRoute().subscribe( res => {
+      this.titlePage = res.title;
+    });
+  }
 
   ngOnInit() { }
 
-  ngDoCheck(): void {
-    // Called every time that the input properties of a component or a directive are checked.
-    // Use it to extend change detection by performing a custom check.
-    // Add 'implements DoCheck' to the class.
-    this.renderer.listen(this.elemSidenavtrigger.nativeElement, 'click', () => {
-      this.value = true;
-    });
-  }
-
   ngAfterContentInit() {
-    const initSidenav = new M.Sidenav(this.elemSidenav.nativeElement, {
-      onOpenStart: () => {
-        this.renderer.setStyle(this.elemSidenav.nativeElement, 'width', '128px');
-      }
-    });
+    const initSidenav = new M.Sidenav(this.elemSidenav.nativeElement, { });
+    const instanceSidenav = M.Sidenav.getInstance(this.elemSidenav.nativeElement);
     const initCollapsible = new M.Collapsible(this.elemCollapsible.nativeElement, {});
-  }
-
-  iconCollapsible() {
-    this.renderer.listen(this.elemCollapsible.nativeElement, 'click', () => {
-      console.log('Hiciste click');
-    });
   }
 
   logout() {
@@ -57,7 +48,12 @@ export class NavbarComponent implements OnInit, DoCheck, AfterContentInit{
     this.router.navigate(['/access/login']);
   }
 
-  showValue(flag: boolean) {
-    this.value = flag;
+  getDataRoute() {
+    return this.router.events.pipe(
+      filter( event => event instanceof ActivationEnd ),
+      filter( (event: ActivationEnd) => event.snapshot.firstChild === null),
+      map( (event: ActivationEnd) => event.snapshot.data )
+    );
   }
+
 }
