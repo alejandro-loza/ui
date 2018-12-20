@@ -42,19 +42,11 @@ const PagesRouting: Routes = [
         }
       },
       {
-        path: 'credentials/:credencialId',
-        loadChildren: './credential-details/credential-details.module#CredentialDetailsModule'
-      },
-      {
         path: 'banks',
-        loadChildren: './banks/banks.module#BanksModule',
+        loadChildren: './banks-list/banks.module#BanksModule',
         data: {
           title: 'Bancos'
         }
-      },
-      {
-        path: 'bank/:bankCode',
-        loadChildren: './bank/bank.module#BankModule'
       },
       {
         path: '',

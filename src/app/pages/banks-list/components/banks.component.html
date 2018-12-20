@@ -6,9 +6,14 @@
         <p>Para tener toda tu información financiera en un solo lugar.</p>
       </div>
   </div>
+  <div *ngIf="institutions.length == 0" class="row">
+    <div class="col s12 center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
   <div class="row">
     <div class="col s4 m3 l2 center intitutionCol" *ngFor="let institution of institutions;">
-        <a [routerLink]="['/app/bank/', institution.code ]">
+        <a (click)="institutionClick( institution )">
         <img class="imgBanks hoverable"
         src="https://cdn.finerio.mx/banks/{{institution.code + (institution.status == 'INACTIVE' ? '_gray' : '' ) +'.png'}}">
         </a>
@@ -24,7 +29,7 @@
 </div>
 <div class="container">
   <div class="row">
-    <div class="col s12 m4">
+    <div class="col s12 m4 center">
       <img width="50%" src="../../../../assets/media/img/colaborators/bbva2.png" alt="BBVA">
     </div>
     <div class="col s12 m4 center">

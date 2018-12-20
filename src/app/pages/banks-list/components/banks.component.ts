@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InstitutionService } from '@services/institution/institution.service';
+import { Router } from "@angular/router";
 import { FinancialInstitution } from '@shared/dto/credentials/financialInstitution';
 
 @Component({
@@ -9,13 +10,18 @@ import { FinancialInstitution } from '@shared/dto/credentials/financialInstituti
   providers: [ InstitutionService ]
 })
 export class BanksComponent implements OnInit {
-
   institutions:FinancialInstitution [] = [];
 
-  constructor( private intitutionService:InstitutionService) { }
+  constructor( private intitutionService:InstitutionService, private route:Router ) { }
 
   ngOnInit() {
     this.getInstitutions();
+  }   
+
+  institutionClick( institution: FinancialInstitution ){
+    if( institution.status == "ACTIVE" ){
+      this.route.navigateByUrl( '/app/banks/'+institution.code );
+    } 
   }
 
   getInstitutions(){

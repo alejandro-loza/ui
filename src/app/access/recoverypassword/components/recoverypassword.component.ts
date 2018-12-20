@@ -52,7 +52,7 @@ export class RecoverypasswordComponent implements OnInit {
           this.router.navigate(['/access']);
           M.toast({
             html: 'Cambio de contraseña exitoso',
-            displayLength: 1500
+            displayLength: 2000
           });
         } else{ this.failedProcess = true; }
       });

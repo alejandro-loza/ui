@@ -34,7 +34,6 @@ export class ForgotpasswordComponent implements OnInit{
 
   onSubmit(){
     this.passwordService.createForgotPasswordToken( this.forgotPasswordForm.value.email ).subscribe( res => {
-      console.log(res);
       res['code'] == "forgot_password_user_found" ? this.success = true : this.showErrorMessage = true
     });
   }

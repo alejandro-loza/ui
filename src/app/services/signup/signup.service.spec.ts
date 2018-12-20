@@ -46,7 +46,6 @@ describe('SignupService', () => {
 
       _signupService.signup( expectedData ) 
                     .subscribe( res => {
-                      console.log(res);
                     });
         const req = http.expectOne(`${environment.backendUrl}/users`);
         expect(req.request.method).toEqual('POST');

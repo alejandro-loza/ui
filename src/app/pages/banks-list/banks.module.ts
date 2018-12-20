@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { BanksComponent } from './components/banks.component';
 import { SharedModule } from '@shared/shared.module';
 
-
 // Routes
 import { BANKS_ROUTES } from './banks.route';
 

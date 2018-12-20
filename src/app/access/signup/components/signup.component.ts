@@ -35,7 +35,7 @@ export class SignupComponent {
       }, error => {
          M.toast({
            html: error.error.message,
-           displayLength: 1500
+           displayLength: 2000
         });
       })
     }

@@ -24,9 +24,11 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   accounts: Account[] = [];
   userId = sessionStorage.getItem("id-user");
   accountId:string;
+  accountAuxForDelete: Account;
 
   @ViewChild('modal') elModal: ElementRef;
-  @ViewChild('modal') elModal2: ElementRef;
+  @ViewChild('modal2') elModal2: ElementRef;
+
   constructor( private credentialService: CredentialService, private activated:ActivatedRoute,
                private fieldService:FieldService, private accountService:AccountService, private router:Router ) { 
                }
@@ -77,14 +79,15 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // fata pulir ========================================================================
   updateCredential( credential ){
     this.credentialService.updateCredential( credential ).subscribe( res => {
       this.router.navigateByUrl("/app/credentials");
       M.toast({
         html: 'Sincronización en proceso...',
-        displayLength: 1500
+        displayLength: 2000
       })
+    }, error => {
+    }, () => {
     })
   }
 
@@ -93,30 +96,37 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       this.router.navigateByUrl("/app/credentials");
       M.toast({
         html:"Credencial elminada correctamente",
-        displayLength: 1500
+        displayLength: 2000
       })
     }, error => {
       M.toast({
         html: 'Ocurrió un error al elminar la credencial, inténtalo mas tarde',
-        displayLength: 1500,
+        displayLength: 2000,
       });
     });
   }
 
-  deleteAccountConfirmed( account:Account ){
-    this.accountService.deleteAccount( account.id ).subscribe( res => {
-     M.toast({
-       html: 'Cuenta eliminada correctamente',
-       displayLength: 1500,
-     })
-     this.accounts = [];
-     this.getAccounts();
-    }, error => {
+  // Delete Account's process
+  deleteAccount( account:Account ){
+    this.accountAuxForDelete = account;
+    const instanceModal = M.Modal.getInstance( this.elModal2.nativeElement );
+    instanceModal.open();
+  }
+
+  deleteAccountConfirmed(){
+    this.accountService.deleteAccount( this.accountAuxForDelete.id ).subscribe( res => {
       M.toast({
-        html: 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde',
-        displayLength: 1500,
-      });
-    });
+        html: 'Cuenta eliminada correctamente',
+        displayLength: 2000,
+      })
+      this.accounts = [];
+      this.getAccounts();
+     }, error => {
+       M.toast({
+         html: 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde',
+         displayLength: 2000,
+       });
+     });
   }
 
 }

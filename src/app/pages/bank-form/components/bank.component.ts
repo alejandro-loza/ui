@@ -20,6 +20,7 @@ export class BankComponent implements OnInit {
   institutions: FinancialInstitution[] = [];
   credential: Credential;
   fields: institutionField[];
+  showSpinner:boolean = true;
 
   constructor(private field: FieldService, private activated: ActivatedRoute,
     private credentialService: CredentialService, private router: Router) {
@@ -40,11 +41,13 @@ export class BankComponent implements OnInit {
         res.forEach(fieldBank => {
           this.fields.push(fieldBank);
         });
+        res.length > 0 ? this.showSpinner = false : null
       }
     );
   }
 
   submit(form: NgForm) {
+    this.showSpinner = true;
     this.credential.username = form.value.username;
     this.credential.password = form.value.password;
     this.credential.securityCode = form.value.sec_code;
@@ -70,27 +73,4 @@ export class BankComponent implements OnInit {
     });
     return currentInstitution;
   }
-
-  /*checkCredential(credential: Credential) {
-    setTimeout(() => {
-      if ( credential.status === 'VALIDATE') {
-        console.log( "validate" );
-        this.credentialService.getCredential(credential.id);
-        clearInterval();
-        this.checkCredential(credential);
-      } else if ( credential.status === 'ACTIVE') {
-        M.toast({
-          html: "Credencial creada correctamente",
-          displayLength: 1500,
-          classes: 'green'
-        });
-      } else {
-        M.toast({
-          html: "Ocurrió un error al ligar tu cuenta",
-          displayLength: 1500,
-          classes: 'Red'
-        });
-      }
-    }, 1500);
-  }*/
 }
