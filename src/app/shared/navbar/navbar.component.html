@@ -1,9 +1,14 @@
 <header>
   <div class="navbar-fixed">
     <nav class="finerio-blue">
-      <div class="nav-wrapper center-align">
-        <img src="assets/media/img/finerio_logo/finerio_white.svg" id="finerio-logo">
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <div class="nav-wrapper">
+        <a class="brand-logo center">{{ titlePage }}</a>
+        <ul class="left hide-on-med-and-down">
+          <li>
+            <img src="assets/media/img/finerio_logo/finerio_white.svg" id="finerio-logo">
+          </li>
+        </ul>
+        <ul class="right hide-on-med-and-down">
           <li>
             <a class="white-text" (click)="logout()">
               <i class="material-icons left medium">exit_to_app</i>Cerrar Sesion
@@ -19,20 +24,20 @@
     </nav>
   </div>
 </header>
-<ul id="slide-out" class="sidenav sidenav-fixed finerio-blue white-text" #sidenav>
+
+<ul id="slide-out" class="sidenav sidenav-fixed finerio-blue white-text z-depth-0" #sidenav>
   <app-link [icon]="'chart-donut'" [route]="'Dashboard'" [nombre]="'Dashboard'"></app-link>
   <app-link [icon]="'format-list-bulleted'" [route]="'Movements'" [nombre]="'Movimientos'"></app-link>
   <app-link [icon]="'chart-bar'" [route]="'Budgets'" [nombre]="'Presupuestos'"></app-link>
   <app-link [icon]="'credit-card'" [route]="'Credentials'" [nombre]="'Cuentas Bancarias'"></app-link>
   <app-link [icon]="'label'" [route]="'Categories'" [nombre]="'Categorías'"></app-link>
-  <app-link [icon]="'cash'" [route]="'Saving'" [nombre]="'Ahorros'"></app-link>
-  <li>
+
+  <li class="hide-on-large-only">
     <ul class="collapsible collapsible-accordion" #collapsible>
       <li>
         <div class="collapsible-header finerio-blue">
           <div class="pages-list valign-wrapper">
-            <i class="mdi mdi-48px mdi-face left icon-list"></i>
-            Perfil
+            <i class="mdi mdi-48px mdi-face left icon-list"></i> Perfil
             <i class="mdi mdi-36px mdi-chevron-up right"></i>
           </div>
         </div>
