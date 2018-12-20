@@ -1,34 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-<<<<<<< HEAD
-:root {
-  --Navyblue-color: #1D3865;
-  --orange-color: #EE883A;
-  --padding-left: 128px;
-}
-
-header,
-main,
-footer {
-    padding-left: var(--padding-left);
-}
-
-main {
-    padding-bottom: 20px;
-=======
-
 body,
 html {
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
-    min-height: 100%;
+    font-family: 'Roboto', sans-serif;
 }
 
 :root {
     --navyblue-color: #18537b;
     --orange-color: #EE883A;
-    --paddingPages: 300px;
->>>>>>> 8173dca52dea7d0ca95e4e04f72a3e5135913025
+    --paddingPages: 128px;
 }
 
 .finerio-blue-text {
@@ -50,11 +31,6 @@ html {
 }
 
 .waves-effect.waves-blue .waves-ripple {
-<<<<<<< HEAD
-  /* The alpha value allows the text and background color
-  of the button to still show through. */
-  background-color: rgba(30, 136, 229, 0.65);
-=======
     /* The alpha value allows the text and background color
     of the button to still show through. */
     background-color: rgba(30, 136, 229, 0.65);
@@ -79,7 +55,6 @@ html {
 .inputMovement {
     border-bottom: none !important;
     height: 100% !important;
->>>>>>> 8173dca52dea7d0ca95e4e04f72a3e5135913025
 }
 
 input:not([type]):focus:not([readonly]),
@@ -114,36 +89,10 @@ textarea.materialize-textarea:focus:not([readonly])+label {
     background-color: var(--orange-color) !important;
 }
 
-<<<<<<< HEAD
-.material-icons.md-24 {
-  font-size: 24px;
-}
-
-.material-icons.md-36 {
-  font-size: 36px;
-}
-
-.material-icons.md-48 {
-  font-size: 48px;
-}
-
-.inputMovement {
-  border-bottom: none !important;
-  height: 100% !important;
-}
-
-@media only screen and (max-width: 992px) {
-    header,
-    main,
-    footer {
-        padding-left: 0;
-    }
-=======
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0;
     /* <-- Apparently some margin are still there even though it's hidden */
->>>>>>> 8173dca52dea7d0ca95e4e04f72a3e5135913025
 }
