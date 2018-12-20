@@ -28,8 +28,7 @@
 }
 
 .containerMovement {
-    margin: 0 auto;
-    width: 90%;
+    padding: 0% 2%;
 }
 
 .customComponent:hover {
