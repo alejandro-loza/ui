@@ -8,27 +8,38 @@ const PagesRouting: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadChildren: './dashboard/dashboard.module#DashboardModule'
+        loadChildren: './dashboard/dashboard.module#DashboardModule',
+        data: {
+          title: 'Dashboard'
+        }
       },
       {
         path: 'budgets',
-        loadChildren: './budgets/budgets.module#BudgetsModule'
+        loadChildren: './budgets/budgets.module#BudgetsModule',
+        data: {
+          title: 'Presupuesto'
+        }
       },
       {
         path: 'movements',
-        loadChildren: './movements/movements.module#MovementsModule'
-      },
-      {
-        path: 'saving',
-        loadChildren: './saving/saving.module#SavingModule'
+        loadChildren: './movements/movements.module#MovementsModule',
+        data: {
+          title: 'Movimientos'
+        }
       },
       {
         path: 'categories',
-        loadChildren: './categories/categories.module#CategoriesModule'
+        loadChildren: './categories/categories.module#CategoriesModule',
+        data: {
+          title: 'Categorias'
+        }
       },
       {
         path: 'credentials',
-        loadChildren: './credential/credential.module#CredentialModule'
+        loadChildren: './credential/credential.module#CredentialModule',
+        data: {
+          title: 'Cuentas bancarias'
+        }
       },
       {
         path: 'credentials/:credencialId',
@@ -36,7 +47,10 @@ const PagesRouting: Routes = [
       },
       {
         path: 'banks',
-        loadChildren: './banks/banks.module#BanksModule'
+        loadChildren: './banks/banks.module#BanksModule',
+        data: {
+          title: 'Bancos'
+        }
       },
       {
         path: 'bank/:bankCode',
