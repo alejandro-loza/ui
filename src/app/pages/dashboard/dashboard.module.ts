@@ -4,6 +4,8 @@ import { RouterModule } from     '@angular/router';
 
 // Component
 import { DashboardComponent } from   './component/dashboard.component';
+import { TabsComponent } from        './component/tabs/tabs.component';
+
 import { BalanceComponent } from     './balance/component/balance.component';
 import { ExpensesComponent } from    './expenses/component/expenses.component';
 import { IncomesComponent } from     './incomes/component/incomes.component';
@@ -11,7 +13,6 @@ import { DiagnosticComponent } from  './diagnostic/component/diagnostic.componen
 
 // Routes
 import { DashboardRoutes } from      './dashboard.route';
-import { TabsComponent } from './component/tabs/tabs.component';
 
 @NgModule({
   imports: [
