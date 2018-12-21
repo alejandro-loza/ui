@@ -3,7 +3,7 @@ import {
   ElementRef,
   OnInit,
   AfterViewInit,
-  ViewChild, } from '@angular/core';
+  ViewChild, } from       '@angular/core';
 
 import * as M from 'materialize-css/dist/js/materialize';
 
@@ -15,8 +15,9 @@ import * as M from 'materialize-css/dist/js/materialize';
 })
 export class TabsComponent implements OnInit, AfterViewInit {
   @ViewChild('tabs') elementTabs: ElementRef;
+  titlePage: String;
 
-  constructor() { }
+  constructor( ) { }
 
   ngOnInit() {
   }
