@@ -1,19 +1,31 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from         '@angular/core';
+import { CommonModule } from     '@angular/common';
+import { RouterModule } from     '@angular/router';
 
 // Component
-import { DashboardComponent } from './components/dashboard.component';
+import { DashboardComponent } from   './component/dashboard.component';
+import { BalanceComponent } from     './balance/component/balance.component';
+import { ExpensesComponent } from    './expenses/component/expenses.component';
+import { IncomesComponent } from     './incomes/component/incomes.component';
+import { DiagnosticComponent } from  './diagnostic/component/diagnostic.component';
 
 // Routes
-import { DASHBOARD_ROUTES } from './dashboard.route';
+import { DashboardRoutes } from      './dashboard.route';
+import { TabsComponent } from './component/tabs/tabs.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    DASHBOARD_ROUTES
+    RouterModule,
+    DashboardRoutes,
   ],
   declarations: [
-    DashboardComponent
+    BalanceComponent,
+    DashboardComponent,
+    DiagnosticComponent,
+    ExpensesComponent,
+    IncomesComponent,
+    TabsComponent,
   ]
 })
 export class DashboardModule { }
