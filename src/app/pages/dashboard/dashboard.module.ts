@@ -13,6 +13,7 @@ import { DiagnosticComponent } from  './diagnostic/component/diagnostic.componen
 
 // Routes
 import { DashboardRoutes } from      './dashboard.route';
+import { MonthChartComponent } from './component/monthChart/month-chart.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { DashboardRoutes } from      './dashboard.route';
     ExpensesComponent,
     IncomesComponent,
     TabsComponent,
+    MonthChartComponent,
   ]
 })
 export class DashboardModule { }
