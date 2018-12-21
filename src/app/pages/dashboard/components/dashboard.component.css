@@ -1,0 +1,8 @@
+#barChartContainer{
+    display: grid;
+    height: 300px;
+}
+
+.row{
+    padding-top: 10px;
+}
