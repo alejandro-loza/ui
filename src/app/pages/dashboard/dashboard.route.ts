@@ -8,19 +8,31 @@ const DashboardRouting: Routes = [
     children: [
       {
         path: 'incomes',
-        loadChildren: './incomes/incomes.module#IncomesModule'
+        loadChildren: './incomes/incomes.module#IncomesModule',
+        data: {
+          title: 'Ingreso'
+        }
       },
       {
         path: 'expenses',
-        loadChildren: './expenses/expenses.module#ExpensesModule'
+        loadChildren: './expenses/expenses.module#ExpensesModule',
+        data: {
+          title: 'Gasto'
+        }
       },
       {
         path: 'balance',
-        loadChildren: './balance/balance.module#BalanceModule'
+        loadChildren: './balance/balance.module#BalanceModule',
+        data: {
+          title: 'Balance'
+        }
       },
       {
         path: 'diagnostic',
-        loadChildren: './diagnostic/diagnostic.module#DiagnosticModule'
+        loadChildren: './diagnostic/diagnostic.module#DiagnosticModule',
+        data: {
+          title: 'Diagnostico'
+        }
       },
     ]
   }
