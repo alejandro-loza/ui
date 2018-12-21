@@ -43,14 +43,10 @@ const PagesRouting: Routes = [
       },
       {
         path: 'banks',
-        loadChildren: './banks/banks.module#BanksModule',
+        loadChildren: './banks-list/banks.module#BanksModule',
         data: {
           title: 'Bancos'
         }
-      },
-      {
-        path: 'bank/:bankCode',
-        loadChildren: './bank/bank.module#BankModule'
       },
       {
         path: '',
