@@ -1,20 +1,23 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Renderer2,
-  AfterViewInit,
-  Output,
-  EventEmitter
-} from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { AfterViewInit,
+         Component,
+         ElementRef,
+         EventEmitter,
+         OnInit,
+         Output,
+         Renderer2,
+         ViewChild, } from       '@angular/core';
+import { NgForm } from           '@angular/forms';
 
-import { MovementsService } from '@services/movements/movements.service';
+import { ConfigService } from    '@services/config/config.service';
 import { DateApiService } from   '@services/date-api/date-api.service';
+import { MovementsService } from '@services/movements/movements.service';
+import { ToastService } from     '@services/toast/toast.service';
 
-import { ParamsMovement } from '@app/shared/interfaces/paramsMovement.interface';
-import * as M from 'materialize-css/dist/js/materialize';
+import { retry } from            'rxjs/operators';
+
+import { ParamsMovement } from   '@app/shared/interfaces/paramsMovement.interface';
+
+import * as M from               'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-new-movement',
@@ -42,9 +45,11 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   };
 
   constructor(
+    private dateApi: DateApiService,
+    private configService: ConfigService,
     private renderer: Renderer2,
     private movementService: MovementsService,
-    public dateApi: DateApiService
+    private toastService: ToastService,
   ) {
     this.date = new Date();
     this.createMovementStatus = new EventEmitter();
@@ -69,42 +74,26 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.movement.duplicated = form.value.duplicated;
     this.movement.type = form.value.typeAmmount;
 
-    this.movementService.createMovement(this.movement).subscribe(
+    this.movementService.createMovement(this.movement)
+    .pipe(
+      retry(2)
+    ).subscribe(
       res => this.createMovementStatus.emit(true),
       err => {
-        M.toast({
-          html: `
-          <span>Ocurrió un error al crear tu movimiento</span>
-          <button
-            class="btn-flat toast-action"
-            onClick="
-            const toastElement = docu  ment.querySelector('.toast');
-            const toastInstance = M.Toast.getInstance(toastElement);
-            toastInstance.dismiss();">
-            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-          </button>`,
-          classes: 'red darken-2',
-          displayLength: 1500
-        });
+        if ( err.status === 401 ) {
+          this.toastService.toastCode401();
+          this.movementService.createMovement(this.movement);
+        } else {
+          this.toastService.setMessage = 'Ocurrió un error al crear tu movimiento';
+          this.toastService.toastCode400();
+        }
       },
       () => {
         form.reset();
         const instaceModal = M.Modal.getInstance(this.modalElement.nativeElement);
         instaceModal.close();
-        M.toast({
-          html: `
-          <span>Se creó su movimiento exitosamente</span>
-          <button
-            class="btn-flat toast-action"
-            onClick="
-            const toastElement = docu  ment.querySelector('.toast');
-            const toastInstance = M.Toast.getInstance(toastElement);
-            toastInstance.dismiss();">
-            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-          </button>`,
-          classes: 'grey darken-2 grey-text text-lighten-5',
-          displayLength: 1500
-        });
+        this.toastService.setMessage = 'Se creó su movimiento exitosamente';
+        this.toastService.toastCode200();
       }
     );
   }

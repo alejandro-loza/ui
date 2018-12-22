@@ -84,6 +84,6 @@ export class ConfigService {
         this.setToken = res.access_token;
         this.setRefreshToken = res.refresh_token;
       })
-    ).subscribe( res => res, err => console.error('%c Config.service.#refreshToken()', 'color: orange', err));
+    );
   }
 }

@@ -1,18 +1,17 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  Renderer2,
-  ViewChild,
-  OnDestroy
-} from                           '@angular/core';
+import { AfterViewInit,
+         Component,
+         ElementRef,
+         OnInit,
+         Renderer2,
+         ViewChild,
+         OnDestroy } from        '@angular/core';
 import { NgModel } from          '@angular/forms';
 
 import { ConfigService } from    '@services/config/config.service';
 import { DateApiService } from   '@services/date-api/date-api.service';
 import { MovementsService } from '@services/movements/movements.service';
 import { ParamsService } from    '@services/movements/params/params.service';
+import { ToastService } from     '@services/toast/toast.service';
 
 import { Movement } from         '@interfaces/movement.interface';
 import { ParamsMovement } from   '@interfaces/paramsMovement.interface';
@@ -46,11 +45,12 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
   paramsMovements: ParamsMovements;
 
   constructor(
-    public renderer: Renderer2,
-    private movementsService: MovementsService,
-    private configService: ConfigService,
-    private dateApiService: DateApiService,
-    private paramsService: ParamsService
+    public  renderer:          Renderer2,
+    private configService:     ConfigService,
+    private dateApiService:    DateApiService,
+    private movementsService:  MovementsService,
+    private paramsService:     ParamsService,
+    private toastService:      ToastService,
   ) {
     this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0 };
     this.editMovement = {
@@ -113,37 +113,12 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
         res => this.movementsList = res,
         err => {
           if (err.status === 401) {
-            this.configService.refreshToken();
-            const toastHTML =
-            `<span>Hemos actualizado tu sesión, ¡Bienvenido de nuevo!</span>
-            <button class="btn-flat toast-action" onClick="
-              const toastElement = document.querySelector('.toast');
-              const toastInstance = M.Toast.getInstance(toastElement);
-              toastInstance.dismiss();">
-              <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-            </button>`;
-            M.Toast.dismissAll();
-            M.toast({
-              html: toastHTML,
-              classes: 'light-blue darken-4',
-              displayLength: 2000
-            });
+            this.toastService.toastCode401();
+            this.getMovements(paramsMovements);
           }
           if (err.status === 500) {
-            const toastHTML =
-            `<span>¡Ha ocurrido un error al obterner tus movimiento!</span>
-            <button class="btn-flat toast-action" onClick="
-              const toastElement = document.querySelector('.toast');
-              const toastInstance = M.Toast.getInstance(toastElement);
-              toastInstance.dismiss();">
-              <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-            </button>`;
-            M.Toast.dismissAll();
-            M.toast({
-              html: toastHTML,
-              classes: 'red darken-4',
-              displayLength: 2000
-            });
+            this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.toastCode500Custom();
           }
         },
         () => {

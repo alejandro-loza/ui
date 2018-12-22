@@ -59,6 +59,7 @@ export class AuthService {
         map( (res: InfoUser) => {
           sessionStorage.setItem( 'id-user', res.id );
           this.configService.setId = res.id;
+          return res;
         })
       );
   }

@@ -1,6 +1,6 @@
-export class PasswordResetRequest{
-    email:string;
-    password:string;
-    passwordConfirmation:string;
-    token:string;
+export class PasswordResetRequest {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+  token: string;
 }
