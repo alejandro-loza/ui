@@ -54,7 +54,7 @@ export class ToastService {
     M.Toast.dismissAll();
     this.setMessage = 'Por favor verífica tu conexión de internet';
     M.toast({
-      html: `<span>${this.message}</span` + this.button,
+      html: `<span>${this.message}</span>` + this.button,
       classes: 'cyan accent-4',
       displayLength: this.displayLength
     });
@@ -67,7 +67,7 @@ export class ToastService {
   toastCode200() {
     M.Toast.dismissAll();
     M.toast({
-      html: `<span>${this.message}</span` + this.button,
+      html: `<span>${this.message}</span>` + this.button,
       classes: 'grey darken-2 grey-text text-lighten-5',
       displayLength: this.displayLength
     });
@@ -80,7 +80,7 @@ export class ToastService {
   toastCode400() {
     M.Toast.dismissAll();
     M.toast({
-      html: `<span>${this.message}</span` + this.button,
+      html: `<span>${this.message}</span>` + this.button,
       classes: 'red accent-3',
       displayLength: this.displayLength
     });
@@ -94,7 +94,7 @@ export class ToastService {
     M.Toast.dismissAll();
     this.setMessage = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!';
     M.toast({
-      html: `<span>${this.message}</span` + this.button,
+      html: `<span>${this.message}</span>` + this.button,
       classes: 'light-blue darken-4',
       displayLength: this.displayLength
     });
@@ -111,7 +111,7 @@ export class ToastService {
     M.Toast.dismissAll();
     this.setMessage = 'Ocurrió un error al querer completar la acción';
     M.toast({
-      html: `<span>${this.message}</span` + this.button,
+      html: `<span>${this.message}</span>` + this.button,
       classes: 'red accent-3',
       displayLength: this.displayLength
     });
@@ -126,7 +126,7 @@ export class ToastService {
   toastCode500Custom() {
     M.Toast.dismissAll();
     M.toast({
-      html: `<span>${this.message}</span` + this.button,
+      html: `<span>${this.message}</span>` + this.button,
       classes: 'red accent-3',
       displayLength: this.displayLength
     });
@@ -142,7 +142,7 @@ export class ToastService {
   toastCustom() {
     M.Toast.dismissAll();
     M.toast({
-      html: `<span>${this.message}</span` + this.button,
+      html: `<span>${this.message}</span>` + this.button,
       classes: this.classes,
       displayLength: this.displayLength
     });

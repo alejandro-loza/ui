@@ -87,12 +87,12 @@ export class MovementDetailComponent implements OnInit {
             this.toastService.toastCode400();
           }
           if (err.status === 500) {
-            this.toastService.setMessage = 'Ocurrió un error al borrar tu movimiento';
+            this.toastService.setMessage = 'Ocurrió un error al actualizar tu movimiento';
             this.toastService.toastCode500Custom();
           }
         },
         () => {
-          this.toastService.setMessage = 'Se borró su movimiento exitosamente';
+          this.toastService.setMessage = 'Se actualizó su movimiento exitosamente';
           this.toastService.toastCode200();
         }
       );
