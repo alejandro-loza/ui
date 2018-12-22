@@ -38,10 +38,19 @@ export class ToastService {
     this.message = message;
   }
 
+  /**
+   * @function setClasses() - Está función sirve para poder enviar clases en el toast
+   * @param classes - El parametro sirve poder enviar Las clases;
+   *
+   */
   public set setClasses( classes: string ) {
     this.classes = classes;
   }
 
+  /**
+   *  @function setClasses() - Está función sirve para poder enviar la duración del toast
+   *  @param classes - El parametro sirve poder enviar el tiempo en milisegundos;
+   */
   public set setDisplayLength( displayLength: number ) {
     this.displayLength = displayLength;
   }
