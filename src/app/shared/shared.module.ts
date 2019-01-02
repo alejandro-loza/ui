@@ -7,7 +7,7 @@ import { SocialMediaComponent } from       '@shared/social-media-button/social-m
 import { NavbarComponent } from            './navbar/navbar.component';
 import { LinkComponent } from              './navbar/link/link.component';
 import { BackButtonComponent } from        './back-button/back-button.component';
-import { SpinnerComponent } from           './spinner/spinner.component'
+import { SpinnerComponent } from           './spinner/spinner.component';
 
 @NgModule({
   imports: [

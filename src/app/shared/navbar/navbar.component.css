@@ -1,8 +1,8 @@
 .nav-wrapper {
-  padding-left: var(--paddingPages);
+  margin: 0px calc(var(--paddingPages) / 2 ) 0px var(--paddingPages);
 }
 
-.pages-list {
+.pages-list { 
   height: 64px;
   line-height: 64px;
   font-size: 16px;
@@ -51,5 +51,18 @@
   }
   .icon-list {
     line-height: 56px;
+  }
+  .brand-logo.center {
+    left: 0%;
+    margin: 0px var(--paddingPages);
+  }
+}
+
+@media only screen and (min-width: 993px) {
+  #slide-out {
+    width: 128px;
+  }
+  .sidenav {
+    margin-top: 64px;
   }
 }

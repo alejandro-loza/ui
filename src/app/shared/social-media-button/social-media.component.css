@@ -18,12 +18,20 @@
     color: #3B5998;
 }
 
-.btn-socialMedia i {
-    font-size: 1.8rem;
+.mdi {
+    margin: 0% 10px;
+}
+
+.btn {
+    margin: 1% 0%;
+    width: 50%;
 }
 
 @media only screen and (max-width: 360px) {
     .btn-socialMedia i {
         display: none;
+    }
+    .btn {
+        width: 100%;
     }
 }

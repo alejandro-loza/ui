@@ -1,11 +1,6 @@
 <div class="container-fluid">
-  <div class="row" id="barChartContainer">
-    <div *ngIf="!dataReady" class="row">
-      <div class="col s12 center">
-          <app-spinner></app-spinner>
-      </div>
-    </div>
-    <div *ngIf="dataReady" class="col s12 center">
+  <div *ngIf="dataReady" class="row">
+    <div id="barChartContainer" class="col s10 offset-s1 center">
       <ngx-charts-bar-vertical-stacked
         [scheme]="colorScheme"
         [results]="dataForBarCharts"

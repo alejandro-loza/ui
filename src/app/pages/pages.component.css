@@ -4,10 +4,6 @@ footer {
     padding-left: var(--paddingPages);
 }
 
-main {
-    padding-bottom: 20px;
-}
-
 @media only screen and (max-width: 992px) {
     header,
     main,

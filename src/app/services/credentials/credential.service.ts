@@ -43,7 +43,6 @@ export class CredentialService {
 
   updateCredential( credential ){
     let postBody = JSON.stringify( credential );
-    console.log( credential );
     let url = `${ environment.backendUrl }/credentials/${ credential.id }`;
     return this.http.put( url, postBody, ({ headers:this.finerio.getJsonHeaders() }));
   }

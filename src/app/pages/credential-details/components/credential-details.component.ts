@@ -87,7 +87,6 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
         displayLength: 2000
       })
     }, error => {
-      console.log( error );
     }, () => {
     })
   }
