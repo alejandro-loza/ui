@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login( this.usuario ).subscribe(
       res => {
+        console.log(res)
         this.router.navigate(['/access/welcome']);
       }, err => {
         if ( err.status === 0 ) {

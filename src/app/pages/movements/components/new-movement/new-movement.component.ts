@@ -92,8 +92,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
         form.reset();
         const instaceModal = M.Modal.getInstance(this.modalElement.nativeElement);
         instaceModal.close();
-        this.toastService.setMessage = 'Se creó su movimiento exitosamente';
-        this.toastService.toastCode200();
+        this.toastService.toastCode200('Se creó su movimiento exitosamente');
       }
     );
   }

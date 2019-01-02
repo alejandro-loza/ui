@@ -19,7 +19,7 @@ export class WelcomeComponent implements OnInit {
   ) {
     this.authService.personalInfo().subscribe(
       res => {
-        if ( res.accountLocked === true ) {
+        if ( res.body.accountLocked === true ) {
           this.toastService.setMessage = 'Tu cuenta está bloqueada. Si es un error,<br>por favor ponte en contacto con nosotros';
           this.toastService.setClasses = 'red darken-4';
           this.toastService.setDisplayLength = 4000;
