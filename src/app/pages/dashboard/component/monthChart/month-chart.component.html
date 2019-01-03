@@ -1,5 +1,10 @@
 <div class="container-fluid">
-  <div *ngIf="dataReady" class="row">
+  <div *ngIf="!dataReady" class="row">
+    <div class="col s12 center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+  <div *ngIf="dataForBarCharts.length > 0" class="row">
     <div id="barChartContainer" class="col s10 offset-s1 center">
       <ngx-charts-bar-vertical-stacked
         [scheme]="colorScheme"
@@ -8,12 +13,11 @@
         [xAxis]="showXAxis"
         [yAxis]="showYAxis"
         [legend]="showLegend"
+        [legendTitle]="legendTitle"
         [barPadding]="barPadding"
         [showGridLines]="showGridLines"
         [showXAxisLabel]="showXAxisLabel"
         [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
         (select)="onSelect($event)">
       </ngx-charts-bar-vertical-stacked>
     </div>
