@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  ɵConsole,
 } from '@angular/core';
 import { MovementsService } from '@services/movements/movements.service';
 import { Movement } from '@interfaces/movement.interface';
@@ -18,8 +19,8 @@ import { DateApiService } from '@services/date-api/date-api.service';
   paramsMovements = { charges: true, 
                       deep: true, 
                       deposits: true, 
-                      startDate:'2018-01-01', 
-                      endDate:'2018-12-31', 
+                      startDate:'', 
+                      endDate:'', 
                       duplicates: false, 
                       maxMovements: 150, 
                       offset: 0 };
@@ -31,18 +32,18 @@ import { DateApiService } from '@services/date-api/date-api.service';
   chargeBalanceAux:number = 0;
   depositBalanceAux:number = 0;
   dataReady:boolean = false;
+  auxForOffset:number = 0;
 
   // options
   showXAxis = true;
   showYAxis = true;
   gradient = false;
   showLegend = true;
+  legendTitle = "Gráfica mensual"
   showXAxisLabel = true;
-  xAxisLabel = '';
-  barPadding = 8;
+  barPadding = 20;
   showGridLines = true;
   showYAxisLabel = true;
-  yAxisLabel = '';
   timeline = true;
   colorScheme = {
     domain: ['#A10A28','#5AA454']
@@ -53,41 +54,51 @@ import { DateApiService } from '@services/date-api/date-api.service';
   }
 
   ngOnInit() {
-    // Primero debemos obtener las fechas de inicio y de final que queremos de los movs
-    this.getMovementsData();
+    
+    if( sessionStorage.getItem("balanceData") ){
+      this.dataForBarCharts = JSON.parse(sessionStorage.getItem("balanceData"));
+      this.dataReady = true;
+    } else {
+      this.getDatesForParams();
+      this.getMovementsData();
+    }
   }
 
-  onSelect( event ){
-    console.log( event );
+  getDatesForParams(){
+    let currentDate = new Date();
+    // END DATE
+    let endDate = this.dateApi.dateWithFormat( currentDate );
+    this.paramsMovements.endDate = endDate;
+    
+    // START DATE
+    let millisLastYear = 1000 * 60 * 60 * 24 * 336;
+    let diff = currentDate.getTime() - millisLastYear; 
+    let startDate = this.dateApi.dateWithFormat( new Date( diff ) );
+    this.paramsMovements.startDate = startDate;
   }
 
   getMovementsData(){
     this.movementsService.getMovements( this.paramsMovements ).subscribe( ( res:Movement[] ) => {
-      res.forEach( movement => {
-        this.movements.push( movement );
-      });
-      this.getFirstMonth( this.movements );
-      });
+      this.auxForOffset += 150;
+      if( res.length == this.auxForOffset  ){
+        this.paramsMovements.offset += 150;
+        this.getMovementsData();
+      } else {
+          res.forEach( movement => {
+            this.movements.push( movement );
+          });
+          let firstMonth = new Date( this.movements[ this.movements.length - 1 ].customDate );
+          this.getBalances( this.movements, firstMonth.getMonth() );
+        }
+    });
   }
 
-  getFirstMonth( movements:Movement[]){
-    let lastMov = movements.length - 1; 
-
-    let date = new Date ( movements[lastMov].customDate );
-    console.log( movements[lastMov].customDate );
-    console.log( this.dateApi.dateWithFormat( date ) );
-
-    let firstMonth = new Date( movements[ lastMov ].customDate ).getUTCMonth();
-    console.log( firstMonth );
-    this.getMonthBalances( movements, firstMonth );
-  }
-
-  getMonthBalances( movements:Movement[], month:number ){
+  getBalances( movements:Movement[], month:number ){
     this.chargeBalanceAux = 0; this.depositBalanceAux = 0;
     movements.forEach( movement => {
-      let auxDate = new Date ( movement.customDate );
+      let movementDate = new Date ( movement.customDate );
 
-      if( auxDate.getMonth() == month ){
+      if( movementDate.getMonth() == month ){
         if( movement.type === "CHARGE" ){
           this.chargeBalanceAux += movement.amount; 
         }
@@ -99,12 +110,28 @@ import { DateApiService } from '@services/date-api/date-api.service';
 
     let ahorro = this.depositBalanceAux - this.chargeBalanceAux;
     ahorro < 0 ? ahorro = 0 : ahorro = ahorro
+
     this.dataProcess( month, this.chargeBalanceAux, ahorro );
 
-    if( month < 11 ){
-      this.getMonthBalances( movements, month + 1 );
+    let starterYear  = new Date( movements[ movements.length -1 ].customDate ).getFullYear();
+    let lastMonth = new Date( movements[0].customDate ).getMonth();
+   
+    // SAME YEAR DATA
+    if( starterYear == new Date().getUTCFullYear() ){
+      if( lastMonth > month ){
+       this.getBalances( movements, month + 1 );
+      }
+    }
+    // DATA OF PREVIOUS YEAR
+    if ( starterYear < new Date().getUTCFullYear() ) {
+      if( lastMonth != month ){
+        month == 11 ? this.getBalances( movements, 0 ) : this.getBalances( movements, month + 1)
+      }
     }
     this.dataReady = true;
+
+    // SAVING THE DATA ON SESSIONSTORAGE
+    sessionStorage.setItem("balanceData", JSON.stringify(this.dataForBarCharts) );
   }
 
   dataProcess( monthNumber:number, gastosValue:number, ahorroValue:number ){
@@ -120,7 +147,17 @@ import { DateApiService } from '@services/date-api/date-api.service';
                                   { name:"Ahorro", value : ahorroValue } 
                                 ]
     });
-    //console.log( this.dataForBarCharts );
+  }
+
+  onSelect( event ){
+    let monthSelected:string = event.series;
+    
+    this.dataForBarCharts.forEach( serie => {
+      if( serie.name == monthSelected ){
+        console.log("Gastos", serie.series[0].value );
+        console.log("Ahorro", serie.series[1].value );
+      }
+    });
   }
     
 }

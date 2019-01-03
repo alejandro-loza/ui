@@ -122,7 +122,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
       } else if( this.credentialInProcess.status === "INVALID" ){
         this.loaderMessagge = "¡Ha ocurrido algo con una de tus credenciales!";
-        this.validateStatusFinished = false;
+        this.validateStatusFinished = true;
         this.getCredentials();
       }
     })

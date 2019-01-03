@@ -29,12 +29,10 @@ export class DateApiService {
   }
 
   dateWithFormat( date:Date ){
-
     const newdate = new Date(date).getDate();
     const datevalue = (Array(2 + 1).join('0') + newdate).slice(-2);
-
     const dateAPI = `${date.getFullYear()}-${date.getMonth() + 1}-${datevalue}`
-
+    
     return dateAPI;
   }
 }
