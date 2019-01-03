@@ -10,7 +10,7 @@ export class Account {
     dateCreated: Date;
     lastUpdated: Date;
     balance: number;
-    nature:string;
+    nature: string;
     pendingDepositAmount: number;
     pendingChargeAmount: number;
     lastBalance: number;
@@ -20,7 +20,7 @@ export class Account {
     }
 
     static reviver(key: any, value: any): any {
-         if(key === 'dateCreated' || key === 'lastPaymentDate' || key === 'paymentDueDate' || key === 'lastUpdated'){
+         if (key === 'dateCreated' || key === 'lastPaymentDate' || key === 'paymentDueDate' || key === 'lastUpdated'){
              return new Date(value);
          }
         return value;
