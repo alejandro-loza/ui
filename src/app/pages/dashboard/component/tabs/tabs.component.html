@@ -1,17 +1,17 @@
 <div class="row">
   <div class="col colTabs s12">
     <ul class="tabs" #tabs>
-      <li class="tab col s3">
-        <a href="#incomes">Ingresos</a>
+      <li routerLinkActive="active" class="tab col s3">
+        <a routerLink="incomes">Ingresos</a>
+      </li>
+      <li routerLinkActive="active" class="tab col s3">
+        <a class="active" routerLink="expenses">Gasto</a>
       </li>
       <li class="tab col s3">
-        <a class="active" href="#expenses">Gasto</a>
+        <a routerLinkActive="active" routerLink="balance">Balance</a>
       </li>
-      <li class="tab col s3">
-        <a href="#balance">Balance</a>
-      </li>
-      <li class="tab col s3 disabled">
-        <a href="#diagnostic">Diagnóstico</a>
+      <li routerLinkActive="active" class="tab col s3 disabled">
+        <a routerLink="diagnostic">Diagnóstico</a>
       </li>
     </ul>
   </div>
