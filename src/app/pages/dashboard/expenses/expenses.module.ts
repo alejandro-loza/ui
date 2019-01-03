@@ -8,6 +8,9 @@ import { ExpensesRoutes } from       './expenses.routes';
   imports: [
     CommonModule,
     ExpensesRoutes
+  ],
+  exports: [
+    ExpensesComponent
   ]
 })
 export class ExpensesModule { }
