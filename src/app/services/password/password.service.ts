@@ -1,52 +1,44 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { PasswordResponse } from '../../shared/dto/passwordResponse';
-import { PasswordResetRequest } from '../../shared/dto/recoveryPasswordRequestDto';
-import { EmailObj } from '../../shared/dto/emailObj';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { PasswordResponse } from '../../shared/interfaces/passwordResponse.interface';
+import { PasswordResetRequest } from '../../shared/interfaces/passwordResetRequest.interface';
 import { environment } from '@env/environment';
-import { map, catchError } from 'rxjs/operators';
+import { ConfigService } from '@services/config/config.service';
+import { Observable } from 'rxjs';
+
+interface ValidateToken {
+  email: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class PasswordService {
+  private url: string = `${environment.newBackendUrl}/password`;
 
-  url:string = environment.newBackendUrl;
-  headers = new HttpHeaders();
+  constructor(private http: HttpClient, private configService: ConfigService) {}
 
-  constructor( private http: HttpClient ) {
-    this.headers.append('Content-Type', 'application/json;charset=UTF-8');
-    this.headers.append('Accept', 'application/json;charset=UTF-8');
-  }
-
-  createForgotPasswordToken( email:string ){
-    return this.http.get(`${ this.url }/password/createForgotPasswordToken?email=${email}`).pipe(
-      map( res => {
-          return res as PasswordResponse
-      }), catchError( this.handleError )
+  createForgotPasswordToken(
+    email: string
+  ): Observable<HttpResponse<PasswordResponse>> {
+    return this.http.get<PasswordResponse>(
+      `${this.url}/createForgotPasswordToken?email=${email}`,
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
   }
 
-  validateToken(token:string){
-    return this.http.get(`${ this.url }/password/getEmailAndValidateToken?token=${token}`).pipe(
-      map( res =>{
-        return res as EmailObj
-      }),catchError( this.handleError )
+  validateToken(token: string): Observable<HttpResponse<ValidateToken>> {
+    return this.http.get<ValidateToken>(
+      `${this.url}/getEmailAndValidateToken?token=${token}`,
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
-  }   
-  
-  resetPassword( passwordReset:PasswordResetRequest ){
-    return this.http.post(`${this.url}/password/setNewPassword`, passwordReset , ({ headers: this.headers})).pipe(
-          map( res => {
-            return res as PasswordResetRequest
-          }), catchError( this.handleError )
-        );      
   }
 
-  handleError(error: any) {
-    let errMsg = (error.message) ? error.message :
-        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    return errMsg
+  resetPassword( passwordReset: PasswordResetRequest ): Observable<HttpResponse<PasswordResetRequest>> {
+    return this.http.post<PasswordResetRequest>(
+      `${this.url}/setNewPassword`,
+      passwordReset,
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
+    );
   }
 }

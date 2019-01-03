@@ -1,4 +1,4 @@
 export class Response {
-    data:Object;
-    size:number;
+    data: Object;
+    size: number;
 }

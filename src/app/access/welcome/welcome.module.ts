@@ -3,6 +3,8 @@ import { CommonModule } from         '@angular/common';
 
 import { WelcomeComponent } from     './components/welcome.component';
 import { WelcomeRoutes } from        './welcome.routes';
+import { AuthService } from          '@services/services.index';
+
 
 @NgModule({
   imports: [
@@ -11,6 +13,9 @@ import { WelcomeRoutes } from        './welcome.routes';
   ],
   declarations: [
     WelcomeComponent
+  ],
+  providers: [
+    AuthService
   ]
 })
 export class WelcomeModule { }

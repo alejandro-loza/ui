@@ -13,9 +13,9 @@ import { ForgotpasswordComponent } from './components/forgotpassword.component';
 @NgModule({
   imports: [
     CommonModule,
-    FORGOT_PASS_ROUTES,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    FORGOT_PASS_ROUTES,
   ],
   declarations: [
     ForgotpasswordComponent

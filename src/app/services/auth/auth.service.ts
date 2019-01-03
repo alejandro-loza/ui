@@ -10,6 +10,7 @@ import { InfoUser } from '@interfaces/infoUser.interface';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { RefreshToken } from '@interfaces/refreshToken.interface';
 
 @Injectable()
 export class AuthService {
@@ -41,18 +42,18 @@ export class AuthService {
     this.configService.setRefreshToken = refresh_token;
   }
 
-  login(user: User) {
+  login(user: User): Observable<HttpResponse<RefreshToken>> {
     return this.httpClient
-      .post<User>(
+      .post<RefreshToken>(
         this.url,
         JSON.stringify({ username: user.email, password: user.password }),
-        { headers: this.configService.getJsonHeaders() }
+        { observe: 'response', headers: this.configService.getJsonHeaders() }
       )
       .pipe(
-        map((res: any) => {
-          this.saveData(res.access_token, res.refresh_token);
+        map(res => {
+          this.saveData(res.body.access_token, res.body.refresh_token);
           this.getData();
-          return true;
+          return res;
         })
       );
   }
@@ -64,8 +65,7 @@ export class AuthService {
         headers: this.configService.getJsonHeaders()
       })
       .pipe(
-        map( res => {
-          console.log(res)
+        map(res => {
           sessionStorage.setItem('id-user', res.body.id);
           this.configService.setId = res.body.id;
           return res;

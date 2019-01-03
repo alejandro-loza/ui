@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { PasswordResetRequest } from '@shared/dto/recoveryPasswordRequestDto.ts';
+import { PasswordResetRequest } from '@interfaces/passwordResetRequest.interface';
 import { PasswordService } from '@services/password/password.service';
 import * as M from 'materialize-css/dist/js/materialize';
 import { ToastService } from '@services/toast/toast.service';
+import { ToastInterface } from '@interfaces/toast.interface';
 
 @Component({
   selector: 'app-recoverypassword',
   templateUrl: './recoverypassword.component.html',
-  styleUrls: ['./recoverypassword.component.css'],
-  providers: [PasswordService]
+  styleUrls: ['./recoverypassword.component.css']
 })
 export class RecoverypasswordComponent implements OnInit {
   passwordReset: PasswordResetRequest;
@@ -20,8 +20,9 @@ export class RecoverypasswordComponent implements OnInit {
   });
   showErrorMessage: boolean = false;
   invalidToken: boolean = false;
-  successCode: string = 'forgotPasswordService_setNewPassword_success';
   failedProcess: boolean = false;
+
+  toastInterface: ToastInterface;
 
   constructor(
     private router: Router,
@@ -29,7 +30,13 @@ export class RecoverypasswordComponent implements OnInit {
     private passwordService: PasswordService,
     private toastService: ToastService
   ) {
-    this.passwordReset = new PasswordResetRequest();
+    this.passwordReset = {
+      email: null,
+      password: null,
+      passwordConfirmation: null,
+      token: null
+    };
+    this.toastInterface = { classes: null, code: null, message: null };
   }
 
   ngOnInit() {
@@ -43,49 +50,46 @@ export class RecoverypasswordComponent implements OnInit {
     this.passwordService
       .validateToken(this.passwordReset.token)
       .subscribe(res => {
-        !res['email']
+        !res.body.email
           ? (this.invalidToken = true)
-          : (this.passwordReset.email = res['email']);
+          : (this.passwordReset.email = res.body.email);
       });
   }
 
   onSubmit() {
     this.passwordReset.password = this.recoveryPasswordGroup.value.password;
     this.passwordReset.passwordConfirmation = this.recoveryPasswordGroup.value.passwordConfirm;
-
-    if (this.validatePasswords()) {
+    if (
+      this.passwordReset.password === this.passwordReset.passwordConfirmation
+    ) {
       this.passwordService.resetPassword(this.passwordReset).subscribe(
-      res => {
-      if (res['code'] === this.successCode) {
-        this.toastService.setMessage = 'Cambio de contraseña exitoso';
-        this.toastService.toastCode200();
-        this.router.navigate(['/access']);
-        } else {
+        res => {
+          this.toastInterface = {
+            code: res.status,
+            message: '!Cambio de contraseña exitoso¡'
+          };
+          this.toastService.toastGeneral(this.toastInterface);
+          this.router.navigate(['/access']);
+        },
+        err => {
+          console.error(err);
+          this.toastInterface.code = err.status;
+          if (err.status === 0) {
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+          if (err.status === 400) {
+            this.toastInterface.message = 'Por favor llena los campos';
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+          if (err.status === 500) {
+            this.toastInterface.message = 'Ocurrió un error al querer cambiar tu contraseña';
+            this.toastService.toastGeneral(this.toastInterface);
+          }
           this.failedProcess = true;
         }
-      }, err => {
-        if ( err.status === 0 ) {
-          this.toastService.toastCode0();
-        }
-        if ( err.status === 400 ) {
-          this.toastService.setMessage = 'Te falto llenar un campo del formulario';
-          this.toastService.setClasses = 'orange darken-2';
-          this.toastService.toastCustom();
-        }
-        if ( err.status === 500) {
-          this.toastService.toastCode500();
-        }
-      });
-    }
-  }
-
-  validatePasswords() {
-    let password = this.recoveryPasswordGroup.value.password;
-    let passwordConfirm = this.recoveryPasswordGroup.value.passwordConfirm;
-
-    if (password == passwordConfirm) {
-      return true;
+      );
     } else {
+      console.error('error showErrorMessage');
       this.showErrorMessage = true;
     }
   }

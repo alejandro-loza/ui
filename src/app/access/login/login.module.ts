@@ -8,6 +8,9 @@ import { LoginRoutes } from                         './login.route';
 import { LoginComponent } from                       './components/login.component';
 import { RegisterLoginComponent } from               '@components/register-login-button/register-login.component';
 
+import { AuthService } from                         '@services/auth/auth.service';
+import { ToastService } from                        '@services/toast/toast.service';
+
 @NgModule({
   imports: [
     SharedModule,
@@ -18,6 +21,10 @@ import { RegisterLoginComponent } from               '@components/register-login
   declarations: [
     LoginComponent,
     RegisterLoginComponent
+  ],
+  providers: [
+    AuthService,
+    ToastService
   ]
 })
 export class LoginModule { }

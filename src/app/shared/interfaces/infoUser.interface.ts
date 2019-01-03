@@ -1,4 +1,3 @@
-import { User } from         '@interfaces/authLogin.interface';
 import { Info } from         '@interfaces/info.interface';
 
 export interface InfoUser {
@@ -6,7 +5,7 @@ export interface InfoUser {
   accountLocked:              boolean;
   customerId:                 number;
   dateCreated:                Date;
-  email:                      User[ 'email' ];
+  email:                      string;
   enabled:                    boolean;
   id:                         string;
   lastUpdated:                Date;

@@ -15,8 +15,8 @@ import { SignupService } from '../../services/signup/signup.service';
   imports: [
     FormsModule,
     SharedModule,
+    ReactiveFormsModule,
     SIGNUP_ROUTES,
-    ReactiveFormsModule
   ],
   declarations: [
     SignupComponent
