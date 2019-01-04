@@ -45,9 +45,9 @@ export class ToastService {
         this.classes = 'red accent-3';
         break;
       case 401:
-        ( toastParams.message !== null ) ? this.message = toastParams.message : this.message = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!';
-        this.classes = 'light-blue darken-4';
-        this.configService.refreshToken();
+      this.configService.refreshToken();
+      ( toastParams.message !== null ) ? this.message = toastParams.message : this.message = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!';
+      this.classes = 'light-blue darken-4';
         break;
         case 422:
         this.message = toastParams.message;

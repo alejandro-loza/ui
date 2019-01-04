@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '@services/auth/auth.service';
 import { ToastService } from '@services/toast/toast.service';
+import { ConfigService } from '@services/config/config.service';
 
 import { ToastInterface } from '@interfaces/toast.interface';
 
@@ -16,6 +17,7 @@ export class PagesComponent implements OnInit {
   toastInterface: ToastInterface;
   constructor(
     private authService: AuthService,
+    private configService: ConfigService,
     private toastService: ToastService
   ) {
     this.toastInterface = {

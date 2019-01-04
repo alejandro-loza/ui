@@ -19,6 +19,10 @@ export class ParamsService {
     };
   }
 
+  public get getParamsMovements(): ParamsMovements {
+    return this.paramsMovements;
+  }
+
   public set setCharges( charges: boolean ) {
     this.paramsMovements.charges = charges;
   }

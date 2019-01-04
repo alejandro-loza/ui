@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment.prod';
 
-import { map } from 'rxjs/operators';
+import { map, retry } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { isNullOrUndefined } from 'util';
@@ -14,7 +14,6 @@ import { RefreshToken } from '@interfaces/refreshToken.interface';
 })
 export class ConfigService {
   private headers: HttpHeaders;
-  private url = `${environment.apiUrl}/oauth/access_token`;
   token_access: string;
   token_refresh: string;
   idUser: string;
@@ -53,11 +52,11 @@ export class ConfigService {
   getJsonHeaders() {
     this.headers = this.headers.append(
       'Content-Type',
-      'application/json;charset=UTF-8'
+      'application/json'
     );
     this.headers = this.headers.append(
       'Accept',
-      'application/json;charset=UTF-8'
+      'application/json'
     );
     /**
      * Se checa si el toquen es undefined o null.
@@ -82,6 +81,8 @@ export class ConfigService {
   }
 
   refreshToken(): Observable<HttpResponse<RefreshToken>> {
+    const url = `${environment.apiUrl}/oauth/access_token`;
+    this.headers.set('Content-Type', 'application/x-www-form-urlencoded');
     if (
       isNullOrUndefined(this.token_refresh) ||
       isNullOrUndefined(this.idUser)
@@ -91,18 +92,17 @@ export class ConfigService {
     }
     return this.httpClient
       .post<RefreshToken>(
-        this.url,
+        url,
         `grant_type=refresh_token&refresh_token=${this.getRefreshToken}`,
         {
           observe: 'response',
-          headers: this.headers.set(
-            'Content-Type',
-            'application/x-www-form-urlencoded'
-          )
+          headers: this.getJsonHeaders()
         }
       )
       .pipe(
+        retry(2),
         map(res => {
+          console.log('refreshToken', res);
           sessionStorage.clear();
 
           sessionStorage.setItem('access-token', res.body.access_token);
