@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment.prod';
-import { RefreshToken } from '@interfaces/refreshToken.interface';
+
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
 import { isNullOrUndefined } from 'util';
+
+import { RefreshToken } from '@interfaces/refreshToken.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -45,10 +49,18 @@ export class ConfigService {
   }
 
   getJsonHeaders() {
-    this.headers = this.headers.append('Content-Type', 'application/json;charset=UTF-8');
-    this.headers = this.headers.append('Accept', 'application/json;charset=UTF-8');
+    this.headers = this.headers.append(
+      'Content-Type',
+      'application/json;charset=UTF-8'
+    );
+    this.headers = this.headers.append(
+      'Accept',
+      'application/json;charset=UTF-8'
+    );
     /**
-     * Se checa si el toquen es undefined o null. Esto puede darse por dos circunstancias, si el token no existe es undefined,
+     * Se checa si el toquen es undefined o null.
+     * Esto puede darse por dos circunstancias,
+     * si el token no existe es undefined,
      * pero si el token expira entonces es nulo.
      */
     if (!isNullOrUndefined(this.token_access)) {
@@ -67,7 +79,7 @@ export class ConfigService {
     return this.headers;
   }
 
-  refreshToken() {
+  refreshToken(): Observable<HttpResponse<RefreshToken>> {
     if (
       isNullOrUndefined(this.token_refresh) ||
       isNullOrUndefined(this.idUser)
@@ -75,11 +87,12 @@ export class ConfigService {
       this.setRefreshToken = sessionStorage.getItem('refresh-token');
       this.setId = sessionStorage.getItem('id-user');
     }
-    this.httpClient
-      .post(
+    return this.httpClient
+      .post<RefreshToken>(
         this.url,
         `grant_type=refresh_token&refresh_token=${this.getRefreshToken}`,
         {
+          observe: 'response',
           headers: this.headers.set(
             'Content-Type',
             'application/x-www-form-urlencoded'
@@ -87,15 +100,16 @@ export class ConfigService {
         }
       )
       .pipe(
-        map((res: RefreshToken) => {
+        map(res => {
           sessionStorage.clear();
 
-          sessionStorage.setItem('access-token', res.access_token);
-          sessionStorage.setItem('refresh-token', res.refresh_token);
+          sessionStorage.setItem('access-token', res.body.access_token);
+          sessionStorage.setItem('refresh-token', res.body.refresh_token);
           sessionStorage.setItem('id-user', this.getId);
 
-          this.setToken = res.access_token;
-          this.setRefreshToken = res.refresh_token;
+          this.setToken = res.body.access_token;
+          this.setRefreshToken = res.body.refresh_token;
+          return res;
         })
       );
   }
