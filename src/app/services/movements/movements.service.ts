@@ -1,5 +1,5 @@
 import { Injectable } from              '@angular/core';
-import { HttpClient } from              '@angular/common/http';
+import { HttpClient, HttpResponse } from              '@angular/common/http';
 import { environment } from             '@env/environment';
 
 import { ConfigService } from           '@services/config/config.service';
@@ -10,6 +10,7 @@ import { Movement } from                '@interfaces/movement.interface';
 import { Movements } from               '@interfaces/movements.interface';
 
 import { map } from                     'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class MovementsService {
@@ -35,7 +36,7 @@ export class MovementsService {
    * @param duplicate : Para incluir los movimientos duplicaods
    */
 
-  getMovements ( paramsMovements: ParamsMovements ) {
+  getMovements ( paramsMovements: ParamsMovements ): Observable<HttpResponse<Movements>> {
     if ( paramsMovements.offset === 0 ) {
       this.movementsList = new Array();
     }
@@ -51,19 +52,19 @@ export class MovementsService {
       `&includeDuplicates=${ paramsMovements.duplicates }`;
     return this.httpClient.get<Movements>(
       urlMovements,
-      { headers: this.configService.getJsonHeaders()}
-    ).pipe(
-      map( (res: Movements) => {
-        if ( this.movementsList.length === res.size) {
-          return this.movementsList;
-        }
-        for (let i = 0; i < res.data.length; i++) {
-          const movement: Movement = res.data[i];
-          this.movementsList.push(movement);
-        }
-        return this.movementsList;
-      })
-    );
+      { observe: 'response', headers: this.configService.getJsonHeaders()}
+    ).pipe( map( res => {
+
+      if ( this.movementsList.length === res.body.size ) {
+        return res;
+      }
+      for (let i = 0; i < res.body.data.length; i++) {
+        const movement: Movement = res.body.data[i];
+        this.movementsList.push(movement);
+      }
+      res.body.data = this.movementsList;
+      return res;
+    }));
   }
 
   createMovement( movement: ParamsMovement ) {

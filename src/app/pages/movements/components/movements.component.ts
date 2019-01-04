@@ -110,7 +110,7 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
         retry(2)
       )
       .subscribe(
-        res => this.movementsList = res,
+        res => this.movementsList = res.body.data,
         err => {
           if (err.status === 401) {
             this.toastService.toastCode401();

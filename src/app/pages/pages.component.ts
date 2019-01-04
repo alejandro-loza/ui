@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from       '@services/auth/auth.service';
 import { ToastService } from      '@services/toast/toast.service';
 
+import { ToastInterface } from    '@interfaces/toast.interface';
+
 import { retry } from             'rxjs/operators';
-import * as M from                'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-pages',
@@ -12,27 +13,36 @@ import * as M from                'materialize-css/dist/js/materialize';
   styleUrls: ['./pages.component.css']
 })
 export class PagesComponent implements OnInit {
+  toastInterface: ToastInterface;
   constructor(
     private authService: AuthService,
     private toastService: ToastService,
-  ) {}
+  ) { }
 
   ngOnInit() {
+    this.personalInfo();
+  }
+
+  personalInfo() {
     this.authService.personalInfo()
     .pipe(
       retry(2)
     )
     .subscribe(
-      res => res,
+      res => {
+        this.toastInterface.code = res.status;
+      },
       err => {
+        this.toastInterface.code = err.status;
         if (err.status === 0) {
-          this.toastService.toastCode0();
+          this.toastService.toastGeneral(this.toastInterface);
         }
         if (err.status === 401) {
-          this.toastService.toastCode401();
+          this.toastService.toastGeneral(this.toastInterface);
         }
         if (err.status === 500) {
-          this.toastService.toastCode500();
+          this.toastInterface.message = 'Ocurrió un error al obtener tu información';
+          this.toastService.toastGeneral(this.toastInterface);
         }
       },
       () => {}
