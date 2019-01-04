@@ -1,23 +1,27 @@
-import { AfterViewInit,
-         Component,
-         ElementRef,
-         EventEmitter,
-         OnInit,
-         Output,
-         Renderer2,
-         ViewChild, } from       '@angular/core';
-import { NgForm } from           '@angular/forms';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
+import { NgForm } from '@angular/forms';
 
-import { ConfigService } from    '@services/config/config.service';
-import { DateApiService } from   '@services/date-api/date-api.service';
+import { ConfigService } from '@services/config/config.service';
+import { DateApiService } from '@services/date-api/date-api.service';
 import { MovementsService } from '@services/movements/movements.service';
-import { ToastService } from     '@services/toast/toast.service';
+import { ToastService } from '@services/toast/toast.service';
 
-import { retry } from            'rxjs/operators';
+import { ToastInterface } from '@interfaces/toast.interface';
 
-import { ParamsMovement } from   '@app/shared/interfaces/paramsMovement.interface';
+import { retry } from 'rxjs/operators';
 
-import * as M from               'materialize-css/dist/js/materialize';
+import { ParamsMovement } from '@app/shared/interfaces/paramsMovement.interface';
+
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-new-movement',
@@ -43,16 +47,17 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     duplicated: this.duplicated,
     type: this.typeIngresoGasto
   };
+  toastInterface: ToastInterface;
 
   constructor(
     private dateApi: DateApiService,
-    private configService: ConfigService,
     private renderer: Renderer2,
     private movementService: MovementsService,
-    private toastService: ToastService,
+    private toastService: ToastService
   ) {
     this.date = new Date();
     this.createMovementStatus = new EventEmitter();
+    this.toastInterface = { code: null, message: null};
   }
 
   ngOnInit() {}
@@ -74,27 +79,35 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.movement.duplicated = form.value.duplicated;
     this.movement.type = form.value.typeAmmount;
 
-    this.movementService.createMovement(this.movement)
-    .pipe(
-      retry(2)
-    ).subscribe(
-      res => this.createMovementStatus.emit(true),
-      err => {
-        if ( err.status === 401 ) {
-          this.toastService.toastCode401();
-          this.movementService.createMovement(this.movement);
-        } else {
-          this.toastService.setMessage = 'Ocurrió un error al crear tu movimiento';
-          this.toastService.toastCode400();
+    this.movementService
+      .createMovement(this.movement)
+      .pipe(retry(2))
+      .subscribe(
+        res => {
+          this.createMovementStatus.emit(true);
+          this.toastInterface.code = res.status;
+        },
+        err => {
+          this.toastInterface.code = err.status;
+          if (err.status === 401) {
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+          if (err.status === 500) {
+            this.toastInterface.message =
+              '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+        },
+        () => {
+          form.reset();
+          const instaceModal = M.Modal.getInstance(
+            this.modalElement.nativeElement
+          );
+          instaceModal.close();
+          this.toastInterface.message = 'Se creó su movimiento exitosamente';
+          this.toastService.toastGeneral(this.toastInterface);
         }
-      },
-      () => {
-        form.reset();
-        const instaceModal = M.Modal.getInstance(this.modalElement.nativeElement);
-        instaceModal.close();
-        this.toastService.toastCode200('Se creó su movimiento exitosamente');
-      }
-    );
+      );
   }
 
   valueIngresoGasto(type: string = 'CHARGE') {
@@ -111,5 +124,4 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   valueDate(date: Date) {
     this.date = date;
   }
-
 }

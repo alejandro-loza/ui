@@ -3,8 +3,8 @@ import { Component,
 import { NgForm } from                      '@angular/forms';
 import { Router } from                      '@angular/router';
 
-import { AuthService,
-         ToastService } from                '@services/services.index';
+import { AuthService } from                 '@services/auth/auth.service';
+import { ToastService } from                '@services/toast/toast.service';
 
 import { User } from                        '@interfaces/authLogin.interface';
 import { ToastInterface } from              '@interfaces/toast.interface';

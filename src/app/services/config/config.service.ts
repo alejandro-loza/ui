@@ -18,10 +18,12 @@ export class ConfigService {
   token_access: string;
   token_refresh: string;
   idUser: string;
-  deep = true;
 
   constructor(private httpClient: HttpClient) {
     this.headers = new HttpHeaders();
+    this.token_access = null;
+    this.token_refresh = null;
+    this.idUser = null;
   }
 
   public set setToken(token: string) {

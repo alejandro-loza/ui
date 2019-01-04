@@ -2,8 +2,6 @@ import { NgModule } from                     '@angular/core';
 import { CommonModule } from                 '@angular/common';
 import { FormsModule } from                  '@angular/forms';
 
-import { CategoriesModule } from             '@pages/categories/categories.module';
-
 import { DateApiService } from               '@services/date-api/date-api.service';
 
 import { DescriptionComponent } from         './description/description.component';

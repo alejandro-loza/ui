@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from  '@angular/core/testing';
 import { RouterTestingModule } from               '@angular/router/testing';
-import { MaterializeModule } from                 'ngx-materialize';
 import { SharedModule } from                      '@shared/shared.module';
 
 import { PagesComponent } from                    './pages.component';
@@ -21,7 +20,6 @@ describe('PagesComponent', () => {
       imports: [
         RouterTestingModule,
         SharedModule,
-        MaterializeModule.forRoot(),
       ],
       declarations: [ PagesComponent ]
     })

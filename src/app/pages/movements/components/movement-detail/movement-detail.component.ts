@@ -1,15 +1,12 @@
-import { Component,
-         EventEmitter,
-         Input,
-         OnInit,
-         Output } from             '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { MovementsService } from   '@services/movements/movements.service';
-import { ToastService } from       '@services/toast/toast.service';
+import { MovementsService } from '@services/movements/movements.service';
+import { ToastService } from '@services/toast/toast.service';
 
-import { ParamsMovement } from     '@interfaces/paramsMovement.interface';
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import { ToastInterface } from '@interfaces/toast.interface';
 
-import { retry } from              'rxjs/operators';
+import { retry } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movement-detail',
@@ -31,40 +28,48 @@ export class MovementDetailComponent implements OnInit {
 
   flagInfo: boolean;
 
+  toastInterface: ToastInterface;
+
   constructor(
     private movementService: MovementsService,
     private toastService: ToastService
   ) {
     this.movementStatus = new EventEmitter();
     this.ingresogastoStatus = new EventEmitter();
+    this.toastInterface = { code: null, classes: null, message: null };
   }
 
   ngOnInit() {}
 
   deleteMovement(id: string) {
-    this.movementService.deleteMovement(id)
-    .pipe( retry(2) )
-    .subscribe(
-      res => this.movementStatus.emit(true),
-      err => {
-        if ( err.status === 401) {
-          this.toastService.toastCode401();
-          this.movementService.deleteMovement(id);
+    this.movementService
+      .deleteMovement(id)
+      .pipe(retry(2))
+      .subscribe(
+        res => {
+          this.movementStatus.emit(true);
+          this.toastInterface.code = res.status;
+        },
+        err => {
+          this.toastInterface.code = err.status;
+          if (err.status === 401) {
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+          if (err.status === 404) {
+            this.toastInterface.message = 'No sé encontró tu movimiento';
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+          if (err.status === 500) {
+            this.toastInterface.message =
+              '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+        },
+        () => {
+          this.toastInterface.message = 'Se borró su movimiento exitosamente';
+          this.toastService.toastGeneral(this.toastInterface);
         }
-        if ( err.status === 404) {
-          this.toastService.setMessage = 'No sé encontró tu movimiento';
-          this.toastService.toastCode400();
-        }
-        if (err.status === 500) {
-          this.toastService.setMessage = 'Ocurrió un error al borrar tu movimiento';
-          this.toastService.toastCode500Custom();
-        }
-      },
-      () => {
-        this.toastService.setMessage = 'Se borró su movimiento exitosamente';
-        this.toastService.toastCode200();
-      }
-    );
+      );
   }
 
   ingresogastoValue(type: string) {
@@ -76,24 +81,26 @@ export class MovementDetailComponent implements OnInit {
       .updateMovement(movement)
       .pipe(retry(2))
       .subscribe(
-        res => this.movementStatus.emit(true),
+        res => {
+          this.movementStatus.emit(true);
+          this.toastInterface.code = res.status;
+        },
         err => {
-          if ( err.status === 401) {
-            this.toastService.toastCode401();
-            this.movementService.updateMovement(movement);
-          }
-          if ( err.status === 404) {
-            this.toastService.setMessage = 'No sé encontró tu movimiento';
-            this.toastService.toastCode400();
-          }
-          if (err.status === 500) {
-            this.toastService.setMessage = 'Ocurrió un error al actualizar tu movimiento';
-            this.toastService.toastCode500Custom();
+          this.toastInterface.code = err.status;
+          if (err.status === 401) {
+            this.toastService.toastGeneral(this.toastInterface);
+          } else if (err.status === 404) {
+            this.toastInterface.message = 'No sé encontró tu movimiento';
+            this.toastService.toastGeneral(this.toastInterface);
+          } else if (err.status === 500) {
+            this.toastInterface.message =
+              '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.toastGeneral(this.toastInterface);
           }
         },
         () => {
-          this.toastService.setMessage = 'Se actualizó su movimiento exitosamente';
-          this.toastService.toastCode200();
+          this.toastInterface.message = 'Se editó su movimiento exitosamente';
+          this.toastService.toastGeneral(this.toastInterface);
         }
       );
   }

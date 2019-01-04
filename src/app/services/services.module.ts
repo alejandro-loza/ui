@@ -4,11 +4,8 @@ import { CommonModule } from     '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import {
-  AuthGuard,
-  AuthService,
   ConfigService,
   DateApiService,
-  MovementsService,
   ToastService,
 } from                           './services.index';
 
@@ -18,11 +15,8 @@ import {
     HttpClientModule,
   ],
   providers: [
-    AuthGuard,
-    AuthService,
     ConfigService,
     DateApiService,
-    MovementsService,
     ToastService,
   ]
 })
