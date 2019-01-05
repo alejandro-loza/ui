@@ -7,9 +7,8 @@ import { Signup } from '@interfaces/signup.interface';
 
 import { ConfigService } from '@services/config/config.service';
 
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { InfoUser } from '@app/shared/interfaces/infoUser.interface';
+import { UserInterface } from '@interfaces/user.interface';
 
 @Injectable()
 export class SignupService {
@@ -19,7 +18,7 @@ export class SignupService {
 
   constructor(private http: HttpClient, private configService: ConfigService) {}
 
-  signup(data: Signup): Observable<HttpResponse<InfoUser>> {
+  signup(data: Signup): Observable<HttpResponse<UserInterface>> {
     const body = JSON.stringify({
       email: data.email,
       password: data.password,
@@ -29,7 +28,7 @@ export class SignupService {
     });
 
     return this.http
-      .post<InfoUser>(`${this.url}/users`, body, {
+      .post<UserInterface>(`${this.url}/users`, body, {
         observe: 'response',
         headers: this.configService.getJsonHeaders()
       });

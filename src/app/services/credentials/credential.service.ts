@@ -1,44 +1,51 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { Response } from '@shared/dto/credentials/response';
-import { ConfigService } from '../config/config.service';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { environment } from '@env/environment';
+
+import { ConfigService } from '@services/config/config.service';
+
+import { CredentialsInterface } from '@interfaces/crendetials.interface';
+import { CredentialInterface } from '@interfaces/credential.interface';
+
 import { Credential } from '@shared/dto/credentials/credential';
+
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CredentialService {
-  url: string = `${environment.backendUrl}/users`;
-  DEEP_PARAM: string = '?deep=true';
+  private url: string;
 
-  constructor(private http: HttpClient, private finerio: ConfigService) {}
-
-  getCredential(credentialId) {
-    let url: string = `${environment.backendUrl}/credentials/${credentialId +
-      this.DEEP_PARAM}`;
-    return this.http
-      .get(url, { headers: this.finerio.getJsonHeaders() })
-      .pipe(
-        map( res => {
-          console.log('getCredential -', res);
-          return res;
-        })
-      );
+  constructor(
+    private httpClient: HttpClient,
+    private configService: ConfigService
+  ) {
+    this.url = `${environment.backendUrl}/users`;
   }
 
-  getAllCredentials(userId: String) {
-    return this.http
-      .get(`${this.url}/${userId}/credentials?deep=true`, {
-        headers: this.finerio.getJsonHeaders()
-      })
-      .pipe(
-        map(res => {
-          console.log('getAllCredentials -', res);
-          return res as Response;
-        })
-      );
+  getCredential(credentialId): Observable<HttpResponse<CredentialInterface>> {
+    const url = `${
+      environment.backendUrl
+    }/credentials/${credentialId}?deep=true`;
+    return this.httpClient
+      .get<CredentialInterface>(url, {
+        observe: 'response',
+        headers: this.configService.getJsonHeaders()
+      });
+  }
+
+  getAllCredentials(
+    userId: String
+  ): Observable<HttpResponse<CredentialsInterface>> {
+    return this.httpClient.get<CredentialsInterface>(
+      `${this.url}/${userId}/credentials?deep=true`,
+      {
+        observe: 'response',
+        headers: this.configService.getJsonHeaders()
+      }
+    );
   }
 
   createCredential(credential: Credential) {
@@ -46,37 +53,27 @@ export class CredentialService {
     let url = `${this.url}/${userId}/credentials`;
     let postBody = JSON.stringify(credential);
 
-    return this.http.post(url, postBody, {
-      headers: this.finerio.getJsonHeaders()
+    return this.httpClient.post(url, postBody, {
+      headers: this.configService.getJsonHeaders()
     });
   }
 
   updateCredential(credential) {
     let postBody = JSON.stringify(credential);
     let url = `${environment.backendUrl}/credentials/${credential.id}`;
-    return this.http.put(url, postBody, {
-      headers: this.finerio.getJsonHeaders()
+    return this.httpClient.put(url, postBody, {
+      headers: this.configService.getJsonHeaders()
     });
   }
 
   deleteCredential(credentialId: string) {
     let url = `${environment.backendUrl}/credentials/${credentialId}`;
-    return this.http
-      .delete(url, { headers: this.finerio.getJsonHeaders() })
+    return this.httpClient
+      .delete(url, { headers: this.configService.getJsonHeaders() })
       .pipe(
         map(res => {
-          console.log('deleteCredential', res);
           return res;
         })
       );
-  }
-
-  handleError(error: any) {
-    let errMsg = error.message
-      ? error.message
-      : error.status
-      ? `${error.status} - ${error.statusText}`
-      : 'Server error';
-    return errMsg;
   }
 }

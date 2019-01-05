@@ -1,11 +1,11 @@
-import { FinancialInstitution } from './financialInstitution';
+import { InstitutionInterface } from '@interfaces/institution.interface';
 
-export class Credential {
+export interface Credential {
     id: number;
     securityCode: string;
     username: string;
     password: string;
-    institution: FinancialInstitution;
+    institution: InstitutionInterface;
     txDate: string;
     status: string;
     errorCode: string;

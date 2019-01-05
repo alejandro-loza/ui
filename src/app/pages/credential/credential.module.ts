@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 
@@ -12,11 +11,12 @@ import { CREDENTIAL_ROUTES } from './credential.route';
 
 @NgModule({
   imports: [
-    CommonModule,
     SharedModule,
     FormsModule,
     CREDENTIAL_ROUTES,
   ],
-  declarations: [ CredentialComponent ]
+  declarations: [
+    CredentialComponent
+  ]
 })
 export class CredentialModule { }

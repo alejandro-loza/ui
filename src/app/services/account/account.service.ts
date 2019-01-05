@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { ConfigService } from '@services/config/config.service';
-import { Response } from '@shared/dto/credentials/response';
+
 import { environment } from '@env/environment';
+
+import { ConfigService } from '@services/config/config.service';
+
+import { AccountsInterface } from '@interfaces/accounts.interface';
+
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,21 +17,21 @@ export class AccountService {
 
   constructor(private http: HttpClient, private finerio: ConfigService) {}
 
-  getAccounts(userId: string): Observable<HttpResponse<Response>> {
-    return this.http
-      .get<Response>(`${this.url}/${userId}/accounts?deep=true`, {
+  getAccounts(userId: string): Observable<HttpResponse<AccountsInterface>> {
+    return this.http.get<AccountsInterface>(
+      `${this.url}/${userId}/accounts?deep=true`,
+      {
         observe: 'response',
         headers: this.finerio.getJsonHeaders()
-      });
+      }
+    );
   }
 
-  deleteAccount(accountId: string) {
+  deleteAccount(accountId: string): Observable<HttpResponse<Account>> {
     let url = `${environment.backendUrl}/accounts/` + accountId;
-    return this.http
-      .delete(url, { headers: this.finerio.getJsonHeaders() })
-      .pipe(map(res => {
-        console.log(res);
-        return res;
-      }));
+    return this.http.delete<Account>(url, {
+      observe: 'response',
+      headers: this.finerio.getJsonHeaders()
+    });
   }
 }

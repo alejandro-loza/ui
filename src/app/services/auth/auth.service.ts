@@ -5,18 +5,17 @@ import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
 
-import { User } from '@app/shared/interfaces/authLogin.interface';
-import { InfoUser } from '@interfaces/infoUser.interface';
+import { LoginInterface } from '@interfaces/authLogin.interface';
+import { UserInterface } from '@interfaces/user.interface';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { RefreshToken } from '@interfaces/refreshToken.interface';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Injectable()
 export class AuthService {
   url = `${environment.backendUrl}/login`;
-  user: User;
+  user: LoginInterface;
 
   constructor(
     private httpClient: HttpClient,
@@ -43,7 +42,7 @@ export class AuthService {
     this.configService.setRefreshToken = refresh_token;
   }
 
-  login(user: User): Observable<HttpResponse<RefreshToken>> {
+  login(user: LoginInterface): Observable<HttpResponse<RefreshToken>> {
     return this.httpClient
       .post<RefreshToken>(
         this.url,
@@ -59,9 +58,9 @@ export class AuthService {
       );
   }
 
-  personalInfo(): Observable<HttpResponse<InfoUser>> {
+  personalInfo(): Observable<HttpResponse<UserInterface>> {
     return this.httpClient
-      .get<InfoUser>(`${environment.backendUrl}/me`, {
+      .get<UserInterface>(`${environment.backendUrl}/me`, {
         observe: 'response',
         headers: this.configService.getJsonHeaders()
       })

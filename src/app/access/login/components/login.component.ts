@@ -6,7 +6,7 @@ import { Router } from                      '@angular/router';
 import { AuthService } from                 '@services/auth/auth.service';
 import { ToastService } from                '@services/toast/toast.service';
 
-import { User } from                        '@interfaces/authLogin.interface';
+import { LoginInterface } from                        '@interfaces/authLogin.interface';
 import { ToastInterface } from              '@interfaces/toast.interface';
 
 @Component({
@@ -17,7 +17,7 @@ import { ToastInterface } from              '@interfaces/toast.interface';
 
 export class LoginComponent implements OnInit {
   errorMsg: string;
-  user: User;
+  user: LoginInterface;
   toastInterface: ToastInterface;
   constructor(
     private router: Router,

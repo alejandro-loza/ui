@@ -1,10 +1,10 @@
-import { FinancialInstitution } from './credentials/financialInstitution';
+import { InstitutionInterface } from '@interfaces/institution.interface';
 
 export class Account {
 
     id: string;
     type: string;
-    institution: FinancialInstitution;
+    institution: InstitutionInterface;
     name: string;
     number: string;
     dateCreated: Date;
@@ -16,7 +16,12 @@ export class Account {
     lastBalance: number;
 
     constructor() {
-        this.institution = new FinancialInstitution();
+        this.institution = {
+            code: null,
+            id: null,
+            name: null,
+            status: null
+        };
     }
 
     static reviver(key: any, value: any): any {

@@ -1,6 +1,6 @@
-import { Info } from         '@interfaces/info.interface';
+import { InfoInterface } from         '@interfaces/info.interface';
 
-export interface InfoUser {
+export interface UserInterface {
   accountExpired:             boolean;
   accountLocked:              boolean;
   customerId:                 number;
@@ -14,12 +14,12 @@ export interface InfoUser {
   termsAndConditionsAccepted: boolean;
   type:                       string;
   birthdate?:                 Date;
-  homeIncome?:                Info;
-  homeSize?:                  Info;
-  homeType?:                  Info;
+  homeIncome?:                InfoInterface;
+  homeSize?:                  InfoInterface;
+  homeType?:                  InfoInterface;
   ratingDate?:                Date;
-  maritalStatus?:             Info;
-  profession?:                Info;
-  professionalDegree?:        Info;
+  maritalStatus?:             InfoInterface;
+  profession?:                InfoInterface;
+  professionalDegree?:        InfoInterface;
   zipCode?:                   string;
 }

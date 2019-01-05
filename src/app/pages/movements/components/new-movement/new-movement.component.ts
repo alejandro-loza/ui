@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { ConfigService } from '@services/config/config.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
@@ -19,7 +18,7 @@ import { ToastInterface } from '@interfaces/toast.interface';
 
 import { retry } from 'rxjs/operators';
 
-import { ParamsMovement } from '@app/shared/interfaces/paramsMovement.interface';
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 

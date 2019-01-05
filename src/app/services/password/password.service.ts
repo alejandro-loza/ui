@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { PasswordResponse } from '../../shared/interfaces/passwordResponse.interface';
-import { PasswordResetRequest } from '../../shared/interfaces/passwordResetRequest.interface';
+import { PasswordResponse } from '@interfaces/passwordResponse.interface';
+import { PasswordResetRequest } from '@interfaces/passwordResetRequest.interface';
 import { environment } from '@env/environment';
 import { ConfigService } from '@services/config/config.service';
 import { Observable } from 'rxjs';

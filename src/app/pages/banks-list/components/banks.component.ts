@@ -16,12 +16,12 @@ export class BanksComponent implements OnInit {
 
   ngOnInit() {
     this.getInstitutions();
-  }   
+  }
 
   institutionClick( institution: FinancialInstitution ){
-    if( institution.status == "ACTIVE" ){
-      this.route.navigateByUrl( '/app/banks/'+institution.code );
-    } 
+    if ( institution.status === 'ACTIVE' ) {
+      this.route.navigateByUrl( '/app/banks/' + institution.code );
+    }
   }
 
   getInstitutions(){
