@@ -34,7 +34,6 @@ export class BanksComponent implements OnInit {
         if (element.code !== 'DINERIO') {
           this.institutions.push(element);
         }
-        console.log(res.body);
       });
     });
   }
