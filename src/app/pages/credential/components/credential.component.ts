@@ -16,6 +16,8 @@ import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import { ToastService } from '@services/toast/toast.service';
+import { ToastInterface } from '@interfaces/toast.interface';
 
 @Component({
   selector: 'app-credential',
@@ -26,6 +28,7 @@ import * as M from 'materialize-css/dist/js/materialize';
 export class CredentialComponent implements OnInit, AfterViewInit {
   accounts: AccountInterface[];
   credentials: CredentialInterface[];
+  toast: ToastInterface;
 
   creditBalance: number;
   debitBalance: number;
@@ -45,7 +48,8 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     private accountService: AccountService,
     private credentialService: CredentialService,
     private institutionService: InstitutionService,
-    private interactiveService: InteractiveFieldService
+    private interactiveService: InteractiveFieldService,
+    private toastService: ToastService
   ) {
     this.credentials = [];
     this.debitBalance = 0;
@@ -55,6 +59,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     this.processCompleteForSpinner = false;
     this.validateStatusFinished = true;
     this.loaderMessagge = '';
+    this.toast = { classes: null, code: null, message: null };
   }
 
   ngOnInit() {
@@ -113,17 +118,19 @@ export class CredentialComponent implements OnInit, AfterViewInit {
       this.loaderMessagge = '¡Ha ocurrido algo con una de tus credenciales!';
     } else if (credential.status === 'VALIDATE') {
       this.loaderMessagge =
-        'Finerio se está sincronizando con tu banca en línea. Esto puede durar unos minutos.';
+        'Finerio se está sincronizando con tu banca en línea.<br>Esto puede durar unos minutos.';
       this.getNewInfoCredential(credential.id);
     } else if (credential.status === 'TOKEN') {
       this.loaderMessagge = 'Solicitando información adicional...';
       this.getNewInfoCredential(credential.id);
     }
+    this.toast.message = this.loaderMessagge;
   }
 
   getNewInfoCredential(credentialId) {
     this.credentialService.getCredential(credentialId).subscribe(res => {
       this.credentialInProcess = res.body;
+      this.toast.code = res.status;
       if (this.credentialInProcess.status === 'VALIDATE') {
         this.validateStatusFinished = false;
         setTimeout(() => {
@@ -131,6 +138,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
         }, 1000);
       } else if (this.credentialInProcess.status === 'ACTIVE') {
         this.loaderMessagge = '¡Tus datos han sido sincronizados!';
+        this.toast.message = this.loaderMessagge;
         this.getAllCredentials();
       } else if (this.credentialInProcess.status === 'TOKEN') {
         this.validateStatusFinished = false;
