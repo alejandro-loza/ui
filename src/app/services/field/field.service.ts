@@ -8,7 +8,6 @@ import { ConfigService } from '@services/config/config.service';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Injectable()

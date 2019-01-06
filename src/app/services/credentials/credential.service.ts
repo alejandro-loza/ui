@@ -7,7 +7,6 @@ import { ConfigService } from '@services/config/config.service';
 import { CredentialsInterface } from '@interfaces/crendetials.interface';
 import { CredentialInterface } from '@interfaces/credential.interface';
 
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
 
