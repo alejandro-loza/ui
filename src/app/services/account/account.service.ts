@@ -27,9 +27,9 @@ export class AccountService {
     );
   }
 
-  deleteAccount(accountId: string): Observable<HttpResponse<Account>> {
-    let url = `${environment.backendUrl}/accounts/` + accountId;
-    return this.http.delete<Account>(url, {
+  deleteAccount(accountId: string): Observable<HttpResponse<AccountsInterface>> {
+    const url = `${environment.backendUrl}/accounts/` + accountId;
+    return this.http.delete<AccountsInterface>(url, {
       observe: 'response',
       headers: this.finerio.getJsonHeaders()
     });

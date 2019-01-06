@@ -13,8 +13,7 @@ import { AccountService } from                 '@services/account/account.servic
 
 import { CredentialInterface } from            '@interfaces/credential.interface';
 import { InstitutionFieldInterface } from      '@interfaces/institutionField';
-
-import { Account } from                        '@shared/dto/account';
+import { AccountInterface } from               '@interfaces/account.interfaces';
 
 import * as M from                             'materialize-css/dist/js/materialize';
 
@@ -28,10 +27,11 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   credentialId: string;
   institutionDetails: CredentialInterface;
   fields: InstitutionFieldInterface[];
-  accounts: Account[];
+  accounts: AccountInterface[];
+
   userId = sessionStorage.getItem('id-user');
   accountId: string;
-  accountAuxForDelete: Account;
+  accountAuxForDelete: AccountInterface;
 
   @ViewChild('modal') elModal: ElementRef;
   @ViewChild('modal2') elModal2: ElementRef;
@@ -70,8 +70,8 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
   getAccounts() {
     // Obtenemos las cuentas del usuario pero sólo gurdamos las de la institución mostrada.
-    this.accountService.getAccounts(this.userId).subscribe((res: any) => {
-      res.data.forEach(element => {
+    this.accountService.getAccounts(this.userId).subscribe(res => {
+      res.body.data.forEach( (element: AccountInterface) => {
         if (
           element.institution.code === this.institutionDetails.institution.code
         ) {
@@ -81,20 +81,20 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getFields(code) {
+  getFields(code: string) {
     // Obtenemos los campos a mostrar de la institución mostrada y borramos el primer campo
     // que en todos los casos es el username.
     this.fieldService
       .findAllFieldsByInstitution(code)
-      .subscribe((res: institutionField[]) => {
-        res.forEach(fieldBank => {
+      .subscribe(res => {
+        res.body.forEach((fieldBank: InstitutionFieldInterface) => {
           this.fields.push(fieldBank);
         });
         this.fields.shift();
       });
   }
 
-  updateCredential(credential) {
+  updateCredential(credential: CredentialInterface) {
     this.credentialService.updateCredential(credential).subscribe(
       res => {
         this.router.navigateByUrl('/app/credentials');
@@ -128,7 +128,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   // Delete Account's process
-  deleteAccount(account: Account) {
+  deleteAccount(account: AccountInterface) {
     this.accountAuxForDelete = account;
     const instanceModal = M.Modal.getInstance(this.elModal2.nativeElement);
     instanceModal.open();

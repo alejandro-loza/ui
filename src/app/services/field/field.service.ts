@@ -21,7 +21,7 @@ export class FieldService {
     private configService: ConfigService
   ) {}
 
-  findAllFieldsByInstitution( institutionCode: string ): Observable<HttpResponse<InstitutionFieldInterface>> {
+  findAllFieldsByInstitution( institutionCode: string ): Observable<HttpResponse<InstitutionFieldInterface[]>> {
     const institutions = JSON.parse(sessionStorage.getItem('institutions'));
     institutions.forEach((element: InstitutionInterface) => {
       element.code === institutionCode
@@ -30,7 +30,7 @@ export class FieldService {
     });
     const url = `${this.endpoint}/fields?institutionId=${this.institutionId}`;
     return this.httpClient
-      .get<InstitutionFieldInterface>(url, {
+      .get<InstitutionFieldInterface[]>(url, {
         observe: 'response',
         headers: this.configService.getJsonHeaders()
       });

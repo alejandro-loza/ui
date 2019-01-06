@@ -2,6 +2,7 @@ import { InstitutionInterface } from  './institution.interface';
 import { UserInterface } from     '@interfaces/user.interface';
 
 export interface AccountInterface {
+
     availableBalance?: number;
     balance: number;
     dateCreated: string;

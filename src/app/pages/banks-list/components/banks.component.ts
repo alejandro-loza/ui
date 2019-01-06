@@ -1,35 +1,39 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { InstitutionService } from '@services/institution/institution.service';
-import { Router } from "@angular/router";
-import { FinancialInstitution } from '@shared/dto/credentials/financialInstitution';
+import { InstitutionInterface } from '@interfaces/institution.interface';
 
 @Component({
   selector: 'app-banks',
   templateUrl: './banks.component.html',
   styleUrls: ['./banks.component.css'],
-  providers: [ InstitutionService ]
+  providers: [InstitutionService]
 })
 export class BanksComponent implements OnInit {
-  institutions:FinancialInstitution [] = [];
+  institutions: InstitutionInterface[];
 
-  constructor( private intitutionService:InstitutionService, private route:Router ) { }
+  constructor(
+    private intitutionService: InstitutionService,
+    private route: Router
+  ) {
+    this.institutions = [];
+  }
 
   ngOnInit() {
     this.getInstitutions();
   }
 
-  institutionClick( institution: FinancialInstitution ){
-    if ( institution.status === 'ACTIVE' ) {
-      this.route.navigateByUrl( '/app/banks/' + institution.code );
+  institutionClick(institution: InstitutionInterface) {
+    if (institution.status === 'ACTIVE') {
+      this.route.navigateByUrl('/app/banks/' + institution.code);
     }
   }
 
-  getInstitutions(){
-    this.intitutionService.getAllInstitutions().subscribe( (res:any) => {
-     res.data.forEach(element => {
-       element.code != "DINERIO" ?  this.institutions.push( element ) : null
-     });
+  getInstitutions() {
+    this.intitutionService.getAllInstitutions().subscribe(res => {
+      res.body.data.forEach((element: InstitutionInterface) => {
+        element.code != 'DINERIO' ? this.institutions.push(element) : null;
+      });
     });
   }
-
 }

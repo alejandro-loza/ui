@@ -2,18 +2,18 @@ import { InstitutionInterface } from '@interfaces/institution.interface';
 
 export class Account {
 
+    balance: number;
+    dateCreated: Date;
     id: string;
-    type: string;
     institution: InstitutionInterface;
+    lastBalance: number;
+    lastUpdated: Date;
     name: string;
     number: string;
-    dateCreated: Date;
-    lastUpdated: Date;
-    balance: number;
     nature: string;
     pendingDepositAmount: number;
     pendingChargeAmount: number;
-    lastBalance: number;
+    type: string;
 
     constructor() {
         this.institution = {

@@ -4,11 +4,12 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
+
 import { InstitutionInterface } from '@interfaces/institution.interface';
+import { InstitutionsInterface } from '@interfaces/Institutions.interface';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { InstitutionsInterface } from '@interfaces/Institutions.interface';
 
 
 @Injectable()

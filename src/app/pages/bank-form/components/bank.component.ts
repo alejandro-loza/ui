@@ -5,7 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FieldService } from '@services/field/field.service';
 import { CredentialService } from '@services/credentials/credential.service';
 
-import { Credential } from '@shared/dto/credentials/credential';
+import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 
@@ -19,9 +19,9 @@ import * as M from 'materialize-css/dist/js/materialize';
 })
 export class BankComponent implements OnInit {
   institutionCode: string;
-  credential: Credential;
+  credential: CreateCredentialInterface;
   institutionField: InstitutionFieldInterface[];
-  showSpinner: boolean = true;
+  showSpinner: boolean;
 
   constructor(
     private field: FieldService,
@@ -30,6 +30,13 @@ export class BankComponent implements OnInit {
     private router: Router
   ) {
     this.institutionField = [];
+    this.showSpinner = true;
+    this.credential = {
+      institution: null,
+      password: null,
+      securityCode: null,
+      username: null
+    };
   }
 
   ngOnInit() {
@@ -37,17 +44,16 @@ export class BankComponent implements OnInit {
       this.institutionCode = params['bankCode'];
     });
     this.getFields();
-    this.credential = new Credential();
   }
 
   getFields() {
     this.field
       .findAllFieldsByInstitution(this.institutionCode)
-      .subscribe((res: any) => {
-        res.forEach(fieldBank => {
+      .subscribe(res => {
+        res.body.forEach((fieldBank: InstitutionFieldInterface) => {
           this.institutionField.push(fieldBank);
         });
-        res.length > 0 ? (this.showSpinner = false) : null;
+        res.body.length > 0 ? (this.showSpinner = false) : null;
       });
   }
 
@@ -57,10 +63,9 @@ export class BankComponent implements OnInit {
     this.credential.password = form.value.password;
     this.credential.securityCode = form.value.sec_code;
     this.credential.institution = this.findCurrentInstitution();
-
     this.credentialService
       .createCredential(this.credential)
-      .subscribe((res: Credential) => {
+      .subscribe( res => {
         this.router.navigateByUrl('/app/credentials');
         M.toast({
           html: 'Recuperando información...',

@@ -38,7 +38,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   processCompleteForSpinner: boolean;
   validateStatusFinished: boolean;
   loaderMessagge: string;
-  credentialInProcess: Credential;
+  credentialInProcess: CredentialInterface;
 
   @ViewChild('modal') interactiveModal: ElementRef;
 
@@ -71,7 +71,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   getAllCredentials() {
     this.credentials = [];
-    this.credentialService.getAllCredentials(this.userId).subscribe(res => {
+    this.credentialService.getAllCredentials().subscribe(res => {
       res.body.data.forEach((element: CredentialInterface) => {
         this.credentials.push(element);
         this.checkStatusOfCredential(element);
@@ -136,7 +136,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
       } else if (this.credentialInProcess.status === 'TOKEN') {
         this.validateStatusFinished = false;
         //  Modal process
-        this.modalProcessForInteractive(res);
+        this.modalProcessForInteractive(res.body);
       } else if (this.credentialInProcess.status === 'INVALID') {
         this.loaderMessagge = '¡Ha ocurrido algo con una de tus credenciales!';
         this.validateStatusFinished = false;
@@ -147,7 +147,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   // InteractiveFields Process
 
-  getInteractiveFields(credential: Credential) {
+  getInteractiveFields(credential: CredentialInterface) {
     this.interactiveService.findAllFields(credential).subscribe((data: any) => {
       data.forEach(element => {
         this.interactiveFields.push(element);
@@ -163,7 +163,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
       });
   }
 
-  modalProcessForInteractive(credential: Credential) {
+  modalProcessForInteractive(credential: CredentialInterface) {
     const instanceModal = M.Modal.getInstance(
       this.interactiveModal.nativeElement
     );
