@@ -16,7 +16,6 @@ import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { Credential } from '@shared/dto/credentials/credential';
 
 @Component({
   selector: 'app-credential',

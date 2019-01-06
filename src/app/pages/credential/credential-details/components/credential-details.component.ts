@@ -7,13 +7,15 @@ import {
 } from                                         '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+import { AccountService } from                 '@services/account/account.service';
 import { CredentialService } from              '@services/credentials/credential.service';
 import { FieldService } from                   '@services/field/field.service';
-import { AccountService } from                 '@services/account/account.service';
+import { ToastService } from                   '@services/toast/toast.service';
 
+import { AccountInterface } from               '@interfaces/account.interfaces';
 import { CredentialInterface } from            '@interfaces/credential.interface';
 import { InstitutionFieldInterface } from      '@interfaces/institutionField';
-import { AccountInterface } from               '@interfaces/account.interfaces';
+import { ToastInterface } from                 '@interfaces/toast.interface';
 
 import * as M from                             'materialize-css/dist/js/materialize';
 
@@ -25,9 +27,11 @@ import * as M from                             'materialize-css/dist/js/material
 })
 export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   credentialId: string;
-  institutionDetails: CredentialInterface;
-  fields: InstitutionFieldInterface[];
+
   accounts: AccountInterface[];
+  fields: InstitutionFieldInterface[];
+  institutionDetails: CredentialInterface;
+  toast: ToastInterface;
 
   userId = sessionStorage.getItem('id-user');
   accountId: string;
@@ -37,14 +41,16 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('modal2') elModal2: ElementRef;
 
   constructor(
-    private credentialService: CredentialService,
+    private router: Router,
     private activated: ActivatedRoute,
+    private credentialService: CredentialService,
     private fieldService: FieldService,
     private accountService: AccountService,
-    private router: Router
+    private toastService: ToastService,
   ) {
     this.fields = [];
     this.accounts = [];
+    this.toast = { code: null, classes: null, message: null };
   }
 
   ngOnInit() {
@@ -97,13 +103,16 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   updateCredential(credential: CredentialInterface) {
     this.credentialService.updateCredential(credential).subscribe(
       res => {
+        this.toast.code = res.status;
+        this.toast.message = 'Sincronización en proceso...';
+        this.toastService.toastGeneral(this.toast);
         this.router.navigateByUrl('/app/credentials');
-        M.toast({
-          html: 'Sincronización en proceso...',
-          displayLength: 2000
-        });
       },
-      error => {},
+      error => {
+        this.toast.code = error.status;
+        this.toast.message = 'Ocurrió un error al actualizar tu credencial';
+        this.toastService.toastGeneral(this.toast);
+      },
       () => {}
     );
   }
@@ -111,18 +120,15 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   deleteCredential() {
     this.credentialService.deleteCredential(this.credentialId).subscribe(
       res => {
+        this.toast.code = res.status;
+        this.toast.message = 'Se borró correctamente tu credencial';
         this.router.navigateByUrl('/app/credentials');
-        M.toast({
-          html: 'Credencial elminada correctamente',
-          displayLength: 2000
-        });
+        this.toastService.toastGeneral(this.toast);
       },
       error => {
-        M.toast({
-          html:
-            'Ocurrió un error al elminar la credencial, inténtalo mas tarde',
-          displayLength: 2000
-        });
+        this.toast.code = error.status;
+        this.toast.message = 'Ocurrió un error al actualizar tu credencial';
+        this.toastService.toastGeneral(this.toast);
       }
     );
   }
@@ -137,18 +143,16 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   deleteAccountConfirmed() {
     this.accountService.deleteAccount(this.accountAuxForDelete.id).subscribe(
       res => {
-        M.toast({
-          html: 'Cuenta eliminada correctamente',
-          displayLength: 2000
-        });
+        this.toast.code = res.status;
+        this.toast.message = 'Se borró correctamente tu cuenta';
+        this.toastService.toastGeneral(this.toast);
         this.accounts = [];
         this.getAccounts();
       },
       error => {
-        M.toast({
-          html: 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde',
-          displayLength: 2000
-        });
+        this.toast.code = error.status;
+        this.toast.message = 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde';
+        this.toastService.toastGeneral(this.toast);
       }
     );
   }
