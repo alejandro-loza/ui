@@ -6,8 +6,7 @@ import { InstitutionInterface } from '@interfaces/institution.interface';
 @Component({
   selector: 'app-banks',
   templateUrl: './banks.component.html',
-  styleUrls: ['./banks.component.css'],
-  providers: [InstitutionService]
+  styleUrls: ['./banks.component.css']
 })
 export class BanksComponent implements OnInit {
   institutions: InstitutionInterface[];
@@ -32,7 +31,10 @@ export class BanksComponent implements OnInit {
   getInstitutions() {
     this.intitutionService.getAllInstitutions().subscribe(res => {
       res.body.data.forEach((element: InstitutionInterface) => {
-        element.code != 'DINERIO' ? this.institutions.push(element) : null;
+        if (element.code !== 'DINERIO') {
+          this.institutions.push(element);
+        }
+        console.log(res.body);
       });
     });
   }

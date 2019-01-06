@@ -1,0 +1,32 @@
+.pt-50{
+  padding-top: 50px;
+}
+
+.pt-30{
+  padding-top: 30px;
+}
+
+.backBtn{
+  background-color: #1D3865;
+}
+
+.background{
+  background-color: #1D3865;
+}
+
+.imgBanks{
+  padding: 10px;
+  border:1px solid gray;
+  border-radius: 5px;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.imgBanks:hover{
+  border:0px;
+}
+
+.intitutionCol{
+ padding-top: 10px;
+}
