@@ -5,7 +5,7 @@ const BanksRouting: Routes = [
   { path: '', component: BanksComponent },
   {
     path: ':bankCode',
-    loadChildren: '../bank-form/bank.module#BankModule'
+    loadChildren: './bank-form/bank-form.module#BankFormModule'
   }
 ];
 

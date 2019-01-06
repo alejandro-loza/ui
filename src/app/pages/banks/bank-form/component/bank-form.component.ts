@@ -10,14 +10,12 @@ import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-
 @Component({
-  selector: 'app-bank',
-  templateUrl: './bank.component.html',
-  styleUrls: ['./bank.component.css'],
-  providers: [FieldService]
+  selector: 'app-bank-form',
+  templateUrl: './bank-form.component.html',
+  styleUrls: ['./bank-form.component.css']
 })
-export class BankComponent implements OnInit {
+export class BankFormComponent implements OnInit {
   institutionCode: string;
   credential: CreateCredentialInterface;
   institutionField: InstitutionFieldInterface[];
