@@ -6,6 +6,7 @@ import {
   ElementRef
 } from                                         '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 import { AccountService } from                 '@services/account/account.service';
 import { CredentialService } from              '@services/credentials/credential.service';
@@ -100,7 +101,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  updateCredential(credential: CredentialInterface) {
+  updateCredential(credential ) {
     this.credentialService.updateCredential(credential).subscribe(
       res => {
         this.toast.code = res.status;
