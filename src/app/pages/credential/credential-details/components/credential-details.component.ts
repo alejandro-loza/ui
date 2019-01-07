@@ -4,21 +4,19 @@ import {
   AfterViewInit,
   ViewChild,
   ElementRef
-} from                                         '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { NgForm } from '@angular/forms';
+} from                                   '@angular/core';
+import { Router } from                   '@angular/router';
+import { ActivatedRoute, Params } from   '@angular/router';
 
-import { AccountService } from                 '@services/account/account.service';
-import { CredentialService } from              '@services/credentials/credential.service';
-import { FieldService } from                   '@services/field/field.service';
-import { ToastService } from                   '@services/toast/toast.service';
+import { CredentialService } from        '@services/credentials/credential.service';
+import { FieldService } from             '@services/field/field.service';
+import { AccountService } from           '@services/account/account.service';
 
-import { AccountInterface } from               '@interfaces/account.interfaces';
-import { CredentialInterface } from            '@interfaces/credential.interface';
-import { InstitutionFieldInterface } from      '@interfaces/institutionField';
-import { ToastInterface } from                 '@interfaces/toast.interface';
+import { InstitutionFieldInterface } from         '@interfaces/institutionField';
 
-import * as M from                             'materialize-css/dist/js/materialize';
+import { Account } from '@shared/dto/account';
+
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-credential-details',
@@ -28,31 +26,23 @@ import * as M from                             'materialize-css/dist/js/material
 })
 export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   credentialId: string;
-
-  accounts: AccountInterface[];
-  fields: InstitutionFieldInterface[];
-  institutionDetails: CredentialInterface;
-  toast: ToastInterface;
-
+  institutionDetails: any;
+  fields: InstitutionFieldInterface[] = [];
+  accounts: Account[] = [];
   userId = sessionStorage.getItem('id-user');
   accountId: string;
-  accountAuxForDelete: AccountInterface;
+  accountAuxForDelete: Account;
 
   @ViewChild('modal') elModal: ElementRef;
   @ViewChild('modal2') elModal2: ElementRef;
 
   constructor(
-    private router: Router,
-    private activated: ActivatedRoute,
     private credentialService: CredentialService,
+    private activated: ActivatedRoute,
     private fieldService: FieldService,
     private accountService: AccountService,
-    private toastService: ToastService,
-  ) {
-    this.fields = [];
-    this.accounts = [];
-    this.toast = { code: null, classes: null, message: null };
-  }
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.activated.params.subscribe((params: Params) => {
@@ -69,7 +59,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   getDetails() {
     // Obtenemos un JSON con los detalles de la institution mostrada.
     this.credentialService.getCredential(this.credentialId).subscribe(res => {
-      this.institutionDetails = res.body;
+      this.institutionDetails = res;
       this.getFields(this.institutionDetails.institution.code);
       this.getAccounts();
     });
@@ -77,10 +67,10 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
   getAccounts() {
     // Obtenemos las cuentas del usuario pero sólo gurdamos las de la institución mostrada.
-    this.accountService.getAccounts(this.userId).subscribe(res => {
-      res.body.data.forEach( (element: AccountInterface) => {
+    this.accountService.getAccounts(this.userId).subscribe((res: any) => {
+      res.data.forEach(element => {
         if (
-          element.institution.code === this.institutionDetails.institution.code
+          element.institution.code == this.institutionDetails.institution.code
         ) {
           this.accounts.push(element);
         }
@@ -88,32 +78,29 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getFields(code: string) {
+  getFields(code) {
     // Obtenemos los campos a mostrar de la institución mostrada y borramos el primer campo
     // que en todos los casos es el username.
     this.fieldService
       .findAllFieldsByInstitution(code)
-      .subscribe(res => {
-        res.body.forEach((fieldBank: InstitutionFieldInterface) => {
+      .subscribe((res: institutionField[]) => {
+        res.forEach(fieldBank => {
           this.fields.push(fieldBank);
         });
         this.fields.shift();
       });
   }
 
-  updateCredential(credential ) {
+  updateCredential(credential) {
     this.credentialService.updateCredential(credential).subscribe(
       res => {
-        this.toast.code = res.status;
-        this.toast.message = 'Sincronización en proceso...';
-        this.toastService.toastGeneral(this.toast);
         this.router.navigateByUrl('/app/credentials');
+        M.toast({
+          html: 'Sincronización en proceso...',
+          displayLength: 2000
+        });
       },
-      error => {
-        this.toast.code = error.status;
-        this.toast.message = 'Ocurrió un error al actualizar tu credencial';
-        this.toastService.toastGeneral(this.toast);
-      },
+      error => {},
       () => {}
     );
   }
@@ -121,21 +108,24 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   deleteCredential() {
     this.credentialService.deleteCredential(this.credentialId).subscribe(
       res => {
-        this.toast.code = res.status;
-        this.toast.message = 'Se borró correctamente tu credencial';
         this.router.navigateByUrl('/app/credentials');
-        this.toastService.toastGeneral(this.toast);
+        M.toast({
+          html: 'Credencial elminada correctamente',
+          displayLength: 2000
+        });
       },
       error => {
-        this.toast.code = error.status;
-        this.toast.message = 'Ocurrió un error al actualizar tu credencial';
-        this.toastService.toastGeneral(this.toast);
+        M.toast({
+          html:
+            'Ocurrió un error al elminar la credencial, inténtalo mas tarde',
+          displayLength: 2000
+        });
       }
     );
   }
 
   // Delete Account's process
-  deleteAccount(account: AccountInterface) {
+  deleteAccount(account: Account) {
     this.accountAuxForDelete = account;
     const instanceModal = M.Modal.getInstance(this.elModal2.nativeElement);
     instanceModal.open();
@@ -144,16 +134,18 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   deleteAccountConfirmed() {
     this.accountService.deleteAccount(this.accountAuxForDelete.id).subscribe(
       res => {
-        this.toast.code = res.status;
-        this.toast.message = 'Se borró correctamente tu cuenta';
-        this.toastService.toastGeneral(this.toast);
+        M.toast({
+          html: 'Cuenta eliminada correctamente',
+          displayLength: 2000
+        });
         this.accounts = [];
         this.getAccounts();
       },
       error => {
-        this.toast.code = error.status;
-        this.toast.message = 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde';
-        this.toastService.toastGeneral(this.toast);
+        M.toast({
+          html: 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde',
+          displayLength: 2000
+        });
       }
     );
   }

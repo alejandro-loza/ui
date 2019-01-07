@@ -10,7 +10,7 @@ import { UserInterface } from '@interfaces/user.interface';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { RefreshToken } from '@interfaces/refreshToken.interface';
+import { Token } from '@app/interfaces/token.interface';
 
 @Injectable()
 export class AuthService {
@@ -25,33 +25,34 @@ export class AuthService {
   }
 
   isAuth() {
-    return this.configService.getToken.length > 0 ? true : false;
+    return this.configService.getAccessToken.length > 0 ? true : false;
   }
 
   getData() {
     if (sessionStorage.getItem('access-token')) {
-      this.configService.setToken = sessionStorage.getItem('access-token');
+      this.configService.setAccessToken = sessionStorage.getItem('access-token');
     }
   }
 
-  saveData(access_token: string, refresh_token: string) {
-    sessionStorage.setItem('access-token', access_token);
-    sessionStorage.setItem('refresh-token', refresh_token);
+  saveData(token: Token) {
+    sessionStorage.setItem('access-token', token.access_token);
+    sessionStorage.setItem('refresh-token', token.refresh_token);
 
-    this.configService.setToken = access_token;
-    this.configService.setRefreshToken = refresh_token;
+    this.configService.setAccessToken = token.access_token;
+    this.configService.setRefreshToken = token.refresh_token;
   }
 
-  login(user: LoginInterface): Observable<HttpResponse<RefreshToken>> {
+  login(user: LoginInterface): Observable<HttpResponse<Token>> {
     return this.httpClient
-      .post<RefreshToken>(
+      .post<Token>(
         this.url,
         JSON.stringify({ username: user.email, password: user.password }),
         { observe: 'response', headers: this.configService.getJsonHeaders() }
       )
       .pipe(
         map(res => {
-          this.saveData(res.body.access_token, res.body.refresh_token);
+          sessionStorage.clear();
+          this.saveData(res.body);
           this.getData();
           return res;
         })
@@ -66,6 +67,7 @@ export class AuthService {
       })
       .pipe(
         map(res => {
+          console.log(res.body);
           sessionStorage.setItem('id-user', res.body.id);
           this.configService.setId = res.body.id;
           return res;

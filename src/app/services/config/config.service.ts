@@ -7,16 +7,16 @@ import { Observable } from 'rxjs';
 
 import { isNullOrUndefined } from 'util';
 
-import { RefreshToken } from '@interfaces/refreshToken.interface';
+import { Token } from '@app/interfaces/token.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
   private headers: HttpHeaders;
-  token_access: string;
-  token_refresh: string;
-  idUser: string;
+  private token_access: string;
+  private token_refresh: string;
+  private idUser: string;
 
   constructor(private httpClient: HttpClient) {
     this.headers = new HttpHeaders();
@@ -25,11 +25,11 @@ export class ConfigService {
     this.idUser = null;
   }
 
-  public set setToken(token: string) {
+  public set setAccessToken(token: string) {
     this.token_access = token;
   }
 
-  public get getToken(): string {
+  public get getAccessToken(): string {
     return this.token_access;
   }
 
@@ -50,48 +50,41 @@ export class ConfigService {
   }
 
   getJsonHeaders() {
-    this.headers = this.headers.append(
-      'Content-Type',
-      'application/json'
-    );
-    this.headers = this.headers.append(
-      'Accept',
-      'application/json'
-    );
+    this.headers = this.headers.append('Content-Type', 'application/json');
+    this.headers = this.headers.append('Accept', 'application/json');
     /**
      * Se checa si el toquen es undefined o null.
      * Esto puede darse por dos circunstancias,
      * si el token no existe es undefined,
      * pero si el token expira entonces es nulo.
      */
-    if (!isNullOrUndefined(this.token_access)) {
-      this.headers = this.headers.set(
+    if (!isNullOrUndefined(this.getAccessToken)) {
+      this.headers = this.headers.append(
         'Authorization',
-        `Bearer ${this.token_access}`
+        `Bearer ${this.getAccessToken}`
       );
-    } else if (sessionStorage.getItem('access-token')) {
-      this.setToken = sessionStorage.getItem('access-token');
+    } else if (!isNullOrUndefined(sessionStorage.getItem('access-token'))) {
+      this.setAccessToken = sessionStorage.getItem('access-token');
       this.headers = this.headers.set(
         'Authorization',
         `Bearer ${this.token_access}`
       );
     }
-
     return this.headers;
   }
 
-  refreshToken(): Observable<HttpResponse<RefreshToken>> {
+  refreshToken(): Observable<HttpResponse<Token>> {
     const url = `${environment.apiUrl}/oauth/access_token`;
     this.headers.set('Content-Type', 'application/x-www-form-urlencoded');
     if (
-      isNullOrUndefined(this.token_refresh) ||
-      isNullOrUndefined(this.idUser)
+      isNullOrUndefined(this.getAccessToken) ||
+      isNullOrUndefined(this.getId)
     ) {
       this.setRefreshToken = sessionStorage.getItem('refresh-token');
       this.setId = sessionStorage.getItem('id-user');
     }
     return this.httpClient
-      .post<RefreshToken>(
+      .post<Token>(
         url,
         `grant_type=refresh_token&refresh_token=${this.getRefreshToken}`,
         {
@@ -102,14 +95,13 @@ export class ConfigService {
       .pipe(
         retry(2),
         map(res => {
-          console.log('refreshToken', res);
           sessionStorage.clear();
 
           sessionStorage.setItem('access-token', res.body.access_token);
           sessionStorage.setItem('refresh-token', res.body.refresh_token);
           sessionStorage.setItem('id-user', this.getId);
 
-          this.setToken = res.body.access_token;
+          this.setAccessToken = res.body.access_token;
           this.setRefreshToken = res.body.refresh_token;
           return res;
         })

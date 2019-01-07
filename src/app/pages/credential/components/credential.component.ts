@@ -118,7 +118,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
       this.loaderMessagge = '¡Ha ocurrido algo con una de tus credenciales!';
     } else if (credential.status === 'VALIDATE') {
       this.loaderMessagge =
-        'Finerio se está sincronizando con tu banca en línea.<br>Esto puede durar unos minutos.';
+        'Finerio se está sincronizando con tu banca en línea. Esto puede durar unos minutos.';
       this.getNewInfoCredential(credential.id);
     } else if (credential.status === 'TOKEN') {
       this.loaderMessagge = 'Solicitando información adicional...';

@@ -10,8 +10,8 @@ import { CREDENTIAL_DETAILS_ROUTES } from './credential-details.route';
 
 @NgModule({
   imports: [
-    FormsModule,
     SharedModule,
+    FormsModule,
     CREDENTIAL_DETAILS_ROUTES
   ],
   declarations: [
