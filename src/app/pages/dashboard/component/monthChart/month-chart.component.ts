@@ -9,25 +9,25 @@ import { PieChart } from '@interfaces/dasboardPieChart.interface';
   })
 
   export class MonthChartComponent implements OnInit {
-  @Input() dataForBarCharts:BarChart[];
-  @Output() selectedMonth: EventEmitter<PieChart[]>;
 
-   // OPTIONS FOR THE CHART
-   showXAxis = true;
-   showYAxis = false;
-   gradient = false;
-   showLegend = false;
-   showXAxisLabel = true;
-   barPadding = 20;
-   showGridLines = true;
-   showYAxisLabel = true;
-   timeline = true;
-   colorScheme = {
-    domain: ['#a02e36','#7bba3a']
-   };
+    @Input() dataForBarChart:BarChart[];
+    
+    // OPTIONS FOR THE CHART
+    showXAxis = true;
+    showYAxis = false;
+    gradient = false;
+    showLegend = false;
+    showXAxisLabel = true;
+    barPadding = 20;
+    showGridLines = true;
+    showYAxisLabel = true;
+    timeline = true;
+    colorScheme = {
+      domain: ['#a02e36','#7bba3a']
+    };
 
   constructor( ) {
-    this.selectedMonth = new EventEmitter();
+
   }
 
   ngOnInit() {
@@ -36,13 +36,12 @@ import { PieChart } from '@interfaces/dasboardPieChart.interface';
   onSelect( event ){
     let monthSelected:string = event.series;
     let data:PieChart[] = [];
-    this.dataForBarCharts.forEach( serie => {
+    this.dataForBarChart.forEach( serie => {
       if( serie.name == monthSelected ){
         data.push( { name : "Gastos", value : serie.series[0].value },
                    { name : "Ahorro", value : serie.series[1].value });
       }
     });
-    this.selectedMonth.emit( data );
   }
 
     

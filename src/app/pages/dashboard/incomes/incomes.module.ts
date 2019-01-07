@@ -9,6 +9,7 @@ import { IncomesRoutes } from    './incomes.routes';
   imports: [
     CommonModule,
     IncomesRoutes
-  ]
+  ],
+  exports: [ IncomesComponent ]
 })
 export class IncomesModule { }

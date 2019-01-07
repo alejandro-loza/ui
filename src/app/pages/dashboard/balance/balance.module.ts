@@ -10,6 +10,7 @@ import { BalanceRoutes } from    './balance.routes';
   imports: [
     CommonModule,
     BalanceRoutes
-  ]
+  ],
+  exports: [ BalanceComponent ]
 })
 export class BalanceModule { }

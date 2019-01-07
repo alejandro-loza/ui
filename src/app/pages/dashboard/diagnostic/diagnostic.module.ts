@@ -10,6 +10,9 @@ import { DiagnosticRoutes } from     './diagnostic.routes';
   imports: [
     CommonModule,
     DiagnosticRoutes
+  ],
+  exports: [
+    DiagnosticComponent
   ]
 })
 export class DiagnosticModule { }
