@@ -59,7 +59,7 @@ export class ConfigService {
      * pero si el token expira entonces es nulo.
      */
     if (!isNullOrUndefined(this.getAccessToken)) {
-      this.headers = this.headers.append(
+      this.headers = this.headers.set(
         'Authorization',
         `Bearer ${this.getAccessToken}`
       );
@@ -75,21 +75,17 @@ export class ConfigService {
 
   refreshToken(): Observable<HttpResponse<Token>> {
     const url = `${environment.apiUrl}/oauth/access_token`;
-    this.headers.set('Content-Type', 'application/x-www-form-urlencoded');
-    if (
-      isNullOrUndefined(this.getAccessToken) ||
-      isNullOrUndefined(this.getId)
-    ) {
-      this.setRefreshToken = sessionStorage.getItem('refresh-token');
-      this.setId = sessionStorage.getItem('id-user');
-    }
+
+    this.setRefreshToken = sessionStorage.getItem('refresh-token');
+    this.setId = sessionStorage.getItem('id-user');
+
     return this.httpClient
       .post<Token>(
         url,
         `grant_type=refresh_token&refresh_token=${this.getRefreshToken}`,
         {
           observe: 'response',
-          headers: this.getJsonHeaders()
+          headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})
         }
       )
       .pipe(

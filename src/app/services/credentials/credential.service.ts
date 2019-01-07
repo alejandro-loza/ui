@@ -28,8 +28,8 @@ export class CredentialService {
   }
 
   getCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
-    this.urlCredential = `${this.urlCredential}/${credentialId}?deep=true`;
-    return this.httpClient.get<CredentialInterface>( this.urlCredential, {
+    const urlCredential = `${this.urlCredential}/${credentialId}?deep=true`;
+    return this.httpClient.get<CredentialInterface>( urlCredential, {
       observe: 'response',
       headers: this.configService.getJsonHeaders()
     });
@@ -55,16 +55,16 @@ export class CredentialService {
 
   updateCredential( credential: CredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
     const postBody = JSON.stringify(credential);
-    this.urlCredential = `${this.urlCredential}/${ credential.id }`;
-    return this.httpClient.put<CredentialInterface>(this.urlCredential, postBody, {
+    const urlCredential = `${this.urlCredential}/${ credential.id }`;
+    return this.httpClient.put<CredentialInterface>(urlCredential, postBody, {
       observe: 'response',
       headers: this.configService.getJsonHeaders()
     });
   }
 
   deleteCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
-    this.urlCredential = `${this.urlCredential}/${credentialId}`;
-    return this.httpClient.delete<CredentialInterface>(this.urlCredential, {
+    const urlCredential = `${this.urlCredential}/${credentialId}`;
+    return this.httpClient.delete<CredentialInterface>(urlCredential, {
       observe: 'response',
       headers: this.configService.getJsonHeaders()
     });

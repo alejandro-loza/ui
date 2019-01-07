@@ -4,11 +4,14 @@ import { CredentialComponent } from './components/credential.component';
 const CREDENTIAL_ROUTING: Routes = [
   {
     path: '',
-    component: CredentialComponent,
+    component: CredentialComponent
   },
   {
     path: ':credencialId',
-    loadChildren: './credential-details/credential-details.module#CredentialDetailsModule'
+    loadChildren: './credential-details/credential-details.module#CredentialDetailsModule',
+    data: {
+      title: 'Detalle de la credencial'
+    }
   }
 ];
 

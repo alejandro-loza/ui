@@ -5,16 +5,20 @@ import {
   ViewChild,
   ElementRef
 } from                                   '@angular/core';
-import { Router } from                   '@angular/router';
-import { ActivatedRoute, Params } from   '@angular/router';
+import {
+  Router,
+  ActivatedRoute,
+  Params } from                          '@angular/router';
 
+import { AccountService } from           '@services/account/account.service';
 import { CredentialService } from        '@services/credentials/credential.service';
 import { FieldService } from             '@services/field/field.service';
-import { AccountService } from           '@services/account/account.service';
+import { ToastService } from             '@services/toast/toast.service';
 
-import { InstitutionFieldInterface } from         '@interfaces/institutionField';
-
-import { Account } from '@shared/dto/account';
+import { InstitutionFieldInterface } from     '@interfaces/institutionField';
+import { CredentialInterface } from           '@interfaces/credential.interface';
+import { AccountInterface } from              '@interfaces/account.interfaces';
+import { ToastInterface } from                 '@interfaces/toast.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 
@@ -25,24 +29,30 @@ import * as M from 'materialize-css/dist/js/materialize';
   providers: [FieldService]
 })
 export class CredentialDetailsComponent implements OnInit, AfterViewInit {
+  fields: InstitutionFieldInterface[];
+  accounts: AccountInterface[];
+  institutionDetails: CredentialInterface;
+  accountAuxForDelete: AccountInterface;
+  toast: ToastInterface;
   credentialId: string;
-  institutionDetails: any;
-  fields: InstitutionFieldInterface[] = [];
-  accounts: Account[] = [];
   userId = sessionStorage.getItem('id-user');
   accountId: string;
-  accountAuxForDelete: Account;
 
   @ViewChild('modal') elModal: ElementRef;
   @ViewChild('modal2') elModal2: ElementRef;
 
   constructor(
-    private credentialService: CredentialService,
     private activated: ActivatedRoute,
+    private router: Router,
+    private credentialService: CredentialService,
     private fieldService: FieldService,
     private accountService: AccountService,
-    private router: Router
-  ) {}
+    private toastService: ToastService,
+  ) {
+    this.fields = [];
+    this.accounts = [];
+    this.toast = { classes: null, code: null, message: null };
+  }
 
   ngOnInit() {
     this.activated.params.subscribe((params: Params) => {
@@ -59,16 +69,16 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   getDetails() {
     // Obtenemos un JSON con los detalles de la institution mostrada.
     this.credentialService.getCredential(this.credentialId).subscribe(res => {
-      this.institutionDetails = res;
-      this.getFields(this.institutionDetails.institution.code);
+      this.institutionDetails = res.body;
+      this.getFields(res.body.institution.code);
       this.getAccounts();
     });
   }
 
   getAccounts() {
     // Obtenemos las cuentas del usuario pero sólo gurdamos las de la institución mostrada.
-    this.accountService.getAccounts(this.userId).subscribe((res: any) => {
-      res.data.forEach(element => {
+    this.accountService.getAccounts(this.userId).subscribe(res => {
+      res.body.data.forEach(element => {
         if (
           element.institution.code == this.institutionDetails.institution.code
         ) {
@@ -78,54 +88,57 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getFields(code) {
+  getFields(code: string) {
     // Obtenemos los campos a mostrar de la institución mostrada y borramos el primer campo
     // que en todos los casos es el username.
     this.fieldService
       .findAllFieldsByInstitution(code)
-      .subscribe((res: institutionField[]) => {
-        res.forEach(fieldBank => {
+      .subscribe(res => {
+        res.body.forEach(fieldBank => {
           this.fields.push(fieldBank);
         });
         this.fields.shift();
+      }, err => {
       });
   }
 
   updateCredential(credential) {
     this.credentialService.updateCredential(credential).subscribe(
       res => {
-        this.router.navigateByUrl('/app/credentials');
-        M.toast({
-          html: 'Sincronización en proceso...',
-          displayLength: 2000
-        });
+        this.toast.code = res.status;
       },
-      error => {},
-      () => {}
+      error => {
+        this.toast.code = error.status;
+        this.toast.message = 'Ocurrió un error al actualizar tu credencial';
+        this.toastService.toastGeneral(this.toast);
+      },
+      () => {
+        this.toast.message = 'Sincronización en proceso...';
+        this.toastService.toastGeneral(this.toast);
+        this.router.navigateByUrl('/app/credentials');
+      }
     );
   }
 
   deleteCredential() {
     this.credentialService.deleteCredential(this.credentialId).subscribe(
       res => {
-        this.router.navigateByUrl('/app/credentials');
-        M.toast({
-          html: 'Credencial elminada correctamente',
-          displayLength: 2000
-        });
+        this.toast.code = res.status;
       },
       error => {
-        M.toast({
-          html:
-            'Ocurrió un error al elminar la credencial, inténtalo mas tarde',
-          displayLength: 2000
-        });
+        this.toast.code = error.status;
+        this.toast.message = 'Ocurrió un error al elminar la credencial, inténtalo mas tarde';
+        this.toastService.toastGeneral(this.toast);
+      }, () => {
+        this.toast.message = 'Credencial elminada correctamente';
+        this.toastService.toastGeneral(this.toast);
+        this.router.navigateByUrl('/app/credentials');
       }
     );
   }
 
   // Delete Account's process
-  deleteAccount(account: Account) {
+  deleteAccount(account) {
     this.accountAuxForDelete = account;
     const instanceModal = M.Modal.getInstance(this.elModal2.nativeElement);
     instanceModal.open();
@@ -134,18 +147,16 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   deleteAccountConfirmed() {
     this.accountService.deleteAccount(this.accountAuxForDelete.id).subscribe(
       res => {
-        M.toast({
-          html: 'Cuenta eliminada correctamente',
-          displayLength: 2000
-        });
-        this.accounts = [];
-        this.getAccounts();
+        this.toast.code = res.status;
       },
       error => {
-        M.toast({
-          html: 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde',
-          displayLength: 2000
-        });
+        this.toast.code = error.status;
+        this.toast.message = 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde';
+        this.toastService.toastGeneral(this.toast);
+      }, () => {
+        this.toast.message = 'Cuenta elminada correctamente';
+        this.toastService.toastGeneral(this.toast);
+        this.router.navigateByUrl('/app/credentials');
       }
     );
   }

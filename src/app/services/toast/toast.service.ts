@@ -13,7 +13,7 @@ export class ToastService {
   private button: string;
   private displayLength: number;
 
-  constructor( private configService: ConfigService) {
+  constructor(private configService: ConfigService) {
     this.button = `<button
       class="btn-flat toast-action"
       onClick="
@@ -45,11 +45,21 @@ export class ToastService {
         this.classes = 'red accent-3';
         break;
       case 401:
-      this.configService.refreshToken();
-      ( toastParams.message !== null ) ? this.message = toastParams.message : this.message = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!';
-      this.classes = 'light-blue darken-4';
+        this.configService.refreshToken().subscribe(
+          res => res,
+          err => {
+            console.error(toastParams.code, err);
+          },
+          () => {
+            toastParams.message !== null
+              ? (this.message = toastParams.message)
+              : (this.message =
+                  'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!');
+          }
+        );
+        this.classes = 'light-blue darken-4';
         break;
-        case 422:
+      case 422:
         this.message = toastParams.message;
         this.classes = 'red accent-3';
         break;

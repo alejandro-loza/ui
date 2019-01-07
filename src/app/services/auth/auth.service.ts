@@ -67,7 +67,6 @@ export class AuthService {
       })
       .pipe(
         map(res => {
-          console.log(res.body);
           sessionStorage.setItem('id-user', res.body.id);
           this.configService.setId = res.body.id;
           return res;
