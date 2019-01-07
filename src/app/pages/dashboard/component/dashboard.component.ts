@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MovementsService } from '@services/movements/movements.service';
+import { DashboardService } from "@services/dashboard/dashboard.service";
 import { Movement } from '@interfaces/movement.interface';
 import { BarChart } from '@interfaces/dashboardBarChart.interface';
-import { PieChart } from '@interfaces/dasboardPieChart.interface';
 import { DateApiService } from '@services/date-api/date-api.service';
+import { PieChart } from '@app/shared/interfaces/dasboardPieChart.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,24 +23,32 @@ export class DashboardComponent implements OnInit {
     offset: 0 
   };
 
-  movements:Movement[] = [];
+  movementsList:Movement[] = [];
   dataForBarCharts: BarChart[] = [];
   dataReady:boolean = false;
+  movementsServiceResponse:Movement[];
+
+  // FOR PIE CHART
+  dataForPieChart:PieChart[];
+  monthSelected:string;
 
   // Aux
   chargeBalanceAux:number = 0;
   depositBalanceAux:number = 0;
-  auxForOffset:number = 0;
 
-  constructor ( private movementsService: MovementsService, private dateApi:DateApiService ){
+  constructor ( private movementsService: MovementsService, private dateApi:DateApiService,
+                private dashboardService: DashboardService ){
 
   }
 
   ngOnInit(){
     if( sessionStorage.getItem("balanceData") ){
+      sessionStorage.removeItem("loadingDataForDashboard");
       this.dataForBarCharts = JSON.parse(sessionStorage.getItem("balanceData"));
+      this.dataForPieCurrentMonth();
       this.dataReady = true;
-    } else {
+    } else if( !sessionStorage.getItem("loadingDataForDashboard") ) {
+      sessionStorage.setItem("loadingDataForDashboard", "true");
       this.getDatesForParams();
       this.getMovementsData();
     }
@@ -52,8 +61,8 @@ export class DashboardComponent implements OnInit {
     this.paramsMovements.endDate = endDate;
     
     // START DATE
-    let millisLastYear = 1000 * 60 * 60 * 24 * 336;
-    let diff = currentDate.getTime() - millisLastYear; 
+    const MILLIS_LAST_YEAR = 1000 * 60 * 60 * 24 * 365; // PONER MILLIS
+    let diff = currentDate.getTime() - MILLIS_LAST_YEAR; 
     let startDate = this.dateApi.dateWithFormat( new Date( diff ) );
     this.paramsMovements.startDate = startDate;
   }
@@ -61,21 +70,25 @@ export class DashboardComponent implements OnInit {
   // THIS METHOD IS THE SLOWEST 
   getMovementsData(){
     this.movementsService.getMovements( this.paramsMovements ).subscribe( ( res:Movement[] ) => {
-      this.auxForOffset += 150;
-      if( res.length == this.auxForOffset  ){
-        this.paramsMovements.offset += 150;
+      this.movementsServiceResponse = res;
+    }, error => {
+      console.log( error );
+    }, () => {
+      this.paramsMovements.offset += 150;
+      if( this.movementsServiceResponse.length == this.paramsMovements.offset  ){
         this.getMovementsData();
       } else {
-          res.forEach( movement => {
-            this.movements.push( movement );
+          this.movementsServiceResponse.forEach( movement => {
+            this.movementsList.push( movement );
           });
-          let firstMonth = new Date( this.movements[ this.movements.length - 1 ].customDate );
-          this.getBalances( this.movements, firstMonth.getMonth() );
+          let firstMonth = new Date( this.movementsList[ this.movementsList.length - 1 ].customDate );
+          this.getBalances( this.movementsList, firstMonth.getMonth() );
         }
     });
   }
 
   getBalances( movements:Movement[], month:number ){
+    console.log("getBalances");
     this.chargeBalanceAux = 0; this.depositBalanceAux = 0;
     movements.forEach( movement => {
       let movementDate = new Date ( movement.customDate );
@@ -111,24 +124,37 @@ export class DashboardComponent implements OnInit {
         month == 11 ? this.getBalances( movements, 0 ) : this.getBalances( movements, month + 1)
       }
     }
-    this.dataReady = true;
     // SAVING THE DATA ON SESSIONSTORAGE
     sessionStorage.setItem("balanceData", JSON.stringify(this.dataForBarCharts) );
+    this.dataForPieCurrentMonth();
+    this.dataReady = true;
   }
 
   dataProcess( monthNumber:number, gastosValue:number, ahorroValue:number ){
     // Name of the month process
-    let months:any[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 
+    let months:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 
                         'Agosto', 'Septiembre', 'Octube', 'Noviembre', 'Diciembre'];
-    let name = "";
+    let name:string = "";
     for( let i = 0; i < months.length; i++ ){
       monthNumber == i ? name = months[i] : null
     }
-    this.dataForBarCharts.push( { name: name, series:[ 
-                                  { name : "Gastos", value : gastosValue }, 
-                                  { name:"Ahorro", value : ahorroValue } 
-                                ]
+    
+    this.dataForBarCharts.push( { name: name, 
+                                  series:[ 
+                                      { name : "Gastos", value : gastosValue }, 
+                                      { name : "Ahorro", value : ahorroValue } 
+                                  ]
     });
+  }
+
+  dataForPieCurrentMonth(){
+    let series = this.dataForBarCharts[ this.dataForBarCharts.length - 1].series;
+    this.dataForPieChart = series;
+    this.monthSelected = this.dataForBarCharts[ this.dataForBarCharts.length - 1].name;
+  }
+
+  selectedMonth( event ){
+    this.dataForPieChart = event;
   }
 
 }

@@ -2,16 +2,23 @@
 <app-tabs></app-tabs>
 
 <!-- Line chart vertical -->
-<div class="row">
-    <div class="col s10 offset-s1 center">
-        <app-spinner *ngIf="!dataReady"></app-spinner>
-        <!-- NGIF NECESSARY TO WAIT FOR THE DATA -->
-        <app-month-chart *ngIf="dataReady" [dataForBarCharts]="dataForBarCharts"></app-month-chart>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col s12 center">
+            <app-spinner *ngIf="!dataReady"></app-spinner>
+            <!-- NGIF NECESSARY TO WAIT FOR THE DATA -->
+            <app-month-chart *ngIf="dataReady"
+                    (selectedMonth)="selectedMonth( $event )" [dataForBarCharts]="dataForBarCharts">
+            </app-month-chart>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <!-- Reference for ids on app-tabs -->
+            <app-incomes id="incomes"></app-incomes>
+            <app-expenses id="expenses"></app-expenses>
+            <app-balance [month]="monthSelected" [data]="dataForPieChart" id="balance"></app-balance>
+            <app-diagnostic id="diagnostic"></app-diagnostic>
+        </div>
     </div>
 </div>
-
-<!-- Reference for ids on app-tabs -->
-<app-incomes id="incomes"></app-incomes>
-<app-expenses id="expenses"></app-expenses>
-<app-balance id="balance"></app-balance>
-<app-diagnostic id="diagnostic"></app-diagnostic>

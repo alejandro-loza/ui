@@ -1,0 +1,15 @@
+#pieContainer{
+    display: grid;
+}
+
+.row{
+    margin-bottom: 0;
+}
+
+.paddAlign{
+    padding-top: 9px;
+}
+
+#text-right{
+    text-align: right;
+}

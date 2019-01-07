@@ -1,20 +1,16 @@
-<div class="container-fluid">
-  <div class="row">
-    <div id="barChartContainer" class="col s10 offset-s1 center">
-      <ngx-charts-bar-vertical-stacked
-        [scheme]="colorScheme"
-        [results]="dataForBarCharts"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="showLegend"
-        [legendTitle]="legendTitle"
-        [barPadding]="barPadding"
-        [showGridLines]="showGridLines"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        (select)="onSelect($event)">
-      </ngx-charts-bar-vertical-stacked>
-    </div>
-  </div>
+<h6>Gráfica mensual</h6>
+<div id="barChartContainer">
+  <ngx-charts-bar-vertical-stacked
+    [scheme]="colorScheme"
+    [results]="dataForBarCharts"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [barPadding]="barPadding"
+    [showGridLines]="showGridLines"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    (select)="onSelect($event)">
+  </ngx-charts-bar-vertical-stacked>
 </div>

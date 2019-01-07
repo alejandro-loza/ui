@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col s6 offset-s4 l4 offset-l2">
+        <div id="pieContainer">
+            <ngx-charts-pie-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="data"
+                [arcWidth]="arcWidth"
+                [explodeSlices]="explodeSlices"
+                [legend]="showLegend"
+                [explodeSlices]="explodeSlices"
+                [labels]="showLabels"
+                [doughnut]="doughnut">
+            </ngx-charts-pie-chart>
+        </div>
+    </div>
+    <div class="col s12 l5">
+        <ul class="collection">
+            <li *ngFor="let element of data" class="collection-item">
+                <div class="row">
+                    <div class="col m2 center">
+                        <img width="40px" src="{{assetsUrl+element.name}}.png">
+                    </div>
+                    <div class="col m6 paddAlign" >{{ element.name }}</div>
+                    <div class="col m4 paddAlign" id="text-right">${{ element.value | number:'1.2-2' }}</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+    
+    
