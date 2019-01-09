@@ -20,18 +20,10 @@ export class AuthService {
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
-  ) {
-    this.getData();
-  }
+  ) { }
 
   isAuth() {
     return this.configService.getAccessToken.length > 0 ? true : false;
-  }
-
-  getData() {
-    if (sessionStorage.getItem('access-token')) {
-      this.configService.setAccessToken = sessionStorage.getItem('access-token');
-    }
   }
 
   saveData(token: Token) {
@@ -53,7 +45,6 @@ export class AuthService {
         map(res => {
           sessionStorage.clear();
           this.saveData(res.body);
-          this.getData();
           return res;
         })
       );
@@ -69,6 +60,8 @@ export class AuthService {
         map(res => {
           sessionStorage.setItem('id-user', res.body.id);
           this.configService.setId = res.body.id;
+          this.configService.setAccessToken = sessionStorage.getItem('access-token');
+          this.configService.setRefreshToken = sessionStorage.getItem('refresh-token');
           return res;
         })
       );
