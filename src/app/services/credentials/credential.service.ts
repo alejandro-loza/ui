@@ -1,60 +1,72 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { Response } from '@shared/dto/credentials/response';
-import { ConfigService } from '../config/config.service';
-import { map, catchError } from 'rxjs/operators';
-import { Credential } from '@shared/dto/credentials/credential';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { environment } from '@env/environment';
 
+import { ConfigService } from '@services/config/config.service';
+
+import { CredentialsInterface } from '@interfaces/crendetials.interface';
+import { CredentialInterface } from '@interfaces/credential.interface';
+
+import { Observable } from 'rxjs';
+import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CredentialService {
+  private url: string;
+  private urlCredential: string;
+  private userId: string;
 
-  
-  url:string = `${environment.backendUrl}/users`;
-  DEEP_PARAM:string = "?deep=true"
-
-  constructor( private http:HttpClient, private finerio:ConfigService ) { 
-    
+  constructor(
+    private httpClient: HttpClient,
+    private configService: ConfigService
+  ) {
+    this.userId = sessionStorage.getItem('id-user');
+    this.urlCredential = `${environment.backendUrl}/credentials`;
+    this.url = `${environment.backendUrl}/users/${ this.userId }/credentials?deep=true`;
   }
 
-  getCredential( credentialId ){
-    let url:string = `${ environment.backendUrl}/credentials/${ credentialId + this.DEEP_PARAM }`
-    return this.http.get( url,({ headers: this.finerio.getJsonHeaders() }));
+  getCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
+    const urlCredential = `${this.urlCredential}/${credentialId}?deep=true`;
+    return this.httpClient.get<CredentialInterface>( urlCredential, {
+      observe: 'response',
+      headers: this.configService.getJsonHeaders()
+    });
   }
 
-  getAllCredentials( userId:String ){
-    return this.http.get( `${ this.url }/${ userId }/credentials?deep=true`, ({ headers : this.finerio.getJsonHeaders() })).pipe(
-      map( res => {
-        return res as Response;
-      }, catchError( this.handleError ))
-    )
+  getAllCredentials( ): Observable<HttpResponse<CredentialsInterface>> {
+    return this.httpClient.get<CredentialsInterface>(
+      this.url,
+      {
+        observe: 'response',
+        headers: this.configService.getJsonHeaders()
+      }
+    );
   }
 
-  createCredential( credential: Credential ) {
-    let userId = sessionStorage.getItem("id-user");
-    let url = `${this.url }/${ userId }/credentials`;
-    let postBody = JSON.stringify(credential);
-    
-    return this.http.post(url, postBody, ({headers: this.finerio.getJsonHeaders() }));
+  createCredential( credential: CreateCredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
+    const postBody = JSON.stringify(credential);
+    return this.httpClient.post<CredentialInterface>(this.url, postBody, {
+      observe: 'response',
+      headers: this.configService.getJsonHeaders()
+    });
   }
 
-  updateCredential( credential ){
-    let postBody = JSON.stringify( credential );
-    let url = `${ environment.backendUrl }/credentials/${ credential.id }`;
-    return this.http.put( url, postBody, ({ headers:this.finerio.getJsonHeaders() }));
+  updateCredential( credential: CredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
+    const postBody = JSON.stringify(credential);
+    const urlCredential = `${this.urlCredential}/${ credential.id }`;
+    return this.httpClient.put<CredentialInterface>(urlCredential, postBody, {
+      observe: 'response',
+      headers: this.configService.getJsonHeaders()
+    });
   }
 
-  deleteCredential( credentialId:string ){
-    let url = `${ environment.backendUrl }/credentials/${ credentialId }`;
-    return this.http.delete( url , ({ headers: this.finerio.getJsonHeaders() }));
-  }
-
-  handleError(error: any) {
-    let errMsg = (error.message) ? error.message :
-        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    return errMsg
+  deleteCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
+    const urlCredential = `${this.urlCredential}/${credentialId}`;
+    return this.httpClient.delete<CredentialInterface>(urlCredential, {
+      observe: 'response',
+      headers: this.configService.getJsonHeaders()
+    });
   }
 }

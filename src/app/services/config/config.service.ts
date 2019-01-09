@@ -1,33 +1,35 @@
-import { Injectable } from              '@angular/core';
-import { HttpHeaders,
-         HttpClient } from              '@angular/common/http';
-import { environment } from             '@env/environment.prod';
-import { RefreshToken } from            '@interfaces/refreshToken.interface';
-import { map } from                     'rxjs/operators';
-import { isNullOrUndefined } from       'util';
+import { Injectable } from '@angular/core';
+import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
+import { environment } from '@env/environment.prod';
+
+import { map, retry } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
+import { isNullOrUndefined } from 'util';
+
+import { Token } from '@app/interfaces/token.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
   private headers: HttpHeaders;
-  private url = `${environment.apiUrl}/oauth/access_token`;
-  token_access: string;
-  token_refresh: string;
-  idUser: string;
-  deep = true;
+  private token_access: string;
+  private token_refresh: string;
+  private idUser: string;
 
-  constructor(
-    private httpClient: HttpClient
-  ) {
+  constructor(private httpClient: HttpClient) {
     this.headers = new HttpHeaders();
+    this.token_access = null;
+    this.token_refresh = null;
+    this.idUser = null;
   }
 
-  public set setToken(token: string) {
+  public set setAccessToken(token: string) {
     this.token_access = token;
   }
 
-  public get getToken(): string {
+  public get getAccessToken(): string {
     return this.token_access;
   }
 
@@ -51,39 +53,54 @@ export class ConfigService {
     this.headers = this.headers.append('Content-Type', 'application/json');
     this.headers = this.headers.append('Accept', 'application/json');
     /**
-     * Se checa si el toquen es undefined o null. Esto puede darse por dos circunstancias, si el token no existe es undefined,
+     * Se checa si el toquen es undefined o null.
+     * Esto puede darse por dos circunstancias,
+     * si el token no existe es undefined,
      * pero si el token expira entonces es nulo.
      */
-    if ( !isNullOrUndefined(this.token_access) ) {
-      this.headers = this.headers.set('Authorization', `Bearer ${this.token_access}`);
-    } else if (sessionStorage.getItem('access-token')) {
-      this.setToken = sessionStorage.getItem('access-token');
-      this.headers = this.headers.set('Authorization', `Bearer ${this.token_access}`);
+    if (!isNullOrUndefined(this.getAccessToken)) {
+      this.headers = this.headers.set(
+        'Authorization',
+        `Bearer ${this.getAccessToken}`
+      );
+    } else if (!isNullOrUndefined(sessionStorage.getItem('access-token'))) {
+      this.setAccessToken = sessionStorage.getItem('access-token');
+      this.headers = this.headers.set(
+        'Authorization',
+        `Bearer ${this.token_access}`
+      );
     }
-
     return this.headers;
   }
 
-  refreshToken() {
-    if ( isNullOrUndefined(this.token_refresh) || isNullOrUndefined(this.idUser)) {
-      this.setRefreshToken = sessionStorage.getItem('refresh-token');
-      this.setId = sessionStorage.getItem('id-user');
-    }
-    this.httpClient.post(
-      this.url,
-      `grant_type=refresh_token&refresh_token=${this.getRefreshToken}`,
-      { headers: this.headers.set('Content-Type', 'application/x-www-form-urlencoded') }
-    ).pipe(
-      map( (res: RefreshToken) => {
-        sessionStorage.clear();
+  refreshToken(): Observable<HttpResponse<Token>> {
+    const url = `${environment.apiUrl}/oauth/access_token`;
 
-        sessionStorage.setItem( 'access-token', res.access_token );
-        sessionStorage.setItem( 'refresh-token', res.refresh_token );
-        sessionStorage.setItem( 'id-user', this.getId);
+    this.setRefreshToken = sessionStorage.getItem('refresh-token');
+    this.setId = sessionStorage.getItem('id-user');
 
-        this.setToken = res.access_token;
-        this.setRefreshToken = res.refresh_token;
-      })
-    ).subscribe( res => res, err => console.error('%c Config.service.#refreshToken()', 'color: orange', err));
+    return this.httpClient
+      .post<Token>(
+        url,
+        `grant_type=refresh_token&refresh_token=${this.getRefreshToken}`,
+        {
+          observe: 'response',
+          headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})
+        }
+      )
+      .pipe(
+        retry(2),
+        map(res => {
+          sessionStorage.clear();
+
+          sessionStorage.setItem('access-token', res.body.access_token);
+          sessionStorage.setItem('refresh-token', res.body.refresh_token);
+          sessionStorage.setItem('id-user', this.getId);
+
+          this.setAccessToken = res.body.access_token;
+          this.setRefreshToken = res.body.refresh_token;
+          return res;
+        })
+      );
   }
 }

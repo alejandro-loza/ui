@@ -1,20 +1,21 @@
-import { Injectable } from                '@angular/core';
-import { HttpClient } from                '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
-import { environment } from               '@env/environment';
+import { environment } from '@env/environment';
 
-import { ConfigService } from             '@services/config/config.service';
+import { ConfigService } from '@services/config/config.service';
 
-import { User } from                      '@app/shared/interfaces/authLogin.interface';
-import { InfoUser } from                  '@interfaces/infoUser.interface';
+import { LoginInterface } from '@interfaces/authLogin.interface';
+import { UserInterface } from '@interfaces/user.interface';
 
-import { map } from                       'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Token } from '@app/interfaces/token.interface';
 
 @Injectable()
 export class AuthService {
-
   url = `${environment.backendUrl}/login`;
-  user: User;
+  user: LoginInterface;
 
   constructor(
     private httpClient: HttpClient,
@@ -24,41 +25,51 @@ export class AuthService {
   }
 
   isAuth() {
-    return (  this.configService.getToken.length  > 0 ) ? true : false;
+    return this.configService.getAccessToken.length > 0 ? true : false;
   }
 
   getData() {
-    if ( sessionStorage.getItem('access-token') ) {
-      this.configService.setToken = sessionStorage.getItem('access-token');
+    if (sessionStorage.getItem('access-token')) {
+      this.configService.setAccessToken = sessionStorage.getItem('access-token');
     }
   }
 
-  saveData( access_token: string, refresh_token: string ) {
-    sessionStorage.setItem( 'access-token', access_token );
-    sessionStorage.setItem( 'refresh-token', refresh_token );
+  saveData(token: Token) {
+    sessionStorage.setItem('access-token', token.access_token);
+    sessionStorage.setItem('refresh-token', token.refresh_token);
 
-    this.configService.setToken = access_token;
-    this.configService.setRefreshToken = refresh_token;
+    this.configService.setAccessToken = token.access_token;
+    this.configService.setRefreshToken = token.refresh_token;
   }
 
-  login(user: User) {
-    return this.httpClient.post<User>(
-      this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.configService.getJsonHeaders()}
-    ).pipe(
-      map( (res: any ) => {
-        this.saveData( res.access_token, res.refresh_token);
-        this.getData();
-        return true;
-      })
-    );
-  }
-
-  personalInfo() {
-    return this.httpClient.get<InfoUser>(`${environment.backendUrl}/me`, {headers: this.configService.getJsonHeaders()})
+  login(user: LoginInterface): Observable<HttpResponse<Token>> {
+    return this.httpClient
+      .post<Token>(
+        this.url,
+        JSON.stringify({ username: user.email, password: user.password }),
+        { observe: 'response', headers: this.configService.getJsonHeaders() }
+      )
       .pipe(
-        map( (res: InfoUser) => {
-          sessionStorage.setItem( 'id-user', res.id );
-          this.configService.setId = res.id;
+        map(res => {
+          sessionStorage.clear();
+          this.saveData(res.body);
+          this.getData();
+          return res;
+        })
+      );
+  }
+
+  personalInfo(): Observable<HttpResponse<UserInterface>> {
+    return this.httpClient
+      .get<UserInterface>(`${environment.backendUrl}/me`, {
+        observe: 'response',
+        headers: this.configService.getJsonHeaders()
+      })
+      .pipe(
+        map(res => {
+          sessionStorage.setItem('id-user', res.body.id);
+          this.configService.setId = res.body.id;
+          return res;
         })
       );
   }

@@ -1,7 +1,7 @@
 import { NgModule } from           '@angular/core';
-import { AcessRoutes } from      '@access/access.route';
+import { AcessRoutes } from        '@access/access.route';
 import { SharedModule } from       '@shared/shared.module';
-import { AccessComponent } from   '@access/access.component';
+import { AccessComponent } from    '@access/access.component';
 
 @NgModule({
   imports: [
@@ -10,7 +10,7 @@ import { AccessComponent } from   '@access/access.component';
   ],
   declarations: [
     AccessComponent
-  ]
+  ],
+  providers: [ ]
 })
 export class AccessModule { }
-  

@@ -6,21 +6,22 @@ import {
   Renderer2,
   ViewChild,
   OnDestroy
-} from                           '@angular/core';
-import { NgModel } from          '@angular/forms';
+} from '@angular/core';
+import { NgModel } from '@angular/forms';
 
-import { ConfigService } from    '@services/config/config.service';
-import { DateApiService } from   '@services/date-api/date-api.service';
+import { DateApiService } from '@services/date-api/date-api.service';
 import { MovementsService } from '@services/movements/movements.service';
-import { ParamsService } from    '@services/movements/params/params.service';
+import { ParamsService } from '@services/movements/params/params.service';
+import { ToastService } from '@services/toast/toast.service';
 
-import { Movement } from         '@interfaces/movement.interface';
-import { ParamsMovement } from   '@interfaces/paramsMovement.interface';
-import { ParamsMovements } from  '@interfaces/paramsMovements.interface';
+import { Movement } from '@interfaces/movement.interface';
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import { ToastInterface } from '@interfaces/toast.interface';
 
-import { retry } from            'rxjs/operators';
+import { retry } from 'rxjs/operators';
 
-import * as M from               'materialize-css/dist/js/materialize';
+import * as M from 'materialize-css/dist/js/materialize';
 
 declare const $: any;
 
@@ -36,23 +37,31 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('inputDescription') inputDescription: NgModel;
 
   description: string;
-  editMovement: ParamsMovement;
   ingresogasto: string;
   instanceCollapsible;
   editMovementFlag: boolean;
   filterflag: boolean;
+  editMovement: ParamsMovement;
+  toastInterface: ToastInterface;
 
   movementsList: Movement[];
   paramsMovements: ParamsMovements;
 
   constructor(
     public renderer: Renderer2,
-    private movementsService: MovementsService,
-    private configService: ConfigService,
     private dateApiService: DateApiService,
-    private paramsService: ParamsService
+    private movementsService: MovementsService,
+    private paramsService: ParamsService,
+    private toastService: ToastService
   ) {
-    this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0 };
+    this.paramsMovements = {
+      charges: true,
+      deep: true,
+      deposits: true,
+      duplicates: true,
+      maxMovements: 35,
+      offset: 0
+    };
     this.editMovement = {
       amount: 0,
       balance: 0,
@@ -64,6 +73,7 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
       id: '',
       type: ''
     };
+    this.toastInterface = { code: null, message: null, classes: null };
     this.editMovementFlag = false;
     this.filterflag = false;
     this.movementsList = [];
@@ -106,44 +116,18 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
   getMovements(paramsMovements: ParamsMovements) {
     this.movementsService
       .getMovements(paramsMovements)
-      .pipe(
-        retry(2)
-      )
+      .pipe(retry(2))
       .subscribe(
-        res => this.movementsList = res,
+        res => (this.movementsList = res.body.data),
         err => {
+          this.toastInterface.code = err.status;
           if (err.status === 401) {
-            this.configService.refreshToken();
-            const toastHTML =
-            `<span>Hemos actualizado tu sesión, ¡Bienvenido de nuevo!</span>
-            <button class="btn-flat toast-action" onClick="
-              const toastElement = document.querySelector('.toast');
-              const toastInstance = M.Toast.getInstance(toastElement);
-              toastInstance.dismiss();">
-              <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-            </button>`;
-            M.Toast.dismissAll();
-            M.toast({
-              html: toastHTML,
-              classes: 'light-blue darken-4',
-              displayLength: 2000
-            });
+            this.toastService.toastGeneral(this.toastInterface);
           }
           if (err.status === 500) {
-            const toastHTML =
-            `<span>¡Ha ocurrido un error al obterner tus movimiento!</span>
-            <button class="btn-flat toast-action" onClick="
-              const toastElement = document.querySelector('.toast');
-              const toastInstance = M.Toast.getInstance(toastElement);
-              toastInstance.dismiss();">
-              <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-            </button>`;
-            M.Toast.dismissAll();
-            M.toast({
-              html: toastHTML,
-              classes: 'red darken-4',
-              displayLength: 2000
-            });
+            this.toastInterface.message =
+              '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.toastGeneral(this.toastInterface);
           }
         },
         () => {
@@ -163,28 +147,8 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
   collapsibleOpen(index: number) {
     this.instanceCollapsible.destroy();
     this.instanceCollapsible.open(index);
-
-    if ( this.editMovementFlag === false ) {
-        this.editMovement = {
-          amount:             this.movementsList[index].amount,
-          balance:            this.movementsList[index].balance,
-          customDate:         this.movementsList[index].customDate.toString(),
-          customDescription:  this.movementsList[index].customDescription,
-          date:               this.movementsList[index].date.toString(),
-          description:        this.movementsList[index].description,
-          duplicated:         this.movementsList[index].duplicated,
-          id:                 this.movementsList[index].id,
-          type:               this.movementsList[index].type
-        };
-        this.editMovementFlag = false;
-    }
-
-    if ( this.editMovement.type === '' || this.editMovement.customDescription === '' ) {
-      this.editMovement.id =                this.movementsList[index].id;
-      this.editMovement.customDate =        this.movementsList[index].customDate.toString();
-      this.editMovement.customDescription = this.movementsList[index].customDescription;
-      this.editMovement.description =       this.movementsList[index].description;
-      this.editMovement.type =              this.movementsList[index].type;
+    if ( this.editMovementFlag === true) {
+      this.editMovement = this.movementsList[index];
       this.editMovementFlag = false;
     }
   }
@@ -199,14 +163,7 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   movementActionEmit(flag: boolean) {
     if (flag === true) {
-      this.paramsMovements = {
-        charges:      this.paramsService.getCharges,
-        deep:         this.paramsService.getDeep,
-        deposits:     this.paramsService.getDeposits,
-        duplicates:   this.paramsService.getDuplicates,
-        maxMovements: this.paramsService.getMaxMovements,
-        offset:       this.paramsService.getOffset
-      };
+      this.paramsMovements = this.paramsService.getParamsMovements;
       this.movementsList = [];
       this.getMovements(this.paramsMovements);
     }

@@ -26,8 +26,7 @@
       "@services/*": ["app/services/*"],
       "@pages/*": ["app/pages/*"],
       "@shared/*": ["app/shared/*"],
-      "@interfaces/*": ["app/shared/interfaces/*"],
-      "@classes/*": ["app/shared/classes/*"]
+      "@interfaces/*": ["app/interfaces/*"],
     }
   }
 }

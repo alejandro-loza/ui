@@ -12,9 +12,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     CommonModule,
-    RECOVERY_ROUTES,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RECOVERY_ROUTES,
   ],
   declarations: [
     RecoverypasswordComponent

@@ -1,17 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-
 body,
 html {
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
-    min-height: 100%;
+    font-family: 'Roboto', sans-serif;
 }
 
 :root {
     --navyblue-color: #18537b;
     --orange-color: #EE883A;
-    --paddingPages: 300px;
+    --paddingPages: 128px;
 }
 
 .finerio-blue-text {

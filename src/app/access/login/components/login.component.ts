@@ -1,12 +1,13 @@
 import { Component,
-         OnInit,
-         Renderer2 } from                   '@angular/core';
+         OnInit, } from                     '@angular/core';
 import { NgForm } from                      '@angular/forms';
 import { Router } from                      '@angular/router';
 
-import { AuthService } from                 '@services/services.index';
-import { User } from                        '@app/shared/interfaces/authLogin.interface';
-import * as M from                          'materialize-css/dist/js/materialize';
+import { AuthService } from                 '@services/auth/auth.service';
+import { ToastService } from                '@services/toast/toast.service';
+
+import { LoginInterface } from                        '@interfaces/authLogin.interface';
+import { ToastInterface } from              '@interfaces/toast.interface';
 
 @Component({
   selector: 'app-login',
@@ -15,58 +16,44 @@ import * as M from                          'materialize-css/dist/js/materialize
 })
 
 export class LoginComponent implements OnInit {
-
   errorMsg: string;
-  usuario: User = {
-    email: '',
-    password: ''
-  };
-
+  user: LoginInterface;
+  toastInterface: ToastInterface;
   constructor(
     private router: Router,
     private authService: AuthService,
-    private renderer: Renderer2
+    private toastService: ToastService
     ) {
       this.errorMsg =  '';
+      this.user = { email: '', password: '' };
+      this.toastInterface = { code: 0, message: null, classes: null };
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   ingresar(loginForm: NgForm) {
-    const buttonToast =
-    ` <button class="transparent btn-flat white-text" onClick="`+
-    `${M.Toast.dismissAll()}` + `var toastElement = document.querySelector('.toast');` +
-    `var toastInstance = M.Toast.getInstance(toastElement);  toastInstance.dismiss();"><i class="large material-icons">close</i></button>'`;
-    this.errorMsg = '';
+    this.user.email = loginForm.value.email,
+    this.user.password = loginForm.value.password;
 
-    this.usuario.email = loginForm.value.email,
-    this.usuario.password = loginForm.value.password;
-
-    this.authService.login( this.usuario ).subscribe(
+    this.authService.login( this.user ).subscribe(
       res => {
         this.router.navigate(['/access/welcome']);
       }, err => {
+        this.toastInterface.code = err.status;
         if ( err.status === 0 ) {
-          this.errorMsg = 'Verifique su conexión de internet';
-          M.toast({
-            html: this.errorMsg + buttonToast,
-            classes: 'cyan accent-4'
-          });
+          this.toastService.toastGeneral(this.toastInterface);
         }
         if ( err.status === 400 ) {
-          this.errorMsg = 'Debes llenar los campos para <br> ingresar a la aplicación';
-          M.toast({
-            html: this.errorMsg + buttonToast,
-            classes: 'orange darken-2'
-          });
+          this.toastInterface.message = 'Te falto llenar un campo del formulario';
+          this.toastService.toastGeneral(this.toastInterface);
         }
         if ( err.status === 401 ) {
-          this.errorMsg = 'Datos incorrectos. Comprueba que <br> sean correctos tus datos';
-          M.toast({
-            html: this.errorMsg + buttonToast,
-            classes: 'red accent-3'
-          });
+          this.toastInterface.message = 'Tus datos son incorrectos, por favor verifica<br>que los hayas escrito bien';
+          this.toastService.toastGeneral(this.toastInterface);
+        }
+        if ( err.status === 500) {
+          this.toastInterface.message = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
+          this.toastService.toastGeneral(this.toastInterface);
         }
       }
     );

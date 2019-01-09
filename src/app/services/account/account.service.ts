@@ -1,41 +1,37 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ConfigService } from "@services/config/config.service";
-import { Response } from '@shared/dto/credentials/response';
-import { environment } from '../../../environments/environment';
-import { map, catchError } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
+import { environment } from '@env/environment';
+
+import { ConfigService } from '@services/config/config.service';
+
+import { AccountsInterface } from '@interfaces/accounts.interface';
+
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
+  url: String = `${environment.backendUrl}/users`;
 
-  url:String = `${environment.backendUrl}/users`;
+  constructor(private http: HttpClient, private finerio: ConfigService) {}
 
-  constructor( private http:HttpClient, private finerio:ConfigService ) { 
-  }
-
-  getAccounts( userId:String ) {
-    return this.http.get( `${ this.url }/${ userId }/accounts?deep=true`, ({ headers:this.finerio.getJsonHeaders() }) ).pipe(
-      map( res => {
-        return res as Response  
-      }, catchError ( this.handleError ))
+  getAccounts(userId: string): Observable<HttpResponse<AccountsInterface>> {
+    return this.http.get<AccountsInterface>(
+      `${this.url}/${userId}/accounts?deep=true`,
+      {
+        observe: 'response',
+        headers: this.finerio.getJsonHeaders()
+      }
     );
   }
 
-  deleteAccount( accountId:string ) {
-    let url = `${ environment.backendUrl }/accounts/`+accountId;
-    return this.http.delete( url, ({ headers:this.finerio.getJsonHeaders() }) ).pipe(
-      map( res => {
-        return res;
-      })
-    );
-  }
-
-  handleError(error: any) {
-    let errMsg = (error.message) ? error.message :
-        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-    return errMsg
+  deleteAccount(accountId: string): Observable<HttpResponse<AccountsInterface>> {
+    const url = `${environment.backendUrl}/accounts/` + accountId;
+    return this.http.delete<AccountsInterface>(url, {
+      observe: 'response',
+      headers: this.finerio.getJsonHeaders()
+    });
   }
 }
