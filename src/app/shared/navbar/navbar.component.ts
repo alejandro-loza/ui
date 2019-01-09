@@ -55,5 +55,4 @@ export class NavbarComponent implements OnInit, AfterContentInit{
       map( (event: ActivationEnd) => event.snapshot.data )
     );
   }
-
 }

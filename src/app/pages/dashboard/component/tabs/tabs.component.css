@@ -1,0 +1,30 @@
+.colTabs {
+  margin: 0%;
+  padding: 0%;
+}
+
+.tab a {
+  color: rgb(1, 87, 155, 0.7);
+}
+
+.tab a:hover,
+.tab a.active {
+  color: rgb(1, 87, 155);
+}
+
+.tab a:focus.active {
+  background-color: rgb(1, 87, 155, 0.1);
+}
+
+.tab a:focus {
+  background-color: transparent;
+}
+
+.tabs .tab.disabled a,
+.tabs .tab.disabled a:hover{
+  color: rgb(1, 87, 155, 0.4);
+}
+
+.tabs .indicator {
+  background-color: var(--orange-color);
+}

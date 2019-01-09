@@ -1,9 +1,11 @@
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard.component';
+import { DashboardComponent } from './component/dashboard.component';
 
-const DASHBOARD_ROUTING: Routes = [
-    { path: '', component: DashboardComponent }
+const DashboardRouting: Routes = [
+  {
+    path: '',
+    component: DashboardComponent
+  }
 ];
 
-export const DASHBOARD_ROUTES = RouterModule.forChild( DASHBOARD_ROUTING );
-
+export const DashboardRoutes = RouterModule.forChild(DashboardRouting);

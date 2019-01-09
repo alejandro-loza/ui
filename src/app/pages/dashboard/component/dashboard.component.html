@@ -1,0 +1,21 @@
+<!-- Tabs for dashboard -->
+<app-tabs></app-tabs>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col s12">
+            <!-- Reference for ids on app-tabs -->
+            <app-incomes id="incomes"></app-incomes>
+            <app-expenses [dataForChart]="dataExpensesMonthChart"
+                          id="expenses"></app-expenses>
+
+            <app-balance 
+                         [data]="dataForPieChart"
+                         [dataForBalanceChart]="dataBalanceMonthChart"
+                         id="balance">
+            </app-balance>
+            <!-- <app-diagnostic id="diagnostic"></app-diagnostic> -->
+        </div>
+    </div> 
+</div>
+        

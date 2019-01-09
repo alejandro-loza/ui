@@ -48,6 +48,8 @@ export class MovementsService {
       `?deep=${paramsMovements.deep}` +
       `&offset=` +
       paramsMovements.offset +
+      `&startDate=${ paramsMovements.startDate }` +
+      `&endDate=${ paramsMovements.endDate }` +
       `&max=${paramsMovements.maxMovements}` +
       `&includeCharges=${paramsMovements.charges}` +
       `&includeDeposits=${paramsMovements.deposits}` +

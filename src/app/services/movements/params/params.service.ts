@@ -10,6 +10,8 @@ export class ParamsService {
 
   constructor() {
     this.paramsMovements = {
+      startDate:'',
+      endDate: '',
       charges: true,
       deep: true,
       deposits: true,
@@ -21,6 +23,22 @@ export class ParamsService {
 
   public get getParamsMovements(): ParamsMovements {
     return this.paramsMovements;
+  }
+
+  public set setStartDate( startDate:string ){
+    this.paramsMovements.startDate = startDate;
+  }
+
+  public get getStartDate():string {
+    return this.paramsMovements.startDate;
+  }
+
+  public set setEndDate( endDate:string ){
+    this.paramsMovements.endDate = endDate;
+  }
+
+  public get getEndtDate():string {
+    return this.paramsMovements.endDate;
   }
 
   public set setCharges( charges: boolean ) {
