@@ -19,7 +19,7 @@ export class DashboardService {
   constructor( ) { }
 
   getDataForBalanceChart( movements:Movement[] ) {
-    this.dataBalanceMonthChart = [];
+    this.dataBalanceMonthChart = []; this.dataExpensesChart = [];
     this.chargeBalanceAux = 0; this.depositBalanceAux = 0; this.savingBalanceAux = 0;
 
     let auxMonth = new Date().getMonth();
