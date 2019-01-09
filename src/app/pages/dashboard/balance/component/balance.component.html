@@ -1,4 +1,14 @@
 <div class="row">
+    <div class="col s12 center">
+        <app-spinner *ngIf="!dataForBalanceChart.length > 0"></app-spinner>
+        <!-- NGIF NECESSARY TO WAIT FOR THE DATA -->
+        <app-month-chart [dataForBalanceChart]="dataForBalanceChart"
+                        (dataPieMonthSelected)="selectedMonthChart( $event )"
+                        *ngIf="dataForBalanceChart.length > 0">
+        </app-month-chart>
+    </div>
+</div>
+<div class="row">
     <div class="col s6 offset-s4 l4 offset-l2">
         <div id="pieContainer">
             <ngx-charts-pie-chart

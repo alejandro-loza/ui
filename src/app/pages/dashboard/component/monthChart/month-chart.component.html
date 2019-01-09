@@ -1,8 +1,8 @@
-<h6>Gráfica mensual</h6>
+<h5>{{ nameMonthSelected }} {{ yearOfSelectedMonth }}</h5>
 <div id="barChartContainer">
   <ngx-charts-bar-vertical-stacked
     [scheme]="colorScheme"
-    [results]="dataForBarChart"
+    [results]="dataForBalanceChart"
     [gradient]="gradient"
     [xAxis]="showXAxis"
     [yAxis]="showYAxis"

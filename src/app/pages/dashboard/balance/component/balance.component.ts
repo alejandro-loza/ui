@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PieChart } from "@interfaces/dasboardPieChart.interface";
+import { BalanceChart } from '@app/shared/interfaces/dashboardBalanceChart.interface';
 
 @Component({
   selector: 'app-balance',
@@ -7,11 +8,11 @@ import { PieChart } from "@interfaces/dasboardPieChart.interface";
   styleUrls: ['./balance.component.css']
 })
 export class BalanceComponent implements OnInit {
-  @Input() data:PieChart[];
-  @Input() month:string;
+  @Input() data:PieChart[] = [];
+  @Input() dataForBalanceChart:BalanceChart[] = [];
 
   // pie
-  view = [ 250, 250 ];
+  view = [ 270, 270 ];
   showLegend = false;
   showLabels = false;
   explodeSlices = false;
@@ -20,14 +21,15 @@ export class BalanceComponent implements OnInit {
   colorScheme = {
    domain: ['#a02e36','#7bba3a']
   };
-
   assetsUrl = "../../../assets/media/img/dashboard/";
 
-  
-  constructor() { }
+  constructor( ) { }
 
   ngOnInit() {
-    
+  }
+
+  selectedMonthChart( event ){
+    this.data = event;
   }
 
 }

@@ -1,3 +1,7 @@
-<p>
-  expenses works!
-</p>
+<div class="row">
+  <div class="col s12 center">
+      <app-spinner *ngIf="!dataForChart.length > 0"></app-spinner>
+      <app-bar-charts *ngIf="dataForChart.length > 0"
+                       [dataForChart]="dataForChart" [colorOfChart]="colorOfChart"></app-bar-charts>
+  </div>
+</div>
