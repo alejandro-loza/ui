@@ -18,7 +18,6 @@ import { BalanceChart } from '@app/shared/interfaces/dashboardBalanceChart.inter
     gradient = false;
     showLegend = false;
     showXAxisLabel = true;
-    barPadding = 20;
     showGridLines = true;
     showYAxisLabel = true;
     timeline = true;
