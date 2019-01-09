@@ -1,30 +1,40 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { FinancialInstitution } from '@shared/dto/credentials/financialInstitution';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+
 import { environment } from '@env/environment';
+
+import { ConfigService } from '@services/config/config.service';
+
+import { InstitutionInterface } from '@interfaces/institution.interface';
+import { InstitutionFieldInterface } from '@interfaces/institutionField';
+
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ConfigService } from '../config/config.service';
-import { institutionField } from '@interfaces/institutionField';
 
 @Injectable()
 export class FieldService {
-
   endpoint = environment.backendUrl;
-  institutionId:number;
+  institutionId: number;
 
-  constructor( private http: HttpClient, private finero:ConfigService ) {
-   }
+  constructor(
+    private httpClient: HttpClient,
+    private configService: ConfigService
+  ) {}
 
-  findAllFieldsByInstitution( institutionCode:string ) {
-    let institutions = JSON.parse( sessionStorage.getItem("institutions") );
-    institutions.forEach( (element:FinancialInstitution) => {
-      element.code ==  institutionCode ? this.institutionId = element.id : null 
+  findAllFieldsByInstitution( institutionCode: string ): Observable<HttpResponse<InstitutionFieldInterface[]>> {
+    const institutions = JSON.parse(sessionStorage.getItem('institutions'));
+    institutions.forEach((element: InstitutionInterface) => {
+      if ( element.code === institutionCode ) {
+        this.institutionId = element.id;
+      }
     });
-    let url = `${ this.endpoint }/fields?institutionId=${ this.institutionId }`;
-    return this.http.get( url, ({ headers: this.finero.getJsonHeaders() }) ).pipe(
-      map( (res: institutionField[]) => {
+    const url = `${this.endpoint}/fields?institutionId=${this.institutionId}`;
+    return this.httpClient
+      .get<InstitutionFieldInterface[]>(url, {
+        observe: 'response',
+        headers: this.configService.getJsonHeaders()
+      }).pipe (map(res => {
         return res;
-      })
-    );
+      }));
   }
 }

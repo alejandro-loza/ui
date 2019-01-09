@@ -1,26 +1,26 @@
-import { Injectable } from              '@angular/core';
-import { HttpClient } from              '@angular/common/http';
-import { environment } from             '@env/environment';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { environment } from '@env/environment';
 
-import { ConfigService } from           '@services/config/config.service';
+import { ConfigService } from '@services/config/config.service';
 
-import { ParamsMovements } from         '@interfaces/paramsMovements.interface';
-import { ParamsMovement } from          '@interfaces/paramsMovement.interface';
-import { Movement } from                '@interfaces/movement.interface';
-import { Movements } from               '@interfaces/movements.interface';
+import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import { Movement } from '@interfaces/movement.interface';
+import { Movements } from '@interfaces/movements.interface';
 
-import { map } from                     'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class MovementsService {
   private url = `${environment.backendUrl}/users`;
   movementsList: Array<Movement>;
 
-
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
-  ) { }
+  ) {}
 
   /**
    * @function allMovements Esta función lo que hace traer todos lo movimiento con los siguientes parametros
@@ -35,59 +35,45 @@ export class MovementsService {
    * @param duplicate : Para incluir los movimientos duplicaods
    */
 
-  getMovements ( paramsMovements: ParamsMovements ) {
-    if ( paramsMovements.offset === 0 ) {
+  getMovements(
+    paramsMovements: ParamsMovements
+  ): Observable<HttpResponse<Movements>> {
+    if (paramsMovements.offset === 0) {
       this.movementsList = new Array();
     }
     const id = sessionStorage.getItem('id-user');
     const urlMovements =
-      `${ this.url }/` +
-      `${ id }/movements` +
-      `?deep=${ paramsMovements.deep }` +
+      `${this.url}/` +
+      `${id}/movements` +
+      `?deep=${paramsMovements.deep}` +
       `&startDate=${ paramsMovements.startDate }`+
       `&endDate=${ paramsMovements.endDate }`+
-      `&offset=` + paramsMovements.offset +
-      `&max=${ paramsMovements.maxMovements }` +
-      `&includeCharges=${ paramsMovements.charges }` +
-      `&includeDeposits=${ paramsMovements.deposits }` +
-      `&includeDuplicates=${ paramsMovements.duplicates }`;
-    return this.httpClient.get<Movements>(
-      urlMovements,
-      { headers: this.configService.getJsonHeaders()}
-    ).pipe(
-      map( (res: Movements) => {
-        if ( this.movementsList.length === res.size) {
-          return this.movementsList;
-        }
-        for (let i = 0; i < res.data.length; i++) {
-          const movement: Movement = res.data[i];
-          this.movementsList.push(movement);
-        }
-        return this.movementsList;
+      `&offset=` +
+      paramsMovements.offset +
+      `&max=${paramsMovements.maxMovements}` +
+      `&includeCharges=${paramsMovements.charges}` +
+      `&includeDeposits=${paramsMovements.deposits}` +
+      `&includeDuplicates=${paramsMovements.duplicates}`;
+    return this.httpClient
+      .get<Movements>(urlMovements, {
+        observe: 'response',
+        headers: this.configService.getJsonHeaders()
       })
-    );
+      .pipe(
+        map(res => {
+          for (let i = 0; i < res.body.data.length; i++) {
+            const movement: Movement = res.body.data[i];
+            this.movementsList.push(movement);
+          }
+          res.body.data = this.movementsList;
+          return res;
+        })
+      );
   }
 
-  createMovement( movement: ParamsMovement ) {
-    return this.httpClient.post<ParamsMovement>(
-      `${this.url}/${ this.configService.getId }/movements`,
-      JSON.stringify  ({
-        amount: movement.amount,
-        balance: movement.balance,
-        customDate: movement.customDate,
-        customDescription: movement.customDescription,
-        date: movement.date,
-        description: movement.description,
-        duplicated: movement.duplicated,
-        type: movement.type.toUpperCase()
-      }),
-      { headers: this.configService.getJsonHeaders() }
-    );
-  }
-
-  updateMovement ( movement: ParamsMovement) {
-    return this.httpClient.put<ParamsMovement>(
-      `${ environment.backendUrl }/movements/${ movement.id }`,
+  createMovement(movement: ParamsMovement): Observable<HttpResponse<Movement>> {
+    return this.httpClient.post<Movement>(
+      `${this.url}/${this.configService.getId}/movements`,
       JSON.stringify({
         amount: movement.amount,
         balance: movement.balance,
@@ -98,14 +84,31 @@ export class MovementsService {
         duplicated: movement.duplicated,
         type: movement.type.toUpperCase()
       }),
-      { headers: this.configService.getJsonHeaders() }
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
   }
 
-  deleteMovement( idMovement: string ) {
-    return this.httpClient.delete<string>(
+  updateMovement(movement: ParamsMovement): Observable<HttpResponse<Movement>> {
+    return this.httpClient.put<Movement>(
+      `${environment.backendUrl}/movements/${movement.id}`,
+      JSON.stringify({
+        amount: movement.amount,
+        balance: movement.balance,
+        customDate: movement.customDate,
+        customDescription: movement.customDescription,
+        date: movement.date,
+        description: movement.description,
+        duplicated: movement.duplicated,
+        type: movement.type.toUpperCase()
+      }),
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
+    );
+  }
+
+  deleteMovement(idMovement: string): Observable<HttpResponse<Movement>> {
+    return this.httpClient.delete<Movement>(
       `${environment.backendUrl}/movements/${idMovement}`,
-      { headers: this.configService.getJsonHeaders() }
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
   }
 }

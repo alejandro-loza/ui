@@ -20,7 +20,6 @@ export class ParamsService {
       offset: 0,
     };
   }
-
   public set setStartDate( startDate:string ){
     this.paramsMovements.startDate = startDate;
   }
@@ -35,6 +34,10 @@ export class ParamsService {
 
   public get getEndtDate():string {
     return this.paramsMovements.endDate;
+  }
+
+  public get getParamsMovements(): ParamsMovements {
+    return this.paramsMovements;
   }
 
   public set setCharges( charges: boolean ) {

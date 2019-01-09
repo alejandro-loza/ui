@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { BarChart } from '@app/shared/interfaces/dashboardBarChart.interface';
+import { BarChart } from '@interfaces/dashboardBarChart.interface';
 
 @Component({
   selector: 'app-bar-charts',

@@ -2,10 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { HttpClientModule } from '@angular/common/http';
-import { AuthService, FinerioService } from '../services.index';
 
 import { User } from '@app/shared/interfaces/authLogin.interface';
 import { environment } from '@env/environment';
+import { AuthService } from '@services/auth/auth.service';
+import { ConfigService } from '@services/config/config.service';
 
 interface UserMock {
   email: string;
@@ -13,10 +14,6 @@ interface UserMock {
   id?: string;
   name?: string;
   lastName?: string;
-}
-
-interface infoMock {
-  info: string;
 }
 
 describe('AuthService', () => {
@@ -30,7 +27,7 @@ describe('AuthService', () => {
       ],
       providers: [
         AuthService,
-        FinerioService
+        ConfigService
        ]
     });
     authService = TestBed.get( AuthService );

@@ -1,15 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from         '@angular/core';
+import { CommonModule } from     '@angular/common';
 
 import { HttpClientModule } from '@angular/common/http';
 
 import {
   ConfigService,
-  AuthService,
-  AuthGuard,
-  MovementsService,
-  DateApiService
-} from './services.index';
+  DateApiService,
+  ToastService,
+} from                           './services.index';
 
 @NgModule({
   imports: [
@@ -18,10 +16,8 @@ import {
   ],
   providers: [
     ConfigService,
-    AuthService,
-    AuthGuard,
-    MovementsService,
-    DateApiService
+    DateApiService,
+    ToastService,
   ]
 })
 export class ServicesModule { }

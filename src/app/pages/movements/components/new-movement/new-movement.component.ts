@@ -1,19 +1,25 @@
 import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  Renderer2,
   AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
   Output,
-  EventEmitter
+  Renderer2,
+  ViewChild
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
+import { DateApiService } from '@services/date-api/date-api.service';
 import { MovementsService } from '@services/movements/movements.service';
-import { DateApiService } from   '@services/date-api/date-api.service';
+import { ToastService } from '@services/toast/toast.service';
 
-import { ParamsMovement } from '@app/shared/interfaces/paramsMovement.interface';
+import { ToastInterface } from '@interfaces/toast.interface';
+
+import { retry } from 'rxjs/operators';
+
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+
 import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
@@ -40,14 +46,17 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     duplicated: this.duplicated,
     type: this.typeIngresoGasto
   };
+  toastInterface: ToastInterface;
 
   constructor(
+    private dateApi: DateApiService,
     private renderer: Renderer2,
     private movementService: MovementsService,
-    public dateApi: DateApiService
+    private toastService: ToastService
   ) {
     this.date = new Date();
     this.createMovementStatus = new EventEmitter();
+    this.toastInterface = { code: null, message: null};
   }
 
   ngOnInit() {}
@@ -69,44 +78,35 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.movement.duplicated = form.value.duplicated;
     this.movement.type = form.value.typeAmmount;
 
-    this.movementService.createMovement(this.movement).subscribe(
-      res => this.createMovementStatus.emit(true),
-      err => {
-        M.toast({
-          html: `
-          <span>Ocurrió un error al crear tu movimiento</span>
-          <button
-            class="btn-flat toast-action"
-            onClick="
-            const toastElement = docu  ment.querySelector('.toast');
-            const toastInstance = M.Toast.getInstance(toastElement);
-            toastInstance.dismiss();">
-            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-          </button>`,
-          classes: 'red darken-2',
-          displayLength: 1500
-        });
-      },
-      () => {
-        form.reset();
-        const instaceModal = M.Modal.getInstance(this.modalElement.nativeElement);
-        instaceModal.close();
-        M.toast({
-          html: `
-          <span>Se creó su movimiento exitosamente</span>
-          <button
-            class="btn-flat toast-action"
-            onClick="
-            const toastElement = docu  ment.querySelector('.toast');
-            const toastInstance = M.Toast.getInstance(toastElement);
-            toastInstance.dismiss();">
-            <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
-          </button>`,
-          classes: 'grey darken-2 grey-text text-lighten-5',
-          displayLength: 1500
-        });
-      }
-    );
+    this.movementService
+      .createMovement(this.movement)
+      .pipe(retry(2))
+      .subscribe(
+        res => {
+          this.createMovementStatus.emit(true);
+          this.toastInterface.code = res.status;
+        },
+        err => {
+          this.toastInterface.code = err.status;
+          if (err.status === 401) {
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+          if (err.status === 500) {
+            this.toastInterface.message =
+              '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.toastGeneral(this.toastInterface);
+          }
+        },
+        () => {
+          form.reset();
+          const instaceModal = M.Modal.getInstance(
+            this.modalElement.nativeElement
+          );
+          instaceModal.close();
+          this.toastInterface.message = 'Se creó su movimiento exitosamente';
+          this.toastService.toastGeneral(this.toastInterface);
+        }
+      );
   }
 
   valueIngresoGasto(type: string = 'CHARGE') {
@@ -123,5 +123,4 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   valueDate(date: Date) {
     this.date = date;
   }
-
 }

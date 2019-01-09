@@ -1,29 +1,25 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+
 import { environment } from '@env/environment';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { Response } from '@shared/dto/credentials/response';
-import { ConfigService } from '../config/config.service';
-import { FinancialInstitution } from '@shared/dto/credentials/financialInstitution';
+
+import { ConfigService } from '@services/config/config.service';
+
+import { InstitutionsInterface } from '@interfaces/Institutions.interface';
+
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class InstitutionService {
+  constructor(private http: HttpClient, private finerio: ConfigService) {}
 
-  institutions:FinancialInstitution [] = []
-
-  constructor( private http:HttpClient, private finerio:ConfigService ) { 
-    }
-
-  getAllInstitutions() {
-    return this.http.get(`${ environment.backendUrl }/institutions`, ({headers: this.finerio.getJsonHeaders() }))
-                    .pipe( map( (res:any) => {
-                      res.data.forEach(element => {
-                        element.code != "DINERIO" ?  this.institutions.push( element ) : null
-                      });
-                      return res as Response
-                      })
-                    );
-            
+  getAllInstitutions(): Observable<HttpResponse<InstitutionsInterface>> {
+    return this.http.get<InstitutionsInterface>(
+      `${environment.backendUrl}/institutions`,
+      {
+        observe: 'response',
+        headers: this.finerio.getJsonHeaders()
+      }
+    );
   }
-
 }

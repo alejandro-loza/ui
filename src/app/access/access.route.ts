@@ -15,7 +15,7 @@ const AcessRouting: Routes = [
         loadChildren: './signup/signup.module#SignupModule'
       },
       {
-        path: 'recovery/:token',
+        path: 'recovery',
         loadChildren: './recoverypassword/recoverypassword.module#RecoverypasswordModule'
       },
       {
