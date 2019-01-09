@@ -23,7 +23,8 @@ export class AuthService {
   ) { }
 
   isAuth() {
-    return this.configService.getAccessToken.length > 0 ? true : false;
+    let accessToken = sessionStorage.getItem('access-token');
+    return accessToken.length > 0 ? true : false;
   }
 
   saveData(token: Token) {

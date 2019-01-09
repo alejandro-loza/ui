@@ -46,8 +46,8 @@ export class MovementsService {
       `${this.url}/` +
       `${id}/movements` +
       `?deep=${paramsMovements.deep}` +
-      `&startDate=${ paramsMovements.startDate }`+
-      `&endDate=${ paramsMovements.endDate }`+
+      `&startDate=${ paramsMovements.startDate }` +
+      `&endDate=${ paramsMovements.endDate }` +
       `&offset=` +
       paramsMovements.offset +
       `&startDate=${ paramsMovements.startDate }` +

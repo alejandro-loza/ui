@@ -51,7 +51,6 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
     public renderer: Renderer2,
     private dateApiService: DateApiService,
     private movementsService: MovementsService,
-    private paramsService: ParamsService,
     private toastService: ToastService
   ) {
     this.paramsMovements = {
@@ -163,7 +162,6 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   movementActionEmit(flag: boolean) {
     if (flag === true) {
-      this.paramsMovements = this.paramsService.getParamsMovements;
       this.movementsList = [];
       this.getMovements(this.paramsMovements);
     }

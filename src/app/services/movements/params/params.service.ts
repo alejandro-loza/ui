@@ -1,43 +1,42 @@
-import { Injectable } from      '@angular/core';
+import { Injectable } from '@angular/core';
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParamsService {
-
-  paramsMovements: ParamsMovements;
+  private paramsMovements: ParamsMovements;
 
   constructor() {
     this.paramsMovements = {
-      startDate:'',
+      startDate: '',
       endDate: '',
       charges: true,
       deep: true,
       deposits: true,
       duplicates: true,
       maxMovements: 35,
-      offset: 0,
+      offset: 0
     };
   }
 
-  public set setStartDate( startDate:string ){
+  public set setStartDate(startDate: string) {
     this.paramsMovements.startDate = startDate;
   }
 
-  public get getStartDate():string {
+  public get getStartDate(): string {
     return this.paramsMovements.startDate;
   }
 
-  public set setEndDate( endDate:string ){
+  public set setEndDate(endDate: string) {
     this.paramsMovements.endDate = endDate;
   }
 
-  public get getEndtDate():string {
+  public get getEndtDate(): string {
     return this.paramsMovements.endDate;
   }
 
-  public set setCharges( charges: boolean ) {
+  public set setCharges(charges: boolean) {
     this.paramsMovements.charges = charges;
   }
 
@@ -45,7 +44,7 @@ export class ParamsService {
     return this.paramsMovements.charges;
   }
 
-  public set setDeep( deep: boolean ) {
+  public set setDeep(deep: boolean) {
     this.paramsMovements.deep = deep;
   }
 
@@ -53,7 +52,7 @@ export class ParamsService {
     return this.paramsMovements.deep;
   }
 
-  public set setDeposits( deposits: boolean ) {
+  public set setDeposits(deposits: boolean) {
     this.paramsMovements.deposits = deposits;
   }
 
@@ -61,7 +60,7 @@ export class ParamsService {
     return this.paramsMovements.deposits;
   }
 
-  public set setDuplicates( duplicates: boolean ) {
+  public set setDuplicates(duplicates: boolean) {
     this.paramsMovements.duplicates = duplicates;
   }
 
@@ -69,7 +68,7 @@ export class ParamsService {
     return this.paramsMovements.duplicates;
   }
 
-  public set setMaxMovements( maxMovements: number ) {
+  public set setMaxMovements(maxMovements: number) {
     this.paramsMovements.maxMovements = maxMovements;
   }
 
@@ -77,7 +76,7 @@ export class ParamsService {
     return this.paramsMovements.maxMovements;
   }
 
-  public set setOffset( offset: number ) {
+  public set setOffset(offset: number) {
     this.paramsMovements.offset = offset;
   }
 
