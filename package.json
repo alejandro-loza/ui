@@ -21,12 +21,8 @@
     "@angular/platform-browser-dynamic": "^7.1.4",
     "@angular/router": "^7.1.4",
     "@mdi/font": "^2.8.94",
-<<<<<<< HEAD
     "core-js": "^2.6.1",
-=======
     "@swimlane/ngx-charts": "^10.0.0",
-    "core-js": "^2.6.0",
->>>>>>> 59279711e683bc9945cf49197b77af8125e3236b
     "hammerjs": "^2.0.8",
     "jquery": "^3.3.1",
     "materialize-css": "^1.0.0",
@@ -36,18 +32,10 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.10.7",
-<<<<<<< HEAD
     "@angular/cli": "^7.1.4",
     "@angular/compiler-cli": "^7.1.4",
     "@angular/language-service": "^7.1.4",
     "@types/jasmine": "^2.8.14",
-=======
-    "@angular/cli": "^7.1.2",
-    "@angular/compiler-cli": "^7.1.2",
-    "@angular/language-service": "^7.1.2",
-    "@types/chart.js": "^2.7.42",
-    "@types/jasmine": "^2.8.12",
->>>>>>> 59279711e683bc9945cf49197b77af8125e3236b
     "@types/jasminewd2": "^2.0.6",
     "@types/jquery": "^3.3.29",
     "@types/materialize-css": "^1.0.6",

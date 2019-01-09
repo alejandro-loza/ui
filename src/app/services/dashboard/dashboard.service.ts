@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Movement } from '@interfaces/movement.interface';
-import { BalanceChart } from "@app/shared/interfaces/dashboardBalanceChart.interface";
+import { BalanceChart } from "@interfaces/dashboardBalanceChart.interface";
 import { BarChart } from "@interfaces/dashboardBarChart.interface";
 import { PieChart } from "@interfaces/dasboardPieChart.interface";
 

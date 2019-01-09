@@ -4,8 +4,8 @@ import { DashboardService } from "@services/dashboard/dashboard.service";
 import { Movement } from '@interfaces/movement.interface';
 import { BalanceChart } from '@interfaces/dashboardBalanceChart.interface';
 import { DateApiService } from '@services/date-api/date-api.service';
-import { PieChart } from '@app/shared/interfaces/dasboardPieChart.interface';
-import { BarChart } from '@app/shared/interfaces/dashboardBarChart.interface';
+import { PieChart } from '@interfaces/dasboardPieChart.interface';
+import { BarChart } from '@interfaces/dashboardBarChart.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -71,8 +71,8 @@ export class DashboardComponent implements OnInit {
 
   // THIS METHOD IS THE SLOWEST 
   getMovementsData(){
-    this.movementsService.getMovements( this.paramsMovements ).subscribe( ( res:Movement[] ) => {
-      this.movementsServiceResponse = res;
+    this.movementsService.getMovements( this.paramsMovements ).subscribe( ( res ) => {
+      this.movementsServiceResponse = res.body.data;
     }, error => {
       console.log( error );
     }, () => {

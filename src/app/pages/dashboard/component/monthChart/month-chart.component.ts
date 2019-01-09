@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PieChart } from '@interfaces/dasboardPieChart.interface';
-import { BalanceChart } from '@app/shared/interfaces/dashboardBalanceChart.interface';
+import { BalanceChart } from '@interfaces/dashboardBalanceChart.interface';
 
   @Component({
     selector: 'app-month-chart',
