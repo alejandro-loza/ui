@@ -30,7 +30,6 @@ export class BarChartsComponent implements OnInit {
   }
 
   onSelect( event ){
-    console.log( event );
   }
 
 }

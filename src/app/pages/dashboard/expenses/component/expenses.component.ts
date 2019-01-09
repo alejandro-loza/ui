@@ -17,7 +17,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   selectedMonthChart( event ){
-    console.log( event );
+    
   }
 
 }

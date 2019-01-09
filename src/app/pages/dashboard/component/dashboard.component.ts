@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit {
     this.movementsService.getMovements( this.paramsMovements ).subscribe( ( res ) => {
       this.movementsServiceResponse = res.body.data;
     }, error => {
-      console.log( error );
+      
     }, () => {
       this.paramsMovements.offset += 150;
       if( this.movementsServiceResponse.length == this.paramsMovements.offset  ){

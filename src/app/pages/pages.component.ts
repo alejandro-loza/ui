@@ -37,7 +37,6 @@ export class PagesComponent implements OnInit {
       .pipe(retry(2))
       .subscribe(
         res => {
-          console.log('res - pages.component', res);
           this.toastInterface.code = res.status;
         },
         err => {
@@ -54,9 +53,6 @@ export class PagesComponent implements OnInit {
               'Ocurrió un error al obtener tu información';
             this.toastService.toastGeneral(this.toastInterface);
           }
-        },
-        () => {
-          console.log('complete - pages.component');
         }
       );
   }
