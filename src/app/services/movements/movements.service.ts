@@ -11,6 +11,7 @@ import { Movements } from '@interfaces/movements.interface';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { isNullOrUndefined } from 'util';
 
 @Injectable()
 export class MovementsService {
@@ -42,20 +43,24 @@ export class MovementsService {
       this.movementsList = new Array();
     }
     const id = sessionStorage.getItem('id-user');
-    const urlMovements =
+    let urlMovements =
       `${this.url}/` +
       `${id}/movements` +
       `?deep=${paramsMovements.deep}` +
-      `&startDate=${ paramsMovements.startDate }` +
-      `&endDate=${ paramsMovements.endDate }` +
-      `&offset=` +
-      paramsMovements.offset +
-      `&startDate=${ paramsMovements.startDate }` +
-      `&endDate=${ paramsMovements.endDate }` +
+      `&offset=${paramsMovements.offset}` +
       `&max=${paramsMovements.maxMovements}` +
       `&includeCharges=${paramsMovements.charges}` +
       `&includeDeposits=${paramsMovements.deposits}` +
       `&includeDuplicates=${paramsMovements.duplicates}`;
+
+    if (
+      !isNullOrUndefined(paramsMovements.startDate || paramsMovements.endDate)
+    ) {
+      urlMovements =
+        urlMovements +
+        `&startDate=${paramsMovements.startDate}` +
+        `&endDate=${paramsMovements.endDate}`;
+    }
     return this.httpClient
       .get<Movements>(urlMovements, {
         observe: 'response',
