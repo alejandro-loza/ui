@@ -1,15 +1,15 @@
 import { NgModule } from             '@angular/core';
-import { CommonModule } from         '@angular/common';
 
 import { DiagnosticComponent } from  './component/diagnostic.component';
 
 import { DiagnosticRoutes } from     './diagnostic.routes';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [DiagnosticComponent],
   imports: [
-    CommonModule,
+    SharedModule,
     NgxChartsModule,
     // DiagnosticRoutesE
   ],

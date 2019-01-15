@@ -1,5 +1,4 @@
 import { NgModule } from         '@angular/core';
-import { CommonModule } from     '@angular/common';
 
 import { BalanceComponent } from './component/balance.component';
 import { SharedModule } from '@shared/shared.module';
@@ -11,12 +10,12 @@ import { NgxChartsModule } from  '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
-    BalanceComponent  ],
+    BalanceComponent
+  ],
   imports: [
-    CommonModule,
+    SharedModule,
     NgxChartsModule,
     SharedDashboardModule,
-    SharedModule
     // BalanceRoutes
   ],
   exports: [ BalanceComponent ]

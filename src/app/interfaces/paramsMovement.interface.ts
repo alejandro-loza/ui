@@ -15,13 +15,13 @@
  *               CHARGE o DEPOSIT, cualquier otro valor mandará un error status 22 - Unprocessable Entity
  */
 export interface ParamsMovement {
-  amount: number;
-  balance: number;
-  customDate: string;
-  customDescription: string;
-  date: string;
-  description: string;
-  duplicated: boolean;
+  amount?: number;
+  balance?: number;
+  customDate?: string;
+  customDescription?: string;
+  date?: string;
+  description?: string;
+  duplicated?: boolean;
   id?: string;
-  type: string;
+  type?: string;
 }

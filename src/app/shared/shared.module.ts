@@ -1,36 +1,26 @@
-import { NgModule } from                   '@angular/core';
-import { CommonModule } from               '@angular/common';
-import { RouterModule } from               '@angular/router';
-import { HttpClientModule } from           '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
-import { SocialMediaComponent } from       '@shared/social-media-button/social-media.component';
-
-import { NavbarComponent } from            './navbar/navbar.component';
-import { LinkComponent } from              './navbar/link/link.component';
-import { BackButtonComponent } from        './back-button/back-button.component';
-import { SpinnerComponent } from           './spinner/spinner.component';
+import { SpinnerModule } from './spinner/spinner.module';
 
 @NgModule({
+  declarations: [],
   imports: [
     CommonModule,
     RouterModule,
     HttpClientModule,
-  ],
-  declarations: [
-    BackButtonComponent,
-    LinkComponent,
-    NavbarComponent,
-    SocialMediaComponent,
-    SpinnerComponent,
+    FormsModule,
+    SpinnerModule
   ],
   exports: [
     CommonModule,
     RouterModule,
     HttpClientModule,
-    BackButtonComponent,
-    NavbarComponent,
-    SocialMediaComponent,
-    SpinnerComponent,
+    FormsModule,
+    SpinnerModule
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

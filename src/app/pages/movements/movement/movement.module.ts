@@ -1,35 +1,34 @@
 import { NgModule } from                     '@angular/core';
-import { CommonModule } from                 '@angular/common';
-import { FormsModule } from                  '@angular/forms';
+import { SharedModule } from                 '@shared/shared.module';
 
 import { DateApiService } from               '@services/date-api/date-api.service';
 
-import { DescriptionComponent } from         './description/description.component';
-import { CuentaComponent } from              './cuenta/cuenta.component';
-import { MontoComponent } from               './monto/monto.component';
-import { ConsiderarComponent } from          './considerar/considerar.component';
-import { IngresoGastoComponent } from        './ingreso-gasto/ingreso-gasto.component';
-import { FechaComponent } from               './fecha/fecha.component';
+import { CategoryModule } from               '@pages/categories/category/category.module';
+import { MovementDetailModule } from         '../movement-detail/movement-detail.module';
+
+import { AmountModule } from                 './amount/amount.module';
+import { ConsiderModule } from               './consider/consider.module';
+import { DateModule } from                   './date/date.module';
+import { DescriptionModule } from            './description/description.module';
+import { ImageModule } from                  './image/image.module';
+
+import { MovementComponent } from            './component/movement.component';
 
 @NgModule({
   declarations: [
-    DescriptionComponent,
-    CuentaComponent,
-    MontoComponent,
-    ConsiderarComponent,
-    IngresoGastoComponent,
-    FechaComponent,
+    MovementComponent,
   ],
   imports: [
-    CommonModule,
-    FormsModule
+    SharedModule,
+    AmountModule,
+    ConsiderModule,
+    DateModule,
+    DescriptionModule,
+    ImageModule,
+    CategoryModule,
+    MovementDetailModule
   ], exports: [
-    DescriptionComponent,
-    CuentaComponent,
-    MontoComponent,
-    ConsiderarComponent,
-    IngresoGastoComponent,
-    FechaComponent,
+    MovementComponent
   ], providers: [
     DateApiService
   ]

@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SharedModule } from "@shared/shared.module";
-import { RouterModule } from "@angular/router";
 import { SharedDashboardModule } from "./sharedDashboard/sharedDashboard.module";
 
 // Component
@@ -26,10 +24,8 @@ import { IncomesModule } from './incomes/incomes.module';
 
 @NgModule({
   imports: [
-    CommonModule,
-    RouterModule,
-    NgxChartsModule,
     SharedModule,
+    NgxChartsModule,
     BalanceModule,
     ExpensesModule,
     DiagnosticModule,
