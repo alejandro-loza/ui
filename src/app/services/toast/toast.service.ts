@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from '@services/config/config.service';
 import { ToastInterface } from '@interfaces/toast.interface';
+import { isNullOrUndefined } from 'util';
 
 import * as M from 'materialize-css/dist/js/materialize';
 
@@ -51,7 +52,7 @@ export class ToastService {
             console.error(toastParams.code, err);
           },
           () => {
-            toastParams.message !== null
+             isNullOrUndefined(toastParams.message)
               ? (this.message = toastParams.message)
               : (this.message =
                   'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!');

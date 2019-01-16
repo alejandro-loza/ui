@@ -7,6 +7,7 @@ import {
   ElementRef,
   ViewChild
 } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
@@ -17,7 +18,7 @@ import { ToastInterface } from '@interfaces/toast.interface';
 
 import { retry } from 'rxjs/operators';
 
-import * as M from 'materialize-css/dist/js/materialize';
+// import * as M from 'materialize-css/dist/js/materialize';
 
 declare var $: any;
 
@@ -28,7 +29,7 @@ declare var $: any;
 })
 export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('collapsible') elcollapsible: ElementRef;
-  @ViewChild('collapsibleBody') eleCollapsibleBody: ElementRef;
+  @ViewChild('form') formMovement: NgForm;
 
   instanceCollapsible: M.Collapsible;
 
@@ -59,13 +60,9 @@ export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    const initCollapsible = new M.Collapsible(
-      this.elcollapsible.nativeElement,
-      {}
-    );
-    this.instanceCollapsible = M.Collapsible.getInstance(
-      this.elcollapsible.nativeElement
-    );
+    const initCollapsible = new M.Collapsible( this.elcollapsible.nativeElement, {} );
+    this.instanceCollapsible = M.Collapsible.getInstance( this.elcollapsible.nativeElement );
+    this.instanceCollapsible.destroy();
   }
 
   ngOnDestroy() {
@@ -83,7 +80,7 @@ export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
     if (scrollVertical >= scrollLimit) {
       this.getMovements(this.paramsMovements);
     }
-  };
+  }
 
   getMovements(paramsMovements: ParamsMovements) {
     this.movementsService
@@ -107,4 +104,5 @@ export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paramsMovements.offset =
       this.paramsMovements.offset + this.paramsMovements.maxMovements;
   }
+
 }

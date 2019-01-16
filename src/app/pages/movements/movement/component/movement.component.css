@@ -1,0 +1,35 @@
+.collapsible-header {
+  padding: 0%;
+}
+
+.imgMovement {
+  height: 42px;
+  margin-top: 10%;
+}
+
+#amount {
+  width: 50%;
+  text-align: right;
+}
+
+@media only screen and (max-width: 374px) {
+  .imgMovement {
+    margin-top: 22%;
+  }
+}
+@media only screen and (min-width: 375px) and (max-width: 560px) {
+  .imgMovement {
+    margin-top: 19%;
+  }
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1366px ){
+  .imgMovement {
+    margin-top: 5%;
+  }
+}
+@media only screen and (min-width: 1367px) {
+  .imgMovement {
+    margin-top: 3%;
+  }
+}

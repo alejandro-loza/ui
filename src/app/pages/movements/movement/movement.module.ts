@@ -6,11 +6,7 @@ import { DateApiService } from               '@services/date-api/date-api.servic
 import { CategoryModule } from               '@pages/categories/category/category.module';
 import { MovementDetailModule } from         '../movement-detail/movement-detail.module';
 
-import { AmountModule } from                 './amount/amount.module';
-import { ConsiderModule } from               './consider/consider.module';
 import { DateModule } from                   './date/date.module';
-import { DescriptionModule } from            './description/description.module';
-import { ImageModule } from                  './image/image.module';
 
 import { MovementComponent } from            './component/movement.component';
 
@@ -20,11 +16,7 @@ import { MovementComponent } from            './component/movement.component';
   ],
   imports: [
     SharedModule,
-    AmountModule,
-    ConsiderModule,
     DateModule,
-    DescriptionModule,
-    ImageModule,
     CategoryModule,
     MovementDetailModule
   ], exports: [
