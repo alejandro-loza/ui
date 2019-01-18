@@ -6,10 +6,10 @@
 <!-- Modal Structure -->
 <div id="modal1" class="modal bottom-sheet" #modal>
   <div class="container containerNewMovement">
-    <div class="row">
-      <form ngNativeValidate #forma="ngForm" (ngSubmit)="createMovement(forma)">
+    <div class="row left-align">
+      <form #forma="ngForm" (ngSubmit)="createMovement(forma)">
         <div class="valign-wrapper">
-          <div class="col s12 m5">
+          <div class="col s12 m5 push-m1">
             <h6>Descripción del Movimiento:</h6>
           </div>
           <div class="col s12 m7">
@@ -21,13 +21,10 @@
           </div>
         </div>
         <div class="valign-wrapper">
-          <div class="col s12 m5">
+          <div class="col s12 m5 push-m1">
             <h6>Monto del Movimiento:</h6>
           </div>
-          <div class="col s1">
-            <span id="signo" #monto>$</span>
-          </div>
-          <div class="col s11 m6">
+          <div class="col s11 m7">
             <div class="input-field">
               <input class="validate" id="monto" name="amount" ngModel min="0" placeholder="Monto del Movimiento" required type="number" value="0" />
               <label for="monto"></label>
@@ -36,23 +33,23 @@
           </div>
         </div>
         <div class="valign-wrapper">
-          <div class="col s12 m5">
+          <div class="col s12 m5 push-m1">
             <h6>Fecha del movimiento:</h6>
           </div>
           <div class="col s12 m7">
             <div class="row rowFecha">
               <div class="input-field col m12">
-                <input type="text" class="datepicker" name="date" ngModel class="inputMovement" #inputDatepicker="ngModel" #datepicker />
+                <input type="button" class="datepicker btn finerio-blue" [ngModel]="date | date:' dd - MMM'" name="date" #datepicker />
               </div>
             </div>
           </div>
         </div>
         <div class="valign-wrapper">
-          <div class="col s12 m5">
+          <div class="col s12 m5 push-m1">
             <h6>Tipo de movimiento:</h6>
           </div>
           <div class="col s12 m7">
-            <app-type [type]="'CHARGE'" name="typeAmmount" ngDefaultControl [(ngModel)]="typeIngresoGasto" (valueType)="valueIngresoGasto($event)" required></app-type>
+            <input type="button" class="btn" ngModel name="type" value="deposit" />
           </div>
         </div>
         <div class="valign-wrapper">

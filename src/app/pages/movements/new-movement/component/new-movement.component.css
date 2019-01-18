@@ -14,10 +14,12 @@
 .deposit {
   color: rgb(67, 160, 71);
 }
-
-#signo {
-  font-size: x-large;
-}
 .modal {
   padding-left: 300px;
+}
+.btnType {
+  margin-right: 1em;
+}
+#signo {
+  font-size: x-large;
 }

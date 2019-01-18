@@ -31,6 +31,8 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   @ViewChild('duplicated') checkboxDuplicate: ElementRef;
   @ViewChild('monto') montoSigno: ElementRef;
   @ViewChild('modal') modalElement: ElementRef;
+  @ViewChild('datepicker') elDatePickker: ElementRef;
+
   @Output() createMovementStatus: EventEmitter<boolean>;
 
   date: Date;
@@ -63,50 +65,58 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const initModal = new M.Modal(this.modalElement.nativeElement, {
-      startingTop: '10%',
-      endingTop: '10%'
+      startingTop: '0%',
+    });
+    const initDatepicker = new M.Datepicker(this.elDatePickker.nativeElement, {
+      format: `dd - mmm`,
+      showClearBtn: true,
+      showDaysInNextAndPreviousMonths: true,
+      i18n: {
+        months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthsShort: ['Ene', 'Feb', 'Marz', 'Abr', 'May', 'Jun', 'Jul', 'Ags', 'Sep', 'Oct', 'Nov', 'Dic'],
+        weekdays: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
+        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+        weekdaysAbbrev: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+      },
+      setDefaultDate: true,
+      defaultDate: new Date(),
+      maxDate: new Date(),
+      onDraw: datepicker => {
+        this.date = datepicker.date;
+      }
     });
   }
 
   createMovement(form: NgForm) {
-    this.movement.type = 'CHARGE';
-    this.movement.amount = form.value.amount;
-    this.movement.customDate = this.dateApi.dateApi(form.value.date);
-    this.movement.customDescription = form.value.description;
-    this.movement.date = this.dateApi.dateApi(form.value.date);
-    this.movement.description = form.value.description;
-    this.movement.duplicated = form.value.duplicated;
-    this.movement.type = form.value.typeAmmount;
+    console.log(form.value);
 
-    this.movementService
-      .createMovement(this.movement)
-      .pipe(retry(2))
-      .subscribe(
-        res => {
-          this.createMovementStatus.emit(true);
-          this.toastInterface.code = res.status;
-        },
-        err => {
-          this.toastInterface.code = err.status;
-          if (err.status === 401) {
-            this.toastService.toastGeneral(this.toastInterface);
-          }
-          if (err.status === 500) {
-            this.toastInterface.message =
-              '¡Ha ocurrido un error al obterner tus movimiento!';
-            this.toastService.toastGeneral(this.toastInterface);
-          }
-        },
-        () => {
-          form.reset();
-          const instaceModal = M.Modal.getInstance(
-            this.modalElement.nativeElement
-          );
-          instaceModal.close();
-          this.toastInterface.message = 'Se creó su movimiento exitosamente';
-          this.toastService.toastGeneral(this.toastInterface);
-        }
-      );
+    // this.movementService
+    //   .createMovement(this.movement)
+    //   .pipe(retry(2))
+    //   .subscribe(
+    //     res => {
+    //       this.createMovementStatus.emit(true);
+    //       this.toastInterface.code = res.status;
+    //     },
+    //     err => {
+    //       this.toastInterface.code = err.status;
+    //       if (err.status === 401) {
+    //         this.toastService.toastGeneral(this.toastInterface);
+    //       }
+    //       if (err.status === 500) {
+    //         this.toastInterface.message =
+    //           '¡Ha ocurrido un error al obterner tus movimiento!';
+    //         this.toastService.toastGeneral(this.toastInterface);
+    //       }
+    //     },
+    //     () => {
+    //       form.reset();
+    //       const instaceModal = M.Modal.getInstance( this.modalElement.nativeElement );
+    //       instaceModal.close();
+    //       this.toastInterface.message = 'Se creó su movimiento exitosamente';
+    //       this.toastService.toastGeneral(this.toastInterface);
+    //     }
+    //   );
   }
 
   valueIngresoGasto(type: string = 'CHARGE') {

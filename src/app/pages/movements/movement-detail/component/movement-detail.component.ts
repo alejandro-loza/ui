@@ -37,6 +37,7 @@ export class MovementDetailComponent implements OnInit {
     this.movementStatus = new EventEmitter();
     this.ingresogastoStatus = new EventEmitter();
     this.toastInterface = { code: null, classes: null, message: null };
+    this.flagInfo = false;
   }
 
   ngOnInit() {}

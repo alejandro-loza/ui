@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
           this.toastService.toastGeneral(this.toastInterface);
         }
         if ( err.status === 401 ) {
-          this.toastInterface.message = 'Tus datos son incorrectos, por favor verifica<br>que los hayas escrito bien';
+          this.toastInterface.code = 4011;
           this.toastService.toastGeneral(this.toastInterface);
         }
         if ( err.status === 500) {

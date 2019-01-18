@@ -1,10 +1,12 @@
 <div class="btn-type">
-  <a class="btn btn-flat btn-small btn-charge"
+  <button class="btn btn-flat btn-small btn-charge"
+      type="button"
       (click)="tipoIngresoGasto('CHARGE')"
       [ngClass]="{ 'active': type === 'CHARGE'}"
-      #charge>Gasto</a>
-  <a class="btn btn-flat btn-small btn-deposit"
+      #charge>Gasto</button>
+  <button class="btn btn-flat btn-small btn-deposit"
+      type="button"
       (click)="tipoIngresoGasto('DEPOSIT')"
       [ngClass]="{ 'active': type === 'DEPOSIT' }"
-      #deposit>Ingreso</a>
+      #deposit>Ingreso</button>
 </div>

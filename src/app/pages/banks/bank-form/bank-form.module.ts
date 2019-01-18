@@ -7,6 +7,7 @@ import { CredentialService } from '@services/credentials/credential.service';
 import { FieldService } from '@services/field/field.service';
 
 import { BankFormComponent } from './component/bank-form.component';
+import { BackButtonModule } from '@components/back-button/back-button.module';
 
 import { BankFormRoutes } from './bank-form.routes';
 
@@ -17,6 +18,7 @@ import { BankFormRoutes } from './bank-form.routes';
   imports: [
     FormsModule,
     SharedModule,
+    BackButtonModule,
     BankFormRoutes
   ],
   providers: [

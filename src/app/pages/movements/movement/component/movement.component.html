@@ -1,6 +1,5 @@
 <ul class="collapsible" #collapsible>
-  <li *ngFor="let movement of movementsList; let i = index">
-    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+  <li *ngFor="let movement of movementsList">
       <!-- Encabezado del collapsible -->
       <div class="collapsible-header valign-wrapper" [ngClass]="{'grey lighten-2': movement.duplicated}">
         <!-- Image Start -->
@@ -11,12 +10,12 @@
 
         <!-- Date Start -->
         <div class="col m1 valign-wrapper customComponent">
-          <app-date [date]="movement.customDate | date: 'dd - MMM'" (click)="collapsibleOpen(i)"></app-date>
+          <app-date [date]="movement.customDate | date: 'dd - MMM'"></app-date>
         </div>
         <!-- Date End -->
 
         <!-- Description Start-->
-        <div class="col m3 customComponent">
+        <div class="col m3 customComponent inputDescription">
           <input [ngModel]="movement.customDescription | uppercase" type="text" class="inputMovement center-align" name="description" />
         </div>
         <!-- Description End-->
@@ -66,8 +65,18 @@
 
 
         <!-- Amount start -->
-        <div class="col m2 valign-wrapper customComponent">
-            <input [ngModel]="movement.amount" name="amount" class="inputMovement" min="0" step="10" type="number" id="amount"/>
+        <div class="col m2 valign-wrapper customComponent inputAmount">
+          <input
+            [ngModel]="movement.amount.toFixed(2) | currency:'USD':'symbol-narrow':'0.2-2'"
+            [ngClass]="{
+              'deposit': movement.type === 'DEPOSIT',
+              'charge': movement.type !== 'DEPOSIT'
+            }"
+            name="amount"
+            class="inputMovement"
+            min="0"
+            step="10"
+            id="amount"/>
         </div>
         <!-- Amount End -->
 
@@ -76,7 +85,7 @@
           <div class="switch">
             <label>
             Si
-            <input ngModel name="movement.duplicated" type="checkbox" />
+            <input [ngModel]="movement.duplicated" name="duplicated" type="checkbox" />
             <span class="lever"></span>
             No
           </label>
@@ -84,10 +93,12 @@
         </div>
         <!-- Consider end -->
       </div>
-      <div class="collapsible-body" #collapsibleBody>
+      <div class="collapsible-body">
         <app-movement-detail [dateOriginal]="movement.date" [descriptionOriginal]="movement.description" [movement]="editMovement" [fecha]="movement.customDate" [flag]="editMovementFlag" [idMovement]="movement.id" [name]="movement.account.name" [type]="movement.type">
         </app-movement-detail>
       </div>
-    </form>
   </li>
 </ul>
+<div class="center-align" *ngIf="spinnerBoolean !== false">
+  <app-spinner></app-spinner>
+</div>

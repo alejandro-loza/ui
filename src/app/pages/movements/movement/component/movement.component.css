@@ -7,8 +7,25 @@
   margin-top: 10%;
 }
 
+.charge {
+  color: rgb(198, 40, 40);
+}
+
+.deposit {
+  color: #2e7d32;
+}
+
+.inputAmount {
+  margin-top: 4px;
+}
+
+.inputAmount {
+  margin-top: 10px;
+}
+
 #amount {
-  width: 50%;
+  margin-left: calc(100% - var(--widthAmout));
+  width: var(--widthAmout);
   text-align: right;
 }
 

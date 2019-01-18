@@ -7,10 +7,12 @@ import { InstitutionService } from '@services/institution/institution.service';
 import { BanksComponent } from './component/banks.component';
 
 import { BanksRoutes } from './banks.routes';
+import { BackButtonModule } from '@components/back-button/back-button.module';
 
 @NgModule({
   imports: [
     SharedModule,
+    BackButtonModule,
     BanksRoutes
   ],
   declarations: [

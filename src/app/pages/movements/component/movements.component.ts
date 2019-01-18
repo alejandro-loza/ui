@@ -12,7 +12,6 @@ import { ParamsMovements } from '@interfaces/paramsMovements.interface';
   styleUrls: ['./movements.component.css']
 })
 export class MovementsComponent implements OnInit {
-  @ViewChild('spinner') elSpinner: ElementRef;
   paramsMovements: ParamsMovements;
   filterflag: boolean;
 
