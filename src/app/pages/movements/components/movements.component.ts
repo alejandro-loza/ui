@@ -165,6 +165,7 @@ export class MovementsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (flag === true) {
       this.paramsMovements = this.paramsService.getParamsMovements;
       this.movementsList = [];
+      this.paramsMovements.offset = 0;
       this.getMovements(this.paramsMovements);
     }
   }
