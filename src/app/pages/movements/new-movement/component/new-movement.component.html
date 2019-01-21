@@ -1,80 +1,81 @@
 <!-- Modal Trigger -->
 <a class="btn modal-trigger finerio-orange" href="#modal1">
-  <i class="material-icons right">add</i>Nuevo Movimiento
+    <i class="material-icons right">add</i>Nuevo Movimiento
 </a>
 
 <!-- Modal Structure -->
 <div id="modal1" class="modal bottom-sheet" #modal>
-  <div class="container containerNewMovement">
-    <div class="row left-align">
-      <form #forma="ngForm" (ngSubmit)="createMovement(forma)">
-        <div class="valign-wrapper">
-          <div class="col s12 m5 push-m1">
-            <h6>Descripción del Movimiento:</h6>
-          </div>
-          <div class="col s12 m7">
-            <div class="input-field">
-              <input class="validate" id="description" name="description" ngModel placeholder="Nombre del Movimiento" required type="text" />
-              <label for="description"></label>
-              <span class="helper-text" data-error="Ingresa una descripción para tu movimiento" data-success="Perfecto">Ej: Startbucks</span>
-            </div>
-          </div>
-        </div>
-        <div class="valign-wrapper">
-          <div class="col s12 m5 push-m1">
-            <h6>Monto del Movimiento:</h6>
-          </div>
-          <div class="col s11 m7">
-            <div class="input-field">
-              <input class="validate" id="monto" name="amount" ngModel min="0" placeholder="Monto del Movimiento" required type="number" value="0" />
-              <label for="monto"></label>
-              <span class="helper-text" data-error="Ingresa un valo numérico y mínimo de 1" data-success="Perfecto">Debes ingresar un valor numérico</span>
-            </div>
-          </div>
-        </div>
-        <div class="valign-wrapper">
-          <div class="col s12 m5 push-m1">
-            <h6>Fecha del movimiento:</h6>
-          </div>
-          <div class="col s12 m7">
-            <div class="row rowFecha">
-              <div class="input-field col m12">
-                <input type="button" class="datepicker btn finerio-blue" [ngModel]="date" name="date" #datepicker value="date" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="valign-wrapper">
-          <div class="col s12 m5 push-m1">
-            <h6>Tipo de movimiento:</h6>
-          </div>
-          <div class="col s12 m7">
-            <input type="button" class="btn" ngModel name="type" value="deposit" />
-          </div>
-        </div>
-        <div class="valign-wrapper">
-          <div class="col s12 center-align">
-            <p>
-              <label>
-                <input
-                  type="checkbox"
-                  class="filled-in"
-                  name="duplicated"
-                  [(ngModel)]="checkboxDuplicate.nativeElement.checked"
-                  #duplicated/>
-                <span>No tomar en cuenta en gráficas y presupuestos</span>
-              </label>
-            </p>
-          </div>
-        </div>
-        <div class="valign-wrapper" id="newMovementBtn">
-          <div class="col s12 center-align">
-            <button class="btn btn-large finerio-blue" [disabled]="forma.invalid" type="submit" name="action">Crear Movimiento
+    <div class="container containerNewMovement">
+        <div class="row left-align">
+            <form #forma="ngForm" (ngSubmit)="createMovement(forma)">
+                <div class="valign-wrapper">
+                    <div class="col s12 m5 push-m1">
+                        <h6>Descripción del Movimiento:</h6>
+                    </div>
+                    <div class="col s12 m7">
+                        <div class="input-field">
+                            <input class="validate" id="description" name="description" ngModel placeholder="Nombre del Movimiento" required type="text" />
+                            <label for="description"></label>
+                            <span class="helper-text" data-error="Ingresa una descripción para tu movimiento" data-success="Perfecto">Ej: Startbucks</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="valign-wrapper">
+                    <div class="col s12 m5 push-m1">
+                        <h6>Monto del Movimiento:</h6>
+                    </div>
+                    <div class="col s11 m7">
+                        <div class="input-field">
+                            <input class="validate" id="monto" name="amount" ngModel min="0" placeholder="Monto del Movimiento" required type="number" value="0" />
+                            <label for="monto"></label>
+                            <span class="helper-text" data-error="Ingresa un valo numérico y mínimo de 1" data-success="Perfecto">Debes ingresar un valor numérico</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="valign-wrapper">
+                    <div class="col s12 m5 push-m1">
+                        <h6>Fecha del movimiento:</h6>
+                    </div>
+                    <div class="col s12 m7">
+                        <div class="row rowFecha">
+                            <div class="input-field col m12">
+                                <input type="button" class="datepicker btn finerio-blue" [ngModel]="date | date: 'dd - MMM'" name="date" #datepicker (valueDate)="$event" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="valign-wrapper">
+                    <div class="col s12 m5 push-m1">
+                        <h6>Tipo de movimiento:</h6>
+                    </div>
+                    <div class="col s12 m7">
+                        <input type="button" class="btn" value="Ingreso" name="type">
+                        <input type="button" class="btn" value="Gasto" name="type">
+                    </div>
+                </div>
+                <div class="valign-wrapper">
+                    <div class="col s12 center-align">
+                        <p>
+                            <label>
+                            <input
+                              type="checkbox"
+                              class="filled-in"
+                              name="duplicated"
+                              [(ngModel)]="checkboxDuplicate.nativeElement.checked"
+                              #duplicated/>
+                            <span>No tomar en cuenta en gráficas y presupuestos</span>
+                          </label>
+                        </p>
+                    </div>
+                </div>
+                <div class="valign-wrapper" id="newMovementBtn">
+                    <div class="col s12 center-align">
+                        <button class="btn btn-large finerio-blue" [disabled]="forma.invalid" ngModel type="submit" name="action">Crear Movimiento
               <i class="material-icons right">send</i>
             </button>
-          </div>
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
     </div>
-  </div>
 </div>

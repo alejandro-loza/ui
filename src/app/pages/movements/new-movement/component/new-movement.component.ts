@@ -36,18 +36,8 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   @Output() createMovementStatus: EventEmitter<boolean>;
 
   date: Date;
-  typeIngresoGasto: string;
+  type: string;
   duplicated: boolean;
-  movement: ParamsMovement = {
-    amount: 0,
-    balance: 0,
-    customDate: '',
-    customDescription: '',
-    date: '',
-    description: '',
-    duplicated: this.duplicated,
-    type: this.typeIngresoGasto
-  };
   toastInterface: ToastInterface;
 
   constructor(
@@ -88,6 +78,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   createMovement(form: NgForm) {
+    form.value.date = this.date;
     console.log(form.value);
 
     // this.movementService
@@ -119,7 +110,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     //   );
   }
 
-  valueIngresoGasto(type: string = 'CHARGE') {
+  valueType(type: string) {
     if (type === 'CHARGE') {
       this.renderer.removeClass(this.montoSigno.nativeElement, 'deposit');
       this.renderer.addClass(this.montoSigno.nativeElement, 'charge');
@@ -127,7 +118,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
       this.renderer.removeClass(this.montoSigno.nativeElement, 'charge');
       this.renderer.addClass(this.montoSigno.nativeElement, 'deposit');
     }
-    this.typeIngresoGasto = type;
+    this.type = type;
   }
 
   valueDate(date: Date) {
