@@ -1,42 +1,42 @@
 <div class="stickyOptions">
-  <!-- Busqueda y filtrado -->
-  <div class="containerMovement">
-    <div class="row valign-wrapper">
-      <div class="col s12 m4">
-        <div class="input-field">
-          <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
-          <label for="first_name"></label>
-          <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+    <!-- Busqueda y filtrado -->
+    <div class="containerMovement">
+        <div class="row valign-wrapper">
+            <div class="col s12 m4">
+                <div class="input-field">
+                    <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
+                    <label for="first_name"></label>
+                    <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+                </div>
+            </div>
+            <div class="col s12 m3 left-align">
+                <a class="btn btn-filter" (click)="filterflag = !filterflag">
+                    <i class="material-icons left">filter_list</i>Filtrar
+                </a>
+            </div>
+            <div class="col s12 m4 right-align">
+                <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
+            </div>
         </div>
-      </div>
-      <div class="col s12 m3 left-align">
-        <a class="btn btn-filter" (click)="filterflag = !filterflag">
-          <i class="material-icons left">filter_list</i>Filtrar
-        </a>
-      </div>
-      <div class="col s12 m4 right-align">
-        <app-new-movement></app-new-movement>
-      </div>
     </div>
-  </div>
-  <app-filter *ngIf="filterflag !== false" [charges]="paramsMovements.charges" [deposits]="paramsMovements.deposits" [duplicates]="paramsMovements.duplicates" class="params-movement"></app-filter>
+    <app-filter *ngIf="filterflag !== false" [charges]="paramsMovements.charges" [deposits]="paramsMovements.deposits" [duplicates]="paramsMovements.duplicates" class="params-movement"></app-filter>
 
-  <!-- Encabezado de movimientos -->
-  <div class="containerMovement">
-    <div class="row center-align z-depth-1 white" id="header">
-      <div class="col m1 movementheader">Cuenta</div>
-      <div class="col m1 movementheader">Fecha</div>
-      <div class="col m3 movementheader">Descripción</div>
-      <div class="col m3 movementheader">Categoria</div>
-      <div class="col m2 movementheader">Monto</div>
-      <div class="col m2 movementheader">Considerar</div>
+    <!-- Encabezado de movimientos -->
+    <div class="containerMovement">
+        <div class="row center-align z-depth-1 white" id="header">
+            <div class="col m1 movementheader">Cuenta</div>
+            <div class="col m1 movementheader">Fecha</div>
+            <div class="col m3 movementheader">Descripción</div>
+            <div class="col m3 movementheader">Categoria</div>
+            <div class="col m2 movementheader">Monto</div>
+            <div class="col m2 movementheader">Considerar</div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Lista de Movimientos -->
 <div class="containerMovement">
-  <div class="row center-align">
-    <app-movement></app-movement>
-  </div>
+    <div class="row center-align">
+        <app-movement [status]="status"></app-movement>
+    </div>
 </div>

@@ -5,29 +5,34 @@ import {
   OnDestroy,
   Renderer2,
   ElementRef,
-  ViewChild
-} from '@angular/core';
+  ViewChild,
+  Input,
+  OnChanges
+} from "@angular/core";
 
-import { MovementsService } from '@services/movements/movements.service';
-import { ToastService } from '@services/toast/toast.service';
+import { MovementsService } from "@services/movements/movements.service";
+import { ToastService } from "@services/toast/toast.service";
 
-import { ParamsMovements } from '@interfaces/paramsMovements.interface';
-import { Movement } from '@interfaces/movement.interface';
-import { ToastInterface } from '@interfaces/toast.interface';
+import { ParamsMovements } from "@interfaces/paramsMovements.interface";
+import { Movement } from "@interfaces/movement.interface";
+import { ToastInterface } from "@interfaces/toast.interface";
 
-import { retry } from 'rxjs/operators';
+import { retry } from "rxjs/operators";
 
-import * as M from 'materialize-css/dist/js/materialize';
+import * as M from "materialize-css/dist/js/materialize";
+import { ParamsService } from "@services/movements/params/params.service";
 
 declare var $: any;
 
 @Component({
-  selector: 'app-movement',
-  templateUrl: './movement.component.html',
-  styleUrls: ['./movement.component.css']
+  selector: "app-movement",
+  templateUrl: "./movement.component.html",
+  styleUrls: ["./movement.component.css"]
 })
-export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('collapsible') elementCollapsible: ElementRef;
+export class MovementComponent
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+  @ViewChild("collapsible") elementCollapsible: ElementRef;
+  @Input() status: boolean;
   instanceCollapsible;
   spinnerBoolean: boolean;
 
@@ -36,7 +41,8 @@ export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
   toastInterface: ToastInterface;
 
   constructor(
-    public renderer: Renderer2,
+    private renderer: Renderer2,
+    private paramsService: ParamsService,
     private movementsService: MovementsService,
     private toastService: ToastService
   ) {
@@ -55,15 +61,27 @@ export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.getMovements(this.paramsMovements);
-    window.addEventListener('scroll', this.offsetMovement, true);
+    window.addEventListener("scroll", this.offsetMovement, true);
+  }
+
+  ngOnChanges() {
+    if (this.status === true) {
+      this.paramsMovements.offset = 0;
+      this.movementsList = [];
+      this.getMovements(this.paramsMovements);
+    }
+    this.status = false;
   }
 
   ngAfterViewInit() {
-    let initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement, {});
+    let initCollapsible = new M.Collapsible(
+      this.elementCollapsible.nativeElement,
+      {}
+    );
   }
 
   ngOnDestroy() {
-    window.removeEventListener('scroll', this.offsetMovement, true);
+    window.removeEventListener("scroll", this.offsetMovement, true);
   }
 
   /**
@@ -78,7 +96,7 @@ export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
       this.spinnerBoolean = true;
       this.getMovements(this.paramsMovements);
     }
-  }
+  };
 
   getMovements(paramsMovements: ParamsMovements) {
     this.movementsService
@@ -88,13 +106,13 @@ export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
         res => (this.movementsList = res.body.data),
         err => {
           this.toastInterface.code = err.status;
-    this.spinnerBoolean = true;
-    if (err.status === 401) {
+          this.spinnerBoolean = true;
+          if (err.status === 401) {
             this.toastService.toastGeneral(this.toastInterface);
           }
           if (err.status === 500) {
             this.toastInterface.message =
-              '¡Ha ocurrido un error al obterner tus movimiento!';
+              "¡Ha ocurrido un error al obterner tus movimiento!";
             this.toastService.toastGeneral(this.toastInterface);
           }
         },
@@ -105,5 +123,4 @@ export class MovementComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paramsMovements.offset =
       this.paramsMovements.offset + this.paramsMovements.maxMovements;
   }
-
 }

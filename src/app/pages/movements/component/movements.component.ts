@@ -1,21 +1,18 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ParamsMovements } from "@interfaces/paramsMovements.interface";
 
 @Component({
-  selector: 'app-movements',
-  templateUrl: './movements.component.html',
-  styleUrls: ['./movements.component.css']
+  selector: "app-movements",
+  templateUrl: "./movements.component.html",
+  styleUrls: ["./movements.component.css"]
 })
 export class MovementsComponent implements OnInit {
+  status: boolean;
   paramsMovements: ParamsMovements;
   filterflag: boolean;
 
-  constructor( ) {
+  constructor() {
+    this.status = false;
     this.filterflag = false;
     this.paramsMovements = {
       charges: true,
@@ -24,5 +21,9 @@ export class MovementsComponent implements OnInit {
     };
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
+
+  statusMovement(status: boolean) {
+    this.status = status;
+  }
 }

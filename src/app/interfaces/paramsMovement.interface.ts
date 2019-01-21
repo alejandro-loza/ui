@@ -17,9 +17,9 @@
 export interface ParamsMovement {
   amount?: number;
   balance?: number;
-  customDate?: string;
+  customDate?: Date;
   customDescription?: string;
-  date?: string;
+  date?: Date;
   description?: string;
   duplicated?: boolean;
   id?: string;
