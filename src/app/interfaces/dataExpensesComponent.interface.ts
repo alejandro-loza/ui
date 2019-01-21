@@ -1,17 +1,17 @@
 import { Movement } from './movement.interface';
 import { Category } from './category.interface';
 
-export interface ExpensesData {
-    month:number;
-    year:number;
+export interface DataForCharts {
+    referenceDate:Date;
     category: Category;
-    amount:number;
+    totalValue:number;
+    movementsPerCategory:Movement[];
     details:[
         {
-            subCategory:string,
-            amount:number,
-            movements:{
-                movement:Movement[]
+            subCategory:Category;
+            totalValue:number;
+            movementsPerSubCategory:{ 
+                movement:Movement[]; 
             }
         }
     ]

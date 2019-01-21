@@ -1,5 +1,6 @@
 export interface BalanceChart {
     name:string,
+    month?:number,
     series: [
         {
             "name":string,

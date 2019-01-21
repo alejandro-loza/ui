@@ -11,6 +11,7 @@ import { BalanceChart } from '@interfaces/dashboardBalanceChart.interface';
   export class MonthChartComponent implements OnInit {
     @Input() dataForBalanceChart:BalanceChart[] = [];
     @Output() dataPieMonthSelected: EventEmitter<PieChart[]> = new EventEmitter();
+    @Output() indexMonthSelected: EventEmitter<number> = new EventEmitter();
 
     // OPTIONS FOR THE CHART
     showXAxis = true;
@@ -24,22 +25,17 @@ import { BalanceChart } from '@interfaces/dashboardBalanceChart.interface';
     colorScheme = {
       domain: ['#a02e36','#7bba3a']
     };
-    nameMonthSelected:string;
-    yearOfSelectedMonth:number;
 
   constructor( ) {
 
   }
 
   ngOnInit() {
-    this.nameMonthSelected = this.dataForBalanceChart[ this.dataForBalanceChart.length - 1 ].name;
-    let yearAux = new Date();
-    this.yearOfSelectedMonth = yearAux.getFullYear();
   }
 
   onSelect( event ){
     let monthSelected:string = event.series;
-    let data:PieChart[] = []
+    let data:any[] = []
     this.dataForBalanceChart.forEach( serie => {
       if( serie.name == monthSelected ){
         data.push( { name : "Gastos", value : serie.series[0].value },
@@ -47,7 +43,19 @@ import { BalanceChart } from '@interfaces/dashboardBalanceChart.interface';
       }
     });
     this.dataPieMonthSelected.emit( data );
-    this.nameMonthSelected = event.series;
+    this.indexMonthSelected.emit( this.getIndexMonth( monthSelected ) );
+  }
+
+  getIndexMonth( name:string ):number{
+    let index = 0;
+    let months:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    for( let i = 0; i < months.length ; i++){
+      if( months[i] == name ){
+        index = i;
+        break;
+      }
+    }
+    return index;
   }
 
     

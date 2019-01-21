@@ -9,6 +9,7 @@ import { ActivationEnd,
 import { filter,
          map } from             'rxjs/operators';
 import * as M from              'materialize-css/dist/js/materialize';
+import { isNullOrUndefined } from 'util';
 
 declare var $: any;
 
@@ -23,7 +24,7 @@ export class NavbarComponent implements OnInit, AfterContentInit{
   @ViewChild('collapsible') elemCollapsible: ElementRef;
   @ViewChild('chevronRight') elemIcon: ElementRef;
   value: boolean;
-  titlePage: string;
+  titlePage: string = "";
 
 
   constructor(
@@ -31,11 +32,16 @@ export class NavbarComponent implements OnInit, AfterContentInit{
     private router: Router,
   ) {
     this.getDataRoute().subscribe( res => {
+      let textDOM = document.querySelector(".brand-logo");
       this.titlePage = res.title;
+      if( !isNullOrUndefined( this.titlePage ) ){
+        textDOM.innerHTML = this.titlePage;
+      }
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+  }
 
   ngAfterContentInit() {
     const initSidenav = new M.Sidenav(this.elemSidenav.nativeElement, { });
