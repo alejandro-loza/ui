@@ -1,4 +1,5 @@
 export class BarChart {
-    name:string
-    value:number
+    name:string;
+    value:number;
+    month:number;
 }

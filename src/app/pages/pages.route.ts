@@ -10,7 +10,7 @@ const PagesRouting: Routes = [
         path: 'dashboard',
         loadChildren: './dashboard/dashboard.module#DashboardModule',
         data: {
-          title: 'Dashboard'
+          title: 'Resumen'
         }
       },
       {

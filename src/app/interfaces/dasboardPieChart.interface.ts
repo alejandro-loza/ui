@@ -1,4 +1,8 @@
 export interface PieChart {
-    name:string,
-    value:number
+    month?:number,
+    series:[{
+        "name":string,
+        "value":number,
+        "color"?:string  
+    }]
 }

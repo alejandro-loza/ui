@@ -5,27 +5,31 @@ import {
   OnInit,
   ViewChild,
   Renderer2
-} from '@angular/core';
-import { ActivationEnd, Router } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
-import * as M from 'materialize-css/dist/js/materialize';
+} from "@angular/core";
+import { ActivationEnd, Router } from "@angular/router";
+import { filter, map } from "rxjs/operators";
+import * as M from "materialize-css/dist/js/materialize";
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  selector: "app-navbar",
+  templateUrl: "./navbar.component.html",
+  styleUrls: ["./navbar.component.css"]
 })
 export class NavbarComponent implements OnInit, AfterContentInit {
-  @ViewChild('sidenav') elemSidenav: ElementRef;
-  @ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
-  @ViewChild('collapsible') elemCollapsible: ElementRef;
-  @ViewChild('chevronRight') elemIcon: ElementRef;
+  @ViewChild("sidenav") elemSidenav: ElementRef;
+  @ViewChild("sidenavTrigger") elemSidenavtrigger: ElementRef;
+  @ViewChild("collapsible") elemCollapsible: ElementRef;
+  @ViewChild("chevronRight") elemIcon: ElementRef;
   value: boolean;
   titlePage: string;
 
   constructor(private renderer: Renderer2, private router: Router) {
     this.getDataRoute().subscribe(res => {
+      let textDOM = document.querySelector(".brand-logo");
       this.titlePage = res.title;
+      if (!isNullOrUndefined(this.titlePage)) {
+        textDOM.innerHTML = this.titlePage;
+      }
     });
   }
 
@@ -44,7 +48,7 @@ export class NavbarComponent implements OnInit, AfterContentInit {
 
   logout() {
     sessionStorage.clear();
-    this.router.navigate(['/access/login']);
+    this.router.navigate(["/access/login"]);
   }
 
   getDataRoute() {

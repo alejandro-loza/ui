@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { BarChart } from '@interfaces/dashboardBarChart.interface';
 
 @Component({
@@ -9,6 +9,7 @@ import { BarChart } from '@interfaces/dashboardBarChart.interface';
 export class BarChartsComponent implements OnInit {
   @Input() dataForChart:BarChart[] = [];
   @Input() colorOfChart:string = "";
+  @Output() clickEvent:EventEmitter<any> = new EventEmitter();
 
    // options
   showXAxis = true;
@@ -30,6 +31,7 @@ export class BarChartsComponent implements OnInit {
   }
 
   onSelect( event ){
+    this.clickEvent.emit( event );
   }
 
 }

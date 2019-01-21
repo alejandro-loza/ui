@@ -6,6 +6,9 @@ import { BalanceChart } from '@interfaces/dashboardBalanceChart.interface';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { PieChart } from '@interfaces/dasboardPieChart.interface';
 import { BarChart } from '@interfaces/dashboardBarChart.interface';
+import { CategoriesService } from '@services/categories/categories.service';
+import { Category } from '@interfaces/category.interface';
+import { DataForCharts } from '@interfaces/dataExpensesComponent.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,31 +28,70 @@ export class DashboardComponent implements OnInit {
   };
 
   movementsList:Movement[] = [];
-  dataBalanceMonthChart: BalanceChart[] = [];
-  dataExpensesMonthChart: BarChart[] = [];
   movementsServiceResponse:Movement[];
+  categoriesList:Category[] = [];
+  dataForChart:DataForCharts[] = [];
+  
+  /*0 INCOMES 1 EXPENSES 2 BALANCE */
+  tabSelected:number = 1;
 
-  // FOR PIE CHART
-  dataForPieChart:PieChart[] = [];
-  monthSelected:string;
+  //AUX
+  dataReady:boolean = false;
 
+  
   constructor ( private movementsService: MovementsService, private dateApi:DateApiService,
-                private dashboardService: DashboardService ){
+                private dashboardService: DashboardService, private categoriesService:CategoriesService ){
 
   }
 
   ngOnInit(){
-    if( sessionStorage.getItem("balanceData") ){
+    if( sessionStorage.getItem("balanceData")){
       sessionStorage.removeItem("loadingDataForDashboard");
-      this.dataBalanceMonthChart = JSON.parse(sessionStorage.getItem("balanceData"));
-      this.dataExpensesMonthChart = JSON.parse( sessionStorage.getItem("expensesData"));
-      this.balanceDataForPieCurrentMonth();
-
-    } else if( !sessionStorage.getItem("loadingDataForDashboard") ) {
-      sessionStorage.setItem("loadingDataForDashboard", "true");
-      this.getDatesForParams();
-      this.getMovementsData();
+      this.dataReady = true;
+    } else {
+      if( !sessionStorage.getItem("loadingDataForDashboard") ){
+        this.getCategoriesInfo();
+      } else if( sessionStorage.getItem("loadingDataForDashboard") ){
+        sessionStorage.setItem("loadingDataForDashboard", "true");
+      } 
     }
+  }
+
+  // THIS METHOD IS THE SLOWEST 
+  getMovementsData( categories:Category[] ){  
+    this.movementsService.getMovements( this.paramsMovements ).subscribe( ( res ) => {
+      this.movementsServiceResponse = res.body.data;
+    }, error => {
+      
+    }, () => {
+      this.paramsMovements.offset += 150;
+      if( this.movementsServiceResponse.length == this.paramsMovements.offset  ){
+        this.getMovementsData( categories );
+      } else {
+          this.movementsServiceResponse.forEach( movement => {
+            this.movementsList.push( movement );
+          });
+          this.dataForChart = this.dashboardService.getDataForCharts( this.movementsList, this.categoriesList );
+          this.dataReady = true;
+          sessionStorage.removeItem("loadingDataForDashboard");
+        }      
+    });
+  }
+
+  getCategoriesInfo(){
+    sessionStorage.setItem("loadingDataForDashboard", "true");
+    this.categoriesList = [];
+    this.categoriesService.getCategoriesInfo().subscribe( res => {
+     res.body.data.forEach( (element:Category)  => {
+      this.categoriesList.push( element );  
+     });
+    this.getDatesForParams();
+    this.getMovementsData( this.categoriesList );
+    });
+  }
+
+  tabClicked( event ){
+    this.tabSelected = event; 
   }
 
   getDatesForParams(){
@@ -67,43 +109,6 @@ export class DashboardComponent implements OnInit {
     startDateAux.setMilliseconds(0);
     let startDate = this.dateApi.dateWithFormat( startDateAux );
     this.paramsMovements.startDate = startDate;
-  }
-
-  // THIS METHOD IS THE SLOWEST 
-  getMovementsData(){
-    this.movementsService.getMovements( this.paramsMovements ).subscribe( ( res ) => {
-      this.movementsServiceResponse = res.body.data;
-    }, error => {
-      
-    }, () => {
-      this.paramsMovements.offset += 150;
-      if( this.movementsServiceResponse.length == this.paramsMovements.offset  ){
-        this.getMovementsData();
-      } else {
-          this.movementsServiceResponse.forEach( movement => {
-            this.movementsList.push( movement );
-          });
-          this.dataBalanceMonthChart = this.dashboardService.getDataForBalanceChart( this.movementsList );
-        }
-        this.balanceDataForPieCurrentMonth();
-        this.getExpensesData();
-    });
-  }
-
-  balanceDataForPieCurrentMonth(){
-    if( this.dataBalanceMonthChart.length > 0 ){
-      let series = this.dataBalanceMonthChart[ this.dataBalanceMonthChart.length - 1].series;
-      this.dataForPieChart = series;
-      this.monthSelected = this.dataBalanceMonthChart[ this.dataBalanceMonthChart.length - 1].name; 
-    }
-  }
-
-  getExpensesData(){
-    this.dataExpensesMonthChart = JSON.parse(sessionStorage.getItem("expensesData"));
-  }
-
-  selectedMonthChart( event ){
-    this.dataForPieChart = event;
   }
 
 }
