@@ -9,6 +9,7 @@ import {
 import { ActivationEnd, Router } from "@angular/router";
 import { filter, map } from "rxjs/operators";
 import * as M from "materialize-css/dist/js/materialize";
+import { isNullOrUndefined } from "util";
 
 @Component({
   selector: "app-navbar",
