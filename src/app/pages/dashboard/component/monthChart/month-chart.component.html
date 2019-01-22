@@ -1,0 +1,14 @@
+<div id="barChartContainer">
+  <ngx-charts-bar-vertical-stacked
+    [scheme]="colorScheme"
+    [results]="dataForBalanceChart"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showGridLines]="showGridLines"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    (select)="onSelect($event)">
+  </ngx-charts-bar-vertical-stacked>
+</div>

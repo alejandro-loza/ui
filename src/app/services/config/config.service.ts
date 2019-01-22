@@ -18,7 +18,9 @@ export class ConfigService {
   private token_refresh: string;
   private idUser: string;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(
+    private httpClient: HttpClient
+  ) {
     this.headers = new HttpHeaders();
     this.token_access = null;
     this.token_refresh = null;
@@ -52,23 +54,8 @@ export class ConfigService {
   getJsonHeaders() {
     this.headers = this.headers.append('Content-Type', 'application/json');
     this.headers = this.headers.append('Accept', 'application/json');
-    /**
-     * Se checa si el toquen es undefined o null.
-     * Esto puede darse por dos circunstancias,
-     * si el token no existe es undefined,
-     * pero si el token expira entonces es nulo.
-     */
-    if (!isNullOrUndefined(this.getAccessToken)) {
-      this.headers = this.headers.set(
-        'Authorization',
-        `Bearer ${this.getAccessToken}`
-      );
-    } else if (!isNullOrUndefined(sessionStorage.getItem('access-token'))) {
-      this.setAccessToken = sessionStorage.getItem('access-token');
-      this.headers = this.headers.set(
-        'Authorization',
-        `Bearer ${this.token_access}`
-      );
+    if ( sessionStorage.getItem('access-token') !== null ) {
+      this.headers = this.headers.set('Authorization', `Bearer ${sessionStorage.getItem('access-token')}`);
     }
     return this.headers;
   }

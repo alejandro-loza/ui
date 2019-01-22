@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col s12 center">
+        <app-bar-charts (clickEvent)="selectedMonthChart( $event )" [colorOfChart]="colorOfChart" [dataForChart]="dataForBarChart">
+        </app-bar-charts>
+    </div>
+</div>
+<div class="row animated fadeIn">
+    <button *ngIf="showBackButton" (click)="selectedMonthChart( monthOfCategorySelected )" class="btn finerio-blue">Regresar</button>
+    <div class="col s12 l6">
+        <div id="pieContainer">
+            <h5>Total <b>${{ totalAmount | number:'1.0-0' }}</b></h5>
+            <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="dataPieChart" [arcWidth]="arcWidth" [explodeSlices]="explodeSlices" [activeEntries]="activeEntries" [legend]="showLegend" [labels]="showLabels" [doughnut]="doughnut">
+            </ngx-charts-pie-chart>
+        </div>
+    </div>
+    <div class="col s12 l4">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Categoría</th>
+                    <th class="center-align">Gasto Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr (click)="clickOnCategory( element )" class="hoverable" *ngFor="let element of dataForTable">
+                    <td>
+                        <img width="25px" height="25px" src="{{assetsUrl}}/color_{{element.category.id}}.png">
+                    </td>
+                    <td>{{ element.category.name }}</td>
+                    <td class="center-align">${{ element.totalValue | number:'1.2-2' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

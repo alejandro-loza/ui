@@ -1,0 +1,37 @@
+.google-color {
+    background-color: #DB4437;
+    color: #f5f5f5;
+}
+
+.google-color:hover {
+    background-color: #f5f5f5;
+    color: #DB4437;
+}
+
+.facebook-color {
+    background-color: #3B5998;
+    color: #f5f5f5;
+}
+
+.facebook-color:hover {
+    background-color: #f5f5f5;
+    color: #3B5998;
+}
+
+.mdi {
+    margin: 0% 10px;
+}
+
+.btn {
+    margin: 1% 0%;
+    width: 50%;
+}
+
+@media only screen and (max-width: 360px) {
+    .btn-socialMedia i {
+        display: none;
+    }
+    .btn {
+        width: 100%;
+    }
+}

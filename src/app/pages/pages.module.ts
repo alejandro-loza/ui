@@ -1,5 +1,4 @@
 import { NgModule } from             '@angular/core';
-import { HttpClientModule } from     '@angular/common/http'
 
 import { SharedModule } from         '@shared/shared.module';
 
@@ -7,10 +6,12 @@ import { PagesRoutes } from          './pages.route';
 
 import { PagesComponent } from       '@pages/pages.component';
 
+import { NavbarModule } from         '@components/navbar/navbar.module';
+
 @NgModule({
   imports: [
     SharedModule,
-    HttpClientModule,
+    NavbarModule,
     PagesRoutes
   ],
   declarations: [

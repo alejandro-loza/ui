@@ -1,0 +1,8 @@
+.btn-division {
+  border: 1px solid var(--orange-color);
+}
+
+.btn-division:hover {
+  background-color: var(--orange-color);
+  color: white;
+}

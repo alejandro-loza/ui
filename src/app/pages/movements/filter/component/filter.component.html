@@ -1,0 +1,55 @@
+<div class="grey lighten-2 grey-text text-darken-4">
+  <div class="container row">
+    <form class="col s12" ngNativeValidate #forma="ngForm" (ngSubmit)="filterMovement(forma)">
+      <div class="row valign-wrapper">
+        <div class="col s2">
+          <p>
+            <label>
+              <input type="checkbox" class="filled-in" name="charges" checked="checked" [ngModel]="charges">
+              <span class="grey-text text-darken-4">Considerar movimientos de tipo gasto</span>
+            </label>
+          </p>
+        </div>
+        <div class="col s2">
+          <p>
+            <label>
+              <input type="checkbox" class="filled-in" name="deposits" checked="checked" [ngModel]="deposits">
+              <span class="grey-text text-darken-4">Considerar movimientos de tipo ingresos</span>
+            </label>
+          </p>
+        </div>
+        <div class="col s2">
+          <p>
+            <label>
+              <input type="checkbox" class="filled-in" name="duplicates" checked="checked" [ngModel]="duplicates">
+              <span class="grey-text text-darken-4">Considerar movimientos duplicados</span>
+            </label>
+          </p>
+        </div>
+        <div class="col s6">
+          <div class="row valign-wrapper">
+            <div class="col s6 center-align">
+              Del:
+              <div class="input-field inline">
+                <input id="email_inline" placeholder="Fecha Inicial" type="email" class="validate">
+              </div>
+            </div>
+            <div class="col s6">
+              Al:
+              <div class="input-field inline">
+                <input id="email_inline" placeholder="Fecha Limite" type="email" class="validate">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col m12 center-align">
+          <button class="btn finerio-orange" type="submit" name="action" [disabled]="charges !== charges || deposits !== deposits || duplicates !== duplicates">Filtrar
+              <i class="material-icons right">send</i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

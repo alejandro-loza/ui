@@ -1,0 +1,4 @@
+#barChartContainer{
+    display: grid;
+    max-height: 150px!important;
+}

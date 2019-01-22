@@ -8,11 +8,13 @@ import { SharedModule } from '@shared/shared.module';
 
 // Route
 import { CREDENTIAL_ROUTES } from './credential.route';
+import { BackButtonModule } from '@components/back-button/back-button.module';
 
 @NgModule({
   imports: [
     SharedModule,
     FormsModule,
+    BackButtonModule,
     CREDENTIAL_ROUTES,
   ],
   declarations: [

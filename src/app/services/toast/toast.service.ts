@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ConfigService } from '@services/config/config.service';
 import { ToastInterface } from '@interfaces/toast.interface';
+import { isNullOrUndefined } from 'util';
 
 import * as M from 'materialize-css/dist/js/materialize';
 
@@ -45,18 +46,16 @@ export class ToastService {
         this.classes = 'red accent-3';
         break;
       case 401:
-        this.configService.refreshToken().subscribe(
-          res => res,
-          err => {
-            console.error(toastParams.code, err);
-          },
-          () => {
-            toastParams.message !== null
-              ? (this.message = toastParams.message)
-              : (this.message =
-                  'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!');
-          }
-        );
+        this.configService.refreshToken()
+          .subscribe(
+            res => res,
+            err => console.error(toastParams.code, err),
+            () => this.message = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!'
+          );
+        this.classes = 'light-blue darken-4';
+        break;
+      case 4011:
+        this.message = 'Tus datos son incorrectos, por favor verifica<br>que los hayas escrito bien';
         this.classes = 'light-blue darken-4';
         break;
       case 422:

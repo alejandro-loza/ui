@@ -1,10 +1,10 @@
 import { NgModule } from                             '@angular/core';
-import { FormsModule } from                          '@angular/forms';
-import { HttpClientModule } from                     '@angular/common/http';
 
-import { SharedModule } from                         '@shared/shared.module';
-import { AuthService } from                          '@services/auth/auth.service';
 import { ServicesModule } from                       '@services/services.module';
+import { SharedModule } from                         '@shared/shared.module';
+import { SocialMediaModule } from                    '@components/social-media-button/social-media.module';
+
+import { AuthService } from                          '@services/auth/auth.service';
 
 import { LoginRoutes } from                          './login.route';
 
@@ -14,9 +14,8 @@ import { LoginComponent } from                       './components/login.compone
 @NgModule({
   imports: [
     SharedModule,
-    FormsModule,
-    HttpClientModule,
     ServicesModule,
+    SocialMediaModule,
     LoginRoutes
   ],
   declarations: [

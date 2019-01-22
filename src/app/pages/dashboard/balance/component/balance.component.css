@@ -1,0 +1,22 @@
+#pieContainer{
+    display: grid;
+    text-align: -webkit-center;
+    position: relative;
+}
+
+.row{
+    margin-bottom: 0;
+    position: relative;
+}
+
+.paddAlign{
+    padding-top: 9px;
+}
+
+#text-right{
+    text-align: right;
+}
+
+#text-left{
+    text-align: left;
+}

@@ -52,8 +52,8 @@ export class PagesComponent implements OnInit {
               'Ocurrió un error al obtener tu información';
             this.toastService.toastGeneral(this.toastInterface);
           }
-        },
-        () => {}
+        }
       );
   }
+
 }

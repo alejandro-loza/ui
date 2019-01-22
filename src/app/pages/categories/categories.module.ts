@@ -2,7 +2,7 @@ import { NgModule } from                   '@angular/core';
 import { CommonModule } from               '@angular/common';
 import { CategoriesComponent } from        './component/categories.component';
 import { CategoriesRoutes } from           './categories.routes';
-import { CategoryModule } from             './component/category/category.module';
+import { CategoryModule } from             './category/category.module';
 
 @NgModule({
   imports: [

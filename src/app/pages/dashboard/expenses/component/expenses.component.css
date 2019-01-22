@@ -1,0 +1,35 @@
+#pieContainer{
+    display: grid;
+    text-align: -webkit-center;
+    position: relative;
+}
+
+.paddAlign{
+    padding-top: 9px;
+}
+
+#text-right{
+    text-align: right;
+}
+
+#text-left{
+    text-align: left;
+}
+
+th, td{
+    font-size: 14px;
+    padding: 3px 0 0px 8px;
+}
+
+tr{
+    border-radius: 15px;
+}
+
+.hoverable{
+    cursor: pointer;
+}
+
+.btn{
+    float: left;
+    margin-left: 35px;
+}
