@@ -87,11 +87,13 @@
             <!-- Consider end -->
         </div>
         <div class="collapsible-body">
-            <app-movement-detail [dateOriginal]="movement.date" [descriptionOriginal]="movement.description" [movement]="editMovement" [fecha]="movement.customDate" [flag]="editMovementFlag" [idMovement]="movement.id" [name]="movement.account.name" [type]="movement.type">
+            <app-movement-detail (status)="statusMovement($event)" [dateOriginal]="movement.date" [descriptionOriginal]="movement.description" [movement]="editMovement" [fecha]="movement.customDate" [flag]="editMovementFlag" [idMovement]="movement.id" [name]="movement.account.name"
+                [type]="movement.type">
             </app-movement-detail>
         </div>
     </li>
 </ul>
+
 <div class="center-align" *ngIf="spinnerBoolean !== false">
     <app-spinner></app-spinner>
 </div>

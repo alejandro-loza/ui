@@ -20,6 +20,10 @@ export class ParamsService {
     };
   }
 
+  public get getParamsMovements(): object {
+    return this.paramsMovements;
+  }
+
   public set setStartDate(startDate: string) {
     this.paramsMovements.startDate = startDate;
   }
