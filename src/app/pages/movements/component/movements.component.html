@@ -19,8 +19,7 @@
             </div>
         </div>
     </div>
-    <app-filter *ngIf="filterflag !== false" [charges]="paramsMovements.charges" [deposits]="paramsMovements.deposits" [duplicates]="paramsMovements.duplicates" class="params-movement"></app-filter>
-
+    <app-filter *ngIf="filterflag !== false" (filterMovementStatus)="statusMovement($event)" [charges]="paramsMovements.charges" [deposits]="paramsMovements.deposits" [duplicates]="paramsMovements.duplicates" class="params-movement"></app-filter>
     <!-- Encabezado de movimientos -->
     <div class="containerMovement">
         <div class="row center-align z-depth-1 white" id="header">
@@ -37,6 +36,6 @@
 <!-- Lista de Movimientos -->
 <div class="containerMovement">
     <div class="row center-align">
-        <app-movement [status]="status"></app-movement>
+        <app-movement (statusMovementsList)="statusMovement($event)" [status]="status"></app-movement>
     </div>
 </div>

@@ -7,7 +7,8 @@ import {
   ElementRef,
   ViewChild,
   Input,
-  OnChanges
+  OnChanges,
+  Output
 } from "@angular/core";
 
 import { MovementsService } from "@services/movements/movements.service";
@@ -21,6 +22,7 @@ import { retry } from "rxjs/operators";
 
 import * as M from "materialize-css/dist/js/materialize";
 import { ParamsService } from "@services/movements/params/params.service";
+import { EventEmitter } from "@angular/core";
 
 declare var $: any;
 
@@ -33,6 +35,8 @@ export class MovementComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @ViewChild("collapsible") elementCollapsible: ElementRef;
   @Input() status: boolean;
+  @Output() statusMovementsList: EventEmitter<boolean>;
+
   instanceCollapsible;
   spinnerBoolean: boolean;
 
@@ -41,22 +45,15 @@ export class MovementComponent
   toastInterface: ToastInterface;
 
   constructor(
-    private renderer: Renderer2,
     private paramsService: ParamsService,
     private movementsService: MovementsService,
     private toastService: ToastService
   ) {
     this.toastInterface = { code: null, message: null, classes: null };
-    this.paramsMovements = {
-      charges: true,
-      deep: true,
-      deposits: true,
-      duplicates: true,
-      maxMovements: 35,
-      offset: 0
-    };
+    this.paramsMovements = this.paramsService.getParamsMovements;
     this.movementsList = [];
     this.spinnerBoolean = true;
+    this.statusMovementsList = new EventEmitter();
   }
 
   ngOnInit() {
@@ -66,11 +63,8 @@ export class MovementComponent
 
   ngOnChanges() {
     if (this.status === true) {
-      this.paramsMovements.offset = 0;
-      this.movementsList = [];
-      this.getMovements(this.paramsMovements);
+      this.refreshMovement();
     }
-    this.status = false;
   }
 
   ngAfterViewInit() {
@@ -122,5 +116,19 @@ export class MovementComponent
       );
     this.paramsMovements.offset =
       this.paramsMovements.offset + this.paramsMovements.maxMovements;
+  }
+
+  refreshMovement() {
+    this.paramsMovements = this.paramsService.getParamsMovements;
+    this.paramsMovements.offset = 0;
+    this.movementsList = [];
+    this.getMovements(this.paramsMovements);
+    this.status = false;
+    this.statusMovementsList.emit(this.status);
+  }
+
+  statusMovement(flag: boolean) {
+    this.status = flag;
+    this.refreshMovement();
   }
 }

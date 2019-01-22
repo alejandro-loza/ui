@@ -5,7 +5,7 @@
         <div class="col s2">
           <p>
             <label>
-              <input type="checkbox" class="filled-in" [(ngModel)]="charges" name="charges" checked="checked" #chargesElement>
+              <input type="checkbox" class="filled-in" name="charges" checked="checked" [ngModel]="charges">
               <span class="grey-text text-darken-4">Considerar movimientos de tipo gasto</span>
             </label>
           </p>
@@ -13,7 +13,7 @@
         <div class="col s2">
           <p>
             <label>
-              <input type="checkbox" class="filled-in" [(ngModel)]="deposits" name="deposits" checked="checked" #depositsElement>
+              <input type="checkbox" class="filled-in" name="deposits" checked="checked" [ngModel]="deposits">
               <span class="grey-text text-darken-4">Considerar movimientos de tipo ingresos</span>
             </label>
           </p>
@@ -21,7 +21,7 @@
         <div class="col s2">
           <p>
             <label>
-              <input type="checkbox" class="filled-in" [(ngModel)]="duplicates" name="duplicates" checked="checked" #duplicatesElement>
+              <input type="checkbox" class="filled-in" name="duplicates" checked="checked" [ngModel]="duplicates">
               <span class="grey-text text-darken-4">Considerar movimientos duplicados</span>
             </label>
           </p>
