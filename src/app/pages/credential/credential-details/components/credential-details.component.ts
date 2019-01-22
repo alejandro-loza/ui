@@ -4,21 +4,18 @@ import {
   AfterViewInit,
   ViewChild,
   ElementRef
-} from                                   '@angular/core';
-import {
-  Router,
-  ActivatedRoute,
-  Params } from                          '@angular/router';
+} from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { AccountService } from           '@services/account/account.service';
-import { CredentialService } from        '@services/credentials/credential.service';
-import { FieldService } from             '@services/field/field.service';
-import { ToastService } from             '@services/toast/toast.service';
+import { AccountService } from '@services/account/account.service';
+import { CredentialService } from '@services/credentials/credential.service';
+import { FieldService } from '@services/field/field.service';
+import { ToastService } from '@services/toast/toast.service';
 
-import { InstitutionFieldInterface } from     '@interfaces/institutionField';
-import { CredentialInterface } from           '@interfaces/credential.interface';
-import { AccountInterface } from              '@interfaces/account.interfaces';
-import { ToastInterface } from                 '@interfaces/toast.interface';
+import { InstitutionFieldInterface } from '@interfaces/institutionField';
+import { CredentialInterface } from '@interfaces/credential.interface';
+import { AccountInterface } from '@interfaces/account.interfaces';
+import { ToastInterface } from '@interfaces/toast.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 
@@ -47,7 +44,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     private credentialService: CredentialService,
     private fieldService: FieldService,
     private accountService: AccountService,
-    private toastService: ToastService,
+    private toastService: ToastService
   ) {
     this.fields = [];
     this.accounts = [];
@@ -91,15 +88,15 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   getFields(code: string) {
     // Obtenemos los campos a mostrar de la institución mostrada y borramos el primer campo
     // que en todos los casos es el username.
-    this.fieldService
-      .findAllFieldsByInstitution(code)
-      .subscribe(res => {
+    this.fieldService.findAllFieldsByInstitution(code).subscribe(
+      res => {
         res.body.forEach(fieldBank => {
           this.fields.push(fieldBank);
         });
         this.fields.shift();
-      }, err => {
-      });
+      },
+      err => {}
+    );
   }
 
   updateCredential(credential) {
@@ -127,9 +124,11 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       },
       error => {
         this.toast.code = error.status;
-        this.toast.message = 'Ocurrió un error al elminar la credencial, inténtalo mas tarde';
+        this.toast.message =
+          'Ocurrió un error al elminar la credencial, inténtalo mas tarde';
         this.toastService.toastGeneral(this.toast);
-      }, () => {
+      },
+      () => {
         this.toast.message = 'Credencial elminada correctamente';
         this.toastService.toastGeneral(this.toast);
         this.router.navigateByUrl('/app/credentials');
@@ -151,9 +150,11 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       },
       error => {
         this.toast.code = error.status;
-        this.toast.message = 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde';
+        this.toast.message =
+          'Ocurrió un error al elminar la cuenta, inténtalo mas tarde';
         this.toastService.toastGeneral(this.toast);
-      }, () => {
+      },
+      () => {
         this.toast.message = 'Cuenta elminada correctamente';
         this.toastService.toastGeneral(this.toast);
         this.router.navigateByUrl('/app/credentials');
