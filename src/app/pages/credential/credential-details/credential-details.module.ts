@@ -7,11 +7,13 @@ import { CredentialDetailsComponent } from './components/credential-details.comp
 
 // Route
 import { CREDENTIAL_DETAILS_ROUTES } from './credential-details.route';
+import { BackButtonModule } from '@components/back-button/back-button.module';
 
 @NgModule({
   imports: [
     SharedModule,
     FormsModule,
+    BackButtonModule,
     CREDENTIAL_DETAILS_ROUTES
   ],
   declarations: [
