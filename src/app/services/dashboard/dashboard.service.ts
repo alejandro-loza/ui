@@ -287,7 +287,6 @@ export class DashboardService {
     let arraysOfMonths:number[] = [];
     this.dataExpensesPieChart = [];
 
-    // DEBO GUARDAR TODO EL AÑO DE LA DATA DEL PIE
     for(let i = 0; i < this.dataForCharts.length; i++ ){
 
      if( this.dataForCharts[i].referenceDate.getMonth() != arraysOfMonths[ arraysOfMonths.length - 1] || i == 0 ){

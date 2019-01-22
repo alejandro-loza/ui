@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
+import { BackButtonModule } from '@components/back-button/back-button.module';
+
 
 // Component
 import { CredentialDetailsComponent } from './components/credential-details.component';

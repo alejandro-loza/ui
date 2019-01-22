@@ -1,11 +1,22 @@
+.row{
+    padding-top: 15px;
+}
+
 #pieContainer{
     display: grid;
     text-align: -webkit-center;
     position: relative;
 }
 
+#pieContainer h5{
+    margin-top: 0px;
+}
+
+td{
+    padding: 5px 0 5px 0;
+}
+
 .row{
-    margin-bottom: 0;
     position: relative;
 }
 

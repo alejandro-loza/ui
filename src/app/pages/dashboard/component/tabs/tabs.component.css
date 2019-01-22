@@ -1,3 +1,7 @@
+.row{
+  margin-bottom: 0px;
+}
+
 .colTabs {
   margin: 0%;
   padding: 0%;
@@ -5,11 +9,14 @@
 
 .tab a {
   color: rgb(1, 87, 155, 0.7);
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .tab a:hover,
 .tab a.active {
-  color: rgb(1, 87, 155);
+  color: rgb(1, 87, 155, 0.7);
+  background: rgb(1, 87, 155, 0.1)
 }
 
 .tab a:focus.active {
@@ -26,5 +33,6 @@
 }
 
 .tabs .indicator {
-  background-color: var(--orange-color);
+  background-color: var(--orange-color)!important;
+  height: 5px;
 }
