@@ -153,7 +153,7 @@ export class DashboardService {
                   // PARA LA CHART DE INCOMES 
   
                 }
-              }
+              } 
             }
           } else {
             if( element.type == "CHARGE" ){
