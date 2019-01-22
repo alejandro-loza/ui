@@ -1,7 +1,15 @@
+.row{
+    padding-top: 15px;
+}
+
 #pieContainer{
     display: grid;
     text-align: -webkit-center;
     position: relative;
+}
+
+#pieContainer h5 {
+    margin-top: 0px;
 }
 
 .paddAlign{
@@ -30,6 +38,6 @@ tr{
 }
 
 .btn{
-    float: left;
-    margin-left: 35px;
+    
+    margin-top: 15px;
 }

@@ -1,11 +1,10 @@
-<div class="row">
+<div class="row z-depth-1">
     <div class="col s12 center">
         <app-bar-charts (clickEvent)="selectedMonthChart( $event )" [colorOfChart]="colorOfChart" [dataForChart]="dataForBarChart">
         </app-bar-charts>
     </div>
 </div>
 <div class="row animated fadeIn">
-    <button *ngIf="showBackButton" (click)="selectedMonthChart( monthOfCategorySelected )" class="btn finerio-blue">Regresar</button>
     <div class="col s12 l6">
         <div id="pieContainer">
             <h5>Total <b>${{ totalAmount | number:'1.0-0' }}</b></h5>
@@ -24,7 +23,7 @@
             </thead>
             <tbody>
                 <tr (click)="clickOnCategory( element )" class="hoverable" *ngFor="let element of dataForTable">
-                    <td>
+                    <td class="center-align">
                         <img width="25px" height="25px" src="{{assetsUrl}}/color_{{element.category.id}}.png">
                     </td>
                     <td>{{ element.category.name }}</td>
@@ -32,5 +31,6 @@
                 </tr>
             </tbody>
         </table>
+        <button *ngIf="showBackButton" (click)="selectedMonthChart( monthOfCategorySelected )" class="btn finerio-blue">Regresar</button>
     </div>
 </div>
