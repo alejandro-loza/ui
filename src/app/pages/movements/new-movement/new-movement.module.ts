@@ -8,7 +8,7 @@ import { MovementsService } from           '@services/movements/movements.servic
 import { ToastService } from               '@services/toast/toast.service';
 
 import { NewMovementComponent } from       './component/new-movement.component';
-import { DateModule } from                 '../movement/date/date.module';
+import { DateModule } from                 '../date/date.module';
 
 
 @NgModule({

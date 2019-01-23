@@ -1,16 +1,16 @@
-import { Injectable } from "@angular/core";
-import { ParamsMovements } from "@interfaces/paramsMovements.interface";
+import { Injectable } from '@angular/core';
+import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class ParamsService {
   private paramsMovements: ParamsMovements;
 
   constructor() {
     this.paramsMovements = {
-      startDate: "",
-      endDate: "",
+      startDate: '',
+      endDate: '',
       charges: true,
       deep: true,
       deposits: true,

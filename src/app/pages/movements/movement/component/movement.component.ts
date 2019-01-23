@@ -3,37 +3,37 @@ import {
   OnInit,
   AfterViewInit,
   OnDestroy,
-  Renderer2,
   ElementRef,
   ViewChild,
   Input,
   OnChanges,
   Output
-} from "@angular/core";
+} from '@angular/core';
 
-import { MovementsService } from "@services/movements/movements.service";
-import { ToastService } from "@services/toast/toast.service";
+import { MovementsService } from '@services/movements/movements.service';
+import { ToastService } from '@services/toast/toast.service';
 
-import { ParamsMovements } from "@interfaces/paramsMovements.interface";
-import { Movement } from "@interfaces/movement.interface";
-import { ToastInterface } from "@interfaces/toast.interface";
+import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import { Movement } from '@interfaces/movement.interface';
+import { ToastInterface } from '@interfaces/toast.interface';
 
-import { retry } from "rxjs/operators";
+import { retry } from 'rxjs/operators';
 
-import * as M from "materialize-css/dist/js/materialize";
-import { ParamsService } from "@services/movements/params/params.service";
-import { EventEmitter } from "@angular/core";
+import { ParamsService } from '@services/movements/params/params.service';
+import { EventEmitter } from '@angular/core';
+
+import * as M from 'materialize-css/dist/js/materialize';
 
 declare var $: any;
 
 @Component({
-  selector: "app-movement",
-  templateUrl: "./movement.component.html",
-  styleUrls: ["./movement.component.css"]
+  selector: 'app-movement',
+  templateUrl: './movement.component.html',
+  styleUrls: ['./movement.component.css']
 })
 export class MovementComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-  @ViewChild("collapsible") elementCollapsible: ElementRef;
+  @ViewChild('collapsible') elementCollapsible: ElementRef;
   @Input() status: boolean;
   @Output() statusMovementsList: EventEmitter<boolean>;
 
@@ -58,7 +58,7 @@ export class MovementComponent
 
   ngOnInit() {
     this.getMovements(this.paramsMovements);
-    window.addEventListener("scroll", this.offsetMovement, true);
+    window.addEventListener('scroll', this.offsetMovement, true);
   }
 
   ngOnChanges() {
@@ -68,14 +68,15 @@ export class MovementComponent
   }
 
   ngAfterViewInit() {
-    let initCollapsible = new M.Collapsible(
+    const initCollapsible = new M.Collapsible(
       this.elementCollapsible.nativeElement,
       {}
     );
+    const instanceCollpaisble = M.Collapsible.getInstance(this.elementCollapsible.nativeElement);
   }
 
   ngOnDestroy() {
-    window.removeEventListener("scroll", this.offsetMovement, true);
+    window.removeEventListener('scroll', this.offsetMovement, true);
   }
 
   /**
@@ -106,7 +107,7 @@ export class MovementComponent
           }
           if (err.status === 500) {
             this.toastInterface.message =
-              "¡Ha ocurrido un error al obterner tus movimiento!";
+              '¡Ha ocurrido un error al obterner tus movimiento!';
             this.toastService.toastGeneral(this.toastInterface);
           }
         },

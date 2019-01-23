@@ -6,7 +6,7 @@ import { DateApiService } from               '@services/date-api/date-api.servic
 import { CategoryModule } from               '@pages/categories/category/category.module';
 import { MovementDetailModule } from         '../movement-detail/movement-detail.module';
 
-import { DateModule } from                   './date/date.module';
+import { DateModule } from                   '../date/date.module';
 
 import { MovementComponent } from            './component/movement.component';
 

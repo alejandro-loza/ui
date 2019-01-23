@@ -31,7 +31,7 @@
             <div class="col s6 center-align">
               Del:
               <div class="input-field inline">
-                <input id="email_inline" placeholder="Fecha Inicial" type="email" class="validate">
+                <input type="text" class="datepicker" [ngModel]="date | date: 'dd - MMM - yyyy'" name="date" #startDate/>
               </div>
             </div>
             <div class="col s6">

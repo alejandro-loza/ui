@@ -1,11 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { ParamsMovements } from "@interfaces/paramsMovements.interface";
-import { ParamsService } from "@services/movements/params/params.service";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import { ParamsService } from '@services/movements/params/params.service';
 
 @Component({
-  selector: "app-movements",
-  templateUrl: "./movements.component.html",
-  styleUrls: ["./movements.component.css"]
+  selector: 'app-movements',
+  templateUrl: './movements.component.html',
+  styleUrls: ['./movements.component.css']
 })
 export class MovementsComponent implements OnInit {
   status: boolean;
