@@ -31,13 +31,13 @@
             <div class="col s6 center-align">
               Del:
               <div class="input-field inline">
-                <input type="text" class="datepicker" [ngModel]="date | date: 'dd - MMM - yyyy'" name="date" #startDate/>
+                <app-date [type]="'text'" [name]="startDate" [date]="startDate" (valueDate)="startDate=$event"></app-date>
               </div>
             </div>
             <div class="col s6">
               Al:
               <div class="input-field inline">
-                <input id="email_inline" placeholder="Fecha Limite" type="email" class="validate">
+                  <app-date [type]="'text'" [name]="startDate" [date]="endDate" (valueDate)="endDate=$event"></app-date>
               </div>
             </div>
           </div>

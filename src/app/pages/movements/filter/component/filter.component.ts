@@ -2,97 +2,48 @@ import {
   Component,
   OnInit,
   Input,
-  ElementRef,
   Output,
   EventEmitter,
-  AfterViewInit
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ParamsService } from '@services/movements/params/params.service';
-import { ViewChild } from '@angular/core';
+import { DateApiService } from '@services/date-api/date-api.service';
 
-import { M } from 'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.css']
 })
-export class FilterComponent implements OnInit, AfterViewInit {
-  @ViewChild('startDate') elDatePickker: ElementRef;
+export class FilterComponent implements OnInit {
   @Input() charges: boolean;
   @Input() deposits: boolean;
   @Input() duplicates: boolean;
 
   @Output() filterMovementStatus: EventEmitter<boolean>;
 
-  date: Date;
+  endDate: Date;
+  startDate: Date;
 
-  constructor(private paramsService: ParamsService) {
+  constructor(
+    private paramsService: ParamsService,
+    private dateApiService: DateApiService
+  ) {
     this.filterMovementStatus = new EventEmitter();
+    this.startDate = new Date();
+    this.endDate = new Date();
+    const year = new Date().getFullYear() - 1;
+    this.startDate.setFullYear(year);
   }
 
   ngOnInit() {}
-
-  ngAfterViewInit() {
-    const initDatepicker = new M.Datepicker(this.elDatePickker.nativeElement, {
-      autoClose: true,
-      format: `dd - mmm - yyyy`,
-      showDaysInNextAndPreviousMonths: true,
-      i18n: {
-        months: [
-          'Enero',
-          'Febrero',
-          'Marzo',
-          'Abril',
-          'Mayo',
-          'Junio',
-          'Julio',
-          'Agosto',
-          'Septiembre',
-          'Octubre',
-          'Noviembre',
-          'Diciembre'
-        ],
-        monthsShort: [
-          'Ene',
-          'Feb',
-          'Marz',
-          'Abr',
-          'May',
-          'Jun',
-          'Jul',
-          'Ags',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dic'
-        ],
-        weekdays: [
-          'Domingo',
-          'Lunes',
-          'Martes',
-          'Miercoles',
-          'Jueves',
-          'Viernes',
-          'Sabado'
-        ],
-        weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-        weekdaysAbbrev: ['D', 'L', 'M', 'M', 'J', 'V', 'S']
-      },
-      setDefaultDate: true,
-      defaultDate: new Date(),
-      maxDate: new Date(),
-      onDraw: datepicker => {
-        this.date = datepicker.date;
-      }
-    });
-  }
 
   filterMovement(ngform: NgForm) {
     this.paramsService.setCharges = ngform.value.charges;
     this.paramsService.setDeposits = ngform.value.deposits;
     this.paramsService.setDuplicates = ngform.value.duplicates;
+    this.paramsService.setStartDate = this.dateApiService.dateWithFormat(this.startDate);
+    this.paramsService.setEndDate = this.dateApiService.dateWithFormat(this.endDate);
     this.filterMovementStatus.emit(true);
   }
 }

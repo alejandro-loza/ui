@@ -1,18 +1,18 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpResponse } from "@angular/common/http";
-import { environment } from "@env/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { environment } from '@env/environment';
 
-import { ConfigService } from "@services/config/config.service";
+import { ConfigService } from '@services/config/config.service';
 
-import { ParamsMovements } from "@interfaces/paramsMovements.interface";
-import { ParamsMovement } from "@interfaces/paramsMovement.interface";
-import { Movement } from "@interfaces/movement.interface";
-import { Movements } from "@interfaces/movements.interface";
+import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import { Movement } from '@interfaces/movement.interface';
+import { Movements } from '@interfaces/movements.interface';
 
-import { map } from "rxjs/operators";
-import { Observable } from "rxjs";
-import { isNullOrUndefined } from "util";
-import { DateApiService } from "@services/date-api/date-api.service";
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { isNullOrUndefined } from 'util';
+import { DateApiService } from '@services/date-api/date-api.service';
 
 @Injectable()
 export class MovementsService {
@@ -44,7 +44,7 @@ export class MovementsService {
     if (paramsMovements.offset === 0) {
       this.movementsList = new Array();
     }
-    const id = sessionStorage.getItem("id-user");
+    const id = sessionStorage.getItem('id-user');
     let urlMovements =
       `${this.url}/` +
       `${id}/movements` +
@@ -65,7 +65,7 @@ export class MovementsService {
     }
     return this.httpClient
       .get<Movements>(urlMovements, {
-        observe: "response",
+        observe: 'response',
         headers: this.configService.getJsonHeaders()
       })
       .pipe(
@@ -93,7 +93,7 @@ export class MovementsService {
         duplicated: movement.duplicated,
         type: movement.type.toUpperCase()
       }),
-      { observe: "response", headers: this.configService.getJsonHeaders() }
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
   }
 
@@ -110,14 +110,14 @@ export class MovementsService {
         duplicated: movement.duplicated,
         type: movement.type.toUpperCase()
       }),
-      { observe: "response", headers: this.configService.getJsonHeaders() }
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
   }
 
   deleteMovement(idMovement: string): Observable<HttpResponse<Movement>> {
     return this.httpClient.delete<Movement>(
       `${environment.backendUrl}/movements/${idMovement}`,
-      { observe: "response", headers: this.configService.getJsonHeaders() }
+      { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
   }
 }

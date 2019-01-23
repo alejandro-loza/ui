@@ -52,8 +52,8 @@ export class DateComponent implements OnInit, AfterContentInit {
         clear: 'Borrar'
       },
       maxDate: new Date(),
-      onDraw: () => {
-        this.valueDate.emit(this.date);
+      onDraw: datepicker => {
+        this.valueDate.emit(datepicker.date);
       },
       onClose: () => {
       }
