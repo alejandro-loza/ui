@@ -227,7 +227,7 @@ export class DashboardService {
         });
       });
       
-      this.replaceCategoryId( valueAuxDad, categories );
+      this.replaceCategoryId( valueAuxDad, categories ); 
       catsArray = [];   valueAuxDad = [];
     }
 
@@ -265,7 +265,7 @@ export class DashboardService {
         } 
       });
     });
-    console.log( detailsAux );
+
     // FOREACH PARA COMPLETAR LA PRIMER PANTALLA DE DASHBOARD
     detailsAux.forEach( element => {
       
