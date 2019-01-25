@@ -1,5 +1,9 @@
 .row{
-    padding-top: 15px;
+    margin-bottom: 0px;
+}
+
+#barChartRow{
+    border-bottom: 1px solid lightgray;
 }
 
 #pieContainer{
@@ -12,32 +16,32 @@
     margin-top: 0px;
 }
 
-.paddAlign{
-    padding-top: 9px;
+.mainRow{
+    padding-top: 20px;
+    /*height: -webkit-fill-available;
+    background-color: white;*/
 }
 
-#text-right{
-    text-align: right;
+.collection{
+    overflow: inherit;
+    margin-top: 0px;
 }
 
-#text-left{
-    text-align: left;
-}
-
-th, td{
-    font-size: 14px;
-    padding: 3px 0 0px 8px;
-}
-
-tr{
-    border-radius: 15px;
-}
-
-.hoverable{
+.collection-item{
+    background-color: inherit;
     cursor: pointer;
+    max-height: 50px;
+    padding: 5px 20px;
 }
 
 .btn{
-    
     margin-top: 15px;
+}
+
+.pt{
+    padding-top: 5px;
+}
+
+.svgFinerioIcon{
+    fill: "#AAAAAA";
 }

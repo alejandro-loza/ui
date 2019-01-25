@@ -112,64 +112,113 @@ export class DashboardService {
         if( !isNullOrUndefined( movement.concepts[0].category )){
           // Filtro para movimientos divididos
           if( movement.concepts.length < 2 ){
-            if( !catsArray.includes( movement.concepts[0].category.parent.id, 0 ) ){
-              catsArray.push( movement.concepts[0].category.parent.id );
+            if( !isNullOrUndefined( movement.concepts[0].category.parent ) ){
+              if( !catsArray.includes( movement.concepts[0].category.parent.id, 0 ) ){
+                catsArray.push( movement.concepts[0].category.parent.id );
+              }
+            } else {
+              catsArray.push( movement.concepts[0].category.id );
             }
+          } else {
+            // MOVEMENT WITH MORE THAN 2 CONCEPTS
+            movement.concepts.forEach(concept => {
+              if( !isNullOrUndefined( concept.category ) ){
+                concept.type == "DEFAULT" ? catsArray.push( concept.category.parent.id ) : null
+              } else {
+                // MOVEMENT WITHOUT CATEGORY
+                concept.type == "DEFAULT" ? catsArray.push( "NoCategory" ) : null
+              }
+             
+            });
           }
         } else {
-          catsArray.push( "No category" );
+          if( !catsArray.includes("NoCategory", 0 ) ){
+            catsArray.push( "NoCategory" );
+          }
         }
       });
-
       catsArray.forEach( (categoryId:string) => {
         valueAux = [];
         sumValues = 0;
         auxMovements = [];
+        
         // LISTA DE MOVIMIENTOS MES X MES
         arrayMovs[i].movements.forEach( element => {
           let date = new Date( element.customDate );
           if( !isNullOrUndefined( element.concepts[0].category ) ){
             if( element.concepts.length < 2 ){
+              if( !isNullOrUndefined( element.concepts[0].category.parent ) ){
+                if( element.concepts[0].category.parent.id == categoryId ){
 
-              if( element.concepts[0].category.parent.id == categoryId ){
-                if( element.type == "CHARGE" ){
-                  valueAux.push(  element.concepts[0].amount );
-                  auxMovements.push( element );
-                } else if( element.type == "DEPOSIT" ){
-                  auxMovements.push( element );
-                  // PARA LA CHART DE INCOMES 
-  
-                }
+                  if( element.type == "CHARGE" ){
+                    valueAux.push(  element.concepts[0].amount );
+                    auxMovements.push( element );
+                  } else if( element.type == "DEPOSIT" ){
+                    auxMovements.push( element );
+                    // PARA LA CHART DE INCOMES 
+    
+                  }
+                } 
+              } else {
+                // PARA MOVS SIN SUBCAT
+                if( element.concepts[0].category.id == categoryId ){
+                  if( element.type == "CHARGE" ){
+                    valueAux.push(  element.concepts[0].amount );
+                    auxMovements.push( element );
+                  } else if( element.type == "DEPOSIT" ){
+                    auxMovements.push( element );
+                    // PARA LA CHART DE INCOMES 
+    
+                  }
+                } 
               }
-
             } else {
               // Else for splited movements
-              if( element.concepts[0].category.id == categoryId ){
-                if( element.type == "CHARGE" ){
-                  valueAux.push(  element.concepts[0].amount );
-                  auxMovements.push( element );
-                } else if( element.type == "DEPOSIT" ){
-                  auxMovements.push( element );
-                  // PARA LA CHART DE INCOMES 
-  
+              element.concepts.forEach( concept => {
+                if( concept.type == "DEFAULT"){
+                  if( !isNullOrUndefined( concept.category ) ){
+                    if( concept.category.parent.id == categoryId ){
+                      if( element.type == "CHARGE" ){
+                        valueAux.push(  element.amount );
+                        auxMovements.push( element );
+                      } else if( element.type == "DEPOSIT" ){
+                        auxMovements.push( element );
+                        // PARA LA CHART DE INCOMES 
+        
+                      }
+                    } 
+                  } else {
+                    if( element.type == "CHARGE" ){
+                      valueAux.push(  element.amount );
+                      auxMovements.push( element );
+                    } else if( element.type == "DEPOSIT" ){
+                      auxMovements.push( element );
+                      // PARA LA CHART DE INCOMES 
+                    }
+                  }
                 }
-              }
+              });
             }
           } else {
-            if( element.type == "CHARGE" ){
-              valueAux.push(  element.concepts[0].amount );
-              auxMovements.push( element );
-            } else if( element.type == "DEPOSIT" ){
-              auxMovements.push( element );
-              // PARA LA CHART DE INCOMES DE MOVS SIN CATS
+            if( categoryId == "NoCategory"){
+             
+              if( element.type == "CHARGE" ){
+                valueAux.push(  element.concepts[0].amount );
+                auxMovements.push( element );
+              } else if( element.type == "DEPOSIT" ){
+                auxMovements.push( element );
+                // PARA LA CHART DE INCOMES 
 
+              }
             }
           }
           auxMonth = new Date( element.customDate );
         });
+
         valueAux.forEach( value => {
           sumValues += value;
         });
+
         valueAuxDad.push({
           catId: categoryId,
           month: auxMonth.getMonth(),
@@ -177,9 +226,9 @@ export class DashboardService {
           movements: auxMovements
         });
       });
+      
       this.replaceCategoryId( valueAuxDad, categories );
-      catsArray = [];
-      valueAuxDad = [];
+      catsArray = [];   valueAuxDad = [];
     }
 
   }
@@ -188,7 +237,8 @@ export class DashboardService {
     let detailsAux:ExpensesPieChart[] = [];
     let subcatsAux:any[] = [];
     let movsForSubs:any[] = [];
-
+    let flagForMovsWithoutCat:boolean = false;
+    
     values.forEach( element => {
       categories.forEach( category => {
         if( element.catId == category.id ){
@@ -198,11 +248,27 @@ export class DashboardService {
             value: element.value,
             movements: element.movements
           });
-        }
+        } else if( element.catId == "NoCategory" && !flagForMovsWithoutCat ){
+          
+          detailsAux.push({
+            category: {
+              id:"000000",
+              color: "#AAAAAA",
+              name: "Sin Categoria",
+              textColor: "#FFF",
+            },
+            categoryName:"NoCategory",
+            value: element.value,
+            movements: element.movements
+          });
+          flagForMovsWithoutCat = true;
+        } 
       });
     });
-    
+    console.log( detailsAux );
+    // FOREACH PARA COMPLETAR LA PRIMER PANTALLA DE DASHBOARD
     detailsAux.forEach( element => {
+      
       let date = new Date( element.movements[0].customDate );
       this.expensesFirstPart.push({
        referenceDate:date,
@@ -211,10 +277,12 @@ export class DashboardService {
        movementsPerCategory: element.movements  
       });
     });
+
+
     // FOR PARA LISTA DE SUBCATS SIN REPETIR
     for( let i=0; i<this.expensesFirstPart.length; i++ ){
-
       this.expensesFirstPart[i].movementsPerCategory.forEach( movement => {
+
         if(!isNullOrUndefined( movement.concepts[0].category) ){
           if( !subcatsAux.includes( movement.concepts[0].category.id, 0) ){
             subcatsAux.push( movement.concepts[0].category.id );
@@ -233,29 +301,68 @@ export class DashboardService {
               }
             });
           }
-
+        } else {
+          // ELSE PARA MOVS SIN CATEGORIA
+          if( !subcatsAux.includes( "NoCategory", 0) ){
+            subcatsAux.push( "NoCategory" );
+            movsForSubs.push({
+              subcat:"NoCategory",
+              movements:[
+                movement
+              ],
+              totalValue: movement.type == "CHARGE" ? movement.amount : 0
+            });
+          } else {
+            movsForSubs.forEach( element => {
+              if( element.subcat == "NoCategory" ){
+                element.movements.push( movement );
+                element.totalValue += movement.type == "CHARGE" ? movement.amount : 0
+              }
+            });
+          }
         }
       });
     }
-
+  
     //PROCESO PARA LIGAR SUBCATEGORIAS CON CATEGORIAS
     this.expensesFirstPart.forEach( element => {
-      let id = element.category.id;
+      let id:string;
+      !isNullOrUndefined( element.category ) ? id = element.category.id : id="NoCategory"
       let subcatsAuxForPush:any = [];
-
+      
       movsForSubs.forEach( subElement => {
         if( subElement.movements[0].concepts.length == 1 ){
-          if( subElement.movements[0].concepts[0].category.parent.id == id ){
-            subcatsAuxForPush.push( subElement );
+          if( !isNullOrUndefined(subElement.movements[0].concepts[0].category ) ){
+            if( !isNullOrUndefined(subElement.movements[0].concepts[0].category.parent) ){
+              if( subElement.movements[0].concepts[0].category.parent.id == id ){
+                subcatsAuxForPush.push( subElement );
+                subElement.subcat = subElement.movements[0].concepts[0].category;
+              }
+            } else if(subElement.subcat == id ){
+              // NO CATEGORY
+              subcatsAuxForPush.push( subElement );
+              subElement.subcat = id;
+            }
+          } else {
+            // ELSE PARA MOVS SIN SUBCATS y MOVS SIN CATS
+            if( subElement.subcat == id ){
+              subcatsAuxForPush.push( subElement );
+              subElement.subcat = id;
+            }
           }
-          subElement.subcat = subElement.movements[0].concepts[0].category;
+          
         } else {
           // ELSE FOR SPLIT MOVEMENTS
          // console.log( subElement );
-          if( subElement.movements[0].concepts[0].category.id == id ){
+          if( !isNullOrUndefined( subElement.movements[0].concepts[0].category ) ){
+            if( subElement.movements[0].concepts[0].category.id == id ){
+              subcatsAuxForPush.push( subElement );
+              subElement.subcat = subElement.movements[0].concepts[0].category;
+            }
+          } else if( subElement.subcat == id ){
             subcatsAuxForPush.push( subElement );
+            subElement.subcat = id;
           }
-          subElement.subcat = subElement.movements[0].concepts[0].category;
         }
 
       });
@@ -267,12 +374,14 @@ export class DashboardService {
         movementsPerCategory: element.movementsPerCategory,
         details: subcatsAuxForPush
       });
+
     });
 
     this.expensesFirstPart = [];
     subcatsAux = [];
   }
 
+  // Arreglo de mes-movimiento, mes-movimiento
   dataProcessMovementsPerMonth( movement:Movement ){
     let date = new Date( movement.customDate );
     if( date.getMonth() == this.auxMonth ){
@@ -296,11 +405,20 @@ export class DashboardService {
       let pieSeries:any[] = [];
 
       pieFilter.forEach( element => {
-       pieSeries.push({
-          name: element.category.name,
+       if( !isNullOrUndefined( element.category ) ){
+          pieSeries.push({
+            name: element.category.name,
+            value: element.totalValue,
+            color: element.category.color
+          });
+       } else {
+        pieSeries.push({
+          name: "Sin Categoria",
           value: element.totalValue,
-          color: element.category.color
-       });
+          color: "#AAAAAA"
+        });
+       }
+      
       });
       this.sortJSON( pieSeries, "value", "desc");
       this.dataExpensesPieChart.push({

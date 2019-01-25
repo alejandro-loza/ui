@@ -82,8 +82,8 @@ export class DashboardComponent implements OnInit {
     sessionStorage.setItem("loadingDataForDashboard", "true");
     this.categoriesList = [];
     this.categoriesService.getCategoriesInfo().subscribe( res => {
-     res.body.data.forEach( (element:Category)  => {
-      this.categoriesList.push( element );  
+     res.body.data.forEach( (category:Category)  => {
+      this.categoriesList.push( category );  
      });
     this.getDatesForParams();
     this.getMovementsData( this.categoriesList );
