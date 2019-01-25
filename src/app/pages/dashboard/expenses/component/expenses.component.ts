@@ -37,7 +37,8 @@ export class ExpensesComponent implements OnInit {
   assetsUrl = "../../../assets/media/img/categories/color";
  
 
-  constructor( ) { }
+  constructor( ) {
+   }
 
   ngOnInit() {
    this.getFirstData();
@@ -136,18 +137,21 @@ export class ExpensesComponent implements OnInit {
   }
 
   clickOnCategory( element ){
+    console.log( element );
     if( isNullOrUndefined(element.isSubcat) ){
-      let date:Date = new Date( element.referenceDate );
-      this.monthOfCategorySelected = date.getMonth();
-  
-      this.auxDataForTable = this.dataForTable;
-      this.dataForTable = [];
-      this.dataForPieWithSubCategories( element );
-      this.dataForTableWithSubcategories( element.details );
-      this.showBackButton =  true;
-  
-      let titleOfThePage = document.querySelector(".brand-logo");
-      titleOfThePage.innerHTML = element.category.name + " "+ this.titleMonth + " "+ this.titleYear;
+      if( element.category.id != "000000"){
+        let date:Date = new Date( element.referenceDate );
+        this.monthOfCategorySelected = date.getMonth();
+    
+        this.auxDataForTable = this.dataForTable;
+        this.dataForTable = [];
+        this.dataForPieWithSubCategories( element );
+        this.dataForTableWithSubcategories( element.details );
+        this.showBackButton =  true;
+    
+        let titleOfThePage = document.querySelector(".brand-logo");
+        titleOfThePage.innerHTML = element.category.name + " "+ this.titleMonth + " "+ this.titleYear;
+      }
     }
   }
 
@@ -155,14 +159,25 @@ export class ExpensesComponent implements OnInit {
     details.forEach(element => {
       if( element.totalValue != 0 ){
         if( !element.movements[0].hasConcepts ){
-          this.dataForTable.push({
-            category:{
-              id: element.subcat.parent.id,
-              name: element.subcat.name
-            },
-            totalValue: element.totalValue,
-            isSubcat: true
-          });
+          if( !isNullOrUndefined( element.movements[0].concepts[0].category.parent ) ){
+            this.dataForTable.push({
+              category:{
+                id: element.subcat.parent.id,
+                name: element.subcat.name
+              },
+              totalValue: element.totalValue,
+              isSubcat: true
+            });
+          } else{
+            this.dataForTable.push({
+              category:{
+                id: element.subcat,
+                name: element.movements[0].concepts[0].category.name
+              },
+              totalValue: element.totalValue,
+              isSubcat: true
+            });
+          }
         }
       }
     });
@@ -172,11 +187,19 @@ export class ExpensesComponent implements OnInit {
     this.dataPieChart = [];
     elementOfEvent.details.forEach( subCategory => {
       if( subCategory.totalValue != 0 ){
-        this.dataPieChart.push({
-          name: subCategory.subcat.name,
-          value: subCategory.totalValue,
-          color: subCategory.subcat.color
-        });
+        if( !isNullOrUndefined( subCategory.movements[0].concepts[0].category.parent ) ){
+          this.dataPieChart.push({
+            name: subCategory.subcat.name,
+            value: subCategory.totalValue,
+            color: subCategory.subcat.color
+          });
+        } else {
+          this.dataPieChart.push({
+            name: subCategory.movements[0].concepts[0].category.name,
+            value: subCategory.totalValue,
+            color: subCategory.movements[0].concepts[0].category.color,
+          });
+        }
       }
     });
     this.sortJSON( this.dataPieChart, "value", "desc");

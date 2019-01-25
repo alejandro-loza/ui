@@ -1,5 +1,5 @@
 .row{
-    padding-top: 15px;
+    margin-bottom: 0px;
 }
 
 #pieContainer{
@@ -12,22 +12,24 @@
     margin-top: 0px;
 }
 
-td{
-    padding: 5px 0 5px 0;
+.mainRow{
+    padding-top: 20px;
+    /*height: -webkit-fill-available;
+    background-color: white;*/
 }
 
-.row{
-    position: relative;
+.collection{
+    overflow: inherit;
+    margin-top: 0px;
 }
 
-.paddAlign{
-    padding-top: 9px;
+.collection-item{
+    background-color: inherit;
+    cursor: pointer;
+    max-height: 40px;
+    padding: 5px 20px;
 }
 
-#text-right{
-    text-align: right;
-}
-
-#text-left{
-    text-align: left;
+.pt{
+    padding-top: 5px;
 }
