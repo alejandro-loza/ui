@@ -1,3 +1,4 @@
+import { DateApiService } from '@services/date-api/date-api.service';
 import { Component,
   OnInit,
   AfterContentInit,
@@ -20,11 +21,13 @@ export class DateComponent implements OnInit, AfterContentInit {
   @Input() classes: string;
   @Input() type: string;
 
-  @Output() valueDate: EventEmitter<Date>;
+  @Output() valueDate: EventEmitter<string>;
 
   @ViewChild('datepicker') elementDatePicker: ElementRef;
 
-  constructor( ) {
+  constructor(
+    private dateApiService: DateApiService
+  ) {
     this.valueDate = new EventEmitter();
   }
 
@@ -44,7 +47,8 @@ export class DateComponent implements OnInit, AfterContentInit {
       },
       maxDate: new Date(),
       onDraw: datepicker => {
-        this.valueDate.emit(datepicker.date);
+        const dateApi = this.dateApiService.dateApi(datepicker.date);
+        this.valueDate.emit(dateApi);
       }
     });
     const instanceDatepicker = new M.Datepicker.getInstance(this.elementDatePicker.nativeElement);
