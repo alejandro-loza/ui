@@ -4,11 +4,11 @@ import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
 
-import { CredentialsInterface } from '@interfaces/crendetials.interface';
 import { CredentialInterface } from '@interfaces/credential.interface';
+import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
+import { Response } from '@interfaces/response.interface';
 
 import { Observable } from 'rxjs';
-import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +35,8 @@ export class CredentialService {
     });
   }
 
-  getAllCredentials( ): Observable<HttpResponse<CredentialsInterface>> {
-    return this.httpClient.get<CredentialsInterface>(
+  getAllCredentials( ): Observable<HttpResponse<Response<CredentialInterface>>> {
+    return this.httpClient.get<Response<CredentialInterface>>(
       this.url,
       {
         observe: 'response',

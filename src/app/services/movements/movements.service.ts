@@ -3,25 +3,21 @@ import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
+import { DateApiService } from '@services/date-api/date-api.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { ParamsMovement } from '@interfaces/paramsMovement.interface';
 import { Movement } from '@interfaces/movement.interface';
-import { Movements } from '@interfaces/movements.interface';
+import { Response } from '@interfaces/response.interface';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
-import { DateApiService } from '@services/date-api/date-api.service';
 
 @Injectable()
 export class MovementsService {
   private url = `${environment.backendUrl}/users`;
   movementsList: Array<Movement>;
-  private options = {
-    day: '2-digit',
-    month: 'short'
-  };
 
   constructor(
     private httpClient: HttpClient,
@@ -44,7 +40,7 @@ export class MovementsService {
 
   getMovements(
     paramsMovements: ParamsMovements
-  ): Observable<HttpResponse<Movements>> {
+  ): Observable<HttpResponse<Response<Movement>>> {
     if (paramsMovements.offset === 0) {
       this.movementsList = new Array();
     }
@@ -68,14 +64,14 @@ export class MovementsService {
         `&endDate=${paramsMovements.endDate}`;
     }
     return this.httpClient
-      .get<Movements>(urlMovements, {
+      .get<Response<Movement>>(urlMovements, {
         observe: 'response',
         headers: this.configService.getJsonHeaders()
       })
       .pipe(
         map(res => {
           res.body.data.forEach(element => {
-            element.formatDate = this.dateFormat(element.customDate);
+            element.formatDate = this.dateApitService.dateFormatMovement(element.customDate);
             this.movementsList.push(element);
           });
           return res;
@@ -106,7 +102,7 @@ export class MovementsService {
       JSON.stringify({
         amount: movement.amount,
         balance: movement.balance,
-        customDate: this.dateApitService.dateApi(movement.customDate),
+        customDate: movement.customDate,
         customDescription: movement.customDescription,
         date: movement.date,
         description: movement.description,
@@ -127,12 +123,4 @@ export class MovementsService {
     );
   }
 
-  dateFormat(date: Date) {
-    const dateFormat = date;
-    const format = new Date(dateFormat)
-      .toLocaleDateString(window.navigator.language, this.options)
-      .toString()
-      .toUpperCase();
-    return format;
-  }
 }

@@ -5,7 +5,8 @@ import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
 
-import { InstitutionsInterface } from '@interfaces/Institutions.interface';
+import { InstitutionInterface } from '@interfaces/institution.interface';
+import { Response } from '@interfaces/response.interface';
 
 import { Observable } from 'rxjs';
 
@@ -13,8 +14,8 @@ import { Observable } from 'rxjs';
 export class InstitutionService {
   constructor(private http: HttpClient, private finerio: ConfigService) {}
 
-  getAllInstitutions(): Observable<HttpResponse<InstitutionsInterface>> {
-    return this.http.get<InstitutionsInterface>(
+  getAllInstitutions(): Observable<HttpResponse<Response<InstitutionInterface>>> {
+    return this.http.get<Response<InstitutionInterface>>(
       `${environment.backendUrl}/institutions`,
       {
         observe: 'response',
