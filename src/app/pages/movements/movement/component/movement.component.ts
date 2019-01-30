@@ -24,6 +24,7 @@ import { retry } from 'rxjs/operators';
 import { ParamsService } from '@services/movements/params/params.service';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import { ParamsMovement } from '@interfaces/paramsMovement.interface';
 
 declare var $: any;
 @Component({
@@ -49,7 +50,7 @@ export class MovementComponent
   movementsList: Movement[];
   toastInterface: ToastInterface;
 
-  auxMovement: Movement;
+  auxMovement: ParamsMovement;
 
   constructor(
     private paramsService: ParamsService,
@@ -59,7 +60,17 @@ export class MovementComponent
     this.stopOffset = false;
     this.statusUpdate = false;
     this.spinnerBoolean = true;
-    this.auxMovement = null;
+    this.auxMovement = {
+      amount: null,
+      balance: null,
+      customDate: new Date(),
+      customDescription: null,
+      date: null,
+      description: null,
+      duplicated: null,
+      id: null,
+      type: null
+    };
     this.movementsList = [];
     this.toastInterface = { code: null, message: null, classes: null };
 
@@ -171,10 +182,10 @@ export class MovementComponent
   }
 
   collapsibleOpen(number: number) {
+    this.auxMovement = this.movementsList[number];
     this.statusUpdate = true;
     this.instanceCollapsible.open(number);
     this.instanceCollapsible.destroy();
-    this.auxMovement = this.movementsList[number];
   }
 
   formatAmount(amount: string) {

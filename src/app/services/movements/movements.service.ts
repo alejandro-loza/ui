@@ -106,7 +106,7 @@ export class MovementsService {
       JSON.stringify({
         amount: movement.amount,
         balance: movement.balance,
-        customDate: movement.customDate,
+        customDate: this.dateApitService.dateApi(movement.customDate),
         customDescription: movement.customDescription,
         date: movement.date,
         description: movement.description,

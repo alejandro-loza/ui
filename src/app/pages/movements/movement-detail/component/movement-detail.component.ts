@@ -6,7 +6,6 @@ import { ToastService } from '@services/toast/toast.service';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { Movement } from '@interfaces/movement.interface';
 
-import { retry } from 'rxjs/operators';
 import { ParamsMovement } from '@interfaces/paramsMovement.interface';
 
 @Component({
@@ -16,7 +15,7 @@ import { ParamsMovement } from '@interfaces/paramsMovement.interface';
 })
 export class MovementDetailComponent implements OnInit {
   @Input() movement: Movement;
-  @Input() auxMovement: Movement;
+  @Input() auxMovement: ParamsMovement;
   @Input() statusUpdate: boolean;
 
   @Output() status: EventEmitter<boolean>;
