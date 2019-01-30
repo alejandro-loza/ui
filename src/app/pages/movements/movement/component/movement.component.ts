@@ -9,22 +9,23 @@ import {
   OnDestroy,
   OnChanges,
   Output,
-  ViewChild,
-} from '@angular/core';
+  ViewChild
+} from                             '@angular/core';
 
-import { MovementsService } from '@services/movements/movements.service';
-import { ToastService } from '@services/toast/toast.service';
+import { MovementsService } from   '@services/movements/movements.service';
+import { ParamsService } from      '@services/movements/params/params.service';
+import { CategoriesService } from  '@services/categories/categories.service';
+import { ToastService } from       '@services/toast/toast.service';
 
-import { Movement } from '@interfaces/movement.interface';
-import { ParamsMovements } from '@interfaces/paramsMovements.interface';
-import { ToastInterface } from '@interfaces/toast.interface';
+import { Movement } from           '@interfaces/movement.interface';
+import { ParamsMovements } from    '@interfaces/paramsMovements.interface';
+import { ToastInterface } from     '@interfaces/toast.interface';
+import { ParamsMovement } from     '@interfaces/paramsMovement.interface';
+import { Category } from           '@interfaces/category.interface';
 
-import { retry } from 'rxjs/operators';
+import { retry } from              'rxjs/operators';
 
-import { ParamsService } from '@services/movements/params/params.service';
-
-import * as M from 'materialize-css/dist/js/materialize';
-import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import * as M from                 'materialize-css/dist/js/materialize';
 
 declare var $: any;
 @Component({
@@ -48,29 +49,21 @@ export class MovementComponent
 
   paramsMovements: ParamsMovements;
   movementsList: Movement[];
+  categoriesList: Category[];
   toastInterface: ToastInterface;
 
   auxMovement: ParamsMovement;
 
   constructor(
-    private paramsService: ParamsService,
+    private categoriesService: CategoriesService,
+    private toastService: ToastService,
     private movementsService: MovementsService,
-    private toastService: ToastService
+    private paramsService: ParamsService
   ) {
     this.stopOffset = false;
     this.statusUpdate = false;
     this.spinnerBoolean = true;
-    this.auxMovement = {
-      amount: null,
-      balance: null,
-      customDate: new Date(),
-      customDescription: null,
-      date: null,
-      description: null,
-      duplicated: null,
-      id: null,
-      type: null
-    };
+    this.auxMovement = { customDate: new Date };
     this.movementsList = [];
     this.toastInterface = { code: null, message: null, classes: null };
 
@@ -82,6 +75,7 @@ export class MovementComponent
 
   ngOnInit() {
     this.getMovements(this.paramsMovements);
+    this.getCategories();
     window.addEventListener('scroll', this.offsetMovement, true);
   }
 
@@ -92,7 +86,7 @@ export class MovementComponent
   }
 
   ngDoCheck() {
-    if ( this.stopOffset === true ) {
+    if (this.stopOffset === true) {
       window.removeEventListener('scroll', this.offsetMovement, true);
       this.toastInterface = {
         code: 200,
@@ -108,7 +102,9 @@ export class MovementComponent
       this.elementCollapsible.nativeElement,
       {}
     );
-    this.instanceCollapsible = M.Collapsible.getInstance(this.elementCollapsible.nativeElement);
+    this.instanceCollapsible = M.Collapsible.getInstance(
+      this.elementCollapsible.nativeElement
+    );
     this.instanceCollapsible.destroy();
   }
 
@@ -154,13 +150,37 @@ export class MovementComponent
         () => {
           this.spinnerBoolean = false;
           const auxNumber = this.auxSize - this.paramsMovements.offset;
-          if ( auxNumber < 35 ) {
+          if (auxNumber < 35) {
             this.paramsMovements.maxMovements = auxNumber;
             this.stopOffset = true;
           }
         }
       );
-    this.paramsMovements.offset = this.paramsMovements.offset + this.paramsMovements.maxMovements;
+    this.paramsMovements.offset =
+      this.paramsMovements.offset + this.paramsMovements.maxMovements;
+  }
+
+  getCategories() {
+    this.categoriesService.getCategoriesInfo().subscribe(
+      res => {
+        this.categoriesList = res.body.data;
+      },
+      err => {
+        this.toastInterface.code = err.status;
+        this.spinnerBoolean = true;
+        if (err.status === 401) {
+          this.toastService.toastGeneral(this.toastInterface);
+        }
+        if (err.status === 500) {
+          this.toastInterface.message =
+            '¡Ha ocurrido un error al obterner las categorias!';
+          this.toastService.toastGeneral(this.toastInterface);
+        }
+      },
+      () => {
+        console.log('%c Finalizó las categorías.', 'color: yellow');
+      }
+    );
   }
 
   refreshMovement() {

@@ -3,9 +3,10 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 
 import { environment } from '@env/environment';
 
-import { ConfigService } from '@services/config/config.service';
+import { Response } from '@interfaces/response.interface';
+import { AccountInterface } from '@interfaces/account.interfaces';
 
-import { AccountsInterface } from '@interfaces/accounts.interface';
+import { ConfigService } from '@services/config/config.service';
 
 import { Observable } from 'rxjs';
 
@@ -17,8 +18,8 @@ export class AccountService {
 
   constructor(private http: HttpClient, private finerio: ConfigService) {}
 
-  getAccounts(userId: string): Observable<HttpResponse<AccountsInterface>> {
-    return this.http.get<AccountsInterface>(
+  getAccounts(userId: string): Observable<HttpResponse<Response<AccountInterface>>> {
+    return this.http.get<Response<AccountInterface>>(
       `${this.url}/${userId}/accounts?deep=true`,
       {
         observe: 'response',
@@ -27,9 +28,9 @@ export class AccountService {
     );
   }
 
-  deleteAccount(accountId: string): Observable<HttpResponse<AccountsInterface>> {
+  deleteAccount(accountId: string): Observable<HttpResponse<Response<AccountInterface>>> {
     const url = `${environment.backendUrl}/accounts/` + accountId;
-    return this.http.delete<AccountsInterface>(url, {
+    return this.http.delete<Response<AccountInterface>>(url, {
       observe: 'response',
       headers: this.finerio.getJsonHeaders()
     });
