@@ -18,6 +18,7 @@ import { ParamsMovement } from '@interfaces/paramsMovement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 import { retry } from 'rxjs/operators';
+import { DateApiService } from '@services/date-api/date-api.service';
 @Component({
   selector: 'app-new-movement',
   templateUrl: './new-movement.component.html',
@@ -38,6 +39,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 
   constructor(
     private movementService: MovementsService,
+    private dateApiService: DateApiService,
     private toastService: ToastService,
     private renderer: Renderer2
   ) {
@@ -50,7 +52,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.formatDate = this.movementService.dateFormat(this.date);
+    this.formatDate = this.dateApiService.dateFormatMovement(this.date);
   }
 
   ngAfterViewInit() {
