@@ -4,6 +4,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class DateApiService {
+  private options = {
+    day: '2-digit',
+    month: 'short'
+  };
   constructor() {}
 
   dateApi(date: Date) {
@@ -33,5 +37,14 @@ export class DateApiService {
     const dateAPI = `${date.getFullYear()}-${date.getMonth() + 1}-${datevalue}`;
 
     return dateAPI;
+  }
+
+  dateFormatMovement(date: Date) {
+    const dateFormat = date;
+    const format = new Date(dateFormat)
+      .toLocaleDateString(window.navigator.language, this.options)
+      .toString()
+      .toUpperCase();
+    return format;
   }
 }
