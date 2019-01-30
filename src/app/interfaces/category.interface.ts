@@ -3,7 +3,7 @@ export interface Category {
   color: string;
   name: string;
   textColor: string;
-  subCategories?: [];
+  subCategories?: Category[];
   parent?: { id: string; };
   user?: {
     id: string;
