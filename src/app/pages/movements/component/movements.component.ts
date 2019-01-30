@@ -35,6 +35,7 @@ export class MovementsComponent implements OnInit {
   statusMovement(status: boolean) {
     setTimeout(() => {
       this.status = status;
+      this.filterflag = false;
     }, 0);
   }
 }

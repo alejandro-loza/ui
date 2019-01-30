@@ -1,13 +1,13 @@
-import { Component, OnInit, Output, EventEmitter, Input } from "@angular/core";
-import { MovementsService } from "@services/movements/movements.service";
-import { ToastService } from "@services/toast/toast.service";
-import { ToastInterface } from "@interfaces/toast.interface";
-import { retry } from "rxjs/operators";
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { MovementsService } from '@services/movements/movements.service';
+import { ToastService } from '@services/toast/toast.service';
+import { ToastInterface } from '@interfaces/toast.interface';
+import { retry } from 'rxjs/operators';
 
 @Component({
-  selector: "app-delete-movement",
-  templateUrl: "./delete-movement.component.html",
-  styleUrls: ["./delete-movement.component.css"]
+  selector: 'app-delete-movement',
+  templateUrl: './delete-movement.component.html',
+  styleUrls: ['./delete-movement.component.css']
 })
 export class DeleteMovementComponent implements OnInit {
   @Input() id: string;
@@ -40,17 +40,17 @@ export class DeleteMovementComponent implements OnInit {
             this.toastService.toastGeneral(this.toastInterface);
           }
           if (err.status === 404) {
-            this.toastInterface.message = "No sé encontró tu movimiento";
+            this.toastInterface.message = 'No sé encontró tu movimiento';
             this.toastService.toastGeneral(this.toastInterface);
           }
           if (err.status === 500) {
             this.toastInterface.message =
-              "¡Ha ocurrido un error al obterner tus movimiento!";
+              '¡Ha ocurrido un error al obterner tus movimiento!';
             this.toastService.toastGeneral(this.toastInterface);
           }
         },
         () => {
-          this.toastInterface.message = "Se borró su movimiento exitosamente";
+          this.toastInterface.message = 'Se borró su movimiento exitosamente';
           this.toastService.toastGeneral(this.toastInterface);
         }
       );

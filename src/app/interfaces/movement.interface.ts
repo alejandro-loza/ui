@@ -6,10 +6,12 @@ export interface Movement {
     amount: number;
     balance: number;
     concepts: Concept[];
-    customDate: string;
+    customDate: Date;
     customDescription: string;
-    date: string;
-    dateCreated: string;
+    formatDate?: string;
+    date: Date;
+    dateCreated: Date;
+    dateDeleted?: Date;
     description: string;
     duplicated: true;
     hasConcepts: boolean;

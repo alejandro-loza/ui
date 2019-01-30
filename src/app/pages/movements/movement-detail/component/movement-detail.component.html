@@ -1,55 +1,55 @@
-<div class="row left-align">
-    <!-- Diseño para movimientos en efectivo-->
-    <ng-container *ngIf="name === 'Efectivo'; else tarjeta">
-        <div class="col m4">
-            <app-type [type]="type"></app-type>
-        </div>
-        <div class="col m4">
-            <app-divide-movement></app-divide-movement>
-        </div>
-        <!-- Diseño para editar movimientos -->
-        <div class="col m4">
-            <ng-container *ngIf="flag === true; else elseFlag">
-                <app-save-movement></app-save-movement>
-                <app-delete-movement (status)="status.emit($event)" [id]="idMovement"></app-delete-movement>
-            </ng-container>
-            <ng-template #elseFlag>
-                <app-delete-movement (status)="status.emit($event)" [id]="idMovement"></app-delete-movement>
-            </ng-template>
+<div class="row center-align">
+  <!-- Diseño para movimientos en efectivo-->
+  <ng-container *ngIf="movement.account.name === 'Efectivo'; else tarjeta">
+      <div class="col m4">
+          <app-type [type]="movement.type" (valueType)="auxMovement.type=$event"></app-type>
+      </div>
+      <div class="col m4">
+          <app-divide-movement></app-divide-movement>
+      </div>
+      <!-- Diseño para editar movimientos -->
+      <div class="col m4">
+          <ng-container *ngIf="statusUpdate === true; else elseFlag">
+              <app-save-movement [movement]="auxMovement" (status)="status.emit($event)"></app-save-movement>
+              <app-delete-movement (status)="status.emit($event)" [id]="movement.id"></app-delete-movement>
+          </ng-container>
+          <ng-template #elseFlag>
+              <app-delete-movement (status)="status.emit($event)" [id]="movement.id"></app-delete-movement>
+          </ng-template>
 
-        </div>
-    </ng-container>
-    <!-- Diseño para movimientos de tarjetas -->
-    <ng-template #tarjeta>
-        <div class="col m6">
-            <a class="btn btn-small btn-flat finerio-orange btn-info" (click)="flagInfo = !flagInfo">
-        Información Original
-      </a>
-        </div>
-        <div class="col m6">
-            <app-divide-movement></app-divide-movement>
-        </div>
-        <div class="extraInfo" *ngIf="flagInfo">
-            <div class="col s6">
-                <div class="row">
-                    <div class="col s4">
-                        <h6>Descripción Original: </h6>
-                    </div>
-                    <div class="col s8">
-                        <p>{{ descriptionOriginal }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col s6">
-                <div class="row valign-wrapper">
-                    <div class="col s4">
-                        <h6>Fecha Original: </h6>
-                    </div>
-                    <div class="col s8">
-                        <p>{{ dateOriginal | date: 'dd / MMMM / yyyy'}}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ng-template>
+      </div>
+  </ng-container>
+  <!-- Diseño para movimientos de tarjetas -->
+  <ng-template #tarjeta>
+      <div class="col m6">
+          <a class="btn btn-small btn-flat finerio-orange btn-info" (click)="flagInfo = !flagInfo">
+      Información Original
+    </a>
+      </div>
+      <div class="col m6">
+          <app-divide-movement></app-divide-movement>
+      </div>
+      <div class="extraInfo" *ngIf="flagInfo">
+          <div class="col s6">
+              <div class="row">
+                  <div class="col s4">
+                      <h6>Descripción Original: </h6>
+                  </div>
+                  <div class="col s8">
+                      <p>{{ movement.description }}</p>
+                  </div>
+              </div>
+          </div>
+          <div class="col s6">
+              <div class="row valign-wrapper">
+                  <div class="col s4">
+                      <h6>Fecha Original: </h6>
+                  </div>
+                  <div class="col s8">
+                      <p>{{ movement.date | date: 'dd / MMMM / yyyy'}}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </ng-template>
 </div>

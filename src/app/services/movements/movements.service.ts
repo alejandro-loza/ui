@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
@@ -18,6 +18,10 @@ import { DateApiService } from '@services/date-api/date-api.service';
 export class MovementsService {
   private url = `${environment.backendUrl}/users`;
   movementsList: Array<Movement>;
+  private options = {
+    day: '2-digit',
+    month: 'short'
+  };
 
   constructor(
     private httpClient: HttpClient,
@@ -70,11 +74,10 @@ export class MovementsService {
       })
       .pipe(
         map(res => {
-          for (let i = 0; i < res.body.data.length; i++) {
-            const movement: Movement = res.body.data[i];
-            this.movementsList.push(movement);
-          }
-          res.body.data = this.movementsList;
+          res.body.data.forEach(element => {
+            element.formatDate = this.dateFormat(element.customDate);
+            this.movementsList.push(element);
+          });
           return res;
         })
       );
@@ -117,7 +120,19 @@ export class MovementsService {
   deleteMovement(idMovement: string): Observable<HttpResponse<Movement>> {
     return this.httpClient.delete<Movement>(
       `${environment.backendUrl}/movements/${idMovement}`,
-      { observe: 'response', headers: this.configService.getJsonHeaders() }
+      {
+        observe: 'response',
+        headers: this.configService.getJsonHeaders()
+      }
     );
+  }
+
+  dateFormat(date: Date) {
+    const dateFormat = date;
+    const format = new Date(dateFormat)
+      .toLocaleDateString(window.navigator.language, this.options)
+      .toString()
+      .toUpperCase();
+    return format;
   }
 }

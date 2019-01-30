@@ -1,9 +1,10 @@
 import {
+  AfterViewInit,
   Component,
-  OnInit,
-  Input,
-  Output,
   EventEmitter,
+  Input,
+  OnInit,
+  Output,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ParamsService } from '@services/movements/params/params.service';
@@ -15,19 +16,20 @@ import { DateApiService } from '@services/date-api/date-api.service';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.css']
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit, AfterViewInit {
   @Input() charges: boolean;
   @Input() deposits: boolean;
   @Input() duplicates: boolean;
 
   @Output() filterMovementStatus: EventEmitter<boolean>;
 
+
   endDate: Date;
   startDate: Date;
 
   constructor(
     private paramsService: ParamsService,
-    private dateApiService: DateApiService
+    private dateApiService: DateApiService,
   ) {
     this.filterMovementStatus = new EventEmitter();
     this.startDate = new Date();
@@ -37,6 +39,8 @@ export class FilterComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngAfterViewInit() { }
 
   filterMovement(ngform: NgForm) {
     this.paramsService.setCharges = ngform.value.charges;

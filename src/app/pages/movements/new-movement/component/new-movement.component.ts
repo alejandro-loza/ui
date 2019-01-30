@@ -5,7 +5,8 @@ import {
   EventEmitter,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
+  Renderer2
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
@@ -26,16 +27,19 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   @ViewChild('duplicated') checkboxDuplicate: ElementRef;
   @ViewChild('modal') modalElement: ElementRef;
   @ViewChild('datepicker') elDatePickker: ElementRef;
+  @ViewChild('btnSubmit') buttonSubmit: ElementRef;
 
   @Output() createMovementStatus: EventEmitter<boolean>;
 
   newMovement: ParamsMovement;
+  formatDate: string;
   date: Date;
   toastInterface: ToastInterface;
 
   constructor(
     private movementService: MovementsService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private renderer: Renderer2
   ) {
     this.newMovement = {
       type: 'charge'
@@ -45,7 +49,9 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.toastInterface = { code: null, message: null };
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formatDate = this.movementService.dateFormat(this.date);
+  }
 
   ngAfterViewInit() {
     const initModal = new M.Modal(this.modalElement.nativeElement, {
@@ -54,9 +60,9 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   createMovement(form: NgForm) {
+    this.renderer.addClass(this.buttonSubmit.nativeElement, 'disabled');
     form.value.date = this.date;
     form.value.type = this.newMovement.type;
-
     this.movementService
       .createMovement(form.value)
       .pipe(retry(2))
@@ -78,10 +84,12 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
         },
         () => {
           form.reset();
+          this.date = new Date();
           const instaceModal = M.Modal.getInstance(
             this.modalElement.nativeElement
           );
           instaceModal.close();
+          this.renderer.removeClass(this.buttonSubmit.nativeElement, 'disabled');
           this.toastInterface.message = 'Se creó su movimiento exitosamente';
           this.toastService.toastGeneral(this.toastInterface);
         }
@@ -100,6 +108,6 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   valueDate(date: Date) {
-    this.date = date;
+    this.newMovement.date = date;
   }
 }

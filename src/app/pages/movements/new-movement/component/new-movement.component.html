@@ -39,7 +39,7 @@
                     <div class="col s12 m7">
                         <div class="row rowFecha">
                             <div class="input-field col m12">
-                              <app-date [type]="'button'" [classes]="'btn finerio-blue'" [name]="'date'" [date]="date" (valueDate)="newMovement.date=$event"></app-date>
+                              <app-date [formatDate]="formatDate" [type]="'button'" [classes]="'btn finerio-blue'" [name]="'date'" [date]="date" (valueDate)="date=$event"></app-date>
                             </div>
                         </div>
                     </div>
@@ -70,9 +70,9 @@
                 </div>
                 <div class="valign-wrapper" id="newMovementBtn">
                     <div class="col s12 center-align">
-                        <button class="btn btn-large finerio-blue" [disabled]="forma.invalid" type="submit">Crear Movimiento
-                      <i class="material-icons right">send</i>
-                    </button>
+                      <button class="btn btn-large finerio-blue" [disabled]="forma.invalid" type="submit" #btnSubmit>Crear Movimiento
+                        <i class="material-icons right">send</i>
+                      </button>
                     </div>
                 </div>
             </form>

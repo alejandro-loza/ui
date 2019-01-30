@@ -7,8 +7,6 @@ import { Component,
   Output,
   EventEmitter, } from          '@angular/core';
 
-import { DateApiService } from  '@services/date-api/date-api.service';
-
 declare var M;
 @Component({
   selector: 'app-date',
@@ -17,6 +15,7 @@ declare var M;
 })
 export class DateComponent implements OnInit, AfterContentInit {
   @Input() date: Date;
+  @Input() formatDate: string;
   @Input() name: string;
   @Input() classes: string;
   @Input() type: string;
@@ -25,12 +24,7 @@ export class DateComponent implements OnInit, AfterContentInit {
 
   @ViewChild('datepicker') elementDatePicker: ElementRef;
 
-  options = {
-    day: '2-digit',
-    month: 'short'
-  }
-
-  constructor( private dateApiService: DateApiService ) {
+  constructor( ) {
     this.valueDate = new EventEmitter();
   }
 
@@ -40,7 +34,6 @@ export class DateComponent implements OnInit, AfterContentInit {
     const initDatepicker = new M.Datepicker(this.elementDatePicker.nativeElement, {
       autoClose: true,
       format: 'dd mmm',
-      showClearBtn: true,
       showDaysInNextAndPreviousMonths: true,
       i18n: {
         months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -48,24 +41,14 @@ export class DateComponent implements OnInit, AfterContentInit {
         weekdays: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
         weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
         weekdaysAbbrev: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-        cancel: 'Cancelar',
-        clear: 'Borrar'
       },
       maxDate: new Date(),
       onDraw: datepicker => {
         this.valueDate.emit(datepicker.date);
-      },
-      onClose: () => {
       }
     });
-  }
-
-  dateFormat(date: Date) {
-    const dateFormat = date;
-    let format = new Date(dateFormat).toLocaleDateString(window.navigator.language, this.options).toString().toLowerCase();
-    const lastChars = format[ format.length - 2 ];
-    format = format.replace(format[format.length - 2], lastChars.toUpperCase() );
-    return format;
+    const instanceDatepicker = new M.Datepicker.getInstance(this.elementDatePicker.nativeElement);
+    instanceDatepicker.setDate(this.date);
   }
 
 }

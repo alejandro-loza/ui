@@ -31,7 +31,6 @@ export class ToastService {
    * @param { ToastInterface } toastParams - Por favor verífica tu conexión de internet Hemos actualizado tu sesión, ¡Bienvenido de nuevo!
    */
   toastGeneral(toastParams: ToastInterface) {
-    M.Toast.dismissAll();
     switch (toastParams.code) {
       case 0:
         this.message = 'Por favor verífica tu conexión de internet';
@@ -46,12 +45,11 @@ export class ToastService {
         this.classes = 'red accent-3';
         break;
       case 401:
-        this.configService.refreshToken()
-          .subscribe(
-            res => res,
-            err => console.error(toastParams.code, err),
-            () => this.message = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!'
-          );
+        this.configService.refreshToken().subscribe(
+          res => res,
+          err => console.error(toastParams.code, err)
+        );
+        this.message = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!';
         this.classes = 'light-blue darken-4';
         break;
       case 4011:
@@ -71,6 +69,7 @@ export class ToastService {
         this.classes = toastParams.classes;
         break;
     }
+    M.Toast.dismissAll();
     M.toast({
       html: `<span>${this.message}</span>` + this.button,
       classes: this.classes,

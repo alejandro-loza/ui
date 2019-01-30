@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Movement } from '@interfaces/movement.interface';
+import { MovementsService } from '@services/movements/movements.service';
+import { retry } from 'rxjs/operators';
+import { ToastInterface } from '../../../../../../interfaces/toast.interface';
+import { ToastService } from '@services/toast/toast.service';
 
 @Component({
   selector: 'app-save-movement',
@@ -6,10 +11,51 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./save-movement.component.css']
 })
 export class SaveMovementComponent implements OnInit {
+  @Input() movement: Movement;
+  @Output() status: EventEmitter<boolean>;
 
-  constructor() { }
+  toastInterface: ToastInterface;
 
-  ngOnInit() {
+  constructor(
+    private movementService: MovementsService,
+    private toastService: ToastService
+  ) {
+    this.status = new EventEmitter();
+    this.toastInterface = {};
   }
 
+  ngOnInit() {}
+
+  updateMovement() {
+    console.log(this.movement);
+    // this.movementService
+    //   .updateMovement(this.movement)
+    //   .pipe(retry(2))
+    //   .subscribe(
+    //     res => {
+    //       this.status.emit(true);
+    //       this.toastInterface.code = res.status;
+    //     },
+    //     err => {
+    //       this.toastInterface.code = err.status;
+    //       if (err.status === 401) {
+    //         this.toastService.toastGeneral(this.toastInterface);
+    //       }
+    //       if (err.status === 404) {
+    //         this.toastInterface.message = 'No sé encontró tu movimiento';
+    //         this.toastService.toastGeneral(this.toastInterface);
+    //       }
+    //       if (err.status === 500) {
+    //         this.toastInterface.message =
+    //           '¡Ha ocurrido un error al obterner tus movimiento!';
+    //         this.toastService.toastGeneral(this.toastInterface);
+    //       }
+    //     },
+    //     () => {
+    //       this.toastInterface.message =
+    //         'Se actualizó su movimiento exitosamente';
+    //       this.toastService.toastGeneral(this.toastInterface);
+    //     }
+    //   );
+  }
 }
