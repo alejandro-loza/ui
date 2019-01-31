@@ -57,7 +57,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const initModal = new M.Modal(this.modalElement.nativeElement, {
-      startingTop: '0%'
+      startingTop: '50%'
     });
   }
 

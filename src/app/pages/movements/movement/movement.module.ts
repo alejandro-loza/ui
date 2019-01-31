@@ -3,12 +3,12 @@ import { SharedModule } from                 '@shared/shared.module';
 
 import { DateApiService } from               '@services/date-api/date-api.service';
 
-import { CategoryModule } from               '@pages/categories/category/category.module';
 import { MovementDetailModule } from         '../movement-detail/movement-detail.module';
 
 import { DateModule } from                   '../date/date.module';
 
 import { MovementComponent } from            './component/movement.component';
+import { CategoryMovementModule } from '../category-movement/category-movement.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,7 @@ import { MovementComponent } from            './component/movement.component';
   imports: [
     SharedModule,
     DateModule,
-    CategoryModule,
+    CategoryMovementModule,
     MovementDetailModule
   ], exports: [
     MovementComponent

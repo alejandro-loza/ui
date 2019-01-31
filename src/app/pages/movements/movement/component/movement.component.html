@@ -48,8 +48,8 @@
                 Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
           -->
             <ng-template #multicategorias>
-              <app-category [hidden]="i > 0" [bckgrndColor]="'#212121'" [categoryName]="'Multi Categorías'" [frgrndColor]="'#fafafa'" [categoryParent]="'multi'">
-              </app-category>
+              <app-category-movement [hidden]="i > 0" [bckgrndColor]="'#212121'" [categoryName]="'Multi Categorías'" [frgrndColor]="'#fafafa'" [categoryParent]="'multi'">
+              </app-category-movement>
             </ng-template>
             <ng-template #simplecategoria>
               <!--
@@ -64,13 +64,13 @@
                 <ng-container *ngIf="concept.category.parent; then subcategory; else parentcategory"></ng-container>
                 <ng-template #subcategory>
                   <!-- Si existe, se agrega el id del parent -->
-                  <app-category [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.parent.id">
-                  </app-category>
+                  <app-category-movement [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.parent.id">
+                  </app-category-movement>
                 </ng-template>
                 <ng-template #parentcategory>
                   <!-- Sino, se agrega el id de category-->
-                  <app-category [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.id">
-                  </app-category>
+                  <app-category-movement [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.id">
+                  </app-category-movement>
                 </ng-template>
 
               </ng-template>
@@ -78,8 +78,8 @@
                 <!--
                               Caso contrario se mandan los parametros definidos para los movimientos sin categoria
                             -->
-                <app-category [bckgrndColor]="'#757575'" [categoryName]="'Sin Categoría'" [frgrndColor]="'#fafafa'" [categoryParent]="'finerio-icon'">
-                </app-category>
+                <app-category-movement [bckgrndColor]="'#757575'" [categoryName]="'Sin Categoría'" [frgrndColor]="'#fafafa'" [categoryParent]="'finerio-icon'">
+                </app-category-movement>
               </ng-template>
             </ng-template>
           </div>
