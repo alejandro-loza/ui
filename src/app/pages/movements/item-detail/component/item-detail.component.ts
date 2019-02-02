@@ -1,19 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
-
-import { ToastInterface } from '@interfaces/toast.interface';
 import { Movement } from '@interfaces/movement.interface';
-
 import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import { ToastInterface } from '@interfaces/toast.interface';
 
 @Component({
-  selector: 'app-movement-detail',
-  templateUrl: './movement-detail.component.html',
-  styleUrls: ['./movement-detail.component.css']
+  selector: 'app-item-detail',
+  templateUrl: './item-detail.component.html',
+  styleUrls: ['./item-detail.component.css']
 })
-export class MovementDetailComponent implements OnInit {
+export class ItemDetailComponent implements OnInit {
   @Input() movement: Movement;
   @Input() auxMovement: ParamsMovement;
   @Input() statusUpdate: boolean;
@@ -34,5 +31,4 @@ export class MovementDetailComponent implements OnInit {
   }
 
   ngOnInit() { }
-
 }
