@@ -4,7 +4,7 @@ import { ParamsService } from                      '@services/movements/params/p
 import { MovementsService } from                   '@services/movements/movements.service';
 
 import { SharedModule } from                       '@shared/shared.module';
-import { MovementModule } from                     './movement/movement.module';
+import { ItemModule } from                         './item/item.module';
 import { FilterModule } from                       './filter/filter.module';
 import { MovementsRoutes } from                    './movements.route';
 
@@ -15,7 +15,7 @@ import { NewMovementModule } from                  './new-movement/new-movement.
 @NgModule({
   imports: [
     SharedModule,
-    MovementModule,
+    ItemModule,
     NewMovementModule,
     FilterModule,
     MovementsRoutes,

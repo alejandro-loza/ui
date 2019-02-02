@@ -4,7 +4,7 @@ import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class ParamsService {
+export class ParamsMovementsService {
   private paramsMovements: ParamsMovements;
 
   constructor() {

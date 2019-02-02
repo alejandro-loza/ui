@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { ParamsService } from '@services/movements/params/params.service';
+import { MovementsService } from '@services/movements/movements.service';
 
 @Component({
   selector: 'app-movements',
@@ -12,7 +13,10 @@ export class MovementsComponent implements OnInit {
   filterflag: boolean;
   paramsMovements: ParamsMovements;
 
-  constructor(private paramsService: ParamsService) {
+  constructor(
+    private paramsService: ParamsService,
+    private movementService: MovementsService
+  ) {
     this.status = false;
     this.filterflag = false;
     this.paramsMovements = {
@@ -37,5 +41,19 @@ export class MovementsComponent implements OnInit {
       this.status = status;
       this.filterflag = false;
     }, 0);
+  }
+
+  getMovement() {
+    this.movementService.getMovements().subscribe(
+      res => {
+
+      },
+      err => {
+
+      },
+      () => {
+
+      }
+    );
   }
 }

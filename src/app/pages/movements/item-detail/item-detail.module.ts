@@ -11,12 +11,12 @@ import { ItemDetailComponent } from './component/item-detail.component';
     ItemDetailComponent
   ],
   imports: [
-    SharedModule
-  ],
-  exports: [
-    ItemDetailComponent,
+    SharedModule,
     TypeModule,
     ButtonsMovementModule
+  ],
+  exports: [
+    ItemDetailComponent
   ],
   providers: [],
 })

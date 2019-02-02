@@ -1,0 +1,65 @@
+.collapsible-header {
+  padding: 0%;
+}
+
+.imgMovement {
+  height: 42px;
+  margin-top: 10%;
+}
+
+.charge {
+  color: rgb(198, 40, 40);
+}
+
+.deposit {
+  color: #2e7d32;
+}
+
+.inputAmount {
+  margin-top: 4px;
+}
+
+.inputAmount {
+  margin-top: 10px;
+}
+
+.customComponent:hover {
+  transition: background-color .2s ease-in-out;
+  background-color: rgb(189, 189, 189, .2);
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+  background-color: var(--orange-color);
+}
+
+.switch label input[type=checkbox]:checked+.lever {
+  background-color: #ffcc80;
+}
+
+#amount {
+  margin-left: calc(100% - var(--widthAmout));
+  width: var(--widthAmout);
+  text-align: right;
+}
+
+@media only screen and (max-width: 374px) {
+  .imgMovement {
+    margin-top: 22%;
+  }
+}
+@media only screen and (min-width: 375px) and (max-width: 560px) {
+  .imgMovement {
+    margin-top: 19%;
+  }
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1366px ){
+  .imgMovement {
+    margin-top: 5%;
+  }
+}
+@media only screen and (min-width: 1367px) {
+  .imgMovement {
+    margin-top: 3%;
+  }
+}
