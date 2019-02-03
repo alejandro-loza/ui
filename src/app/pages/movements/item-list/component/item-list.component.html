@@ -1,0 +1,15 @@
+<ul class="collapsible" #collapsible>
+  <ng-template ngFor [ngForOf]="movementList" [ngForTrackBy]="trackByFn" let-movement let-i="index">
+    <li class="fast fadeIn">
+      <!-- Encabezado del collapsible -->
+      <div class="collapsible-header" [ngClass]="{'grey lighten-2': movement.duplicated}">
+        <app-item [movement]="movement"></app-item>
+      </div>
+      <div class="collapsible-body">
+        <p>Test</p>
+        <!-- <app-item-detail (status)="statusMovement($event)" [movement]="movement" [auxMovement]="auxMovement" [statusUpdate]="statusUpdate">
+            </app-item-detail> -->
+      </div>
+    </li>
+  </ng-template>
+</ul>
