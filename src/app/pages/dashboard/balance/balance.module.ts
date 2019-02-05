@@ -5,8 +5,6 @@ import { SharedModule } from '@shared/shared.module';
 import { SharedDashboardModule } from "../sharedDashboard/sharedDashboard.module";
 
 import { BalanceRoutes } from    './balance.routes';
-import { NgxChartsModule } from  '@swimlane/ngx-charts';
-
 
 @NgModule({
   declarations: [
@@ -14,7 +12,6 @@ import { NgxChartsModule } from  '@swimlane/ngx-charts';
   ],
   imports: [
     SharedModule,
-    NgxChartsModule,
     SharedDashboardModule,
     // BalanceRoutes
   ],

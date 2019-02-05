@@ -36,6 +36,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   totalBalance: number;
   userId: string;
 
+  debitAccounts:AccountInterface[] = [];
+  creditAccounts:AccountInterface[] = [];
+  investmentsAccounts:AccountInterface[] = [];
+
   // Aux properties
   processCompleteForSpinner: boolean;
   validateStatusFinished: boolean;
@@ -43,6 +47,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   credentialInProcess: CredentialInterface;
 
   @ViewChild('modal') interactiveModal: ElementRef;
+  @ViewChild("collapsible") elementCollapsible: ElementRef;
 
   constructor(
     private accountService: AccountService,
@@ -69,6 +74,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const initModal = new M.Modal(this.interactiveModal.nativeElement);
+    const initCollapsible = new M.Collapsible(
+      this.elementCollapsible.nativeElement,
+      {}
+    );
   }
 
   // Main methods for getting data
@@ -92,7 +101,40 @@ export class CredentialComponent implements OnInit, AfterViewInit {
         this.accounts.push(element);
       });
       this.getBalance(this.accounts);
+      this.accountsTable( this.accounts );
+      this.automaticSync( this.credentials );
     });
+  }
+
+  automaticSync( credentials:CredentialInterface[] ){
+    
+    let currentMoment = new Date();
+    credentials.forEach( credential => {
+      let dateObj =  new Date(credential.lastUpdated);
+      let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 *60 * 60);
+
+      if( diff >= 8 ){
+        this.credentialService.updateCredential( credential ).subscribe( res => {
+          this.checkStatusOfCredential( credential );
+        });
+      }
+    });
+  }
+
+  accountsTable( accounts:AccountInterface[] ){
+
+    accounts.forEach( account => {
+      if( account.type == "Crédito" ){
+        this.creditAccounts.push( account );
+      } else if( account.type == "DEBIT" || account.type == "Cheques" || account.type == "Débito"){
+        if( account.institution.code != "DINERIO"){
+          this.debitAccounts.push( account );
+        }
+      } else if( account.type == "Inversión"){
+        this.investmentsAccounts.push( account );
+      }
+    });
+
   }
 
   getBalance(accountsArray: AccountInterface[]) {

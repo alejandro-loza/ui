@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { BarChart } from '@interfaces/dashboardBarChart.interface';
-import { DataForCharts } from '@interfaces/dataExpensesComponent.interface';
-import { PieChart } from '@app/interfaces/dasboardPieChart.interface';
+import { Chart } from "chart.js";
+import { DashboardBeanService } from "@services/dashboard/dashboard-bean.service";
+import { ExpensesMainData } from '@app/interfaces/dashboard/dataExpensesComponent.interface';
 import { isNullOrUndefined } from 'util';
+import { MonthChartEvent } from '@app/interfaces/dashboard/monthChartEvent.interface';
+import { StackedBar } from '@app/interfaces/dashboard/dashboardStackedBar.interface';
 
 @Component({
   selector: 'app-expenses',
@@ -10,206 +12,80 @@ import { isNullOrUndefined } from 'util';
   styleUrls: ['./expenses.component.css']
 })
 export class ExpensesComponent implements OnInit {
-  dataForBarChart:BarChart[] = [];
-  dataPieChart:any[] = [];
 
-  dataExpenses:DataForCharts[] = [];
-  colorOfChart:string = "a02e36";
-  dataForTable:any[] = [];
-  auxDataForTable:any[] = [];
+  stackedBarData:StackedBar[] = [];
+  doughnutChart:Chart;
 
-  titleMonth:string;
-  titleYear:string;
   totalAmount:number = 0;
-  showBackButton:boolean = false;
-  monthOfCategorySelected:number;
-
-  view = [ 270, 270 ];
-  showLegend = false;
-  showLabels = false;
-  explodeSlices = false;
-  doughnut = true;
-  arcWidth = 0.50;
-  activeEntries = [];
-  colorScheme = {
-   domain: []
-  };
-  assetsUrl = "../../../assets/media/img/categories/color";
+  titleMonth:string = "";
+  titleYear:string = "";
+  assetsUrl:string = "../../../assets/media/img/categories/color";
  
 
-  constructor( ) {
+  constructor( private dashboardBean:DashboardBeanService ) {
    }
 
   ngOnInit() {
-   this.getFirstData();
+    this.getStackedBarData();
+    this.setMainMessage( this.stackedBarData[0].labels.length - 1 );
+    this.setTitles( this.stackedBarData[0].labels.length - 1 );
+    this.firstData();
   }
 
-  // EVENTO PROVENIENTE DE LA GRAFICA MENSUAL
-  selectedMonthChart( param ){
-    let month:number = 0;
-    typeof(param) == "object" ?  month = this.getIndexMonth( param.name ) :  month = param;
-    this.tableData( month );
-    this.getDataAnotherMonth( month );
+  firstData(){
+    this.pieChartOptions( this.stackedBarData[0].labels.length - 1 );
+  }
+
+  pieChartOptions( index:number ){
+    let pieChart = document.querySelector("#expensesPieChart");
+    this.doughnutChart = new Chart(pieChart, {
+      type: 'doughnut',
+      data:{
+        labels:[],
+        datasets:[{
+          data: [],
+          backgroundColor: []
+        }],
+      },
+      options: {
+        responsive: true,
+        animation:{
+          animateScale : false
+        },
+        legend: { display: false },
+      }
+    });
+  }
+
+   // EVENTO DE CLICK
+   selectedMonthChart( event:MonthChartEvent ){
+    this.setMainMessage( event.index );
+    this.setTitles( event.index );
+  }
+
+  setTitles( index:number ){
+    this.titleMonth = this.stackedBarData[0].labels[index];
+    this.titleYear = this.stackedBarData[0].year[index].toString();
+
     let titleOfThePage = document.querySelector(".brand-logo");
     titleOfThePage.innerHTML = "Resumen "+ this.titleMonth + " "+ this.titleYear;
-    this.showBackButton = false;
   }
 
-  getIndexMonth( name:string ):number{
-    let index = 0;
-    let months:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    for( let i = 0; i < months.length ; i++){
-      if( months[i] == name ){
-        this.titleMonth = name;
-        index = i;
-        break;
-      }
-    }
-    return index;
+  setMainMessage( index ){
+    this.totalAmount = this.stackedBarData[0].expenses[index];
   }
 
-  getDataAnotherMonth( month:number ){
-    this.dataPieChart = [];
-    this.colorScheme.domain = [];
-    let dataSession = JSON.parse(sessionStorage.getItem("expensesPie") );
-
-    for( let i = 0; dataSession.length; i++ ){
-      if( dataSession[i].month == month ){
-        this.dataPieChart = dataSession[i].series;
-        for( let j = 0; j < this.dataPieChart.length; j++ ){
-          this.colorScheme.domain.push( dataSession[i].series[j].color );
-        }  
-        break;
-      }
-    }
+  getStackedBarData(){
+    this.stackedBarData = this.dashboardBean.getDataStackedBar();
   }
 
-  getFirstData(){
-    this.colorScheme.domain = [];
-    this.titleMonth = "";
-    this.titleYear = "";
-
-    let dataSession = JSON.parse(sessionStorage.getItem("expensesPie") );
-    this.dataPieChart = dataSession[0].series;
-
-    for( let i = 0; i < this.dataPieChart.length; i++ ){
-     this.colorScheme.domain.push( dataSession[0].series[i].color );
-    }    
-
-    this.dataForBarChart = JSON.parse( sessionStorage.getItem("expensesData") );
-    this.dataExpenses = JSON.parse( sessionStorage.getItem("formatedData") );
-
-    this.titleMonth = this.dataForBarChart[ this.dataForBarChart.length - 1].name;
-    let year = new Date(this.dataExpenses[0].referenceDate);
-    this.titleYear = year.getFullYear().toString();
-
-    let firstMonth:Date = new Date (this.dataExpenses[0].referenceDate);
-    this.tableData( firstMonth.getMonth() );
-
-
-   let titleOfThePage = document.querySelector(".brand-logo");
-   titleOfThePage.innerHTML = "Resumen "+ this.titleMonth + " "+ this.titleYear;
+  dataForExpensesBarChart():number[] {
+    return this.stackedBarData[0].expenses;
   }
 
-  tableData( numberMonth:number ){
-    this.dataForTable = [];
-    this.dataExpenses.forEach( element => {
-      let elementDate:Date = new Date(element.referenceDate);
-
-      if( elementDate.getMonth() == numberMonth ){
-        let year = new Date( element.referenceDate );
-        this.titleYear = year.getFullYear().toString();
-        
-        if( element.totalValue != 0 ){
-          this.dataForTable.push( element );
-        }
-      }
-    });
-    this.getTotalAmount( this.dataForTable );
-    this.sortJSON( this.dataForTable, "totalValue", "desc");
+  labelsForExpensesChart():string[] {
+    return this.stackedBarData[0].labels;
   }
-
-  getTotalAmount( data ){
-    this.totalAmount = 0;
-    data.forEach(element => {
-      this.totalAmount += element.totalValue;
-    });
-  }
-
-  clickOnCategory( element ){
-    console.log( element );
-    if( isNullOrUndefined(element.isSubcat) ){
-      if( element.category.id != "000000"){
-        let date:Date = new Date( element.referenceDate );
-        this.monthOfCategorySelected = date.getMonth();
-    
-        this.auxDataForTable = this.dataForTable;
-        this.dataForTable = [];
-        this.dataForPieWithSubCategories( element );
-        this.dataForTableWithSubcategories( element.details );
-        this.showBackButton =  true;
-    
-        let titleOfThePage = document.querySelector(".brand-logo");
-        titleOfThePage.innerHTML = element.category.name + " "+ this.titleMonth + " "+ this.titleYear;
-      }
-    }
-  }
-
-  dataForTableWithSubcategories( details ){
-    details.forEach(element => {
-      if( element.totalValue != 0 ){
-        if( !element.movements[0].hasConcepts ){
-          if( !isNullOrUndefined( element.movements[0].concepts[0].category.parent ) ){
-            this.dataForTable.push({
-              category:{
-                id: element.subcat.parent.id,
-                name: element.subcat.name
-              },
-              totalValue: element.totalValue,
-              isSubcat: true
-            });
-          } else{
-            this.dataForTable.push({
-              category:{
-                id: element.subcat,
-                name: element.movements[0].concepts[0].category.name
-              },
-              totalValue: element.totalValue,
-              isSubcat: true
-            });
-          }
-        }
-      }
-    });
-  }
-
-  dataForPieWithSubCategories( elementOfEvent ){
-    this.dataPieChart = [];
-    elementOfEvent.details.forEach( subCategory => {
-      if( subCategory.totalValue != 0 ){
-        if( !isNullOrUndefined( subCategory.movements[0].concepts[0].category.parent ) ){
-          this.dataPieChart.push({
-            name: subCategory.subcat.name,
-            value: subCategory.totalValue,
-            color: subCategory.subcat.color
-          });
-        } else {
-          this.dataPieChart.push({
-            name: subCategory.movements[0].concepts[0].category.name,
-            value: subCategory.totalValue,
-            color: subCategory.movements[0].concepts[0].category.color,
-          });
-        }
-      }
-    });
-    this.sortJSON( this.dataPieChart, "value", "desc");
-    this.colorScheme.domain = [];
-    for( let i = 0; i < this.dataPieChart.length; i++ ){
-      this.colorScheme.domain.push( this.dataPieChart[i].color );
-     }    
-    this.getTotalAmount( elementOfEvent.details );
-  }
-
 
   sortJSON(data, key, orden) {
     return data.sort( (a, b) => {

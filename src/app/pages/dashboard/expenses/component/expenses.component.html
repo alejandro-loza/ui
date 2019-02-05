@@ -1,6 +1,8 @@
-<div class="row" id="barChartRow">
+<div class="row z-depth-1" id="barChartRow">
     <div class="col s12 center">
-        <app-bar-charts (clickEvent)="selectedMonthChart( $event )" [colorOfChart]="colorOfChart" [dataForChart]="dataForBarChart">
+        <app-bar-charts (clickEventData)="selectedMonthChart( $event )" 
+                        [dataForChart]="dataForExpensesBarChart()"
+                        [labels]="labelsForExpensesChart()">
         </app-bar-charts>
     </div>
 </div>
@@ -8,8 +10,7 @@
     <div class="col s12 m5 l6">
         <div id="pieContainer">
             <h5>Total <b>${{ totalAmount | number:'1.0-0' }}</b></h5>
-            <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="dataPieChart" [arcWidth]="arcWidth" [explodeSlices]="explodeSlices" [activeEntries]="activeEntries" [legend]="showLegend" [labels]="showLabels" [doughnut]="doughnut">
-            </ngx-charts-pie-chart>
+            <canvas id="expensesPieChart" height="100"></canvas>
         </div>
     </div>
     <div class="col s12 m6 l5">

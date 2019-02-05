@@ -1,62 +1,91 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PieChart } from '@interfaces/dasboardPieChart.interface';
-import { BalanceChart } from '@interfaces/dashboardBalanceChart.interface';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Chart } from "chart.js";
+import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { StackedBar } from '@app/interfaces/dashboard/dashboardStackedBar.interface';
+import { MonthChartEvent } from '@interfaces/dashboard/monthChartEvent.interface';
+import { isNullOrUndefined } from 'util';
 
-  @Component({
-    selector: 'app-month-chart',
-    templateUrl: './month-chart.component.html',
-    styleUrls: ['./month-chart.component.css']
-  })
+@Component({
+  selector: 'app-month-chart',
+  templateUrl: './month-chart.component.html',
+  styleUrls: ['./month-chart.component.css']
+})
 
-  export class MonthChartComponent implements OnInit {
-    @Input() dataForBalanceChart:BalanceChart[] = [];
-    @Output() dataPieMonthSelected: EventEmitter<PieChart[]> = new EventEmitter();
-    @Output() indexMonthSelected: EventEmitter<number> = new EventEmitter();
+export class MonthChartComponent implements OnInit {
 
-    // OPTIONS FOR THE CHART
-    showXAxis = true;
-    showYAxis = false;
-    gradient = false;
-    showLegend = false;
-    showXAxisLabel = true;
-    showGridLines = true;
-    showYAxisLabel = true;
-    timeline = true;
-    colorScheme = {
-      domain: ['#a02e36','#7bba3a']
-    };
-
-  constructor( ) {
-
+  @Output() onClickMonth:EventEmitter<MonthChartEvent>;
+  dataForBarChart:StackedBar[] = [];
+  
+  constructor( private dashboardService:DashboardBeanService ) {
+    this.onClickMonth = new EventEmitter();
   }
 
   ngOnInit() {
+    this.getDataStackedBar();
+    this.chartOptions();
   }
 
-  onSelect( event ){
-    let monthSelected:string = event.series;
-    let data:any[] = []
-    this.dataForBalanceChart.forEach( serie => {
-      if( serie.name == monthSelected ){
-        data.push( { name : "Gastos", value : serie.series[0].value },
-                   { name : "Ahorro", value : serie.series[1].value });
+  getDataStackedBar(){
+    this.dataForBarChart = this.dashboardService.getDataStackedBar();
+  }
+
+  chartOptions(){
+    let chart = document.querySelector("#stackedBarChart");
+    let myChart = new Chart(chart, {
+      type: 'bar',
+      data: {
+          labels: this.dataForBarChart[0].labels,
+          datasets: [
+            {
+              label: "Gastos",
+              data: this.dataForBarChart[0].expenses,
+              backgroundColor: "#a02e36"
+            },
+            {
+              label: "Ahorro",
+              data: this.dataForBarChart[0].saving,
+              backgroundColor: "#7bba3a"
+            }
+        ]
+      },
+      options: {
+          scales: {
+              yAxes: [{ stacked : true }],
+              xAxes: [{ 
+                stacked : true,
+                gridLines: {
+                  display: false,
+                },
+              }]
+          },
+          tooltip:{
+            enabled:true,
+            mode: 'index',
+            intersect: false,
+          },
+          hover: {
+            mode: 'nearest',
+            intersect: true
+          },
+          responsive:true,
+          events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
+          onClick: ( evt, item ) => {
+            if( item.length != 0 ){
+              this.clickEvent( item );
+            }
+          } 
       }
     });
-    this.dataPieMonthSelected.emit( data );
-    this.indexMonthSelected.emit( this.getIndexMonth( monthSelected ) );
   }
 
-  getIndexMonth( name:string ):number{
-    let index = 0;
-    let months:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    for( let i = 0; i < months.length ; i++){
-      if( months[i] == name ){
-        index = i;
-        break;
-      }
+  clickEvent( item ){
+    let auxEmit:MonthChartEvent;
+    if( !isNullOrUndefined(item[0]._model)){
+      let label = item[0]._model.label;
+      let index = item[0]._index;
+      auxEmit = { label:label, index:index };
+      this.onClickMonth.emit( auxEmit );
     }
-    return index;
   }
-
-    
-}
+  
+ }

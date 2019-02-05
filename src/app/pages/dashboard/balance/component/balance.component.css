@@ -3,8 +3,7 @@
 }
 
 #pieContainer{
-    display: grid;
-    text-align: -webkit-center;
+    text-align: center;
     position: relative;
 }
 

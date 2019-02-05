@@ -8,15 +8,15 @@
         </div>
         <div class="col s12">
             <!-- Reference for ids on app-tabs -->
-            <app-incomes *ngIf="dataReady && tabSelected == 0"
+            <app-incomes *ngIf="tabSelected == 0 && dataReady"
             id="incomes">
             </app-incomes>
 
-            <app-expenses *ngIf="dataReady && tabSelected == 1"
+            <app-expenses *ngIf="tabSelected == 1 && dataReady"
             id="expenses">
             </app-expenses>
 
-            <app-balance *ngIf="dataReady && tabSelected == 2"
+            <app-balance *ngIf="tabSelected == 2 && dataReady"
             id="balance">
             </app-balance>
             <!-- <app-diagnostic id="diagnostic"></app-diagnostic> -->
