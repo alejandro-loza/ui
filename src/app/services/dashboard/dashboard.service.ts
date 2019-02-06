@@ -49,10 +49,8 @@ export class DashboardService {
     this.cleanValues();
     this.categoriesList = categories;
     this.movementsList = movements;
-
     this.dataForBalanceChart();
     this.dataForBalancePie();
-
     this.dataForExpenses();
 
     this.dashboardBean.setLoadInformation( false );
@@ -78,6 +76,7 @@ export class DashboardService {
     }
     this.monthMovementArray = this.monthMovementsArray( monthsArray );
     this.expensesMainData( this.monthMovementArray );
+    this.dashboardBean.setDataExpensesTab( this.expensesData );
   }
 
   expensesMainData( monthMovementArray:MonthMovementArray[] ){
@@ -130,8 +129,6 @@ export class DashboardService {
       firstScreen: this.firstScreen,
       secondScreen: this.secondScreen
     })
-    console.log( this.expensesData );
-    console.log("==============================");
   }
 
   detailsOfMainData( movements:MonthMovementArray ){
@@ -299,31 +296,55 @@ export class DashboardService {
     let flagDoubleCat:boolean = false;
 
     this.secondScreen.forEach( (secondScreen:ExpensesSecondScreen) => {
-      
       if( element.Category.id == secondScreen.parentCategory ){
+         // significa que la categoria papa ya está anteriormente
         flagDoubleCat = true;
       }
     });
-
-    if( !flagDoubleCat ){
-      element.Movements.forEach( movement => {
-        movement.movement.concepts.forEach( concept => {
-          if( isNullOrUndefined( concept.category.parent ) ){
-            movements.push( movement.movement ) 
-            totalAmount += movement.movement.amount
-          }
-        });
+    element.Movements.forEach( movement => {
+      movement.movement.concepts.forEach( concept => {
+        if( isNullOrUndefined( concept.category.parent ) ){
+          movements.push( movement.movement ) 
+          totalAmount += movement.movement.amount
+        }
       });
-      this.secondScreen.push({
-        parentCategory:element.Category.id,
-        details:[{
-          subCategory: element.Category,
-          backgroundColorSubCategory: element.Category.color,
-          totalAmount: totalAmount,
-          movements: movements
-        }]
+    });
+
+   // new no subcats
+    if( !flagDoubleCat ){
+      this.pushSecondScreenMovWoSubcat( element, totalAmount, movements );
+    } else {
+      this.secondScreen.forEach( secondScreen => {
+        if( secondScreen.parentCategory == element.Category.id ){
+          let flagDoubleSubcat = false;
+          for( let i=0; i<secondScreen.details.length; i++ ){
+            if(secondScreen.details[i].subCategory.id == element.Category.id){
+              flagDoubleSubcat = true;
+            }
+          }
+          if( !flagDoubleSubcat ){
+            secondScreen.details.push({
+              subCategory: element.Category,
+              backgroundColorSubCategory: element.Category.color,
+              totalAmount: totalAmount,
+              movements: movements
+            });
+          }
+        }
       });
     }
+  }
+
+  pushSecondScreenMovWoSubcat( element, totalAmount, movements ){
+    this.secondScreen.push({
+      parentCategory:element.Category.id,
+      details:[{
+        subCategory: element.Category,
+        backgroundColorSubCategory: element.Category.color,
+        totalAmount: totalAmount,
+        movements: movements
+      }]
+    });
   }
 
   fillingExpensesNoCat( elementPreDetails:PreDetails ){
@@ -564,6 +585,7 @@ export class DashboardService {
     this.auxDataStackedBarSaving = [];
     this.auxDataStackedBarLabels = [];
     this.auxDataStackedBarYear = [];
+    this.expensesData = [];
   }
 
 

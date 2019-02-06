@@ -15,6 +15,7 @@ export class ExpensesComponent implements OnInit {
 
   stackedBarData:StackedBar[] = [];
   doughnutChart:Chart;
+  expensesData:ExpensesMainData[] = [];
 
   totalAmount:number = 0;
   titleMonth:string = "";
@@ -27,24 +28,27 @@ export class ExpensesComponent implements OnInit {
 
   ngOnInit() {
     this.getStackedBarData();
+    this.getMainData();
     this.setMainMessage( this.stackedBarData[0].labels.length - 1 );
     this.setTitles( this.stackedBarData[0].labels.length - 1 );
     this.firstData();
   }
 
   firstData(){
-    this.pieChartOptions( this.stackedBarData[0].labels.length - 1 );
+    this.pieChartOptions(0);
   }
 
   pieChartOptions( index:number ){
+    console.log( this.expensesData[index].firstScreen.labels );
+
     let pieChart = document.querySelector("#expensesPieChart");
     this.doughnutChart = new Chart(pieChart, {
       type: 'doughnut',
       data:{
-        labels:[],
+        labels:this.expensesData[index].firstScreen.labels,
         datasets:[{
-          data: [],
-          backgroundColor: []
+          data: this.expensesData[index].firstScreen.totalAmount,
+          backgroundColor:this.expensesData[index].firstScreen.backgroundColor
         }],
       },
       options: {
@@ -61,6 +65,9 @@ export class ExpensesComponent implements OnInit {
    selectedMonthChart( event:MonthChartEvent ){
     this.setMainMessage( event.index );
     this.setTitles( event.index );
+    this.doughnutChart.destroy();
+    
+    this.pieChartOptions( event.index );
   }
 
   setTitles( index:number ){
@@ -77,6 +84,11 @@ export class ExpensesComponent implements OnInit {
 
   getStackedBarData(){
     this.stackedBarData = this.dashboardBean.getDataStackedBar();
+  }
+
+  getMainData(){
+    this.expensesData = this.dashboardBean.getDataExpensesTab();
+    console.log( this.expensesData );
   }
 
   dataForExpensesBarChart():number[] {
