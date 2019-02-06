@@ -4,7 +4,7 @@ import { monthMovement } from './monthMovement.interface';
 
 export interface ExpensesMainData {
    firstScreen:ExpensesFirstScreen,
-   secondScreen:ExpensesSecondScreen
+   secondScreen:ExpensesSecondScreen[]
 }
 
 export interface PreDetails{
@@ -21,11 +21,11 @@ export interface ExpensesFirstScreen{
 }
 
 export interface ExpensesSecondScreen{
-    Category:Category,
-    movementsPerSubCategory:[{
+    parentCategory:String,
+    details:[{
         subCategory?:Category,
         backgroundColorSubCategory:string,
-        totalAmount:number,
+        totalAmount?:number,
         movements:Movement[]
     }]
 }

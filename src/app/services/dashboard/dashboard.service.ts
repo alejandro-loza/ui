@@ -125,9 +125,13 @@ export class DashboardService {
     this.firstScreen.backgroundColor = this.auxBackgroundColor; 
     
     this.detailsOfMainData( movements );
-    console.log( this.firstScreen );
-
-    console.log("-------------------");
+    
+    this.expensesData.push({
+      firstScreen: this.firstScreen,
+      secondScreen: this.secondScreen
+    })
+    console.log( this.expensesData );
+    console.log("==============================");
   }
 
   detailsOfMainData( movements:MonthMovementArray ){
@@ -154,7 +158,6 @@ export class DashboardService {
               movementsArray.push( movement );
             }
           }
-
         });
       });
       detailsForExpenses.push({ 
@@ -163,13 +166,26 @@ export class DashboardService {
       });
     });
     
-   this.filterOfSubcats( detailsForExpenses );
+    this.filterOfSubcats( detailsForExpenses );
+    this.calculateAmoutOfSubcatsElements();
+  }
 
+  calculateAmoutOfSubcatsElements(){
+    let amountAux:number = 0;
+
+    this.secondScreen.forEach( secondScreen => {
+      secondScreen.details.forEach( detail => {
+        detail.movements.forEach( movement => {
+          amountAux += movement.amount
+        });
+        detail.totalAmount = amountAux;
+        amountAux = 0;
+      });
+    });
   }
 
   filterOfSubcats( detailsForExpenses:PreDetails[] ){
-    this.secondScreen = []
-    //console.log( detailsForExpenses );
+    this.secondScreen = [];
 
     // process to get details
     detailsForExpenses.forEach( (element:PreDetails) => {
@@ -180,8 +196,7 @@ export class DashboardService {
             if( !isNullOrUndefined( concept.category ) ){
               if( !isNullOrUndefined( concept.category.parent ) ){
 
-                this.fillingExpenses( concept, Movement.movement );
-
+                this.fillingExpenses( concept, Movement.movement, element );
 
               } else {
                 // MOVS WO SUBCATS
@@ -192,44 +207,90 @@ export class DashboardService {
             } 
           });
         });
-
       } else {
         this.fillingExpensesNoCat( element );
       }
     });
-
   }
 
-
   // TODO LO QUE ENTRA A ESTE METODO TIENE UN PARENT ID
-  fillingExpenses( concept, movement:Movement ){
+  fillingExpenses( concept, movement:Movement, element:PreDetails ){
     let flagDoubleCat:boolean = false;
    
     this.secondScreen.forEach( (secondScreen:ExpensesSecondScreen) => {
-      if( concept.category.parent.id == secondScreen.Category.id ){
+      if( concept.category.parent.id == secondScreen.parentCategory ){
         flagDoubleCat = true;
       }
     });
-
+   
     if( !flagDoubleCat ){
       this.pushMovementWithNewParent( concept, movement );
     } else {
-      this.pushMovementWithSameParent( concept, movement );
-
-
+      this.pushMovementWithSameParent( concept, movement,  element );
     }
   }
 
   pushMovementWithNewParent( concept, movement:Movement ){
+    let auxArrayMovs:Movement[] = []
+    auxArrayMovs.push( movement );
 
-    
-    
+    this.secondScreen.push({
+      parentCategory: concept.category.parent.id,
+      details:[{
+        subCategory:concept.category,
+        backgroundColorSubCategory:concept.category.color,
+        movements:auxArrayMovs
+      }]
+    });
   }
 
-  pushMovementWithSameParent( concept, movement:Movement ){
+  pushMovementWithSameParent( concept, movement:Movement, element:PreDetails ){
+    let flagExistentSubcat:boolean; 
+    let detailsIndex:number = 0;
 
+    for( let i=0; i < this.secondScreen.length; i++ ){
+      if( this.secondScreen[i].parentCategory == concept.category.parent.id ){
+
+        for(let j=0; j < this.secondScreen[i].details.length; j++ ){
+          if(this.secondScreen[i].details[j].subCategory.id == concept.category.id ){
+            this.pushMovementOnExistingSubat( i, j, movement );
+          } else {
+            this.newSubcatElement( i, movement, concept.category );
+          }
+        }
+      }
+    }
+  }
+
+  pushMovementOnExistingSubat( index:number, index2:number, movement ){
+    let flagForDoubleMov = false;
+    for( let j=0; j < this.secondScreen[index].details[index2].movements.length; j++ ){
+      if( this.secondScreen[index].details[index2].movements[j].id == movement.id ){
+        flagForDoubleMov = true;
+      }
+    }
+    if( !flagForDoubleMov ){
+      this.secondScreen[index].details[index2].movements.push( movement );
+    }
+  }
+
+  newSubcatElement( index:number, movement:Movement, subcategory:Category ){
+    let auxArrayMovs:Movement[] = [];
+    let flagForDoubleSubcats:boolean = false;
+    auxArrayMovs.push( movement );
     
-
+    for( let j=0; j < this.secondScreen[index].details.length; j++ ){
+      if( this.secondScreen[index].details[j].subCategory.id == subcategory.id ){
+        flagForDoubleSubcats = true;
+      }
+    }
+    if(!flagForDoubleSubcats ){
+      this.secondScreen[ index ].details.push({
+        subCategory: subcategory,
+        backgroundColorSubCategory: subcategory.color,
+        movements:auxArrayMovs
+      });
+    }
   }
 
   fillingExpensesNoSubCats( element:PreDetails ){
@@ -238,19 +299,24 @@ export class DashboardService {
     let flagDoubleCat:boolean = false;
 
     this.secondScreen.forEach( (secondScreen:ExpensesSecondScreen) => {
-      if( element.Category.id == secondScreen.Category.id ){
+      
+      if( element.Category.id == secondScreen.parentCategory ){
         flagDoubleCat = true;
       }
     });
 
     if( !flagDoubleCat ){
       element.Movements.forEach( movement => {
-        movements.push( movement.movement ) 
-        totalAmount += movement.movement.amount
+        movement.movement.concepts.forEach( concept => {
+          if( isNullOrUndefined( concept.category.parent ) ){
+            movements.push( movement.movement ) 
+            totalAmount += movement.movement.amount
+          }
+        });
       });
       this.secondScreen.push({
-        Category:element.Category,
-        movementsPerSubCategory:[{
+        parentCategory:element.Category.id,
+        details:[{
           subCategory: element.Category,
           backgroundColorSubCategory: element.Category.color,
           totalAmount: totalAmount,
@@ -270,15 +336,14 @@ export class DashboardService {
     })
     
     this.secondScreen.push({
-      Category:elementPreDetails.Category,
-      movementsPerSubCategory:[{
+      parentCategory:elementPreDetails.Category.id,
+      details:[{
         subCategory: elementPreDetails.Category,
         backgroundColorSubCategory: elementPreDetails.Category.color,
         totalAmount: totalAmount,
         movements: movements
       }]
     });
-
   }
 
   // Se ejecuta una vez por cada MES
