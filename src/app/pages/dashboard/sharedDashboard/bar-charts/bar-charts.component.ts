@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { BarChart } from '@interfaces/dashboardBarChart.interface';
+import { Chart } from "chart.js";
+import { MonthChartEvent } from '@app/interfaces/dashboard/monthChartEvent.interface';
+import { isNullOrUndefined } from 'util';
+
 
 @Component({
   selector: 'app-bar-charts',
@@ -7,31 +10,63 @@ import { BarChart } from '@interfaces/dashboardBarChart.interface';
   styleUrls: ['./bar-charts.component.css']
 })
 export class BarChartsComponent implements OnInit {
-  @Input() dataForChart:BarChart[] = [];
-  @Input() colorOfChart:string = "";
-  @Output() clickEvent:EventEmitter<any> = new EventEmitter();
+  @Input() dataForChart:number[] = [];
+  @Input() labels:string[] = [];
+  @Output() clickEventData:EventEmitter<MonthChartEvent> = new EventEmitter();
 
-   // options
-  showXAxis = true;
-  showYAxis = false;
-  gradient = false;
-  showLegend = false;
-  showXAxisLabel = true;
-  xAxisLabel = '';
-  showYAxisLabel = true;
-  yAxisLabel = '';
-  colorScheme = {
-    domain: [""]
-  };
+  barChart:Chart; 
 
   constructor() { }
 
   ngOnInit() {
-    this.colorScheme.domain[0] = "#"+this.colorOfChart;
+    this.barChartOptions();
   }
 
-  onSelect( event ){
-    this.clickEvent.emit( event );
+  barChartOptions(){
+    let chart = document.querySelector("#barChart");
+    this.barChart = new Chart(chart, {
+      type: 'bar',
+      data: {
+          labels: this.labels,
+          datasets: [{
+              label: "Gastos",
+              data: this.dataForChart,
+              backgroundColor: "#a02e36",
+          }]
+      },
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }],
+              xAxes: [{
+                gridLines: {
+                  display: false,
+                },
+              }]
+          },
+          responsive:true,
+          legend: { display: false },
+          events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
+          onClick: ( evt, item ) => {
+            if( item.length != 0 ){
+                this.clickEvent( item );
+              }
+          }
+      }
+    });
   }
+
+  clickEvent( item ){
+    let auxEmit:MonthChartEvent;
+    if( !isNullOrUndefined(item[0]._model)){
+      let label = item[0]._model.label;
+      let index = item[0]._index;
+      auxEmit = { label:label, index:index };
+      this.clickEventData.emit( auxEmit );
+    }
+  } 
 
 }

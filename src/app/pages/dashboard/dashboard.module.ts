@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SharedModule } from "@shared/shared.module";
 import { SharedDashboardModule } from "./sharedDashboard/sharedDashboard.module";
 
@@ -25,7 +24,6 @@ import { IncomesModule } from './incomes/incomes.module';
 @NgModule({
   imports: [
     SharedModule,
-    NgxChartsModule,
     BalanceModule,
     ExpensesModule,
     DiagnosticModule,

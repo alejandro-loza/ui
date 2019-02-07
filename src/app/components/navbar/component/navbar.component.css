@@ -8,6 +8,10 @@
   font-size: 16px;
 }
 
+#iconLi{
+  height: 64px;
+}
+
 .icon-list {
   line-height: 64px !important;
   margin-right: 40px;

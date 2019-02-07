@@ -1,15 +1,3 @@
 <div id="chartsContainer">
-  <ngx-charts-bar-vertical
-    [scheme]="colorScheme"
-    [results]="dataForChart"
-    [gradient]="gradient"
-    [xAxis]="showXAxis"
-    [yAxis]="showYAxis"
-    [legend]="showLegend"
-    [showXAxisLabel]="showXAxisLabel"
-    [showYAxisLabel]="showYAxisLabel"
-    [xAxisLabel]="xAxisLabel"
-    [yAxisLabel]="yAxisLabel"
-    (select)="onSelect($event)">
-  </ngx-charts-bar-vertical>
+    <canvas id="barChart" height="30"></canvas>
 </div>

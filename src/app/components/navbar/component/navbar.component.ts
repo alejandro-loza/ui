@@ -6,6 +6,7 @@ import {
   ViewChild,
   Renderer2
 } from "@angular/core";
+import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ActivationEnd, Router } from "@angular/router";
 import { filter, map } from "rxjs/operators";
 import * as M from "materialize-css/dist/js/materialize";
@@ -24,7 +25,9 @@ export class NavbarComponent implements OnInit, AfterContentInit {
   value: boolean;
   titlePage: string;
 
-  constructor(private renderer: Renderer2, private router: Router) {
+  constructor(private renderer: Renderer2, private router: Router,
+              private cleanerService:CleanerService ) {
+
     this.getDataRoute().subscribe(res => {
       let textDOM = document.querySelector(".brand-logo");
       this.titlePage = res.title;
@@ -49,6 +52,7 @@ export class NavbarComponent implements OnInit, AfterContentInit {
 
   logout() {
     sessionStorage.clear();
+    this.cleanerService.cleanAllVariables();
     this.router.navigate(["/access/login"]);
   }
 
