@@ -12,5 +12,6 @@ export class CleanerService {
     this.dashboardBean.setDataStackedBar( null );
     this.dashboardBean.setDataBalancePieChart( null );
     this.dashboardBean.setLoadInformation( true );
+    this.dashboardBean.setDataExpensesTab( null );
   }
 }

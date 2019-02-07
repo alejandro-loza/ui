@@ -18,14 +18,14 @@
             <div (click)="clickOnCategory( element )" 
                 *ngFor="let element of dataForTable" class="hoverable collection-item">
                 <div class="row">
-                    <div class="col s2 center">
-                        <img width="25px" height="25px" src="{{assetsUrl}}/color_{{element.category.id}}.{{ element.category.id != '000000' ? 'png' : 'svg' }}">
+                    <div class="col s2 pt center">
+                        <img width="25px" height="25px" src="{{assetsUrl}}/color_{{element.catId}}.{{ element.catId != '000000' ? 'png' : 'svg' }}">
                     </div>
                     <div class="col s6 pt">
-                        {{ element.category.name }}
+                        {{ element.label }}
                     </div>
                     <div class="col s4 center pt">
-                        ${{ element.totalValue | number:'1.2-2' }}
+                        ${{ element.amount| number:'1.2-2' }}
                     </div>
                 </div>        
             </div>

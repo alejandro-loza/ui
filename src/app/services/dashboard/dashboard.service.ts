@@ -45,19 +45,14 @@ export class DashboardService {
   constructor( private dashboardBean:DashboardBeanService ) { }
 
   getDataForCharts( movements:Movement[], categories:Category[] ) {
-
     this.cleanValues();
     this.categoriesList = categories;
     this.movementsList = movements;
     this.dataForBalanceChart();
     this.dataForBalancePie();
     this.dataForExpenses();
-
     this.dashboardBean.setLoadInformation( false );
-   
-
-  }/////////////////////////////////////////////////////
-
+  }
 
   dataForExpenses(){
     let auxDate = new Date( this.movementsList[0].customDate );
@@ -76,13 +71,13 @@ export class DashboardService {
     }
     this.monthMovementArray = this.monthMovementsArray( monthsArray );
     this.expensesMainData( this.monthMovementArray );
+    this.expensesData.reverse();
     this.dashboardBean.setDataExpensesTab( this.expensesData );
   }
 
   expensesMainData( monthMovementArray:MonthMovementArray[] ){
     monthMovementArray.forEach( element => {
       this.fillExpensesMainData( element );
-      
     });
   }
 
@@ -124,11 +119,64 @@ export class DashboardService {
     this.firstScreen.backgroundColor = this.auxBackgroundColor; 
     
     this.detailsOfMainData( movements );
+    this.sortData();
+    this.expensesData.push({ firstScreen: this.firstScreen, secondScreen: this.secondScreen });
     
-    this.expensesData.push({
-      firstScreen: this.firstScreen,
-      secondScreen: this.secondScreen
-    })
+  }
+
+  sortData(){
+    let auxAmount:number;
+    let auxLabel:string;
+    let auxCategory:Category;
+    let auxCategoryId:string;
+    let auxBackground:string;
+    let auxSecondScreen:ExpensesSecondScreen;
+
+    for( let i=1; i < this.firstScreen.totalAmount.length; i++ ){
+      for( let j=0; j<(this.firstScreen.totalAmount.length - 1); j++ ){
+        if( this.firstScreen.totalAmount[j] < this.firstScreen.totalAmount[j+1] ){
+          auxAmount = this.firstScreen.totalAmount[j+1];
+          this.firstScreen.totalAmount[j+1] = this.firstScreen.totalAmount[j];
+          this.firstScreen.totalAmount[j] = auxAmount;
+
+          auxLabel = this.firstScreen.labels[j+1];
+          this.firstScreen.labels[j+1] = this.firstScreen.labels[j];
+          this.firstScreen.labels[j] = auxLabel;
+
+          auxCategory = this.firstScreen.category[j+1];
+          this.firstScreen.category[j+1] = this.firstScreen.category[j];
+          this.firstScreen.category[j] = auxCategory;
+
+          auxCategoryId = this.firstScreen.categoryId[j+1];
+          this.firstScreen.categoryId[j+1] = this.firstScreen.categoryId[j];
+          this.firstScreen.categoryId[j] = auxCategoryId;
+
+          auxBackground = this.firstScreen.backgroundColor[j+1];
+          this.firstScreen.backgroundColor[j+1] = this.firstScreen.backgroundColor[j];
+          this.firstScreen.backgroundColor[j] = auxBackground;
+
+          auxSecondScreen = this.secondScreen[j+1];
+          this.secondScreen[j+1] = this.secondScreen[j];
+          this.secondScreen[j] = auxSecondScreen;
+        }
+      }
+    }
+    this.sortSecondScreenSubcategories();
+  }
+
+  sortSecondScreenSubcategories(){
+    let auxDetail:any;
+    this.secondScreen.forEach( secondScreen => {
+      for( let j=1; j<secondScreen.details.length; j++ ){
+        for( let i=0; i<(secondScreen.details.length -1); i++ ){
+          if( secondScreen.details[i].totalAmount < secondScreen.details[i+1].totalAmount ){
+            auxDetail = secondScreen.details[i+1];
+            secondScreen.details[i+1] = secondScreen.details[i];
+            secondScreen.details[i] = auxDetail;
+          }
+        }
+      }
+    });
   }
 
   detailsOfMainData( movements:MonthMovementArray ){
@@ -136,27 +184,29 @@ export class DashboardService {
 
     this.auxCategory.forEach( category => {
       let movementsArray:any[] = [];
-      movements.details.forEach( movement => {
-        movement.movement.concepts.forEach( concept => {
-          if( !isNullOrUndefined( concept.category ) ){
-            if( !isNullOrUndefined( concept.category.parent ) ){
-              if( concept.category.parent.id == category.id ){
-                movementsArray.push( movement );
+      if( !isNullOrUndefined( category ) ){
+        movements.details.forEach( movement => {
+          movement.movement.concepts.forEach( concept => {
+            if( !isNullOrUndefined( concept.category ) ){
+              if( !isNullOrUndefined( concept.category.parent ) ){
+                if( concept.category.parent.id == category.id ){
+                  movementsArray.push( movement );
+                }
+              } else {
+                // SUBCAT AS CATEGORY
+                if( concept.category.id == category.id ){
+                  movementsArray.push( movement );
+                }
               }
             } else {
-              // SUBCAT AS CATEGORY
-              if( concept.category.id == category.id ){
+              // NO CATEGORY
+              if( "000000" == category.id ){
                 movementsArray.push( movement );
               }
             }
-          } else {
-            // NO CATEGORY
-            if( "000000" == category.id ){
-              movementsArray.push( movement );
-            }
-          }
+          });
         });
-      });
+      }
       detailsForExpenses.push({ 
         Category:category,
         Movements: movementsArray
@@ -175,7 +225,7 @@ export class DashboardService {
         detail.movements.forEach( movement => {
           amountAux += movement.amount
         });
-        detail.totalAmount = amountAux;
+        detail.totalAmount = Math.round( amountAux );
         amountAux = 0;
       });
     });
@@ -186,32 +236,33 @@ export class DashboardService {
 
     // process to get details
     detailsForExpenses.forEach( (element:PreDetails) => {
-    
-      if( element.Category.id != "000000" ){
-        element.Movements.forEach( Movement => {
-          Movement.movement.concepts.forEach( concept => {
-            if( !isNullOrUndefined( concept.category ) ){
-              if( !isNullOrUndefined( concept.category.parent ) ){
-
-                this.fillingExpenses( concept, Movement.movement, element );
-
-              } else {
-                // MOVS WO SUBCATS
-                if( concept.type == "DEFAULT" ){
-                  this.fillingExpensesNoSubCats( element );
+      if( !isNullOrUndefined( element.Category )){
+        if( element.Category.id != "000000" ){
+          element.Movements.forEach( Movement => {
+            Movement.movement.concepts.forEach( concept => {
+              if( !isNullOrUndefined( concept.category ) ){
+                if( !isNullOrUndefined( concept.category.parent ) ){
+  
+                  this.fillingExpenses( concept, Movement.movement );
+  
+                } else {
+                  // MOVS WO SUBCATS
+                  if( concept.type == "DEFAULT" ){
+                    this.fillingExpensesNoSubCats( element );
+                  }
                 }
-              }
-            } 
+              } 
+            });
           });
-        });
-      } else {
-        this.fillingExpensesNoCat( element );
+        } else {
+          this.fillingExpensesNoCat( element );
+        }
       }
     });
   }
 
   // TODO LO QUE ENTRA A ESTE METODO TIENE UN PARENT ID
-  fillingExpenses( concept, movement:Movement, element:PreDetails ){
+  fillingExpenses( concept, movement:Movement ){
     let flagDoubleCat:boolean = false;
    
     this.secondScreen.forEach( (secondScreen:ExpensesSecondScreen) => {
@@ -223,7 +274,7 @@ export class DashboardService {
     if( !flagDoubleCat ){
       this.pushMovementWithNewParent( concept, movement );
     } else {
-      this.pushMovementWithSameParent( concept, movement,  element );
+      this.pushMovementWithSameParent( concept, movement );
     }
   }
 
@@ -241,9 +292,7 @@ export class DashboardService {
     });
   }
 
-  pushMovementWithSameParent( concept, movement:Movement, element:PreDetails ){
-    let flagExistentSubcat:boolean; 
-    let detailsIndex:number = 0;
+  pushMovementWithSameParent( concept, movement:Movement ){
 
     for( let i=0; i < this.secondScreen.length; i++ ){
       if( this.secondScreen[i].parentCategory == concept.category.parent.id ){
@@ -326,7 +375,7 @@ export class DashboardService {
             secondScreen.details.push({
               subCategory: element.Category,
               backgroundColorSubCategory: element.Category.color,
-              totalAmount: totalAmount,
+              totalAmount: Math.round(totalAmount),
               movements: movements
             });
           }
@@ -341,7 +390,7 @@ export class DashboardService {
       details:[{
         subCategory: element.Category,
         backgroundColorSubCategory: element.Category.color,
-        totalAmount: totalAmount,
+        totalAmount: Math.round(totalAmount),
         movements: movements
       }]
     });
@@ -361,7 +410,7 @@ export class DashboardService {
       details:[{
         subCategory: elementPreDetails.Category,
         backgroundColorSubCategory: elementPreDetails.Category.color,
-        totalAmount: totalAmount,
+        totalAmount: Math.round(totalAmount),
         movements: movements
       }]
     });
@@ -370,14 +419,16 @@ export class DashboardService {
   // Se ejecuta una vez por cada MES
   getTotalAmount( movements:MonthMovementArray, auxTotalAmount:number[], auxCategory:Category[] ): number[]{
     auxCategory.forEach( category => {
-      auxTotalAmount.push( this.filterForTotalAmount( category, movements.details ) );
+      if( !isNullOrUndefined( category ) ){
+        auxTotalAmount.push( this.filterForTotalAmount( category, movements.details ) );
+      }
     });
     return auxTotalAmount;
   }
 
   filterForTotalAmount( category:Category, movements:monthMovement[] ):number {
     let amount:number = 0;
-
+    
     movements.forEach( movement => {
       if( movement.movement.type == "CHARGE"){
         movement.movement.concepts.forEach( concept => {
@@ -561,21 +612,6 @@ export class DashboardService {
     }
   }
 
-  sortJSON(data, key, orden) {
-    return data.sort( (a, b) => {
-        let x = a[key],
-        y = b[key];
-
-        if (orden === 'asc') {
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        }
-
-        if (orden === 'desc') {
-            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-        }
-    });
-  }
-
   cleanValues(){
     this.chargeBalanceAux = 0;
     this.depositBalanceAux = 0;
@@ -586,7 +622,11 @@ export class DashboardService {
     this.auxDataStackedBarLabels = [];
     this.auxDataStackedBarYear = [];
     this.expensesData = [];
+    this.firstScreen = null;
+    this.secondScreen = [];
+    this.categoriesList = [];
+    this.movementsList = [];
+    this.movementsPerMonth = [];
+    this.monthMovementArray = []; 
   }
-
-
 }

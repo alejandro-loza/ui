@@ -21,7 +21,7 @@ export interface ExpensesFirstScreen{
 }
 
 export interface ExpensesSecondScreen{
-    parentCategory:String,
+    parentCategory:string,
     details:[{
         subCategory?:Category,
         backgroundColorSubCategory:string,
