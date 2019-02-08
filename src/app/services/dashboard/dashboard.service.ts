@@ -34,7 +34,10 @@ export class DashboardService {
   firstScreen:ExpensesFirstScreen;
   secondScreen:ExpensesSecondScreen[] = [];
 
-  // 
+  // FOR INCOMES
+  
+  
+  // GENERAL
   categoriesList:Category[] = [];
   movementsList:Movement[] = [];
   movementsPerMonth:monthMovement[] = [];
@@ -100,7 +103,9 @@ export class DashboardService {
     movements.details.forEach( element => {
       if( element.movement.type === "CHARGE" ){
         element.movement.concepts.forEach( concept => {
-          this.getCategoryInfo(concept, auxCategoryId, auxLabels, auxCategory, auxBackgroundColor );
+          if( concept.type == "DEFAULT" ){
+            this.getCategoryInfo(concept, auxCategoryId, auxLabels, auxCategory, auxBackgroundColor );
+          }
          });
       }
     });
@@ -121,7 +126,6 @@ export class DashboardService {
     this.detailsOfMainData( movements );
     this.sortData();
     this.expensesData.push({ firstScreen: this.firstScreen, secondScreen: this.secondScreen });
-    
   }
 
   sortData(){
@@ -186,25 +190,29 @@ export class DashboardService {
       let movementsArray:any[] = [];
       if( !isNullOrUndefined( category ) ){
         movements.details.forEach( movement => {
-          movement.movement.concepts.forEach( concept => {
-            if( !isNullOrUndefined( concept.category ) ){
-              if( !isNullOrUndefined( concept.category.parent ) ){
-                if( concept.category.parent.id == category.id ){
-                  movementsArray.push( movement );
-                }
-              } else {
-                // SUBCAT AS CATEGORY
-                if( concept.category.id == category.id ){
-                  movementsArray.push( movement );
+          if( movement.movement.type != "DEPOSIT" ){
+            movement.movement.concepts.forEach( concept => {
+              if( concept.type == "DEFAULT" ){
+                if( !isNullOrUndefined( concept.category ) ){
+                  if( !isNullOrUndefined( concept.category.parent ) ){
+                    if( concept.category.parent.id == category.id ){
+                      movementsArray.push( movement );
+                    }
+                  } else {
+                    // SUBCAT AS CATEGORY
+                    if( concept.category.id == category.id ){
+                      movementsArray.push( movement );
+                    }
+                  }
+                } else {
+                  // NO CATEGORY
+                  if( "000000" == category.id ){
+                    movementsArray.push( movement );
+                  }
                 }
               }
-            } else {
-              // NO CATEGORY
-              if( "000000" == category.id ){
-                movementsArray.push( movement );
-              }
-            }
-          });
+            });
+          }
         });
       }
       detailsForExpenses.push({ 
@@ -212,7 +220,6 @@ export class DashboardService {
         Movements: movementsArray
       });
     });
-    
     this.filterOfSubcats( detailsForExpenses );
     this.calculateAmoutOfSubcatsElements();
   }
@@ -242,9 +249,9 @@ export class DashboardService {
             Movement.movement.concepts.forEach( concept => {
               if( !isNullOrUndefined( concept.category ) ){
                 if( !isNullOrUndefined( concept.category.parent ) ){
-  
-                  this.fillingExpenses( concept, Movement.movement );
-  
+                  if( concept.type == "DEFAULT" ){
+                    this.fillingExpenses( concept, Movement.movement );
+                  }
                 } else {
                   // MOVS WO SUBCATS
                   if( concept.type == "DEFAULT" ){

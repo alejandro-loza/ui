@@ -22,10 +22,10 @@
                         <img width="25px" height="25px" src="{{assetsUrl}}/color_{{element.catId}}.{{ element.catId != '000000' ? 'png' : 'svg' }}">
                     </div>
                     <div class="col s6 pt">
-                        {{ element.label }}
+                        <b>{{ element.label }}</b>
                     </div>
-                    <div class="col s4 center pt">
-                        ${{ element.amount| number:'1.2-2' }}
+                    <div class="col s4 pt">
+                        <b>${{ element.amount| number:'1.2-2' }}</b>
                     </div>
                 </div>        
             </div>

@@ -5,6 +5,7 @@ import { ExpensesMainData } from '@app/interfaces/dashboard/dataExpensesComponen
 import { MonthChartEvent } from '@app/interfaces/dashboard/monthChartEvent.interface';
 import { StackedBar } from '@app/interfaces/dashboard/dashboardStackedBar.interface';
 import { TableData } from '@app/interfaces/dashboard/dataForTables.interface';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-expenses',
@@ -38,6 +39,8 @@ export class ExpensesComponent implements OnInit {
     this.setMainMessage( this.stackedBarData[0].labels.length - 1 );
     this.setTitles( this.stackedBarData[0].labels.length - 1 );
     this.firstData();
+
+    console.log( this.expensesData );
   }
 
   firstData(){
@@ -152,6 +155,7 @@ export class ExpensesComponent implements OnInit {
 
     this.dataForTableofSubcats( element.catId, element.index );
     this.makingStructureForPie( element.catId, element.index );
+    this.setMainMessage( element.index, element.amount );
   }
 
   setTitles( index:number ){
@@ -162,8 +166,12 @@ export class ExpensesComponent implements OnInit {
     titleOfThePage.innerHTML = "Resumen "+ this.titleMonth + " "+ this.titleYear;
   }
 
-  setMainMessage( index ){
-    this.totalAmount = this.stackedBarData[0].expenses[index];
+  setMainMessage( index:number, amount?:number ){
+    if( isNullOrUndefined( amount ) ){
+      this.totalAmount = this.stackedBarData[0].expenses[index];
+    } else {
+      this.totalAmount = amount;
+    }
   }
 
   getStackedBarData(){

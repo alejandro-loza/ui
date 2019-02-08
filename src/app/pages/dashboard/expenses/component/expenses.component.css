@@ -18,13 +18,12 @@
 
 .mainRow{
     padding-top: 20px;
-    /*height: -webkit-fill-available;
-    background-color: white;*/
 }
 
 .collection{
     overflow: inherit;
     margin-top: 0px;
+    background-color: white;
 }
 
 .collection-item{
