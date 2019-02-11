@@ -1,121 +1,84 @@
-<!-- Encabezado del collapsible -->
-<div class="collapsible-header valign-wrapper" [ngClass]="{'grey lighten-2': movement.duplicated}">
-    <!-- Image Start -->
-    <div class="col m1">
-      <img src="https://cdn.finerio.mx/banks/{{movement.account.institution.code}}_shield.png" srcset="assets/media/img/movements/{{movement.account.institution.code}}.png" alt="{{movement.account.institution.code}}" class="imgMovement" />
-    </div>
-    <!-- Image End -->
+<div class="row valign-wrapper center-align">
+  <!-- Image Start -->
+  <div class="col m1">
+    <img src="https://cdn.finerio.mx/banks/{{movement.account.institution.code}}_shield.png" srcset="assets/media/img/movements/{{movement.account.institution.code}}.png" alt="{{movement.account.institution.code}}" class="imgMovement" />
+  </div>
+  <!-- Image End -->
 
-    <!-- Date Start -->
-    <div class="col m1 valign-wrapper customComponent" (click)="collapsibleOpen(i)">
+  <!-- Date Start -->
+  <div class="col m1 customComponent">
+    <ng-container *ngIf="movement.editAvailable === true; else elseDate">
       <app-date
         [formatDate]="movement.formatDate"
         [date]="movement.customDate"
         [classes]="'inputMovement center'"
         [type]="'text'"
         name="customDate"
-        (valueDate)="auxMovement.customDate=$event"></app-date>
-    </div>
-    <!-- Date End -->
-
-    <!-- Description Start-->
-    <div class="col m3 customComponent" (click)="collapsibleOpen(i)">
-      <input
-      [ngModel]="movement.customDescription | uppercase"
-      type="text"
-      class="inputMovement center-align"
-      name="description"
-      (ngModelChange)="auxMovement.customDescription=$event"/>
-    </div>
-    <!-- Description End-->
-
-    <!-- Category Start -->
-    <div class="col m3">
-      <!--
-          Se recorren las conceptos de los movimientos
-        -->
-      <div *ngFor="let concept of movement.concepts; let i = index">
-        <!--
-            Se valida si existe más de un concepto en cada movimiento
-          -->
-        <ng-container *ngIf="movement.concepts?.length > 1; then multicategorias; else simplecategoria"></ng-container>
-        <!--
-            Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría.
-            Esto genera un pequeño bug donde se pinta dos veces, esto se debe por los multiples conceptos.
-            Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
-      -->
-        <ng-template #multicategorias>
-          <app-category-movement [hidden]="i > 0" [bckgrndColor]="'#212121'" [categoryName]="'Multi Categorías'" [frgrndColor]="'#fafafa'" [categoryParent]="'multi'">
-          </app-category-movement>
-        </ng-template>
-        <ng-template #simplecategoria>
-          <!--
-              Si solo tiene un concepto, se verifica si ese concepto tiene una categoria
-            -->
-          <ng-container *ngIf="concept.category; then conCategoria; else sinCategoria"></ng-container>
-          <!--
-                      Si tiene una categoría se pinta con sus respectivos parametros
-                    -->
-          <ng-template #conCategoria>
-            <!-- Se checa si existe la propiedad parent existe. -->
-            <ng-container *ngIf="concept.category.parent; then subcategory; else parentcategory"></ng-container>
-            <ng-template #subcategory>
-              <!-- Si existe, se agrega el id del parent -->
-              <app-category-movement [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.parent.id">
-              </app-category-movement>
-            </ng-template>
-            <ng-template #parentcategory>
-              <!-- Sino, se agrega el id de category-->
-              <app-category-movement [bckgrndColor]="concept.category.color" [categoryName]="concept.category.name" [frgrndColor]="concept.category.textColor" [categoryParent]="concept.category.id">
-              </app-category-movement>
-            </ng-template>
-
-          </ng-template>
-          <ng-template #sinCategoria>
-            <!--
-                          Caso contrario se mandan los parametros definidos para los movimientos sin categoria
-                        -->
-            <app-category-movement [bckgrndColor]="'#757575'" [categoryName]="'Sin Categoría'" [frgrndColor]="'#fafafa'" [categoryParent]="'finerio-icon'">
-            </app-category-movement>
-          </ng-template>
-        </ng-template>
-      </div>
-    </div>
-    <!-- Category End-->
-
-
-    <!-- Amount start -->
-    <div class="col m2 valign-wrapper customComponent inputAmount" (click)="collapsibleOpen(i)">
-      <input
-      [ngModel]="movement.amount | currency:'USD':'symbol-narrow':'0.2'"
-      [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }"
-      name="amount"
-      class="inputMovement"
-      min="0"
-      step="10"
-      id="amount"
-      (ngModelChange)="formatAmount($event)"/>
-    </div>
-    <!-- Amount End -->
-
-    <!-- Consider start -->
-    <div class="col m2 center-align" (click)="collapsibleOpen(i)">
-      <div class="switch">
-        <label>
-          Si
-          <input
-            [ngModel]="movement.duplicated"
-            name="duplicated"
-            type="checkbox"
-            (ngModelChange)="auxMovement.duplicated=$event"/>
-          <span class="lever"></span>
-          No
-        </label>
-      </div>
-    </div>
-    <!-- Consider end -->
+        (valueDate)="updateDate($event)">
+      </app-date>
+    </ng-container>
+    <ng-template #elseDate>
+      <h6>{{ movement.formatDate }}</h6>
+    </ng-template>
   </div>
-  <div class="collapsible-body">
-    <app-item-detail (status)="statusMovement($event)" [movement]="movement" [auxMovement]="auxMovement" [statusUpdate]="statusUpdate">
-    </app-item-detail>
+  <!-- Date End -->
+
+  <!-- Description Start-->
+  <div class="col m3 customComponent">
+    <ng-container *ngIf="movement.editAvailable === true; else elseDescription">
+      <input
+        [(ngModel)]="movement.customDescription"
+        type="text"
+        class="inputMovement center-align"
+        name="description"
+        (keyup)="updateMovement($event)" />
+    </ng-container>
+    <ng-template #elseDescription>
+      <h6>{{ movement.customDescription | uppercase }}</h6>
+    </ng-template>
   </div>
+  <!-- Description End-->
+
+  <!-- Category Start -->
+  <div class="col m3">
+    <app-concept-type-movement [categoryList]="categoryList" [concepts]="movement.concepts"></app-concept-type-movement>
+  </div>
+  <!-- Category End-->
+
+  <!-- Amount start -->
+  <div class="col m2 customComponent right-align">
+      <ng-container *ngIf="movement.editAvailable === true; else elseAmount">
+        <input
+          [(ngModel)]="movement.amount"
+          name="amount"
+          class="inputMovement right-align"
+          min="0"
+          step="10"
+          type="number"
+          (keyup)="updateMovement($event)"/>
+      </ng-container>
+      <ng-template #elseAmount>
+        <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">
+          {{ movement.amount | currency:'USD':'symbol-narrow':'0.2' }}
+        </h6>
+      </ng-template>
+  </div>
+  <!-- Amount End -->
+
+  <!-- Consider start -->
+  <div class="col m2">
+    <div class="switch">
+      <label>
+        Si
+        <input
+          [ngModel]="movement.duplicated"
+          name="duplicated"
+          type="checkbox"
+          (ngModelChange)="movement.duplicated=$event"/>
+        <span class="lever"></span>
+        No
+      </label>
+    </div>
+  </div>
+  <!-- Consider end -->
+</div>

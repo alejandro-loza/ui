@@ -1,0 +1,11 @@
+.categorySize {
+  padding: 0%;
+  width: 165px !important;
+  margin: .4%;
+}
+
+.imageCategory {
+  width: 30%;
+  height: auto;
+  margin-top: 6%;
+}

@@ -7,8 +7,8 @@ import {
   Output,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ParamsService } from '@services/movements/params/params.service';
 import { DateApiService } from '@services/date-api/date-api.service';
+import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
   startDate: Date;
 
   constructor(
-    private paramsService: ParamsService,
+    private paramsMovementsService: ParamsMovementsService,
     private dateApiService: DateApiService,
   ) {
     this.filterMovementStatus = new EventEmitter();
@@ -43,11 +43,11 @@ export class FilterComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() { }
 
   filterMovement(ngform: NgForm) {
-    this.paramsService.setCharges = ngform.value.charges;
-    this.paramsService.setDeposits = ngform.value.deposits;
-    this.paramsService.setDuplicates = ngform.value.duplicates;
-    this.paramsService.setStartDate = this.dateApiService.dateWithFormat(this.startDate);
-    this.paramsService.setEndDate = this.dateApiService.dateWithFormat(this.endDate);
+    this.paramsMovementsService.setCharges = ngform.value.charges;
+    this.paramsMovementsService.setDeposits = ngform.value.deposits;
+    this.paramsMovementsService.setDuplicates = ngform.value.duplicates;
+    this.paramsMovementsService.setStartDate = this.dateApiService.dateWithFormat(this.startDate);
+    this.paramsMovementsService.setEndDate = this.dateApiService.dateWithFormat(this.endDate);
     this.filterMovementStatus.emit(true);
   }
 }

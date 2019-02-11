@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ItemListComponent } from './component/item-list.component';
 import { ItemModule } from       '../item/item.module';
+import { ItemDetailModule } from '../item-detail/item-detail.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { ItemModule } from       '../item/item.module';
   ],
   imports: [
     CommonModule,
-    ItemModule
+    ItemModule,
+    ItemDetailModule,
   ],
   exports: [
     ItemListComponent

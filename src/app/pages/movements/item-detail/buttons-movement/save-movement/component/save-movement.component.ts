@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
 import { retry } from 'rxjs/operators';
 import { ToastInterface } from '@interfaces/toast.interface';
-import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import { Movement } from '@interfaces/movement.interface';
 
 @Component({
   selector: 'app-save-movement',
@@ -11,7 +11,8 @@ import { ParamsMovement } from '@interfaces/paramsMovement.interface';
   styleUrls: ['./save-movement.component.css']
 })
 export class SaveMovementComponent implements OnInit {
-  @Input() movement: ParamsMovement;
+  @ViewChild('guardarBtn') saveButton: ElementRef;
+  @Input() movement: Movement;
   @Output() status: EventEmitter<boolean>;
 
   toastInterface: ToastInterface;
@@ -27,6 +28,7 @@ export class SaveMovementComponent implements OnInit {
   ngOnInit() {}
 
   updateMovement() {
+
     this.movementService
       .updateMovement(this.movement)
       .pipe(retry(2))
@@ -39,6 +41,7 @@ export class SaveMovementComponent implements OnInit {
           this.toastInterface.code = err.status;
           if (err.status === 401) {
             this.toastService.toastGeneral(this.toastInterface);
+            this.updateMovement();
           }
           if (err.status === 404) {
             this.toastInterface.message = 'No sé encontró tu movimiento';

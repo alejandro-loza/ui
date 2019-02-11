@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
-import { ParamsMovement } from '@interfaces/paramsMovement.interface';
+import { NewMovement } from '@interfaces/newMovement.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { Response } from '@interfaces/response.interface';
 
@@ -21,7 +21,6 @@ export class MovementsService {
 
   constructor(
     private httpClient: HttpClient,
-    private dateApitService: DateApiService,
     private configService: ConfigService
   ) {}
 
@@ -67,27 +66,25 @@ export class MovementsService {
       .get<Response<Movement>>(urlMovements, {
         observe: 'response',
         headers: this.configService.getJsonHeaders()
-      })
-      .pipe(
+      }).pipe(
         map(res => {
-          res.body.data.forEach(element => {
-            element.formatDate = this.dateApitService.dateFormatMovement(element.customDate);
-            this.movementsList.push(element);
+          res.body.data.forEach(movement => {
+            this.movementsList.push(movement);
           });
           return res;
         })
       );
   }
 
-  createMovement(movement: ParamsMovement): Observable<HttpResponse<Movement>> {
+  createMovement(movement: NewMovement): Observable<HttpResponse<Movement>> {
     return this.httpClient.post<Movement>(
       `${this.url}/${this.configService.getId}/movements`,
       JSON.stringify({
         amount: movement.amount,
         balance: 0,
-        customDate: this.dateApitService.dateApi(movement.date),
+        customDate: movement.date,
         customDescription: movement.description,
-        date: this.dateApitService.dateApi(movement.date),
+        date: movement.date,
         description: movement.description,
         duplicated: movement.duplicated,
         type: movement.type.toUpperCase()
@@ -96,7 +93,7 @@ export class MovementsService {
     );
   }
 
-  updateMovement(movement: ParamsMovement): Observable<HttpResponse<Movement>> {
+  updateMovement(movement: Movement): Observable<HttpResponse<Movement>> {
     return this.httpClient.put<Movement>(
       `${environment.backendUrl}/movements/${movement.id}`,
       JSON.stringify({

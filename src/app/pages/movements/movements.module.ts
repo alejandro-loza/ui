@@ -1,10 +1,11 @@
 import { NgModule } from                           '@angular/core';
 
-import { ParamsService } from                      '@services/movements/params/params.service';
 import { MovementsService } from                   '@services/movements/movements.service';
+import { ParamsMovementsService } from             '@services/movements/params-movements/params-movements.service';
+import { ToastService } from                       '@services/toast/toast.service';
 
 import { SharedModule } from                       '@shared/shared.module';
-import { ItemModule } from                         './item/item.module';
+import { ItemListModule } from                     './item-list/item-list.module';
 import { FilterModule } from                       './filter/filter.module';
 import { MovementsRoutes } from                    './movements.route';
 
@@ -15,7 +16,7 @@ import { NewMovementModule } from                  './new-movement/new-movement.
 @NgModule({
   imports: [
     SharedModule,
-    ItemModule,
+    ItemListModule,
     NewMovementModule,
     FilterModule,
     MovementsRoutes,
@@ -24,7 +25,8 @@ import { NewMovementModule } from                  './new-movement/new-movement.
     MovementsComponent,
   ],
   providers: [
-    ParamsService,
+    ParamsMovementsService,
+    ToastService,
     MovementsService
   ]
 })

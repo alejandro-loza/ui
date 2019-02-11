@@ -2,20 +2,21 @@ import { AccountInterface } from './account.interfaces';
 import { Concept } from './concept.interface';
 
 export interface Movement {
-    account: AccountInterface;
-    amount: number;
-    balance: number;
-    concepts: Concept[];
-    customDate: Date;
-    customDescription: string;
-    formatDate?: string;
-    date: Date;
-    dateCreated: Date;
-    dateDeleted?: Date;
-    description: string;
-    duplicated: true;
-    hasConcepts: boolean;
-    id: string;
-    lastUpdated: string;
-    type: string;
+  account: AccountInterface;
+  amount: number;
+  balance: number;
+  concepts: Concept[];
+  customDate: Date;
+  customDescription: string;
+  date: Date;
+  dateCreated: Date;
+  dateDeleted?: Date;
+  description: string;
+  duplicated: true;
+  editAvailable?: boolean;
+  formatDate?: string;
+  hasConcepts: boolean;
+  readonly id: string;
+  lastUpdated: string;
+  type: string;
 }

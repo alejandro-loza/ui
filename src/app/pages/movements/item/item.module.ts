@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { ItemComponent } from './component/item.component';
 import { SharedModule } from '@shared/shared.module';
+
 import { DateModule } from '../date/date.module';
-import { CategoryMovementModule } from '../category-movement/category-movement.module';
-import { ItemDetailModule } from '../item-detail/item-detail.module';
+
+import { ItemComponent } from './component/item.component';
+import { ConceptTypeMovementModule } from '../concept-type-movement/concept-type-movement.module';
 
 @NgModule({
   declarations: [
@@ -12,8 +13,7 @@ import { ItemDetailModule } from '../item-detail/item-detail.module';
   imports: [
     SharedModule,
     DateModule,
-    CategoryMovementModule,
-    ItemDetailModule,
+    ConceptTypeMovementModule
    ],
   exports: [
     ItemComponent

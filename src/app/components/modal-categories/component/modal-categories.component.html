@@ -1,0 +1,34 @@
+<!-- Modal Structure -->
+<div id="{{ modalTrigger }}" class="modal" #modalCateogry>
+  <div class="modal-content">
+    <h4 class="black-text">Selecciona una categoría: </h4>
+    <p>{{ flagSubcategories }}</p>
+    <ng-container *ngIf="categoryList; else elseSpinner">
+      <div class="container-fluid row category-container">
+        <ng-template ngFor let-category [ngForOf]="categoryList" let-i="index">
+          <div class="col s6 m2 white-text categorySize" [ngStyle]="{'background-color': category.color }" (click)="filterSubcategories(i)">
+            <ng-container *ngIf="category.user; else elseCategorySystem">
+              <img
+              src="https://cdn.finerio.mx/categories/web/finerio-icon.svg"
+              srcset="assets/media/img/categories/finerio-icon.svg"
+              alt="{{ category.name }}" class="imageCategory">
+            </ng-container>
+            <ng-template #elseCategorySystem>
+                <img
+                src="https://cdn.finerio.mx/categories/web/{{ category.id }}.svg"
+                srcset="assets/media/img/categories/{{ category.id }}.svg"
+                alt="{{ category.name }}" class="imageCategory">
+            </ng-template>
+            <p>{{ category.name }}</p>
+          </div>
+        </ng-template>
+      </div>
+    </ng-container>
+    <ng-template #elseSpinner>
+      <app-spinner></app-spinner>
+    </ng-template>
+  </div>
+  <div class="modal-footer left-align">
+    <a class="modal-back btn-flat left-align" (click)="backCategories()">Regresar</a>
+  </div>
+</div>

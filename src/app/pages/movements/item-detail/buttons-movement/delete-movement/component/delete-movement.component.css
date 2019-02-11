@@ -1,3 +1,16 @@
 .btn {
   margin: 0% 1%;
 }
+
+.btn-delete{
+  border: 1px solid #c62828;
+  background-color: transparent;
+  color: black;
+  transition: all .2s ease-in-out;
+}
+
+.btn-delete:hover {
+  border: 1px solid #c62828;
+  background-color: #c62828;
+  color: whitesmoke;
+}

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FilterComponent } from './component/filter.component';
-import { ParamsService } from '@services/movements/params/params.service';
+import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { DateModule } from '../date/date.module';
 import { DateApiService } from '@services/date-api/date-api.service';
@@ -14,7 +14,7 @@ import { DateApiService } from '@services/date-api/date-api.service';
     DateModule
   ],
   providers: [
-    ParamsService,
+    ParamsMovementsService,
     DateApiService
   ],
   exports: [

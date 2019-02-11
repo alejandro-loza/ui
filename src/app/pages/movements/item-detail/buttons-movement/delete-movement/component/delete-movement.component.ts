@@ -25,9 +25,9 @@ export class DeleteMovementComponent implements OnInit {
 
   ngOnInit() {}
 
-  deleteMovement(id: string) {
+  deleteMovement() {
     this.movementService
-      .deleteMovement(id)
+      .deleteMovement(this.id)
       .pipe(retry(2))
       .subscribe(
         res => {
@@ -38,6 +38,7 @@ export class DeleteMovementComponent implements OnInit {
           this.toastInterface.code = err.status;
           if (err.status === 401) {
             this.toastService.toastGeneral(this.toastInterface);
+            this.deleteMovement();
           }
           if (err.status === 404) {
             this.toastInterface.message = 'No sé encontró tu movimiento';

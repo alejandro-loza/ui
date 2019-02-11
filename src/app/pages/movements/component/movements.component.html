@@ -35,16 +35,8 @@
 
 <!-- Lista de Movimientos -->
 <div class="containerMovement">
-  <div class="row center-align">
-    <ul class="collapsible" #collapsible>
-      <ng-template ngFor [ngForOf]="movementsList" [ngForTrackBy]="trackByFn" let-movement let-i="index">
-        <li class="fast fadeIn">
-          <app-item (statusMovementsList)="statusMovement($event)" [status]="status"></app-item>
-        </li>
-      </ng-template>
-    </ul>
+    <app-item-list [categoryList]="categoryList" [movementList]="movementList"></app-item-list>
     <div class="center-align" *ngIf="spinnerBoolean !== false">
       <app-spinner></app-spinner>
     </div>
-  </div>
 </div>

@@ -1,32 +1,70 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ParamsMovements } from '@interfaces/paramsMovements.interface';
-import { ParamsService } from '@services/movements/params/params.service';
+import {
+  Component,
+  OnInit,
+  OnDestroy
+} from '@angular/core';
+
 import { MovementsService } from '@services/movements/movements.service';
+import { ToastService } from '@services/toast/toast.service';
+import { CategoriesService } from '@services/categories/categories.service';
+import { DateApiService } from '@services/date-api/date-api.service';
+
+import { ParamsMovements } from '@interfaces/paramsMovements.interface';
+import { Movement } from '@interfaces/movement.interface';
+import { ToastInterface } from '@interfaces/toast.interface';
+
+import { retry } from 'rxjs/operators';
+import { Category } from '@interfaces/category.interface';
+
+declare var $: any;
 
 @Component({
   selector: 'app-movements',
   templateUrl: './movements.component.html',
   styleUrls: ['./movements.component.css']
 })
-export class MovementsComponent implements OnInit {
-  status: boolean;
-  filterflag: boolean;
-  paramsMovements: ParamsMovements;
+export class MovementsComponent implements OnInit, OnDestroy {
+  private paramsMovements: ParamsMovements;
+  private movementList: Movement[];
+  private categoryList: Category[];
+  private toast: ToastInterface;
+
+  private status: boolean;
+  private filterflag: boolean;
+  private spinnerBoolean: boolean;
+  private auxSize: number;
 
   constructor(
-    private paramsService: ParamsService,
-    private movementService: MovementsService
+    private categoryService: CategoriesService,
+    private movementService: MovementsService,
+    private dateApitService: DateApiService,
+    private toastService: ToastService
   ) {
     this.status = false;
+    this.spinnerBoolean = true;
     this.filterflag = false;
+    this.auxSize = 0;
+    this.movementList = [];
+    this.toast = {};
     this.paramsMovements = {
-      charges: this.paramsService.getCharges,
-      deposits: this.paramsService.getDeposits,
-      duplicates: this.paramsService.getDuplicates
+      charges: true,
+      deep: true,
+      deposits: true,
+      duplicates: true,
+      maxMovements: 35,
+      offset: 0
     };
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getCategories();
+    this.getMovements();
+    window.addEventListener('scroll', this.offsetMovement, true);
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('scroll', this.offsetMovement, true);
+  }
 
   /**
    * @function statusMovement() - Esto es la función del output en los componentes. Esto es para notificar a los demás componentes
@@ -41,19 +79,95 @@ export class MovementsComponent implements OnInit {
       this.status = status;
       this.filterflag = false;
     }, 0);
+    this.refreshMovement();
   }
 
-  getMovement() {
-    this.movementService.getMovements().subscribe(
-      res => {
+  /**
+   * @function offsetMovement() - It's anonymous functions, its used for eventListener Scroll
+   */
 
-      },
-      err => {
-
-      },
-      () => {
-
+  offsetMovement = () => {
+    if ( this.spinnerBoolean === false ) {
+      const scrollVertical = window.scrollY;
+      let scrollLimit: number;
+      scrollLimit = $(document).height() - $(window).height();
+      if (scrollVertical >= scrollLimit) {
+        this.spinnerBoolean = true;
+        this.getMovements();
       }
-    );
+    }
+  }
+
+  getMovements() {
+    this.movementService
+      .getMovements(this.paramsMovements)
+      .pipe(retry(2))
+      .subscribe(
+        res => {
+          // Se le asigna el tamaño de la lista a la variable _auxSize_
+          this.auxSize = res.body.data.length;
+
+          // Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
+          res.body.data.forEach(element => {
+            element['formatDate'] = this.dateApitService.dateFormatMovement( element.customDate );
+            element['editAvailable'] = false;
+            this.movementList.push(element);
+          });
+
+          // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
+          // Se manda un toast y se remueve la función del scroll.
+          if( this.auxSize < this.paramsMovements.maxMovements || this.auxSize === 0 ) {
+            window.removeEventListener('scroll', this.offsetMovement, true);
+            this.toast = {
+              code: res.status,
+              message: 'Hemos cargamos todos tus movimientos'
+            };
+            this.toastService.toastGeneral(this.toast);
+          }
+        },
+        err => {
+          this.toast.code = err.status;
+          if (err.status === 401) {
+            this.toastService.toastGeneral(this.toast);
+            this.getMovements();
+          }
+          if (err.status === 500) {
+            this.toast.message =
+              '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.toastGeneral(this.toast);
+          }
+        },
+        () => this.spinnerBoolean = false
+      );
+    this.paramsMovements.offset += this.paramsMovements.maxMovements;
+  }
+
+  getCategories() {
+    this.categoryService
+      .getCategoriesInfo()
+      .pipe(retry(2))
+      .subscribe(
+        res => {
+          this.categoryList = res.body.data;
+        },
+        err => {
+          this.toast.code = err.status;
+          if (err.status === 401) {
+            this.toastService.toastGeneral(this.toast);
+            this.getCategories();
+          }
+          if (err.status === 500) {
+            this.toast.message =
+            '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.toastGeneral(this.toast);
+          }
+        }
+      );
+  }
+
+  refreshMovement() {
+    this.paramsMovements.offset = 0;
+    this.movementList = [];
+    this.getMovements();
   }
 }

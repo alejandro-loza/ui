@@ -1,5 +1,8 @@
 <div class="valign-wrapper">
-  <button type="button" data-target="modalCategory"  class="btn category-container truncate modal-trigger" [ngStyle]="{'background-color': bckgrndColor, 'color': frgrndColor}">
+  <button
+    attr.data-target="{{ modalTrigger }}"
+    type="button" class="btn category-container truncate modal-trigger"
+    [ngStyle]="{'background-color': bckgrndColor, 'color': frgrndColor}">
     <i class="mdi mdi-24px left">
       <img src="https://cdn.finerio.mx/categories/web/{{categoryParent}}.svg"
             alt="categoryName"
@@ -11,13 +14,4 @@
   </button>
 </div>
 
-<!-- Modal Structure -->
-<div id="modalCategory" class="modal" #modalCateogry>
-  <div class="modal-content">
-    <h4>Selecciona una categoría: </h4>
-    <p>A bunch of text</p>
-  </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-  </div>
-</div>
+<app-modal-categories [categoryList]="categoryList" [modalTrigger]="modalTrigger"></app-modal-categories>

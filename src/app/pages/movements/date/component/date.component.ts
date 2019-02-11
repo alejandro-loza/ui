@@ -28,6 +28,7 @@ export class DateComponent implements OnInit, AfterContentInit {
   constructor(
     private dateApiService: DateApiService
   ) {
+    this.date = new Date();
     this.valueDate = new EventEmitter();
   }
 
