@@ -1,0 +1,10 @@
+<ng-container *ngIf="categoryList; else elseSpinner">
+  <div class="container-fluid row category-container">
+    <ng-template ngFor let-category [ngForOf]="categoryList" let-i="index">
+      <app-category-item [category]="category"></app-category-item>
+    </ng-template>
+  </div>
+</ng-container>
+<ng-template #elseSpinner>
+  <app-spinner></app-spinner>
+</ng-template>
