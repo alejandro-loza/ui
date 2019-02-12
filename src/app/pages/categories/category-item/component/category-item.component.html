@@ -1,4 +1,4 @@
-<div class="col s6 m2 white-text categorySize" [ngStyle]="{'background-color': category.color }" (click)="filterSubcategories(i)">
+<div [ngStyle]="{'background-color': category.color }" (click)="filterSubcategories(i)">
   <ng-container *ngIf="category.user; else elseCategorySystem">
     <img
     src="https://cdn.finerio.mx/categories/web/finerio-icon.svg"

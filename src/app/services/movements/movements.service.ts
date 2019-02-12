@@ -3,7 +3,6 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
-import { DateApiService } from '@services/date-api/date-api.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { NewMovement } from '@interfaces/newMovement.interface';

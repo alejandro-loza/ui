@@ -1,0 +1,10 @@
+.categorySize {
+  margin: 3px;
+  height: 10rem;
+}
+
+@media only screen and (min-width: 601px) {
+  .row .col.m2 {
+    width: 15.666667%;
+  }
+}

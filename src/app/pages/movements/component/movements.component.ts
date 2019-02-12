@@ -100,9 +100,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 
   getMovements() {
     this.movementService
-      .getMovements(this.paramsMovements)
-      .pipe(retry(2))
-      .subscribe(
+      .getMovements(this.paramsMovements).pipe(retry(2)).subscribe(
         res => {
           // Se le asigna el tamaño de la lista a la variable _auxSize_
           this.auxSize = res.body.data.length;
@@ -116,7 +114,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 
           // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
           // Se manda un toast y se remueve la función del scroll.
-          if( this.auxSize < this.paramsMovements.maxMovements || this.auxSize === 0 ) {
+          if ( this.auxSize < this.paramsMovements.maxMovements || this.auxSize === 0 ) {
             window.removeEventListener('scroll', this.offsetMovement, true);
             this.toast = {
               code: res.status,
@@ -132,14 +130,15 @@ export class MovementsComponent implements OnInit, OnDestroy {
             this.getMovements();
           }
           if (err.status === 500) {
-            this.toast.message =
-              '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toast.message = '¡Ha ocurrido un error al obterner tus movimiento!';
             this.toastService.toastGeneral(this.toast);
           }
         },
-        () => this.spinnerBoolean = false
+        () => {
+          this.spinnerBoolean = false;
+          this.paramsMovements.offset += this.paramsMovements.maxMovements;
+        }
       );
-    this.paramsMovements.offset += this.paramsMovements.maxMovements;
   }
 
   getCategories() {

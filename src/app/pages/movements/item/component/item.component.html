@@ -34,7 +34,7 @@
         (keyup)="updateMovement($event)" />
     </ng-container>
     <ng-template #elseDescription>
-      <h6>{{ movement.customDescription | uppercase }}</h6>
+      <h6 class="truncate">{{ movement.customDescription | uppercase }}</h6>
     </ng-template>
   </div>
   <!-- Description End-->

@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { CategoriesListComponent } from './component/categories-list.component';
+import { SharedModule } from '@shared/shared.module';
 import { CategoryItemModule } from '../category-item/category-item.module';
+import { CategoriesListComponent } from './component/categories-list.component';
 
 @NgModule({
   declarations: [
     CategoriesListComponent
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     CategoryItemModule
   ],
   exports: [

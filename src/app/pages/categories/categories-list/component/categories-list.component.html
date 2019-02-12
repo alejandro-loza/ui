@@ -1,7 +1,9 @@
 <ng-container *ngIf="categoryList; else elseSpinner">
   <div class="container-fluid row category-container">
     <ng-template ngFor let-category [ngForOf]="categoryList" let-i="index">
-      <app-category-item [category]="category"></app-category-item>
+      <div class="col s6 m2 white-text categorySize">
+        <app-category-item [category]="category"></app-category-item>
+      </div>
     </ng-template>
   </div>
 </ng-container>
