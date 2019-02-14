@@ -9,6 +9,7 @@
 #pieContainer{
     display: grid;
     text-align: -webkit-center;
+    text-align: center;
     position: relative;
 }
 
@@ -17,7 +18,7 @@
 }
 
 .mainRow{
-    padding-top: 20px;
+    padding-top: 40px;
 }
 
 .collection{

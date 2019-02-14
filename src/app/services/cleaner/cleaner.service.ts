@@ -12,6 +12,9 @@ export class CleanerService {
     this.dashboardBean.setDataStackedBar( null );
     this.dashboardBean.setDataBalancePieChart( null );
     this.dashboardBean.setLoadInformation( true );
+    this.dashboardBean.setDataIsReady( false );
     this.dashboardBean.setDataExpensesTab( null );
+    this.dashboardBean.setDataIncomesBarChart( null );
+    this.dashboardBean.setDataIncomesTab( null );
   }
 }

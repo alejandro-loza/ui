@@ -45,6 +45,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   validateStatusFinished: boolean;
   loaderMessagge: string;
   credentialInProcess: CredentialInterface;
+  errorWithCredentials:boolean = false;
 
   @ViewChild('modal') interactiveModal: ElementRef;
   @ViewChild("collapsible") elementCollapsible: ElementRef;
@@ -90,6 +91,8 @@ export class CredentialComponent implements OnInit, AfterViewInit {
         this.checkStatusOfCredential(element);
       });
       this.processCompleteForSpinner = true;
+    }, error => {
+      this.errorWithCredentials = true;
     });
     this.getAccounts();
   }
@@ -122,7 +125,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   }
 
   accountsTable( accounts:AccountInterface[] ){
-
     accounts.forEach( account => {
       if( account.type == "Crédito" ){
         this.creditAccounts.push( account );
@@ -134,7 +136,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
         this.investmentsAccounts.push( account );
       }
     });
-
   }
 
   getBalance(accountsArray: AccountInterface[]) {

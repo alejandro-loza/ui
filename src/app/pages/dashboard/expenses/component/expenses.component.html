@@ -1,6 +1,7 @@
 <div class="row z-depth-1" id="barChartRow">
     <div class="col s12 center">
-        <app-bar-charts (clickEventData)="selectedMonthChart( $event )" 
+        <app-bar-charts *ngIf="true"
+                        (clickEventData)="selectedMonthChart( $event )" 
                         [dataForChart]="dataForExpensesBarChart()"
                         [labels]="labelsForExpensesChart()">
         </app-bar-charts>
@@ -13,7 +14,7 @@
             <canvas id="expensesPieChart" height="100"></canvas>
         </div>
     </div>
-    <div class="col s12 m6 l5">
+    <div *ngIf="dataForTable.length > 0" class="col s12 m6 l5">
         <ul class="collection z-depth-1">
             <div (click)="clickOnCategory( element )" 
                 *ngFor="let element of dataForTable" class="hoverable collection-item">
@@ -30,6 +31,6 @@
                 </div>        
             </div>
         </ul>
-        <button *ngIf="showBackButton" (click)="selectedMonthChart( monthOfCategorySelected )" class="btn finerio-blue">Regresar</button>
+        <button *ngIf="showBackButton" (click)="returnButton( monthOnScreen )" class="btn finerio-blue">Regresar</button>
     </div>
 </div>

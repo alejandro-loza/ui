@@ -1,20 +1,19 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Chart } from "chart.js";
 import { MonthChartEvent } from '@app/interfaces/dashboard/monthChartEvent.interface';
 import { isNullOrUndefined } from 'util';
 
-
 @Component({
-  selector: 'app-bar-charts',
-  templateUrl: './bar-charts.component.html',
-  styleUrls: ['./bar-charts.component.css']
+  selector: 'app-incomes-chart',
+  templateUrl: './incomes-chart.component.html',
+  styleUrls: ['./incomes-chart.component.css']
 })
-export class BarChartsComponent implements OnInit {
+export class IncomesChartComponent implements OnInit {
   @Input() dataForChart:number[] = [];
   @Input() labels:string[] = [];
   @Output() clickEventData:EventEmitter<MonthChartEvent> = new EventEmitter();
 
-  barChart:Chart; 
+  barChart:Chart = []; 
 
   constructor() { }
 
@@ -23,18 +22,24 @@ export class BarChartsComponent implements OnInit {
   }
 
   barChartOptions(){
-    let chart = document.querySelector("#barChart");
+    let chart = document.querySelector("#incomesChart");
     this.barChart = new Chart(chart, {
       type: 'bar',
       data: {
           labels: this.labels,
           datasets: [{
-              label: "Gastos",
               data: this.dataForChart,
-              backgroundColor: "#a02e36",
+              backgroundColor: "#7bba3a",
           }]
       },
       options: {
+          tooltips:{
+            callbacks: {
+              label: function(tooltipItem) {
+                  return "$" + Number(tooltipItem.yLabel)
+              }
+            }
+          },
           scales: {
               yAxes: [{
                   ticks: {
@@ -68,5 +73,4 @@ export class BarChartsComponent implements OnInit {
       this.clickEventData.emit( auxEmit );
     }
   } 
-
 }

@@ -14,7 +14,8 @@ import { Category } from '@interfaces/category.interface';
 })
 export class DashboardComponent implements OnInit {
 
-  paramsMovements = { charges: true, 
+  paramsMovements = { 
+    charges: true, 
     deep: true, 
     deposits: true, 
     startDate:'', 
@@ -43,7 +44,7 @@ export class DashboardComponent implements OnInit {
     if( this.dashboardBean.getLoadInformation() ){
       this.getCategoriesInfo();
     } else {
-      this.dataReady =  true;
+      this.dataReadyValidator();
     }
   }
 
@@ -60,7 +61,7 @@ export class DashboardComponent implements OnInit {
           this.movementsServiceResponse.forEach( movement => {
             this.movementsList.push( movement );
           });
-          this.dashboardService.getDataForCharts( this.movementsList, this.categoriesList );
+          this.dashboardService.mainMethod( this.movementsList, this.categoriesList );
         }      
     });
    this.dataReadyValidator();
@@ -68,6 +69,7 @@ export class DashboardComponent implements OnInit {
 
   getCategoriesInfo(){
     this.categoriesList = [];
+    this.dashboardBean.setLoadInformation( false );
     this.categoriesService.getCategoriesInfo().subscribe( res => {
      res.body.data.forEach( (category:Category)  => {
       this.categoriesList.push( category );  
@@ -82,7 +84,7 @@ export class DashboardComponent implements OnInit {
   }
 
   dataReadyValidator(){
-    if( !this.dashboardBean.getLoadInformation() ){
+    if( this.dashboardBean.getDataIsReady() ){
       this.dataReady = true;
     } else {
       setTimeout( () => {

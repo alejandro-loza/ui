@@ -3,4 +3,5 @@ export interface TableData{
     label:string;
     amount:number;
     index:number;
+    isSubCat:boolean;
 }

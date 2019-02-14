@@ -49,6 +49,13 @@ export class MonthChartComponent implements OnInit {
         ]
       },
       options: {
+          tooltips:{
+            callbacks: {
+              label: function(tooltipItem) {
+                  return "$" + Number(tooltipItem.yLabel)
+              }
+            }
+          },
           scales: {
               yAxes: [{ stacked : true }],
               xAxes: [{ 
