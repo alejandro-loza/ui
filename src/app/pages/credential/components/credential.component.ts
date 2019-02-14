@@ -11,7 +11,7 @@ import { AccountService } from '@services/account/account.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
-
+import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
 
@@ -55,6 +55,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     private credentialService: CredentialService,
     private institutionService: InstitutionService,
     private interactiveService: InteractiveFieldService,
+    private dashboardBean: DashboardBeanService,
     private toastService: ToastService
   ) {
     this.credentials = [];
@@ -85,6 +86,9 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   getAllCredentials() {
     this.credentials = [];
+    this.debitAccounts = [];
+    this.creditAccounts = [];
+    this.investmentsAccounts = [];
     this.credentialService.getAllCredentials().subscribe(res => {
       res.body.data.forEach((element: CredentialInterface) => {
         this.credentials.push(element);
@@ -158,13 +162,13 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     if (credential.status === 'ACTIVE') {
       this.validateStatusFinished = true;
     } else if (credential.status === 'INVALID') {
-      this.loaderMessagge = '¡Ha ocurrido algo con una de tus credenciales!';
+      this.loaderMessagge = '¡Ha ocurrido algo con tu credencial ' + credential.institution.name + "!";
     } else if (credential.status === 'VALIDATE') {
       this.loaderMessagge =
         'Finerio se está sincronizando con tu banca en línea. Esto puede durar unos minutos.';
       this.getNewInfoCredential(credential.id);
     } else if (credential.status === 'TOKEN') {
-      this.loaderMessagge = 'Solicitando información adicional...';
+      this.loaderMessagge = 'Solicitando información adicional para ' + credential.institution.name + "...";
       this.getNewInfoCredential(credential.id);
     }
     this.toast.message = this.loaderMessagge;
@@ -183,6 +187,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
         this.loaderMessagge = '¡Tus datos han sido sincronizados!';
         this.toast.message = this.loaderMessagge;
         this.getAllCredentials();
+        this.dashboardBean.setLoadInformation( true );
       } else if (this.credentialInProcess.status === 'TOKEN') {
         this.validateStatusFinished = false;
         //  Modal process

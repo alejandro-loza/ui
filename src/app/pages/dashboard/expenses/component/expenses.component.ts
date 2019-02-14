@@ -44,7 +44,6 @@ export class ExpensesComponent implements OnInit {
     this.setTitles( this.expensesData.length - 1 );
     this.monthOnScreen = this.expensesData.length - 1
     this.showBackButton = false;
-    console.log( this.expensesData );
   }
 
   PieChartOfCats( index:number ){
