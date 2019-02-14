@@ -36,7 +36,6 @@ export class CredentialService {
   }
 
   getAllCredentials( ): Observable<HttpResponse<CredentialsInterface>> {
-    console.log( this.configService.getJsonHeaders() );
     return this.httpClient.get<CredentialsInterface>(
       this.url,
       {
