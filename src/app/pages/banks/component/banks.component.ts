@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CredentialBeanService } from "@services/credentials/credential-bean.service";
 import { InstitutionService } from '@services/institution/institution.service';
 import { InstitutionInterface } from '@interfaces/institution.interface';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-banks',
@@ -13,7 +15,8 @@ export class BanksComponent implements OnInit {
 
   constructor(
     private intitutionService: InstitutionService,
-    private route: Router
+    private route: Router,
+    private credentialBeanService:CredentialBeanService
   ) {
     this.institutions = [];
   }
@@ -29,12 +32,16 @@ export class BanksComponent implements OnInit {
   }
 
   getInstitutions() {
-    this.intitutionService.getAllInstitutions().subscribe(res => {
-      res.body.data.forEach((element: InstitutionInterface) => {
-        if (element.code !== 'DINERIO') {
-          this.institutions.push(element);
-        }
+    if( isNullOrUndefined( this.credentialBeanService.getInstitutions() )){
+      this.intitutionService.getAllInstitutions().subscribe(res => {
+        res.body.data.forEach((element: InstitutionInterface) => {
+          if (element.code !== 'DINERIO') {
+            this.institutions.push(element);
+          }
+        });
       });
-    });
+    } else {
+      this.institutions = this.credentialBeanService.getInstitutions();
+    }
   }
 }

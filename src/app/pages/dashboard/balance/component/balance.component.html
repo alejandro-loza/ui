@@ -1,52 +1,45 @@
 <div class="row z-depth-1">
     <div class="col s12 center">
-        <!-- NGIF NECESSARY TO WAIT FOR THE DATA -->
-        <app-month-chart [dataForBalanceChart]="dataForBalanceChart"
-                        (dataPieMonthSelected)="selectedMonthChart( $event )"
-                        (indexMonthSelected)="indexMonthSelected( $event )"
-                        *ngIf="dataForBalanceChart.length > 0">
-        </app-month-chart>
+       <app-month-chart (onClickMonth)="onClickMonth( $event )">
+       </app-month-chart>
     </div>
 </div>
-<div class="row animated fadeIn">
-    <div class="col s12 l6">
+<div class="row mainRow animated fadeIn">
+    <div class="col s12 m5 l6">
         <div id="pieContainer">
             <h5>{{ typeOfAmount }}<b> ${{ totalAmount | number:'1.0-0' }}</b></h5>
-            <ngx-charts-pie-chart
-                [view]="view"
-                [scheme]="colorScheme"
-                [results]="dataPieChart"
-                [arcWidth]="arcWidth"
-                [explodeSlices]="explodeSlices"
-                [legend]="showLegend"
-                [explodeSlices]="explodeSlices"
-                [labels]="showLabels"
-                [doughnut]="doughnut">
-            </ngx-charts-pie-chart>
+            <canvas id="balancePieChart" height="100"></canvas>
         </div>
     </div>
-    <div class="col s12 l4">
-        <table>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Concepto</th>
-                    <th class="center-align">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let element of dataPieChart">
-                    <td class="center-align">
-                        <img width="30px" src="{{assetsUrl+element.name}}.png">
-                    </td>
-                    <td>{{ element.name }}</td>
-                    <td class="center-align">${{ element.value | number:'1.2-2' }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-
-       
+    <div class="col s12 m5 offset-m1 l4">
+        <ul class="collection z-depth-1">
+            <div class="hoverable collection-item">
+                <div class="row">
+                    <div class="col s2 center">
+                        <img width="30px" src="{{ assetsUrl }}Gastos.png">
+                    </div>
+                    <div class="col s5 pt">
+                        Gastos
+                    </div>
+                    <div class="col s5 center pt">
+                       ${{ expensesAmount | number:'1.2-2' }}
+                    </div>
+                </div>        
+            </div>
+            <div class="hoverable collection-item">
+                <div class="row">
+                    <div class="col s2 center">
+                        <img width="30px" src="{{ assetsUrl }}Ahorro.png">
+                    </div>
+                    <div class="col s5 pt">
+                        Ahorro
+                    </div>
+                    <div class="col s5 center pt">
+                      $  {{ savingAmount | number:'1.2-2' }}
+                    </div>
+                </div>        
+            </div>
+        </ul>
     </div>
 </div>
     

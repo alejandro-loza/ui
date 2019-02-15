@@ -1,357 +1,764 @@
 import { Injectable } from '@angular/core';
+import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
 import { Movement } from '@interfaces/movement.interface';
-import { BalanceChart } from "@interfaces/dashboardBalanceChart.interface";
-import { BarChart } from "@interfaces/dashboardBarChart.interface";
-import { PieChart } from "@interfaces/dasboardPieChart.interface";
-import { DataForCharts } from '@interfaces/dataExpensesComponent.interface';
-import { movementsPerMonth } from "@interfaces/dashboardMovementsPerMonth.interface";
 import { Category } from '@interfaces/category.interface';
 import { isNullOrUndefined } from 'util';
-import { ExpensesPieChart } from '@app/interfaces/dashboardPieChartExpenses.interface';
+import { StackedBar } from '@app/interfaces/dashboard/dashboardStackedBar.interface';
+import { monthMovement } from '@app/interfaces/dashboard/monthMovement.interface';
+import { BalancePieChart } from '@app/interfaces/dashboard/BalancePieChart.interface';
+import { MonthMovementArray } from '@app/interfaces/dashboard/monthMovementArray.interface';
+import { BarChart } from '@app/interfaces/dashboard/BarChart.interface';
+import { MonthMovements } from '@app/interfaces/dashboard/monthMovements.interface';
+import { ResumeMainData } from '@app/interfaces/dashboard/resumeMainData.interface';
+import { Concept } from '@app/interfaces/concept.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
 
+  // FOR BALANCE
   chargeBalanceAux:number = 0;
   depositBalanceAux:number = 0;
   savingBalanceAux:number = 0;
-  dataBalanceMonthChart:BalanceChart[] = [];
-  dataExpensesChart:BarChart[] = [];
-  dataBalancePieChart:PieChart[] = [];
+  auxMonthMovement:number = 0;
+  auxDataStackedBarExpenses:number[] = [];
+  auxDataStackedBarSaving:number[] = [];
+  auxDataStackedBarLabels:string[] = [];
+  auxDataStackedBarYear:number[] = [];
 
-  // EXPENSES STUFF
-  dataForCharts:DataForCharts[] = [];
-  movementsPerMonth:movementsPerMonth[] = [];
-  dataExpensesPieChart:any[] = [];   // CREAR INTERFAZ
-  expensesFirstPart:any[] = [];
-  movementsPerSubCat:any[] = [];
-  details:any[] = [];
+  // NEW EXPENSES
+  expensesMovementsPerMonth:MonthMovements[] = [];
+  expensesData:ResumeMainData[] = [];
 
-  // AUX
-  auxMonth:number = 0;
+  // FOR INCOMES
+  incomeMovementsPerMonth:MonthMovements[] = [];
+  incomesData:ResumeMainData[] = [];
+  incomeBarChart:BarChart[] = []
+  
+  // GENERAL
+  categoriesList:Category[] = [];
+  movementsList:Movement[] = [];
+  movementsPerMonth:monthMovement[] = [];
+  monthMovementArray:MonthMovementArray[] = [];
 
-  constructor() { }
+  constructor( private dashboardBean:DashboardBeanService ) { }
 
-  getDataForCharts( movements:Movement[], categories:Category[] ) {
+  mainMethod( movements:Movement[], categories:Category[] ) {
     this.cleanValues();
-    let auxMonth = new Date().getMonth();
-
-    for( let i=0; i < movements.length; i++ ){
-      this.dataProcessMovementsPerMonth( movements[i] );
-      let movementMonth = new Date (movements[i].customDate);
-
-      if( movementMonth.getMonth() == auxMonth ){
-        if( movements[i].type === "CHARGE" ){
-          this.chargeBalanceAux += movements[i].amount; 
-        }
-        if( movements[i].type === "DEPOSIT" ){
-          this.depositBalanceAux += movements[i].amount;
-        }
-      } 
-      else {
-        this.savingBalanceAux = this.depositBalanceAux - this.chargeBalanceAux;
-        this.savingBalanceAux < 0 ? this.savingBalanceAux = 0 : this.savingBalanceAux = this.savingBalanceAux
-        
-        this.dataProcessBalanceChart( auxMonth, this.chargeBalanceAux, this.savingBalanceAux );
-        this.chargeBalanceAux = 0; this.depositBalanceAux = 0;
-
-        if( movements[i].type === "CHARGE" ){
-          this.chargeBalanceAux += movements[i].amount; 
-        }
-        if( movements[i].type === "DEPOSIT" ){
-          this.depositBalanceAux += movements[i].amount;
-        }
-        auxMonth = movementMonth.getMonth();
-      }
-    }
-
-    this.dataProcessMovements( this.movementsPerMonth, categories );
-    this.dataProcessBalanceChart( auxMonth, this.chargeBalanceAux, this.savingBalanceAux );
-    this.settingDataForExpensesPie();
-    this.dataBalanceMonthChart.reverse();
-    this.dataExpensesChart.reverse();
-    
-    sessionStorage.setItem("balanceData", JSON.stringify(this.dataBalanceMonthChart) );
-    sessionStorage.setItem("expensesData", JSON.stringify(this.dataExpensesChart) );
-    sessionStorage.setItem("expensesPie", JSON.stringify( this.dataExpensesPieChart ));
-    sessionStorage.setItem("formatedData", JSON.stringify( this.dataForCharts ));
-
-    return this.dataForCharts;
+    this.categoriesList = categories;
+    this.movementsList = movements;
+    this.dataForBalanceChart();
+    this.dataForBalancePie();
+    this.dataForExpenses();
+    this.dataForIncomes();
+    this.dashboardBean.setDataIsReady( true );
   }
 
-  dataProcessMovements( movementsPerMonth:movementsPerMonth[], categories:Category[] ){
-    let arrayMonths:number[] = [];
-    let arrayMovs:any[] = [];
-    let catsArray:string[] = [];
-    let valueAux:number[] = [];
-    let valueAuxDad:any[] = [];
-    let auxMonth:Date;
-    let auxMovements:any[] = [];
-    let sumValues:number = 0;
-   
-    for( let i=0; i < movementsPerMonth.length ; i++ ){
-      if( movementsPerMonth[i].month != arrayMonths[ arrayMonths.length - 1 ] || i == 0 ){
-        arrayMonths.push( movementsPerMonth[i].month );
-        let movsFilter = movementsPerMonth.filter( mov => mov.month == arrayMonths[ arrayMonths.length - 1] );
-        let movsAux:Movement[] = [];
-        movsFilter.forEach(element => {
-          movsAux.push( element.movement );
-        });
-        arrayMovs.push({
-          month: arrayMonths[arrayMonths.length - 1],
-          movements: movsAux
-        });
-      }
-    }
-    
-    for( let i=0; i < arrayMovs.length; i++ ){
-      arrayMovs[i].movements.forEach( movement => {
-        // MOVEMENT WITH CATEGORY
-        if( !isNullOrUndefined( movement.concepts[0].category )){
-          // Filtro para movimientos divididos
-          if( movement.concepts.length < 2 ){
-            if( !catsArray.includes( movement.concepts[0].category.parent.id, 0 ) ){
-              catsArray.push( movement.concepts[0].category.parent.id );
-            }
-          }
-        } else {
-          catsArray.push( "No category" );
+  dataForIncomes(){
+    this.dashboardBean.setDataIncomesBarChart( this.incomeBarChart.reverse() );
+    this.incomesMainData( this.monthMovementArray );
+  }
+
+  incomesMainData( incomesMovements:MonthMovementArray[] ){
+    incomesMovements.forEach( (element:MonthMovementArray) => {
+      let auxMovements:Movement[] = [];
+      element.details.forEach( detail => {
+        if( detail.movement.type == "DEPOSIT" ){
+          auxMovements.push( detail.movement );
         }
       });
+      this.incomeMovementsPerMonth.push({
+        month: element.month,
+        movements: auxMovements
+      });
+    });
+    this.incomesDataProcess( this.incomeMovementsPerMonth );
+  }
 
-      catsArray.forEach( (categoryId:string) => {
-        valueAux = [];
-        sumValues = 0;
-        auxMovements = [];
-        // LISTA DE MOVIMIENTOS MES X MES
-        arrayMovs[i].movements.forEach( element => {
-          let date = new Date( element.customDate );
-          if( !isNullOrUndefined( element.concepts[0].category ) ){
-            if( element.concepts.length < 2 ){
+  incomesDataProcess( incomeMovementsPerMonth:MonthMovements[] ){
+    incomeMovementsPerMonth.forEach( monthMovements => {
+      this.getDataForIncomesMain( monthMovements.month, monthMovements.movements );
+    });
+  }
 
-              if( element.concepts[0].category.parent.id == categoryId ){
-                if( element.type == "CHARGE" ){
-                  valueAux.push(  element.concepts[0].amount );
-                  auxMovements.push( element );
-                } else if( element.type == "DEPOSIT" ){
-                  auxMovements.push( element );
-                  // PARA LA CHART DE INCOMES 
-  
-                }
-              }
-
+  getDataForIncomesMain( month:number, movements:Movement[] ){
+    movements.forEach( movement => {
+      movement.concepts.forEach( concept => {
+        if( concept.type == "DEFAULT" ){
+          if( !isNullOrUndefined( concept.category ) ){
+            if( !isNullOrUndefined( concept.category.parent ) ){
+              this.incomesFillingDataForNormalMovs( concept, movement, month );
             } else {
-              // Else for splited movements
-              if( element.concepts[0].category.id == categoryId ){
-                if( element.type == "CHARGE" ){
-                  valueAux.push(  element.concepts[0].amount );
-                  auxMovements.push( element );
-                } else if( element.type == "DEPOSIT" ){
-                  auxMovements.push( element );
-                  // PARA LA CHART DE INCOMES 
-  
-                }
-              }
+              this.incomesFillingDataForMovsWoSubcats( concept, movement, month );
             }
           } else {
-            if( element.type == "CHARGE" ){
-              valueAux.push(  element.concepts[0].amount );
-              auxMovements.push( element );
-            } else if( element.type == "DEPOSIT" ){
-              auxMovements.push( element );
-              // PARA LA CHART DE INCOMES DE MOVS SIN CATS
-
-            }
+            this.incomesFillingDataForMovsWoCats( movement, month );
           }
-          auxMonth = new Date( element.customDate );
-        });
-        valueAux.forEach( value => {
-          sumValues += value;
-        });
-        valueAuxDad.push({
-          catId: categoryId,
-          month: auxMonth.getMonth(),
-          value: sumValues,
-          movements: auxMovements
-        });
+        }
       });
-      this.replaceCategoryId( valueAuxDad, categories );
-      catsArray = [];
-      valueAuxDad = [];
-    }
-
+    });
+    this.incomesCalculateAmounts();
+    this.sortIncomesData();
+    this.dashboardBean.setDataIncomesTab( this.incomesData );
   }
 
-  replaceCategoryId( values , categories:Category[] ){
-    let detailsAux:ExpensesPieChart[] = [];
-    let subcatsAux:any[] = [];
-    let movsForSubs:any[] = [];
+  incomesFillingDataForNormalMovs( concept:Concept, movement:Movement, month:number ){
+    let arrayOfMonth = this.incomesData.filter( element => element.month == month );
+    let movements:Movement[] = []
+    movements.push( movement );
+    if( arrayOfMonth.length == 0 ){
+      this.incomesData.push({
+        month: month,
+        data:[{
+          label: this.getCategoryById( concept.category.parent.id ).name,
+          totalAmount: movement.amount,
+          category: this.getCategoryById( concept.category.parent.id ) ,
+          categoryId: concept.category.parent.id,
+          backgroundColor: this.getCategoryById( concept.category.parent.id ).color,
+          details:[{
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: movements
+          }]
+        }]
+      });
+    } else {
+      this.incomesData.forEach( element => {
+        element.month == month ? this.incomeElementWithMonthCreated( element, concept, movement ) : null
+      });
+    }
+  }
 
-    values.forEach( element => {
-      categories.forEach( category => {
-        if( element.catId == category.id ){
-          detailsAux.push({
-            category:category,
-            categoryName:category.name,
-            value: element.value,
-            movements: element.movements
+  incomeElementWithMonthCreated( element:ResumeMainData, concept:Concept, movement:Movement ){
+    let categoryAlreadyExists:boolean = false;
+    let categoryAsSubcatExists:boolean = false;
+    let auxMovement:Movement[] = []; 
+    auxMovement.push( movement );
+    element.data.forEach( data => {
+      if( data.categoryId == concept.category.parent.id ){
+        categoryAlreadyExists = true;
+        data.details.forEach( detail => {
+          if(detail.subCategory.id == concept.category.id){
+            detail.movements.push( movement )
+            categoryAsSubcatExists = true;
+          }
+        });
+        if( !categoryAsSubcatExists ){
+          data.details.push({
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: auxMovement
           });
         }
-      });
+      }
     });
-    
-    detailsAux.forEach( element => {
-      let date = new Date( element.movements[0].customDate );
-      this.expensesFirstPart.push({
-       referenceDate:date,
-       category:element.category,
-       totalValue:element.value,
-       movementsPerCategory: element.movements  
-      });
-    });
-    // FOR PARA LISTA DE SUBCATS SIN REPETIR
-    for( let i=0; i<this.expensesFirstPart.length; i++ ){
-
-      this.expensesFirstPart[i].movementsPerCategory.forEach( movement => {
-        if(!isNullOrUndefined( movement.concepts[0].category) ){
-          if( !subcatsAux.includes( movement.concepts[0].category.id, 0) ){
-            subcatsAux.push( movement.concepts[0].category.id );
-            movsForSubs.push({
-              subcat: movement.concepts[0].category.id,
-              movements:[
-                movement
-              ],
-              totalValue: movement.type == "CHARGE" ? movement.amount : 0
-            });
-          } else {
-            movsForSubs.forEach( element => {
-              if( element.subcat ==  movement.concepts[0].category.id ){
-                element.movements.push( movement );
-                element.totalValue += movement.type == "CHARGE" ? movement.amount : 0
-              }
-            });
-          }
-
-        }
-      });
+    if( !categoryAlreadyExists ){
+      element.data.push({
+        label: this.getCategoryById( concept.category.parent.id ).name,
+          totalAmount: movement.amount,
+          category: this.getCategoryById( concept.category.parent.id ) ,
+          categoryId: concept.category.parent.id,
+          backgroundColor: this.getCategoryById( concept.category.parent.id ).color,
+          details:[{
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: auxMovement
+          }]
+      })
     }
-
-    //PROCESO PARA LIGAR SUBCATEGORIAS CON CATEGORIAS
-    this.expensesFirstPart.forEach( element => {
-      let id = element.category.id;
-      let subcatsAuxForPush:any = [];
-
-      movsForSubs.forEach( subElement => {
-        if( subElement.movements[0].concepts.length == 1 ){
-          if( subElement.movements[0].concepts[0].category.parent.id == id ){
-            subcatsAuxForPush.push( subElement );
-          }
-          subElement.subcat = subElement.movements[0].concepts[0].category;
-        } else {
-          // ELSE FOR SPLIT MOVEMENTS
-         // console.log( subElement );
-          if( subElement.movements[0].concepts[0].category.id == id ){
-            subcatsAuxForPush.push( subElement );
-          }
-          subElement.subcat = subElement.movements[0].concepts[0].category;
-        }
-
-      });
-
-      this.dataForCharts.push({
-        referenceDate: element.referenceDate,
-        category: element.category,
-        totalValue: element.totalValue,
-        movementsPerCategory: element.movementsPerCategory,
-        details: subcatsAuxForPush
-      });
-    });
-
-    this.expensesFirstPart = [];
-    subcatsAux = [];
   }
 
-  dataProcessMovementsPerMonth( movement:Movement ){
+  incomesFillingDataForMovsWoSubcats( concept:Concept, movement:Movement, month:number ){
+    let arrayOfMonth = this.incomesData.filter( element => element.month == month );
+    let movements:Movement[] = []
+    movements.push( movement );
+    if( arrayOfMonth.length == 0 ){
+      this.incomesData.push({
+        month: month,
+        data:[{
+          label: concept.category.name,
+          totalAmount: movement.amount,
+          category: concept.category,
+          categoryId: concept.category.id,
+          backgroundColor: concept.category.color,
+          details:[{
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: movements
+          }]
+        }]
+      });
+    } else {
+      this.incomesData.forEach( element => {
+        element.month == month ? this.incomeElementWithMonthCreatedWoSubcat( element, concept, movement ) : null
+      });
+    }
+  }
+
+  incomeElementWithMonthCreatedWoSubcat( element:ResumeMainData, concept:Concept, movement:Movement ){
+    let categoryAlreadyExists:boolean = false;
+    let categoryAsSubcatExists:boolean = false;
+    let auxMovement:Movement[] = []; 
+    auxMovement.push( movement );
+    element.data.forEach( data => {
+      if( data.categoryId == concept.category.id ){
+        categoryAlreadyExists = true;
+        data.details.forEach( detail => {
+          if( detail.subCategory.id == concept.category.id ){
+            detail.movements.push( movement )
+            categoryAsSubcatExists = true;
+          }
+        });
+        if( !categoryAsSubcatExists ){
+          data.details.push({
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: auxMovement
+          });
+        }
+      }
+    });
+    if( !categoryAlreadyExists ){
+      element.data.push({
+        label: concept.category.name,
+        totalAmount: movement.amount,
+        category: concept.category,
+        categoryId: concept.category.id,
+        backgroundColor: concept.category.color,
+        details:[{
+          subCategory: concept.category,
+          backgroundColorSubCategory: concept.category.color,
+          totalAmount: movement.amount,
+          movements: auxMovement
+        }]
+      })
+    }
+  }
+
+  incomesFillingDataForMovsWoCats( movement:Movement, month:number ){
+    let arrayOfMonth = this.incomesData.filter( element => element.month == month );
+    let movements:Movement[] = []
+    movements.push( movement );
+    // ENTRARA CADA NUEVO MES CUANDO NO EXISTE INFORMACION
+    if( arrayOfMonth.length == 0 ){
+      this.incomesData.push({
+        month: month,
+        data:[{
+          label: "Sin Categoria",
+          totalAmount: movement.amount,
+          category: { id:"000000", color:"#AAAAAA", name: "Sin Categoria", textColor: "#FFF" },
+          categoryId: "000000",
+          backgroundColor: "#AAAAAA",
+          details:[{
+            subCategory: { id:"000000", color:"#AAAAAA", name: "Sin Categoria", textColor: "#FFF", parent:{id:"000000"} },
+            backgroundColorSubCategory: "#AAAAAA",
+            totalAmount:movement.amount,
+            movements: movements
+          }]
+        }]
+      });
+    } else {
+      this.incomesData.forEach( element => {
+        element.month == month ? this.incomeElementWithMonthCreatedWoCat( element, movement ) : null
+      });
+    }
+  }
+
+  incomeElementWithMonthCreatedWoCat( element:ResumeMainData, movement:Movement ){
+    let categoryAlreadyExists:boolean = false;
+    let auxMovement:Movement[] = []; 
+    auxMovement.push( movement );
+    element.data.forEach( data => {
+      if( data.categoryId == "000000" ){
+        categoryAlreadyExists = true;
+        data.details.forEach( detail => {
+          if(detail.subCategory.id == "000000" )
+            detail.movements.push( movement )
+        });
+      }
+    });
+    if( !categoryAlreadyExists ){
+      element.data.push({
+        label: "Sin Categoria",
+          totalAmount: movement.amount,
+          category: { id:"000000", color:"#AAAAAA", name: "Sin Categoria", textColor: "#FFF" },
+          categoryId: "000000",
+          backgroundColor: "#AAAAAA",
+          details:[{
+            subCategory: { id:"000000", color:"#AAAAAA", name: "Sin Categoria", textColor: "#FFF", parent:{id:"000000"} },
+            backgroundColorSubCategory: "#AAAAAA",
+            totalAmount:movement.amount,
+            movements: auxMovement
+          }]
+      })
+    }
+  }
+
+  sortIncomesData(){
+    this.incomesData.forEach( incomesData => {
+      incomesData.data.sort( (a,b) => {
+        return b.totalAmount - a.totalAmount
+      })
+      incomesData.data.forEach( data => {
+        data.details.sort( (a,b) => {
+          return b.totalAmount - a.totalAmount
+        } );
+      });
+    });
+  }
+
+  incomesCalculateAmounts(){
+    let amountSubAux:number = 0;
+    let amountMainAux:number = 0;
+    this.incomesData.forEach( incomes => {
+      incomes.data.forEach( data => {
+        amountMainAux = 0;
+        data.details.forEach( detail => {
+          amountSubAux = 0;
+          detail.movements.forEach( movement => {
+            amountSubAux += movement.amount
+          });
+          detail.totalAmount = amountSubAux 
+          amountMainAux += detail.totalAmount
+        });
+        data.totalAmount = amountMainAux
+      });
+    })
+  }
+
+  incomesBarChartMethod( month:string, depositValue:number){
+    this.incomeBarChart.push({
+      label:month,
+      amount: depositValue,
+      year: this.auxDataStackedBarYear[ this.auxDataStackedBarYear.length - 1 ]
+    });
+  }
+
+  dataForExpenses(){
+    let auxDate = new Date( this.movementsList[0].customDate );
+    let monthsArray:number[] = [];
+    monthsArray.push( auxDate.getMonth() );
+
+    for( let i=0; i < this.movementsList.length; i++){
+      let movementDate = new Date( this.movementsList[i].customDate );
+      if( movementDate.getMonth() == auxDate.getMonth() ){
+        this.monthMovementProcess( this.movementsList[i], monthsArray );
+      } 
+      else {
+        this.monthMovementProcess( this.movementsList[i], monthsArray );
+        auxDate = movementDate;
+      }
+    }
+    this.monthMovementArray = this.monthMovementsArray( monthsArray );
+    this.expensesMainData( this.monthMovementArray );
+  }
+
+  expensesMainData( monthMovementArray:MonthMovementArray[] ){
+    monthMovementArray.forEach( element => {
+      let auxMovements:Movement[] = [];
+      element.details.forEach( detail => {
+        if(detail.movement.type == "CHARGE"){
+          auxMovements.push( detail.movement );
+        }
+      });
+      this.expensesMovementsPerMonth.push({
+        month: element.month,
+        movements: auxMovements
+      });
+    });
+    this.fillExpensesMainData( this.expensesMovementsPerMonth )
+  }
+
+  fillExpensesMainData( expensesMovementsPerMonth:MonthMovements[] ){
+    expensesMovementsPerMonth.forEach( monthMovements => {
+      this.getDataForExpensesMain( monthMovements.month, monthMovements.movements );
+    });
+  }
+
+  getDataForExpensesMain( month:number, movements:Movement[] ){
+    movements.forEach( movement => {
+      movement.concepts.forEach( concept => {
+        if( concept.type === "DEFAULT" ){
+          if( !isNullOrUndefined( concept.category ) ){
+            if( !isNullOrUndefined(concept.category.name)) {
+              if( !isNullOrUndefined( concept.category.parent ) ){
+                this.expensesFillingDataForNormalMovs( concept, movement, month );
+              } else {
+                this.expensesFillingDataForMovsWoSubcats( concept, movement, month );
+              }
+            }
+          } else {
+            this.expensesFillingDataForMovsWoCat( movement, month );
+          }
+          
+        }
+      });
+    });
+    this.expensesCalculateAmounts();
+    this.sortExpensesData();
+    this.dashboardBean.setDataExpensesTab( this.expensesData );
+  }
+
+  expensesFillingDataForNormalMovs( concept:Concept, movement:Movement, month:number ){
+    let arrayOfMonth = this.expensesData.filter( element => element.month == month );
+    let movements:Movement[] = [];
+    movements.push( movement );
+    if( arrayOfMonth.length == 0 ){
+      this.expensesData.push({
+        month: month,
+        data:[{
+          label: this.getCategoryById( concept.category.parent.id ).name,
+          totalAmount: movement.amount,
+          category: this.getCategoryById( concept.category.parent.id ) ,
+          categoryId: concept.category.parent.id,
+          backgroundColor: this.getCategoryById( concept.category.parent.id ).color,
+          details:[{
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: movements
+          }]
+        }]
+      });
+    } else {
+      this.expensesData.forEach( element => {
+        element.month == month ? this.expensesElementWithMonthCreated( element, concept, movement ) : null
+      });
+    }
+  }
+
+  expensesElementWithMonthCreated( element:ResumeMainData, concept:Concept, movement:Movement ){
+    let categoryAlreadyExists:boolean = false;
+    let categoryAsSubcatExists:boolean = false;
+    let auxMovement:Movement[] = []; 
+    auxMovement.push( movement );
+    element.data.forEach( data => {
+      if( data.categoryId == concept.category.parent.id ){
+        categoryAlreadyExists = true;
+        data.details.forEach( detail => {
+          if(detail.subCategory.id == concept.category.id){
+            detail.movements.push( movement )
+            categoryAsSubcatExists = true;
+          }
+        });
+        if( !categoryAsSubcatExists ){
+          data.details.push({
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: auxMovement
+          });
+        }
+      }
+    });
+    if( !categoryAlreadyExists ){
+      element.data.push({
+        label: this.getCategoryById( concept.category.parent.id ).name,
+          totalAmount: movement.amount,
+          category: this.getCategoryById( concept.category.parent.id ) ,
+          categoryId: concept.category.parent.id,
+          backgroundColor: this.getCategoryById( concept.category.parent.id ).color,
+          details:[{
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: auxMovement
+          }]
+      })
+    }
+  }
+
+  expensesFillingDataForMovsWoSubcats( concept:Concept, movement:Movement, month:number ){
+    let arrayOfMonth = this.expensesData.filter( element => element.month == month );
+    let movements:Movement[] = []
+    movements.push( movement );
+    if( arrayOfMonth.length == 0 ){
+      this.expensesData.push({
+        month: month,
+        data:[{
+          label: concept.category.name,
+          totalAmount: movement.amount,
+          category: concept.category,
+          categoryId: concept.category.id,
+          backgroundColor: concept.category.color,
+          details:[{
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: movements
+          }]
+        }]
+      });
+    } else {
+      this.expensesData.forEach( element => {
+        element.month == month ? this.expensesElementWithMonthCreatedWoSubcat( element, concept, movement ) : null
+      });
+    }
+  }
+
+  expensesElementWithMonthCreatedWoSubcat( element:ResumeMainData, concept:Concept, movement:Movement ){
+    let categoryAlreadyExists:boolean = false;
+    let categoryAsSubcatExists:boolean = false;
+    let auxMovement:Movement[] = []; 
+    auxMovement.push( movement );
+    element.data.forEach( data => {
+      if( data.categoryId == concept.category.id ){
+        categoryAlreadyExists = true;
+        data.details.forEach( detail => {
+          if( detail.subCategory.id == concept.category.id ){
+            detail.movements.push( movement )
+            categoryAsSubcatExists = true;
+          }
+        });
+        if( !categoryAsSubcatExists ){
+          data.details.push({
+            subCategory: concept.category,
+            backgroundColorSubCategory: concept.category.color,
+            totalAmount: movement.amount,
+            movements: auxMovement
+          });
+        }
+      }
+    });
+    if( !categoryAlreadyExists ){
+      element.data.push({
+        label: concept.category.name,
+        totalAmount: movement.amount,
+        category: concept.category,
+        categoryId: concept.category.id,
+        backgroundColor: concept.category.color,
+        details:[{
+          subCategory: concept.category,
+          backgroundColorSubCategory: concept.category.color,
+          totalAmount: movement.amount,
+          movements: auxMovement
+        }]
+      })
+    }
+  }
+
+  expensesFillingDataForMovsWoCat( movement:Movement, month:number ){
+    let arrayOfMonth = this.expensesData.filter( element => element.month == month );
+    let movements:Movement[] = []
+    movements.push( movement );
+    // ENTRARA CADA NUEVO MES CUANDO NO EXISTE INFORMACION
+    if( arrayOfMonth.length == 0 ){
+      this.expensesData.push({
+        month: month,
+        data:[{
+          label: "Sin Categoria",
+          totalAmount: movement.amount,
+          category: { id:"000000", color:"#AAAAAA", name: "Sin Categoria", textColor: "#FFF" },
+          categoryId: "000000",
+          backgroundColor: "#AAAAAA",
+          details:[{
+            subCategory: { id:"000000", color:"#AAAAAA", name: "Sin Categoria", textColor: "#FFF", parent:{id:"000000"} },
+            backgroundColorSubCategory: "#AAAAAA",
+            totalAmount:movement.amount,
+            movements: movements
+          }]
+        }]
+      });
+    } else {
+      this.expensesData.forEach( element => {
+        element.month == month ? this.expensesElementWithMonthCreatedWoCat( element, movement ) : null
+      });
+    }
+  }
+
+  expensesElementWithMonthCreatedWoCat( element:ResumeMainData, movement:Movement ){
+    let categoryAlreadyExists:boolean = false;
+    let auxMovement:Movement[] = []; 
+    auxMovement.push( movement );
+    element.data.forEach( data => {
+      if( data.categoryId == "000000" ){
+        categoryAlreadyExists = true;
+        data.details.forEach( detail => {
+          if(detail.subCategory.id == "000000" )
+            detail.movements.push( movement )
+        });
+      }
+    });
+    if( !categoryAlreadyExists ){
+      element.data.push({
+        label: "Sin Categoria",
+          totalAmount: movement.amount,
+          category: { id:"000000", color:"#AAAAAA", name: "Sin Categoria", textColor: "#FFF" },
+          categoryId: "000000",
+          backgroundColor: "#AAAAAA",
+          details:[{
+            subCategory: { id:"000000", color:"#AAAAAA", name: "Sin Categoria", textColor: "#FFF", parent:{id:"000000"} },
+            backgroundColorSubCategory: "#AAAAAA",
+            totalAmount:movement.amount,
+            movements: auxMovement
+          }]
+      })
+    }
+  }
+
+  sortExpensesData(){
+    this.expensesData.forEach( expensesData => {
+      expensesData.data.sort( (a,b) => {
+        return b.totalAmount - a.totalAmount
+      })
+      expensesData.data.forEach( data => {
+        data.details.sort( (a,b) => {
+          return b.totalAmount - a.totalAmount
+        } );
+      });
+    });
+  }
+
+  expensesCalculateAmounts(){
+    let amountSubAux:number = 0;
+    let amountMainAux:number = 0;
+    this.expensesData.forEach( expenses => {
+      expenses.data.forEach( data => {
+        amountMainAux = 0;
+        data.details.forEach( detail => {
+          amountSubAux = 0;
+          detail.movements.forEach( movement => {
+            amountSubAux += movement.amount
+          });
+          detail.totalAmount = amountSubAux 
+          amountMainAux += detail.totalAmount
+        });
+        data.totalAmount = amountMainAux
+      });
+    })
+  }
+
+  getCategoryById( id:string ):Category{
+    let categoryVar:Category;
+    this.categoriesList.forEach( category => {
+      if( category.id == id ){
+        categoryVar = category;
+      }
+    });
+    return categoryVar;
+  }
+
+  monthMovementsArray( monthsArray:number[] ):MonthMovementArray[] {
+    let movementArray:MonthMovementArray[] = [];
+    monthsArray.forEach( monthIndex => {
+      movementArray.push({
+        month: monthIndex,
+        details: this.movementsPerMonth.filter( mov => mov.month == monthIndex )
+      });
+    })
+    return movementArray;
+  }
+
+  // Arreglo de mes-movimiento, mes-movimiento
+  monthMovementProcess( movement:Movement, monthsArray:number[] ){
     let date = new Date( movement.customDate );
-    if( date.getMonth() == this.auxMonth ){
+    
+    if( !monthsArray.includes( date.getMonth() ) ){
+      monthsArray.push( date.getMonth() );
+    }
+    if( date.getMonth() == this.auxMonthMovement ){
       this.movementsPerMonth.push( { month:date.getMonth(), movement:movement } );
     } else {
-      this.auxMonth = date.getMonth();
+      this.auxMonthMovement = date.getMonth();
       this.movementsPerMonth.push( { month:date.getMonth(), movement:movement } );
     }
   }
 
-  settingDataForExpensesPie(){   
-    let arraysOfMonths:number[] = [];
-    this.dataExpensesPieChart = [];
+  dataForBalanceChart(){
+    let firstdate = new Date( this.movementsList[0].customDate );
+    this.fillingYearsArray( firstdate.getFullYear() ); 
+    let auxMonth:number = firstdate.getMonth();
 
-    for(let i = 0; i < this.dataForCharts.length; i++ ){
+    this.movementsList.forEach( movement => {
+      let date = new Date( movement.customDate );
+      let dateMovementMonth = date.getMonth();
 
-     if( this.dataForCharts[i].referenceDate.getMonth() != arraysOfMonths[ arraysOfMonths.length - 1] || i == 0 ){
-      arraysOfMonths.push( this.dataForCharts[i].referenceDate.getMonth() ); 
-      
-      let pieFilter = this.dataForCharts.filter( element => element.referenceDate.getMonth() == arraysOfMonths[ arraysOfMonths.length - 1]);
-      let pieSeries:any[] = [];
-
-      pieFilter.forEach( element => {
-       pieSeries.push({
-          name: element.category.name,
-          value: element.totalValue,
-          color: element.category.color
-       });
-      });
-      this.sortJSON( pieSeries, "value", "desc");
-      this.dataExpensesPieChart.push({
-        month: arraysOfMonths[ arraysOfMonths.length - 1],
-        series: pieSeries
-      });
-     }
-    }
+      if( auxMonth == dateMovementMonth ){
+        this.chargeDepositOperation( movement );
+      } 
+      else {
+        this.dataProcessBalanceChart( auxMonth, this.chargeBalanceAux, this.depositBalanceAux );
+        this.fillingYearsArray( date.getFullYear() ); 
+        auxMonth = dateMovementMonth;
+        this.chargeBalanceAux = 0; this.depositBalanceAux = 0;
+        this.chargeDepositOperation( movement );
+      }
+    });
+    this.dataProcessBalanceChart( auxMonth, this.chargeBalanceAux, this.depositBalanceAux ); 
+    this.setAuxStackedData();
   }
 
-  dataProcessBalanceChart( monthNumber:number, gastosValue:number, ahorroValue:number ){
-    // Name of the month process
+  dataProcessBalanceChart( monthNumber:number, gastosValue:number, depositValue:number ){
     let months:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     let name:string = "";
     for( let i = 0; i < months.length; i++ ){
       monthNumber == i ? name = months[i] : null
     }
-    this.dataBalanceMonthChart.push( { name: name, month:monthNumber, 
-                                  series:[ 
-                                      { name : "Gastos", value : gastosValue }, 
-                                      { name : "Ahorro", value : ahorroValue } 
-                                  ]
-    });
-    this.dataExpensesChart.push( { name: name, value: gastosValue, month:monthNumber } );
+    this.savingBalanceAux = this.depositBalanceAux - this.chargeBalanceAux;
+    this.savingBalanceAux < 0 ? this.savingBalanceAux = 0 : this.savingBalanceAux = this.savingBalanceAux
+    this.incomesBarChartMethod( name, depositValue );
+    this.auxDataStackedBarExpenses.push( Math.round(gastosValue) );
+    this.auxDataStackedBarSaving.push( Math.round(this.savingBalanceAux) );
+    this.auxDataStackedBarLabels.push( name );
   }
 
-  sortJSON(data, key, orden) {
-    return data.sort( (a, b) => {
-        let x = a[key],
-        y = b[key];
+  dataForBalancePie(){
+    let stackedData = this.dashboardBean.getDataStackedBar();
+    let auxDataBalancePieChart:BalancePieChart[] = [];
+    for( let i=0; i < stackedData[0].labels.length; i++ ){
+      auxDataBalancePieChart.push({
+        data: [stackedData[0].expenses[i], stackedData[0].saving[i] ]
+      });
+    }
+    this.dashboardBean.setDataBalancePieChart( auxDataBalancePieChart );
+  }
 
-        if (orden === 'asc') {
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        }
+  fillingYearsArray( year:number ){
+    this.auxDataStackedBarYear.push( year );
+  }
 
-        if (orden === 'desc') {
-            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-        }
+  setAuxStackedData(){
+    let auxStackedData:StackedBar[] = [];
+    auxStackedData.push({
+      expenses: this.auxDataStackedBarExpenses.reverse(),
+      saving: this.auxDataStackedBarSaving.reverse(),
+      labels: this.auxDataStackedBarLabels.reverse(),
+      year: this.auxDataStackedBarYear.reverse()
     });
+    this.dashboardBean.setDataStackedBar( auxStackedData );
+  }
+
+  chargeDepositOperation( movement ){
+    if( movement.type === "CHARGE" ){
+      this.chargeBalanceAux += movement.amount; 
+    }
+    if( movement.type === "DEPOSIT" ){
+      this.depositBalanceAux += movement.amount;
+    }
   }
 
   cleanValues(){
-    this.dataBalanceMonthChart = []; 
-    this.dataExpensesChart = [];
-    this.dataExpensesPieChart = [];
-    this.chargeBalanceAux = 0; 
-    this.depositBalanceAux = 0; 
+    this.chargeBalanceAux = 0;
+    this.depositBalanceAux = 0;
     this.savingBalanceAux = 0;
+    this.auxMonthMovement = 0;
+    this.auxDataStackedBarExpenses = [];
+    this.auxDataStackedBarSaving = [];
+    this.auxDataStackedBarLabels = [];
+    this.auxDataStackedBarYear = [];
+    this.expensesData = [];
+    this.categoriesList = [];
+    this.movementsList = [];
     this.movementsPerMonth = [];
-    this.dataForCharts = [];
+    this.monthMovementArray = []; 
+    this.incomeBarChart = [];
+    this.incomeMovementsPerMonth = [];
+    this.incomesData = [];
   }
-
-
 }

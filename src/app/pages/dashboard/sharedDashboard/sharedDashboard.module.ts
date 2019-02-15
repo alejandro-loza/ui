@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { ListMovementsComponent } from './list-movements/list-movements.component';
 import { MonthChartComponent } from "../component/monthChart/month-chart.component";
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { BarChartsComponent } from './bar-charts/bar-charts.component';
+import { BarChartsComponent } from './bar-charts/expenses/bar-charts.component';
 import { SharedModule } from '@shared/shared.module';
+import { IncomesChartComponent } from './bar-charts/incomes/incomes-chart.component';
 
 
 @NgModule({
@@ -12,17 +12,18 @@ import { SharedModule } from '@shared/shared.module';
     PieChartComponent,
     ListMovementsComponent,
     MonthChartComponent,
-    BarChartsComponent
+    BarChartsComponent,
+    IncomesChartComponent
   ],
   imports: [
-    SharedModule,
-    NgxChartsModule
+    SharedModule
   ],
   exports: [
     PieChartComponent,
     ListMovementsComponent,
     MonthChartComponent,
-    BarChartsComponent
+    BarChartsComponent,
+    IncomesChartComponent
   ]
 })
 export class SharedDashboardModule { }

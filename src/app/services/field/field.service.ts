@@ -4,6 +4,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
+import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 
 import { InstitutionInterface } from '@interfaces/institution.interface';
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
@@ -18,11 +19,12 @@ export class FieldService {
 
   constructor(
     private httpClient: HttpClient,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private credentialBean:CredentialBeanService
   ) {}
 
   findAllFieldsByInstitution( institutionCode: string ): Observable<HttpResponse<InstitutionFieldInterface[]>> {
-    const institutions = JSON.parse(sessionStorage.getItem('institutions'));
+    const institutions = this.credentialBean.getInstitutions();
     institutions.forEach((element: InstitutionInterface) => {
       if ( element.code === institutionCode ) {
         this.institutionId = element.id;

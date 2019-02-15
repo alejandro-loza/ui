@@ -11,6 +11,8 @@ import { AccountService } from '@services/account/account.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { FieldService } from '@services/field/field.service';
 import { ToastService } from '@services/toast/toast.service';
+import { CredentialBeanService } from '@services/credentials/credential-bean.service';
+import { InstitutionService } from '@services/institution/institution.service';
 
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { CredentialInterface } from '@interfaces/credential.interface';
@@ -18,18 +20,21 @@ import { AccountInterface } from '@interfaces/account.interfaces';
 import { ToastInterface } from '@interfaces/toast.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import { isNullOrUndefined } from 'util';
+import { InstitutionInterface } from '@app/interfaces/institution.interface';
 
 @Component({
   selector: 'app-credential-details',
   templateUrl: './credential-details.component.html',
   styleUrls: ['./credential-details.component.css'],
-  providers: [FieldService]
+  providers: [FieldService, InstitutionService]
 })
 export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   fields: InstitutionFieldInterface[];
   accounts: AccountInterface[];
   institutionDetails: CredentialInterface;
   accountAuxForDelete: AccountInterface;
+  institutions: InstitutionInterface[] = [];
   toast: ToastInterface;
   credentialId: string;
   userId = sessionStorage.getItem('id-user');
@@ -44,7 +49,9 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     private credentialService: CredentialService,
     private fieldService: FieldService,
     private accountService: AccountService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private credentialBeanService: CredentialBeanService,
+    private institutionService: InstitutionService
   ) {
     this.fields = [];
     this.accounts = [];
@@ -56,11 +63,25 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       this.credentialId = params['credencialId'];
     });
     this.getDetails();
+    if (isNullOrUndefined(this.credentialBeanService.getInstitutions())) {
+      this.loadInstitutions();
+    }
   }
 
   ngAfterViewInit() {
     const modal = new M.Modal(this.elModal.nativeElement);
     const modal2 = new M.Modal(this.elModal2.nativeElement);
+  }
+
+  loadInstitutions() {
+    this.institutionService.getAllInstitutions().subscribe(res => {
+      res.body.data.forEach(institution => {
+        if (institution.code !== 'DINERIO') {
+          this.institutions.push(institution);
+        }
+      });
+      this.credentialBeanService.setInstitutions(this.institutions);
+    });
   }
 
   getDetails() {
@@ -77,7 +98,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     this.accountService.getAccounts(this.userId).subscribe(res => {
       res.body.data.forEach(element => {
         if (
-          element.institution.code == this.institutionDetails.institution.code
+          element.institution.code === this.institutionDetails.institution.code
         ) {
           this.accounts.push(element);
         }
