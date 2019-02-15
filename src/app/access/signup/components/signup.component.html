@@ -10,17 +10,17 @@
             <div class="col s12 l8 offset-l2">
                 <form [formGroup]="signupData" (ngSubmit)="signup()" method="POST">
                     <div class="input-field">
-                        <input required formControlName="email" name="email" class="form-control" id="email-input" type="email" class="validate" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
+                        <input required formControlName="email" name="email" class="form-control" id="email-input" type="email" class="validate" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                         <label for="email-input">Correo Electrónico</label>
                         <span class="helper-text" data-error="Correo Inválido">Ej. contacto@finerio.mx</span>
                     </div>
                     <div class="input-field">
-                        <input required formControlName="password" name="password" minlength="8" class="form-control" id="password-input" type="password" class="validate">
+                        <input required formControlName="password" name="password" pattern="^(?=.*?[A-ZÑ])(?=.*?[a-zñ])(?=.*?[\d])(?=.*?[\W]).{8,}$" class="form-control" id="password-input" type="password" class="validate">
                         <label for="password-input">Contraseña</label>
-                        <span class="helper-text" data-error="Contraseña Inválida (mínimo 8 caracteres)"></span>
+                        <span class="helper-text" data-error="La contraseña debe tener al menos 8 caracteres y debe incluir tanto un número como un símbolo"></span>
                     </div>
                     <div class="input-field">
-                        <input required formControlName="passwordConfirm" name="confirmPassword" minlength="8" class="form-control" id="confirm-input" type="password" class="validate">
+                        <input required formControlName="passwordConfirm" name="confirmPassword" class="form-control" id="confirm-input" (keyup)="passwordMatch()" type="password">
                         <label for="confirm-input">Confirmar contraseña</label>
                         <span id="passwordError" *ngIf="!passwordValidate">Las contraseñas no coinciden</span>
                     </div>

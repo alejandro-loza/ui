@@ -31,6 +31,15 @@
 	font-size: 20px;
 }
 
+.input-field{
+	margin-bottom: 2rem;
+}
+
+[type="checkbox"].filled-in:checked+span:not(.lever):after{
+	border: 2px solid #e48d2b;
+    background-color: #e48d2b;
+}
+
 @media screen and (max-width: 600px){
 	#tips-col{
 		display: none;
