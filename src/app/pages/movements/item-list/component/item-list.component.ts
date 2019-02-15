@@ -23,12 +23,18 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   @ViewChild('collapsible') collapsibleElement: ElementRef;
   private auxMovement: Movement;
   private instanceCollapsible;
-  constructor() {}
+  private statusModal: boolean;
+  constructor() {
+    this.statusModal = false;
+  }
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    const initCollapsible = new M.Collapsible( this.collapsibleElement.nativeElement, {} );
+    const initCollapsible = new M.Collapsible(
+      this.collapsibleElement.nativeElement,
+      {}
+    );
     this.instanceCollapsible = M.Collapsible.getInstance(
       this.collapsibleElement.nativeElement
     );
@@ -41,7 +47,11 @@ export class ItemListComponent implements OnInit, AfterViewInit {
 
   collapsibleOpen(index: number) {
     if (!isNullOrUndefined(this.auxMovement)) {
-      this.auxMovement.editAvailable = false;
+      if (this.statusModal === true) {
+        return;
+      } else {
+        this.auxMovement.editAvailable = false;
+      }
     }
     this.auxMovement = this.movementList[index];
     this.auxMovement.editAvailable = true;
@@ -50,8 +60,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   collapsibleClose(index: number) {
-    this.auxMovement.editAvailable = false;
-    this.instanceCollapsible.close(index);
-    this.instanceCollapsible.destroy();
+      this.auxMovement.editAvailable = false;
+      this.instanceCollapsible.close(index);
+      this.instanceCollapsible.destroy();
   }
 }

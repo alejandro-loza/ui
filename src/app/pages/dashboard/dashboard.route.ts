@@ -5,6 +5,10 @@ const DashboardRouting: Routes = [
   {
     path: '',
     component: DashboardComponent
+  },
+  {
+    path: '**',
+    redirectTo: '/access/login'
   }
 ];
 

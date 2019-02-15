@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { environment } from '@env/environment';
 
@@ -7,10 +8,10 @@ import { ConfigService } from '@services/config/config.service';
 
 import { LoginInterface } from '@interfaces/authLogin.interface';
 import { UserInterface } from '@interfaces/user.interface';
+import { Token } from '@interfaces/token.interface';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Token } from '@app/interfaces/token.interface';
 
 @Injectable()
 export class AuthService {
@@ -19,12 +20,13 @@ export class AuthService {
 
   constructor(
     private httpClient: HttpClient,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private router: Router
   ) {}
 
   isAuth() {
-    let accessToken = sessionStorage.getItem('access-token');
-    return accessToken.length > 0 ? true : false;
+    const accessToken = sessionStorage.getItem('access-token');
+    return accessToken.length > 0 ? true : this.router.navigate(['/access/login']);
   }
 
   saveData(token: Token) {

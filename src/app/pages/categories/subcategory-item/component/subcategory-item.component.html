@@ -1,3 +1,29 @@
-<p>
-  subcategory-item works!
-</p>
+<div class="col s12 m4 l4">
+  <div class="category-info text-center fast fadeIn" [ngStyle]="{
+      'background-color': category.color,
+      'color': category.textColor
+    }">
+    <ng-container *ngIf="category.user; else elseCategorySystem">
+      <img class="category" src="https://cdn.finerio.mx/categories/web/finerio-icon.svg" srcset="assets/media/img/categories/finerio-icon.svg" alt="{{ category.name }}">
+    </ng-container>
+    <ng-template #elseCategorySystem>
+      <img class="category" src="https://cdn.finerio.mx/categories/web/{{ category.id }}.svg" srcset="assets/media/img/categories/{{ category.id }}.svg" alt="{{ category.name }}">
+    </ng-template>
+    <h4>{{ category.name }}</h4>
+  </div>
+</div>
+<div class="col s12 m8">
+  <div class="row">
+    <!-- Se recorren las subcategorías de la cateogria actual -->
+    <ng-template ngFor let-subcategory [ngForOf]="category.subCategories" let-i="index" [ngForTrackBy]="trackByFn">
+      <div class="col m6 center subcategory fast fadeIn">
+        <button [attr.id]="subcategory.id" class="btn btn-subcategory truncate"
+          [ngStyle]="{'border-color': subcategory.color}"
+          (mouseover)="overSubcategory(i)"
+          (mouseout)="outSubcategory(i)"
+          (click)="selectCategory(i)"
+          #btnSubcategory> {{ subcategory.name }} </button>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -4,7 +4,9 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  Input
+  EventEmitter,
+  Input,
+  Output
 } from '@angular/core';
 import * as M from 'materialize-css/dist/js/materialize';
 import { Category } from '@interfaces/category.interface';
@@ -18,29 +20,36 @@ export class ModalCategoriesComponent implements OnInit, AfterViewInit {
   @Input() private modalTrigger: string;
   @Input() private categoryList: Category[];
 
+  @Output() private statusModal: EventEmitter<boolean>;
+  @Output() private category: EventEmitter<Category>;
+
   @ViewChild('modalCateogry') modalCategory: ElementRef;
+
   private auxCategoryList: Category[];
   private instanceModal;
-  private flagSubcategories: boolean;
+  private backCategories: boolean;
   constructor() {
-    this.flagSubcategories = false;
+    this.backCategories = false;
+    this.statusModal = new EventEmitter();
+    this.category = new EventEmitter();
   }
 
   ngOnInit() {}
 
   ngAfterViewInit() {
     const initModal = new M.Modal(this.modalCategory.nativeElement, {
+      onOpenStart: () => { this.statusModal.emit(true); },
       onCloseEnd: () => {
-        if ( this.auxCategoryList ) {
-          this.categoryList = this.auxCategoryList;
-        }
+        this.backCategories = false;
+        this.statusModal.emit(false);
       }
     });
-    this.instanceModal = M.Modal.getInstance(this.modalCategory.nativeElement);
+    this.instanceModal = M.Modal.getInstance( this.modalCategory.nativeElement );
   }
 
-  backCategories() {
-    this.flagSubcategories = false;
-    this.categoryList = this.auxCategoryList;
+  getSubcategory (subcategory: Category) {
+    this.category.emit(subcategory);
+    this.instanceModal.close();
   }
+
 }

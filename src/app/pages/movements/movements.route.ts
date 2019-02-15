@@ -5,6 +5,10 @@ const MovementsRouting: Routes = [
     {
         path: '',
         component: MovementsComponent
+    },
+    {
+      path: '**',
+      redirectTo: '/access/login'
     }
 ];
 

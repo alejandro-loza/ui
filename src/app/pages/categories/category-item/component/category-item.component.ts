@@ -13,14 +13,4 @@ export class CategoryItemComponent implements OnInit {
   ngOnInit() {
   }
 
-  // filterSubcategories(index: number) {
-  //   this.auxCategoryList = this.categoryList;
-  //   this.flagSubcategories = true;
-  //   if (this.categoryList[index].subCategories) {
-  //     this.categoryList = this.categoryList[index].subCategories;
-  //   } else {
-  //     this.instanceModal.close();
-  //   }
-  // }
-
 }

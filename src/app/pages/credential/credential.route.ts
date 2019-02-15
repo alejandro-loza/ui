@@ -11,7 +11,11 @@ const CREDENTIAL_ROUTING: Routes = [
     loadChildren: './credential-details/credential-details.module#CredentialDetailsModule',
     data: {
       title: 'Detalle de la credencial'
-    }
+    },
+  },
+  {
+    path: '**',
+    redirectTo: '/access/login'
   }
 ];
 

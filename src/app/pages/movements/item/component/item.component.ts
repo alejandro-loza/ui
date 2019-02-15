@@ -12,9 +12,11 @@ export class ItemComponent implements OnInit {
   @Input() categoryList: Category[];
 
   @Output() movementEdited: EventEmitter<Movement>;
+  @Output() private statusModal: EventEmitter<boolean>;
 
   constructor( ) {
     this.movementEdited = new EventEmitter();
+    this.statusModal = new EventEmitter();
   }
 
   ngOnInit() { }

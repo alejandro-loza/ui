@@ -1,0 +1,21 @@
+.category-info{
+  height: 32rem;
+}
+
+img.category {
+  width: 60%;
+  height: auto;
+  margin: 6rem 0;
+}
+.col.m6.subcategory {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.btn-subcategory {
+  color: #212121;
+  border: 2px solid;
+  border-radius: .4rem;
+  width: 20rem;
+  background-color: transparent;
+}
