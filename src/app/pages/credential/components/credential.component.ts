@@ -9,6 +9,7 @@ import { NgForm } from '@angular/forms';
 
 import { AccountService } from '@services/account/account.service';
 import { CredentialService } from '@services/credentials/credential.service';
+import { CredentialBeanService } from '@services/credentials/credential-bean.service'
 import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
@@ -18,6 +19,8 @@ import { CredentialInterface } from '@interfaces/credential.interface';
 import * as M from 'materialize-css/dist/js/materialize';
 import { ToastService } from '@services/toast/toast.service';
 import { ToastInterface } from '@interfaces/toast.interface';
+import { InstitutionInterface } from '@app/interfaces/institution.interface';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-credential',
@@ -28,6 +31,7 @@ import { ToastInterface } from '@interfaces/toast.interface';
 export class CredentialComponent implements OnInit, AfterViewInit {
   accounts: AccountInterface[];
   credentials: CredentialInterface[];
+  institutions: InstitutionInterface[] = [];
   toast: ToastInterface;
 
   creditBalance: number;
@@ -56,7 +60,8 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     private institutionService: InstitutionService,
     private interactiveService: InteractiveFieldService,
     private dashboardBean: DashboardBeanService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private credentialBean: CredentialBeanService
   ) {
     this.credentials = [];
     this.debitBalance = 0;
@@ -70,8 +75,12 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.getAllCredentials();
-    this.loadInstitutions();
+    if( isNullOrUndefined( this.credentialBean.getCredentials() ) ){
+      this.getAllCredentials();
+      this.loadInstitutions();
+    } else {
+      this.loadInformationFromRam();
+    }
   }
 
   ngAfterViewInit() {
@@ -80,6 +89,19 @@ export class CredentialComponent implements OnInit, AfterViewInit {
       this.elementCollapsible.nativeElement,
       {}
     );
+  }
+
+  loadInformationFromRam(){
+    this.credentials = this.credentialBean.getCredentials();
+    this.accounts = this.credentialBean.getAccounts();
+    this.institutions = this.credentialBean.getInstitutions();
+    this.credentials.forEach( credential => {
+      this.checkStatusOfCredential( credential );
+    });
+    this.getBalance( this.accounts );
+    this.accountsTable( this.accounts );
+    this.automaticSync( this.credentials );
+    this.processCompleteForSpinner = true;
   }
 
   // Main methods for getting data
@@ -98,6 +120,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     }, error => {
       this.errorWithCredentials = true;
     });
+    this.credentialBean.setCredentials( this.credentials );
     this.getAccounts();
   }
 
@@ -107,6 +130,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
       res.body.data.forEach((element: AccountInterface) => {
         this.accounts.push(element);
       });
+      this.credentialBean.setAccounts( this.accounts );
       this.getBalance(this.accounts);
       this.accountsTable( this.accounts );
       this.automaticSync( this.credentials );
@@ -114,7 +138,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   }
 
   automaticSync( credentials:CredentialInterface[] ){
-    
     let currentMoment = new Date();
     credentials.forEach( credential => {
       let dateObj =  new Date(credential.lastUpdated);
@@ -142,7 +165,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getBalance(accountsArray: AccountInterface[]) {
+  getBalance( accountsArray: AccountInterface[] ) {
     this.debitBalance = 0;
     this.creditBalance = 0;
     this.totalBalance = 0;
@@ -230,7 +253,12 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   loadInstitutions() {
     this.institutionService.getAllInstitutions().subscribe(res => {
-      sessionStorage.setItem('institutions', JSON.stringify(res.body.data));
+      res.body.data.forEach( institution => {
+        if (institution.code !== 'DINERIO') {
+          this.institutions.push(institution);
+        }
+      });
+      this.credentialBean.setInstitutions( this.institutions );
     });
   }
 }
