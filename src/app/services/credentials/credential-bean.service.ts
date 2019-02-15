@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CredentialInterface } from '@app/interfaces/credential.interface';
 import { AccountInterface } from '@app/interfaces/account.interfaces';
-import { InstitutionInterface } from '@app/interfaces/Institution.interface';
+import { InstitutionInterface } from '@app/interfaces/institution.interface';
 
 @Injectable({
   providedIn: 'root'
