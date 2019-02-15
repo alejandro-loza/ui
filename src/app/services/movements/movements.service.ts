@@ -70,6 +70,7 @@ export class MovementsService {
           res.body.data.forEach(movement => {
             this.movementsList.push(movement);
           });
+          res.body.data = this.movementsList;
           return res;
         })
       );
