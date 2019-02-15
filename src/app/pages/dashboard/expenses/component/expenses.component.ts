@@ -14,7 +14,7 @@ import { PieChart } from '@app/interfaces/dashboard/pieChart.interface';
   styleUrls: ['./expenses.component.css']
 })
 export class ExpensesComponent implements OnInit {
-  
+
   stackedBarData:StackedBar[] = [];
   dataForPieChart:PieChart = {labels:[], amount:[], backgroundColor:[]};
   doughnutChart:Chart;
@@ -94,7 +94,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   transformIncomesData( data:ResumeMainData ){
-    this.dataForPieChart.amount = []; 
+    this.dataForPieChart.amount = [];
     this.dataForPieChart.labels = [];
     this.dataForPieChart.backgroundColor = [];
     data.data.forEach( element => {
@@ -119,7 +119,7 @@ export class ExpensesComponent implements OnInit {
 
   dataForTableOfSubcats( index:number, catId:string ){
     this.dataForTable = [];
-    this.dataForPieChart.amount = []; 
+    this.dataForPieChart.amount = [];
     this.dataForPieChart.labels = [];
     this.dataForPieChart.backgroundColor = [];
     this.expensesData[index].data.forEach( data => {
@@ -199,6 +199,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   setTitles( index:number ){
+    console.log( this.stackedBarData );
     this.titleMonth = this.stackedBarData[0].labels[index];
     this.titleYear = this.stackedBarData[0].year[index].toString();
 
