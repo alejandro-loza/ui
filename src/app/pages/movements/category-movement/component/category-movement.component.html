@@ -14,4 +14,4 @@
   </button>
 </div>
 
-<app-modal-categories [categoryList]="categoryList" [modalTrigger]="modalTrigger"></app-modal-categories>
+<app-modal-categories [categoryList]="categoryList" [modalTrigger]="modalTrigger" (statusModal)="statusModal.emit($event)"></app-modal-categories>

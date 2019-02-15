@@ -39,7 +39,9 @@
           -->
           <app-category-movement
             [categoryList]="categoryList"
+            [category]="concept.category"
             [modalTrigger]="'categoryTrigger'"
+            (statusModal)="statusModal.emit($event)"
             [bckgrndColor]="concept.category.color"
             [categoryName]="concept.category.name"
             [frgrndColor]="concept.category.textColor"
@@ -52,7 +54,9 @@
           -->
           <app-category-movement
             [categoryList]="categoryList"
+            [category]="concept.category"
             [modalTrigger]="'categoryTrigger'"
+            (statusModal)="statusModal.emit($event)"
             [bckgrndColor]="concept.category.color"
             [categoryName]="concept.category.name"
             [frgrndColor]="concept.category.textColor"
@@ -67,6 +71,7 @@
         <app-category-movement
           [categoryList]="categoryList"
           [modalTrigger]="'categoryTrigger'"
+          (statusModal)="statusModal.emit($event)"
           [bckgrndColor]="'#757575'"
           [categoryName]="'Sin Categoría'"
           [frgrndColor]="'#fafafa'"

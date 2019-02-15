@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Concept } from '@interfaces/concept.interface';
 import { Category } from '@interfaces/category.interface';
 
@@ -8,9 +8,13 @@ import { Category } from '@interfaces/category.interface';
   styleUrls: ['./concept-type-movement.component.css']
 })
 export class ConceptTypeMovementComponent implements OnInit {
-  @Input() concepts: Concept[];
-  @Input() categoryList: Category[];
-  constructor() { }
+  @Input() private concepts: Concept[];
+  @Input() private categoryList: Category[];
+
+  @Output() private statusModal: EventEmitter<boolean>;
+  constructor() {
+    this.statusModal = new EventEmitter();
+  }
 
   ngOnInit() {
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import * as M from 'materialize-css/dist/js/materialize';
 import { Category } from '@interfaces/category.interface';
@@ -15,9 +15,14 @@ export class CategoryMovementComponent implements OnInit {
   @Input() categoryName: string;
   @Input() categoryParent: string;
   @Input() categoryList: Category[];
+  @Input() category: Category;
+
+  @Output() private statusModal: EventEmitter<boolean>;
 
 
-  constructor() { }
+  constructor() {
+    this.statusModal = new EventEmitter();
+  }
 
   ngOnInit() { }
 
