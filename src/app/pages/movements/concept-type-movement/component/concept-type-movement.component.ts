@@ -8,15 +8,26 @@ import { Category } from '@interfaces/category.interface';
   styleUrls: ['./concept-type-movement.component.css']
 })
 export class ConceptTypeMovementComponent implements OnInit {
+  private multiCategory: Category;
+  private noCategory: Category;
   @Input() private concepts: Concept[];
+  @Input() private editAvailable: boolean;
   @Input() private categoryList: Category[];
 
   @Output() private statusModal: EventEmitter<boolean>;
+  @Output() private statusConcepts: EventEmitter<Concept[]>;
   constructor() {
     this.statusModal = new EventEmitter();
+    this.statusConcepts = new EventEmitter();
+    this.multiCategory = { id: 'multi', color: '#212121', name: 'Multi Categoria', textColor: '#fafafa' };
+    this.noCategory = { id: 'finerio-icon', color: '#757575', name: 'Sin Categoría', textColor: '#fafafa' };
   }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  updateConcepts(category: Category) {
+    this.concepts[0].category = category;
+    this.statusConcepts.emit(this.concepts);
   }
 
 }

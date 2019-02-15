@@ -8,12 +8,12 @@ import { Category } from '@interfaces/category.interface';
 })
 export class SubcategoryItemComponent implements OnInit {
   @Input() private category: Category;
-  @Output() private subcategory: EventEmitter<Category>;
+  @Output() private statusSubcategory: EventEmitter<Category>;
   @ViewChild('btnSubcategory') btnSubcategory: ElementRef;
   constructor(
     private renderer: Renderer2
   ) {
-    this.subcategory = new EventEmitter();
+    this.statusSubcategory = new EventEmitter();
   }
 
   ngOnInit() {
@@ -41,6 +41,6 @@ export class SubcategoryItemComponent implements OnInit {
   selectCategory( i: number ) {
     const auxcategory = this.category.subCategories[i];
     auxcategory.parent.id = this.category.id;
-    this.subcategory.emit(auxcategory);
+    this.statusSubcategory.emit(auxcategory);
   }
 }

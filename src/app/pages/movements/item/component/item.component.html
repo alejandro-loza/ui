@@ -30,8 +30,7 @@
         [(ngModel)]="movement.customDescription"
         type="text"
         class="inputMovement center-align"
-        name="description"
-        (keyup)="updateMovement($event)" />
+        name="description" />
     </ng-container>
     <ng-template #elseDescription>
       <h6 class="truncate">{{ movement.customDescription | uppercase }}</h6>
@@ -41,7 +40,12 @@
 
   <!-- Category Start -->
   <div class="col m3">
-    <app-concept-type-movement [categoryList]="categoryList" [concepts]="movement.concepts" (statusModal)="statusModal.emit($event)"></app-concept-type-movement>
+    <app-concept-type-movement
+      [editAvailable]="movement.editAvailable"
+      [categoryList]="categoryList"
+      [concepts]="movement.concepts"
+      (statusModal)="statusModal.emit($event)"
+      (statusConcepts)="updateConcepts($event)"></app-concept-type-movement>
   </div>
   <!-- Category End-->
 
@@ -54,8 +58,7 @@
           class="inputMovement right-align"
           min="0"
           step="10"
-          type="number"
-          (keyup)="updateMovement($event)"/>
+          type="number"/>
       </ng-container>
       <ng-template #elseAmount>
         <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">
@@ -71,10 +74,9 @@
       <label>
         Si
         <input
-          [ngModel]="movement.duplicated"
+          [(ngModel)]="movement.duplicated"
           name="duplicated"
-          type="checkbox"
-          (ngModelChange)="movement.duplicated=$event"/>
+          type="checkbox"/>
         <span class="lever"></span>
         No
       </label>

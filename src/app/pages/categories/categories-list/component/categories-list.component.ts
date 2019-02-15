@@ -10,13 +10,13 @@ export class CategoriesListComponent implements OnInit {
   @Input() private categoryList: Category[];
   @Input() private flagCategory: boolean;
   @Output() private categoryStatus: EventEmitter<boolean>;
-  @Output() private subcategory: EventEmitter<Category>;
+  @Output() private statusSubcategory: EventEmitter<Category>;
 
   private category: Category;
 
   constructor() {
     this.categoryStatus = new EventEmitter();
-    this.subcategory = new EventEmitter();
+    this.statusSubcategory = new EventEmitter();
   }
 
   ngOnInit() {

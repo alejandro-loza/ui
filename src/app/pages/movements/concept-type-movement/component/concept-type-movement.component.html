@@ -1,82 +1,50 @@
 <!-- Se recorren las conceptos de los movimientos -->
 <ng-template ngFor [ngForOf]="concepts" [ngForTrackBy]="trackByFn" let-concept let-i="index">
-    <!--
+  <!--
       Se valida si existe más de un concepto en cada movimiento
     -->
-    <ng-container *ngIf="concepts?.length > 1; then multicategorias; else simplecategoria"></ng-container>
-    <!--
+  <ng-container *ngIf="concepts?.length > 1; then multicategorias; else simplecategoria"></ng-container>
+  <!--
       Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría.
       Esto genera un pequeño bug donde se pinta dos veces, esto se debe por los multiples conceptos.
       Entonces lo que se hace es usar la propiedad [hidden] para mostar solo la primer posición.
     -->
-    <ng-template #multicategorias>
-      <app-category-movement
-        [hidden]="i > 0"
-        [categoryList]="categoryList"
-        [bckgrndColor]="'#212121'"
-        [categoryName]="'Multi Categorías'"
-        [frgrndColor]="'#fafafa'"
-        [categoryParent]="'multi'">
-      </app-category-movement>
-    </ng-template>
+  <ng-template #multicategorias>
+    <app-category-movement [hidden]="i > 0"
+      [categoryList]="categoryList"
+      [category]="multiCategory"
+      [editAvailable]="false">
+    </app-category-movement>
+  </ng-template>
 
-    <ng-template #simplecategoria>
-      <!--
+  <ng-template #simplecategoria>
+    <!--
         Si solo tiene un concepto, se verifica si ese concepto tiene una categoria ss
       -->
-      <ng-container *ngIf="concept.category; then conCategoria; else sinCategoria"></ng-container>
-      <!--
+    <ng-container *ngIf="concept.category; then conCategoria; else sinCategoria"></ng-container>
+    <!--
         Si tiene una categoría se pinta con sus respectivos parametros
       -->
-      <ng-template #conCategoria>
-        <!--
-          Se checa si existe la propiedad parent.
-        -->
-        <ng-container *ngIf="concept.category.parent; then subcategory; else parentcategory"></ng-container>
-        <ng-template #subcategory>
-          <!--
-            Si existe, se agrega el id del parent
-          -->
-          <app-category-movement
-            [categoryList]="categoryList"
-            [category]="concept.category"
-            [modalTrigger]="'categoryTrigger'"
-            (statusModal)="statusModal.emit($event)"
-            [bckgrndColor]="concept.category.color"
-            [categoryName]="concept.category.name"
-            [frgrndColor]="concept.category.textColor"
-            [categoryParent]="concept.category.parent.id">
-          </app-category-movement>
-        </ng-template>
-        <ng-template #parentcategory>
-          <!--
-            Sino, se agrega el id de category
-          -->
-          <app-category-movement
-            [categoryList]="categoryList"
-            [category]="concept.category"
-            [modalTrigger]="'categoryTrigger'"
-            (statusModal)="statusModal.emit($event)"
-            [bckgrndColor]="concept.category.color"
-            [categoryName]="concept.category.name"
-            [frgrndColor]="concept.category.textColor"
-            [categoryParent]="concept.category.id">
-          </app-category-movement>
-        </ng-template>
-      </ng-template>
-      <ng-template #sinCategoria>
-        <!--
+    <ng-template #conCategoria>
+      <app-category-movement
+        [categoryList]="categoryList"
+        [category]="concept.category"
+        [editAvailable]="editAvailable"
+        (statusModal)="statusModal.emit($event)"
+        (statusSubcategory)="updateConcepts($event)">
+      </app-category-movement>
+    </ng-template>
+    <ng-template #sinCategoria>
+      <!--
           Caso contrario se mandan los parametros definidos para los movimientos sin categoria
         -->
-        <app-category-movement
-          [categoryList]="categoryList"
-          [modalTrigger]="'categoryTrigger'"
-          (statusModal)="statusModal.emit($event)"
-          [bckgrndColor]="'#757575'"
-          [categoryName]="'Sin Categoría'"
-          [frgrndColor]="'#fafafa'"
-          [categoryParent]="'finerio-icon'">
-        </app-category-movement>
-      </ng-template>
+      <app-category-movement
+      [categoryList]="categoryList"
+      [category]="noCategory"
+      [editAvailable]="editAvailable"
+      (statusModal)="statusModal.emit($event)"
+      (statusSubcategory)="updateConcepts($event)">
+      </app-category-movement>
     </ng-template>
+  </ng-template>
 </ng-template>

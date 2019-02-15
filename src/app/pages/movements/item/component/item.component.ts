@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Movement } from '@interfaces/movement.interface';
 import { Category } from '@interfaces/category.interface';
+import { Concept } from '@app/interfaces/concept.interface';
 
 @Component({
   selector: 'app-item',
@@ -26,7 +27,13 @@ export class ItemComponent implements OnInit {
     this.movementEdited.emit(this.movement);
   }
 
-  updateMovement() {
-    this.movementEdited.emit(this.movement);
+  updateConcepts(concepts: Concept[]) {
+    if ( this.movement.editAvailable === true ) {
+      // this.movement.concepts = concepts;
+      // this.movementEdited.emit(this.movement);
+      console.log('Actualizó el correcto');
+    } else {
+      console.log('Se modificó otro que no era');
+    }
   }
 }

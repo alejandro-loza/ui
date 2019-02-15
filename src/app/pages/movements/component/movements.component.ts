@@ -109,8 +109,9 @@ export class MovementsComponent implements OnInit, OnDestroy {
           res.body.data.forEach(element => {
             element['formatDate'] = this.dateApitService.dateFormatMovement( element.customDate );
             element['editAvailable'] = false;
-            this.movementList.push(element);
           });
+
+          this.movementList = res.body.data;
 
           // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
           // Se manda un toast y se remueve la función del scroll.

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import * as M from 'materialize-css/dist/js/materialize';
 import { Category } from '@interfaces/category.interface';
 
 @Component({
@@ -9,21 +8,22 @@ import { Category } from '@interfaces/category.interface';
   styleUrls: ['./category-movement.component.css']
 })
 export class CategoryMovementComponent implements OnInit {
-  @Input() modalTrigger: string;
-  @Input() bckgrndColor: string;
-  @Input() frgrndColor: string;
-  @Input() categoryName: string;
-  @Input() categoryParent: string;
-  @Input() categoryList: Category[];
-  @Input() category: Category;
+  @Input() private categoryList: Category[];
+  @Input() private category: Category;
+  @Input() private editAvailable: boolean;
 
   @Output() private statusModal: EventEmitter<boolean>;
-
+  @Output() private statusSubcategory: EventEmitter<Category>;
 
   constructor() {
     this.statusModal = new EventEmitter();
+    this.statusSubcategory = new EventEmitter();
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
+  updateCategory(category: Category) {
+    this.category = category;
+    this.statusSubcategory.emit(this.category);
+  }
 }
