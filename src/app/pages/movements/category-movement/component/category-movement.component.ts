@@ -24,6 +24,6 @@ export class CategoryMovementComponent implements OnInit {
 
   updateCategory(category: Category) {
     this.category = category;
-    this.statusSubcategory.emit(this.category);
+    this.statusSubcategory.emit(category);
   }
 }

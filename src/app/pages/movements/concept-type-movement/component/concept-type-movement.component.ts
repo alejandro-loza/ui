@@ -29,5 +29,4 @@ export class ConceptTypeMovementComponent implements OnInit {
     this.concepts[0].category = category;
     this.statusConcepts.emit(this.concepts);
   }
-
 }

@@ -39,13 +39,14 @@
   <!-- Description End-->
 
   <!-- Category Start -->
-  <div class="col m3">
+  <div class="col m3 category-margin">
     <app-concept-type-movement
       [editAvailable]="movement.editAvailable"
       [categoryList]="categoryList"
       [concepts]="movement.concepts"
       (statusModal)="statusModal.emit($event)"
-      (statusConcepts)="updateConcepts($event)"></app-concept-type-movement>
+      (statusConcepts)="updateConcepts($event)">
+    </app-concept-type-movement>
   </div>
   <!-- Category End-->
 

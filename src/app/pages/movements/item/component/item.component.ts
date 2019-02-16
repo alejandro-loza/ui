@@ -28,12 +28,7 @@ export class ItemComponent implements OnInit {
   }
 
   updateConcepts(concepts: Concept[]) {
-    if ( this.movement.editAvailable === true ) {
-      // this.movement.concepts = concepts;
-      // this.movementEdited.emit(this.movement);
-      console.log('Actualizó el correcto');
-    } else {
-      console.log('Se modificó otro que no era');
-    }
+    this.movement.concepts = concepts;
+    this.movementEdited.emit(this.movement);
   }
 }

@@ -48,8 +48,8 @@ export class ModalCategoriesComponent implements OnInit, AfterViewInit {
   }
 
   getSubcategory (subcategory: Category) {
-    this.statusSubcategory.emit(subcategory);
     this.instanceModal.close();
+    this.statusSubcategory.emit(subcategory);
   }
 
 }

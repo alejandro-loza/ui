@@ -104,10 +104,12 @@ export class MovementsService {
         date: movement.date,
         description: movement.description,
         duplicated: movement.duplicated,
-        category: {
-          id: movement.concepts[0].category.id
-        },
-        type: movement.type.toUpperCase()
+        type: movement.type.toUpperCase(),
+      }, (key, value) => {
+        key = 'category';
+        if ( movement.concepts[0].category ) {
+          value[key] = {'id': movement.concepts[0].category.id};
+        }
       }),
       { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
