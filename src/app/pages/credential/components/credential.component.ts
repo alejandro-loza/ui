@@ -42,7 +42,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   debitAccounts:AccountInterface[] = [];
   creditAccounts:AccountInterface[] = [];
-  investmentsAccounts:AccountInterface[] = [];
 
   // Aux properties
   processCompleteForSpinner: boolean;
@@ -110,7 +109,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     this.credentials = [];
     this.debitAccounts = [];
     this.creditAccounts = [];
-    this.investmentsAccounts = [];
     this.credentialService.getAllCredentials().subscribe(res => {
       res.body.data.forEach((element: CredentialInterface) => {
         this.credentials.push(element);
@@ -155,12 +153,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     accounts.forEach( account => {
       if( account.type == "Crédito" ){
         this.creditAccounts.push( account );
-      } else if( account.type == "DEBIT" || account.type == "Cheques" || account.type == "Débito"){
+      } else {
         if( account.institution.code != "DINERIO"){
           this.debitAccounts.push( account );
         }
-      } else if( account.type == "Inversión"){
-        this.investmentsAccounts.push( account );
       }
     });
   }
