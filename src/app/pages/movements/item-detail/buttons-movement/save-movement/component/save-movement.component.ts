@@ -28,7 +28,6 @@ export class SaveMovementComponent implements OnInit {
   ngOnInit() {}
 
   updateMovement() {
-
     this.movementService
       .updateMovement(this.movement)
       .pipe(retry(2))

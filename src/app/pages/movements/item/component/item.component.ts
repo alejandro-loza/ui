@@ -31,4 +31,8 @@ export class ItemComponent implements OnInit {
     this.movement.concepts = concepts;
     this.movementEdited.emit(this.movement);
   }
+
+  updateMovement() {
+    this.movementEdited.emit(this.movement);
+  }
 }

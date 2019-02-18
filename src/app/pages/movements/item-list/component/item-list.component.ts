@@ -64,4 +64,5 @@ export class ItemListComponent implements OnInit, AfterViewInit {
       this.instanceCollapsible.close(index);
       this.instanceCollapsible.destroy();
   }
+
 }

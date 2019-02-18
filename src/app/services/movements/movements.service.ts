@@ -65,7 +65,8 @@ export class MovementsService {
       .get<Response<Movement>>(urlMovements, {
         observe: 'response',
         headers: this.configService.getJsonHeaders()
-      }).pipe(
+      })
+      .pipe(
         map(res => {
           res.body.data.forEach(movement => {
             this.movementsList.push(movement);
@@ -93,24 +94,23 @@ export class MovementsService {
     );
   }
 
-  updateMovement(movement: Movement): Observable<HttpResponse<Movement>> {
+  updateMovement(movement: Movement) {
+    const body = {
+      amount: movement.amount,
+      balance: movement.balance,
+      customDate: movement.customDate,
+      customDescription: movement.customDescription,
+      date: movement.date,
+      description: movement.description,
+      duplicated: movement.duplicated,
+      type: movement.type.toUpperCase()
+    };
+    if (movement.concepts[0].category) {
+      body['category'] = { id: movement.concepts[0].category.id };
+    }
     return this.httpClient.put<Movement>(
       `${environment.backendUrl}/movements/${movement.id}`,
-      JSON.stringify({
-        amount: movement.amount,
-        balance: movement.balance,
-        customDate: movement.customDate,
-        customDescription: movement.customDescription,
-        date: movement.date,
-        description: movement.description,
-        duplicated: movement.duplicated,
-        type: movement.type.toUpperCase(),
-      }, (key, value) => {
-        key = 'category';
-        if ( movement.concepts[0].category ) {
-          value[key] = {'id': movement.concepts[0].category.id};
-        }
-      }),
+      body,
       { observe: 'response', headers: this.configService.getJsonHeaders() }
     );
   }
@@ -124,5 +124,4 @@ export class MovementsService {
       }
     );
   }
-
 }
