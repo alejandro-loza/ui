@@ -8,7 +8,7 @@
     <!-- Date Start -->
     <div class="col m1 customComponent">
         <ng-container *ngIf="movement.editAvailable === true; else elseDate">
-            <app-date [formatDate]="movement.formatDate" [date]="movement.customDate" [classes]="'inputMovement center'" [type]="'text'" name="customDate" (valueDate)="updateDate($event)">
+            <app-date [formatDate]="movement.formatDate" [date]="movement.customDate" [classes]="'inputMovement center'" [type]="'text'" name="customDate" (valueDate)="movement.customDate=$event" (valueFormatDate)="movement.formatDate=$event">
             </app-date>
         </ng-container>
         <ng-template #elseDate>
@@ -20,7 +20,7 @@
     <!-- Description Start-->
     <div class="col m3 customComponent">
         <ng-container *ngIf="movement.editAvailable === true; else elseDescription">
-            <input [(ngModel)]="movement.customDescription" type="text" class="inputMovement center-align" name="description" (keyup)="updateMovement()" />
+            <input [(ngModel)]="movement.customDescription" type="text" class="inputMovement center-align" name="description" />
         </ng-container>
         <ng-template #elseDescription>
             <h6 class="truncate">{{ movement.customDescription | uppercase }}</h6>
@@ -38,7 +38,7 @@
     <!-- Amount start -->
     <div class="col m2 customComponent right-align">
         <ng-container *ngIf="movement.editAvailable === true; else elseAmount">
-            <input [(ngModel)]="movement.amount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" (keyup)="updateMovement()" />
+            <input [(ngModel)]="movement.amount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" />
         </ng-container>
         <ng-template #elseAmount>
             <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">

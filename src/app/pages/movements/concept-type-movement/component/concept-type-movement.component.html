@@ -2,35 +2,22 @@
 <!-- Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría. -->
 <ng-template #multicategorias>
     <div class="multicategory-margin">
-    <app-category-movement
-      [categoryList]="categoryList"
-      [category]="multiCategory"
-      [editAvailable]="false">
-    </app-category-movement>
-  </div>
+        <app-category-movement [categoryList]="categoryList" [category]="multiCategory" [editAvailable]="false">
+        </app-category-movement>
+    </div>
 </ng-template>
 
 <ng-template #simplecategoria>
-  <ng-container *ngIf="concepts[0].category; then conCategoria; else sinCategoria"></ng-container>
-  <!-- Si tiene una categoría se pinta con sus respectivos parametros -->
-  <ng-template #conCategoria>
-    <app-category-movement
-      [categoryList]="categoryList"
-      [category]="concepts[0].category"
-      [editAvailable]="editAvailable"
-      (statusModal)="statusModal.emit($event)"
-      (statusSubcategory)="updateConcepts($event)">
-    </app-category-movement>
-  </ng-template>
-  ￼
-  <ng-template #sinCategoria>
-    <!-- Caso contrario se mandan los parametros definidos para los movimientos sin categoria -->
-    <app-category-movement
-    [categoryList]="categoryList"
-    [category]="noCategory"
-    [editAvailable]="editAvailable"
-    (statusModal)="statusModal.emit($event)"
-    (statusSubcategory)="updateConcepts($event)">
-    </app-category-movement>
-  </ng-template>
+    <ng-container *ngIf="concepts[0].category; then conCategoria; else sinCategoria"></ng-container>
+    <!-- Si tiene una categoría se pinta con sus respectivos parametros -->
+    <ng-template #conCategoria>
+        <app-category-movement [categoryList]="categoryList" [category]="concepts[0].category" [editAvailable]="editAvailable" (statusModal)="statusModal.emit($event)" (statusCategory)="updateConcepts($event)">
+        </app-category-movement>
+    </ng-template>
+    ￼
+    <ng-template #sinCategoria>
+        <!-- Caso contrario se mandan los parametros definidos para los movimientos sin categoria -->
+        <app-category-movement [categoryList]="categoryList" [category]="noCategory" [editAvailable]="editAvailable" (statusModal)="statusModal.emit($event)" (statusCategory)="updateConcepts($event)">
+        </app-category-movement>
+    </ng-template>
 </ng-template>

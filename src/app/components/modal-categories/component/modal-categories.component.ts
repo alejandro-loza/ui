@@ -21,7 +21,7 @@ export class ModalCategoriesComponent implements OnInit, AfterViewInit {
   @Input() private categoryList: Category[];
 
   @Output() private statusModal: EventEmitter<boolean>;
-  @Output() private statusSubcategory: EventEmitter<Category>;
+  @Output() private statusCategory: EventEmitter<Category>;
 
   @ViewChild('modalCateogry') modalCategory: ElementRef;
 
@@ -31,7 +31,7 @@ export class ModalCategoriesComponent implements OnInit, AfterViewInit {
   constructor() {
     this.backCategories = false;
     this.statusModal = new EventEmitter();
-    this.statusSubcategory = new EventEmitter();
+    this.statusCategory = new EventEmitter();
   }
 
   ngOnInit() {}
@@ -39,7 +39,7 @@ export class ModalCategoriesComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const initModal = new M.Modal(this.modalCategory.nativeElement, {
       onOpenStart: () => { this.statusModal.emit(true); },
-      onCloseEnd: () => {
+      onCloseStart: () => {
         this.backCategories = false;
         this.statusModal.emit(false);
       }
@@ -49,7 +49,7 @@ export class ModalCategoriesComponent implements OnInit, AfterViewInit {
 
   getSubcategory (subcategory: Category) {
     this.instanceModal.close();
-    this.statusSubcategory.emit(subcategory);
+    this.statusCategory.emit(subcategory);
   }
 
 }

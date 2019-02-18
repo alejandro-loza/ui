@@ -9,14 +9,14 @@ import { Category } from '@interfaces/category.interface';
 export class CategoriesListComponent implements OnInit {
   @Input() private categoryList: Category[];
   @Input() private flagCategory: boolean;
-  @Output() private categoryStatus: EventEmitter<boolean>;
-  @Output() private statusSubcategory: EventEmitter<Category>;
+  @Output() private filterStatus: EventEmitter<boolean>;
+  @Output() private statusCategory: EventEmitter<Category>;
 
   private category: Category;
 
   constructor() {
-    this.categoryStatus = new EventEmitter();
-    this.statusSubcategory = new EventEmitter();
+    this.filterStatus = new EventEmitter();
+    this.statusCategory = new EventEmitter();
   }
 
   ngOnInit() {
@@ -25,6 +25,6 @@ export class CategoriesListComponent implements OnInit {
   filterCategories(index: number) {
     this.category = this.categoryList[index];
     this.flagCategory = true;
-    this.categoryStatus.emit(this.flagCategory);
+    this.filterStatus.emit(this.flagCategory);
   }
 }

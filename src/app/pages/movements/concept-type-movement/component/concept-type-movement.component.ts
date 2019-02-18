@@ -16,17 +16,31 @@ export class ConceptTypeMovementComponent implements OnInit {
 
   @Output() private statusModal: EventEmitter<boolean>;
   @Output() private statusConcepts: EventEmitter<Concept[]>;
+  @Output() private valueCategoryColor: EventEmitter<string>;
+
   constructor() {
     this.statusModal = new EventEmitter();
     this.statusConcepts = new EventEmitter();
-    this.multiCategory = { id: 'multi', color: '#212121', name: 'Multi Categoria', textColor: '#fafafa' };
-    this.noCategory = { id: 'finerio-icon', color: '#757575', name: 'Sin Categoría', textColor: '#fafafa' };
+    this.valueCategoryColor = new EventEmitter();
+    this.multiCategory = {
+      id: 'multi',
+      color: '#212121',
+      name: 'Multi Categoria',
+      textColor: '#fafafa'
+    };
+    this.noCategory = {
+      id: 'finerio-icon',
+      color: '#757575',
+      name: 'Sin Categoría',
+      textColor: '#fafafa'
+    };
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   updateConcepts(category: Category) {
     this.concepts[0].category = category;
+    console.log(this.concepts);
     this.statusConcepts.emit(this.concepts);
   }
 }

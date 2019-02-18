@@ -26,34 +26,31 @@ export class DeleteMovementComponent implements OnInit {
   ngOnInit() {}
 
   deleteMovement() {
-    this.movementService
-      .deleteMovement(this.id)
-      .pipe(retry(2))
-      .subscribe(
-        res => {
-          this.status.emit(true);
-          this.toastInterface.code = res.status;
-        },
-        err => {
-          this.toastInterface.code = err.status;
-          if (err.status === 401) {
-            this.toastService.toastGeneral(this.toastInterface);
-            this.deleteMovement();
-          }
-          if (err.status === 404) {
-            this.toastInterface.message = 'No sé encontró tu movimiento';
-            this.toastService.toastGeneral(this.toastInterface);
-          }
-          if (err.status === 500) {
-            this.toastInterface.message =
-              '¡Ha ocurrido un error al obterner tus movimiento!';
-            this.toastService.toastGeneral(this.toastInterface);
-          }
-        },
-        () => {
-          this.toastInterface.message = 'Se borró su movimiento exitosamente';
+    this.movementService.deleteMovement(this.id).subscribe(
+      res => {
+        this.status.emit(true);
+        this.toastInterface.code = res.status;
+      },
+      err => {
+        this.toastInterface.code = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral(this.toastInterface);
+          this.deleteMovement();
+        }
+        if (err.status === 404) {
+          this.toastInterface.message = 'No sé encontró tu movimiento';
           this.toastService.toastGeneral(this.toastInterface);
         }
-      );
+        if (err.status === 500) {
+          this.toastInterface.message =
+            '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.toastGeneral(this.toastInterface);
+        }
+      },
+      () => {
+        this.toastInterface.message = 'Se borró su movimiento exitosamente';
+        this.toastService.toastGeneral(this.toastInterface);
+      }
+    );
   }
 }

@@ -58,40 +58,38 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const initModal = new M.Modal(this.modalElement.nativeElement, { });
-    this.instaceModal = M.Modal.getInstance( this.modalElement.nativeElement );
+    const initModal = new M.Modal(this.modalElement.nativeElement, {});
+    this.instaceModal = M.Modal.getInstance(this.modalElement.nativeElement);
   }
 
-  createMovement( form: NgForm ) {
+  createMovement(form: NgForm) {
     form.value.date = this.newMovement.date;
     form.value.type = this.newMovement.type;
     this.renderer.addClass(this.buttonSubmit.nativeElement, 'disabled');
-    this.movementService
-      .createMovement(form.value)
-      .pipe(retry(2))
-      .subscribe(
-        res => {
-          this.createMovementStatus.emit(true);
-          this.toastInterface.code = res.status;
-        },
-        err => {
-          this.toastInterface.code = err.status;
-          if (err.status === 401) {
-            this.toastService.toastGeneral(this.toastInterface);
-          }
-          if (err.status === 500) {
-            this.toastInterface.message =
-              '¡Ha ocurrido un error al obterner tus movimiento!';
-            this.toastService.toastGeneral(this.toastInterface);
-          }
-        },
-        () => {
-          this.instaceModal.close();
-          this.renderer.removeClass(this.buttonSubmit.nativeElement, 'disabled');
-          form.resetForm();
-          this.toastInterface.message = 'Se creó su movimiento exitosamente';
+    this.movementService.createMovement(form.value).subscribe(
+      res => {
+        this.createMovementStatus.emit(true);
+        this.toastInterface.code = res.status;
+      },
+      err => {
+        this.toastInterface.code = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral(this.toastInterface);
+          this.createMovement(form);
+        }
+        if (err.status === 500) {
+          this.toastInterface.message =
+            '¡Ha ocurrido un error al obterner tus movimiento!';
           this.toastService.toastGeneral(this.toastInterface);
         }
+      },
+      () => {
+        this.instaceModal.close();
+        this.renderer.removeClass(this.buttonSubmit.nativeElement, 'disabled');
+        form.resetForm();
+        this.toastInterface.message = 'Se creó su movimiento exitosamente';
+        this.toastService.toastGeneral(this.toastInterface);
+      }
     );
   }
 
@@ -105,5 +103,4 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     }
     this.newMovement.type = type;
   }
-
 }

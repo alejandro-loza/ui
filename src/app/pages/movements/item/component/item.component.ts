@@ -14,25 +14,18 @@ export class ItemComponent implements OnInit {
 
   @Output() movementEdited: EventEmitter<Movement>;
   @Output() private statusModal: EventEmitter<boolean>;
+  @Output() private valueCategoryColor: EventEmitter<string>;
 
-  constructor( ) {
+  constructor() {
     this.movementEdited = new EventEmitter();
     this.statusModal = new EventEmitter();
+    this.valueCategoryColor = new EventEmitter();
   }
 
-  ngOnInit() { }
-
-  updateDate(date: Date) {
-    this.movement.customDate = date;
-    this.movementEdited.emit(this.movement);
-  }
+  ngOnInit() {}
 
   updateConcepts(concepts: Concept[]) {
     this.movement.concepts = concepts;
-    this.movementEdited.emit(this.movement);
-  }
-
-  updateMovement() {
-    this.movementEdited.emit(this.movement);
+    // this.movementEdited.emit(this.movement);
   }
 }

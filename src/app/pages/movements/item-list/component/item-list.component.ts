@@ -11,6 +11,7 @@ import { Movement } from '@interfaces/movement.interface';
 import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
 import { Category } from '@interfaces/category.interface';
+import { Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-item-list',
@@ -24,7 +25,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   private auxMovement: Movement;
   private instanceCollapsible;
   private statusModal: boolean;
-  constructor() {
+  constructor(private renderer: Renderer2) {
     this.statusModal = false;
   }
 
@@ -60,9 +61,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   collapsibleClose(index: number) {
-      this.auxMovement.editAvailable = false;
-      this.instanceCollapsible.close(index);
-      this.instanceCollapsible.destroy();
+    this.auxMovement.editAvailable = false;
+    this.instanceCollapsible.close(index);
+    this.instanceCollapsible.destroy();
   }
-
 }

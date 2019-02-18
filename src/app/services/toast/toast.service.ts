@@ -47,13 +47,16 @@ export class ToastService {
       case 401:
         this.configService.refreshToken().subscribe(
           res => res,
-          err => console.error(toastParams.code, err)
+          err => console.error(toastParams.code, err),
+          () => {
+            this.message = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!';
+            this.classes = 'light-blue darken-4';
+          }
         );
-        this.message = 'Hemos actualizado tu sesión, ¡Bienvenido de nuevo!';
-        this.classes = 'light-blue darken-4';
         break;
       case 4011:
-        this.message = 'Tus datos son incorrectos, por favor verifica<br>que los hayas escrito bien';
+        this.message =
+          'Tus datos son incorrectos, por favor verifica<br>que los hayas escrito bien';
         this.classes = 'light-blue darken-4';
         break;
       case 422:

@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
@@ -37,7 +33,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   constructor(
     private categoryService: CategoriesService,
     private movementService: MovementsService,
-    private dateApitService: DateApiService,
+    private dateApiService: DateApiService,
     private toastService: ToastService
   ) {
     this.status = false;
@@ -87,7 +83,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
    */
 
   offsetMovement = () => {
-    if ( this.spinnerBoolean === false ) {
+    if (this.spinnerBoolean === false) {
       const scrollVertical = window.scrollY;
       let scrollLimit: number;
       scrollLimit = $(document).height() - $(window).height();
@@ -96,73 +92,75 @@ export class MovementsComponent implements OnInit, OnDestroy {
         this.getMovements();
       }
     }
-  }
+  };
 
   getMovements() {
-    this.movementService
-      .getMovements(this.paramsMovements).pipe(retry(2)).subscribe(
-        res => {
-          // Se le asigna el tamaño de la lista a la variable _auxSize_
-          this.auxSize = res.body.data.length;
+    this.movementService.getMovements(this.paramsMovements).subscribe(
+      res => {
+        // Se le asigna el tamaño de la lista a la variable _auxSize_
+        this.auxSize = res.body.data.length;
 
-          // Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
-          res.body.data.forEach(element => {
-            element['formatDate'] = this.dateApitService.dateFormatMovement( element.customDate );
-            element['editAvailable'] = false;
-          });
+        // Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
+        res.body.data.forEach(element => {
+          element['formatDate'] = this.dateApiService.dateFormatMovement(
+            element.customDate
+          );
+          element['editAvailable'] = false;
+        });
 
-          this.movementList = res.body.data;
+        this.movementList = res.body.data;
 
-          // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
-          // Se manda un toast y se remueve la función del scroll.
-          if ( this.auxSize < this.paramsMovements.maxMovements || this.auxSize === 0 ) {
-            window.removeEventListener('scroll', this.offsetMovement, true);
-            this.toast = {
-              code: res.status,
-              message: 'Hemos cargamos todos tus movimientos'
-            };
-            this.toastService.toastGeneral(this.toast);
-          }
-        },
-        err => {
-          this.toast.code = err.status;
-          if (err.status === 401) {
-            this.toastService.toastGeneral(this.toast);
-            this.getMovements();
-          }
-          if (err.status === 500) {
-            this.toast.message = '¡Ha ocurrido un error al obterner tus movimiento!';
-            this.toastService.toastGeneral(this.toast);
-          }
-        },
-        () => {
-          this.spinnerBoolean = false;
-          this.paramsMovements.offset += this.paramsMovements.maxMovements;
+        // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
+        // Se manda un toast y se remueve la función del scroll.
+        if (
+          this.auxSize < this.paramsMovements.maxMovements ||
+          this.auxSize === 0
+        ) {
+          window.removeEventListener('scroll', this.offsetMovement, true);
+          this.toast = {
+            code: res.status,
+            message: 'Hemos cargamos todos tus movimientos'
+          };
+          this.toastService.toastGeneral(this.toast);
         }
-      );
+      },
+      err => {
+        this.toast.code = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral(this.toast);
+          this.getMovements();
+        }
+        if (err.status === 500) {
+          this.toast.message =
+            '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.toastGeneral(this.toast);
+        }
+      },
+      () => {
+        this.spinnerBoolean = false;
+        this.paramsMovements.offset += this.paramsMovements.maxMovements;
+      }
+    );
   }
 
   getCategories() {
-    this.categoryService
-      .getCategoriesInfo()
-      .pipe(retry(2))
-      .subscribe(
-        res => {
-          this.categoryList = res.body.data;
-        },
-        err => {
-          this.toast.code = err.status;
-          if (err.status === 401) {
-            this.toastService.toastGeneral(this.toast);
-            this.getCategories();
-          }
-          if (err.status === 500) {
-            this.toast.message =
-            '¡Ha ocurrido un error al obterner tus movimiento!';
-            this.toastService.toastGeneral(this.toast);
-          }
+    this.categoryService.getCategoriesInfo().subscribe(
+      res => {
+        this.categoryList = res.body.data;
+      },
+      err => {
+        this.toast.code = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral(this.toast);
+          this.getCategories();
         }
-      );
+        if (err.status === 500) {
+          this.toast.message =
+            '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.toastGeneral(this.toast);
+        }
+      }
+    );
   }
 
   refreshMovement() {
