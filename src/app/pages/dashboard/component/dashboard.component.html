@@ -1,12 +1,15 @@
 <!-- Tabs for dashboard -->
 <app-tabs (tabClicked)="tabClicked($event)"></app-tabs>
 
-<div class="container-fluid">
+<div *ngIf="!dataReady" class="row">
+    <div class="col s12 center pt-20">
+        <small><b>Obteniendo información...</b></small><br><br>
+        <app-spinner></app-spinner>
+    </div>
+</div>
+
+<div *ngIf="!dashboardBean.getShowEmptyState()" class="container-fluid">
     <div class="row">
-        <div *ngIf="!dataReady" class="col s12 center pt-20">
-            <small><b>Obteniendo información...</b></small><br><br>
-            <app-spinner></app-spinner>
-        </div>
         <div class="col s12" id="childComponentsCol">
             <!-- Reference for ids on app-tabs -->
             <app-incomes *ngIf="tabSelected == 0 && dataReady"
@@ -23,5 +26,13 @@
             <!-- <app-diagnostic id="diagnostic"></app-diagnostic> -->
         </div>
     </div> 
+</div>
+
+<div *ngIf="dashboardBean.getShowEmptyState()" class="emptyState">
+    <div class="row center">
+        <div class="col s12">
+            <h5>Empty State here!</h5>
+        </div>
+    </div>
 </div>
         

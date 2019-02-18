@@ -115,6 +115,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
         this.checkStatusOfCredential(element);
       });
       this.processCompleteForSpinner = true;
+      this.automaticSync( this.credentials );
     }, error => {
       this.errorWithCredentials = true;
     });
@@ -131,7 +132,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
       this.credentialBean.setAccounts( this.accounts );
       this.getBalance(this.accounts);
       this.accountsTable( this.accounts );
-      this.automaticSync( this.credentials );
     });
   }
 
@@ -140,7 +140,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     credentials.forEach( credential => {
       let dateObj =  new Date(credential.lastUpdated);
       let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 *60 * 60);
-
       if( diff >= 8 ){
         this.credentialService.updateCredential( credential ).subscribe( res => {
           this.checkStatusOfCredential( credential );
