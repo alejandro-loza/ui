@@ -24,5 +24,6 @@ export class CleanerService {
     this.credentialBeanService.setCredentials( null );
     this.credentialBeanService.setAccounts( null );
     this.credentialBeanService.setInstitutions( null );
+    this.credentialBeanService.setLoadInformation( true );
   }
 }
