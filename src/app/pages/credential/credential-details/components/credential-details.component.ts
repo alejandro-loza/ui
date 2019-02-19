@@ -116,7 +116,12 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
         });
         this.fields.shift();
       },
-      err => {}
+      err => {
+        this.toast.message = 'Ocurrió un error, intentalo de nuevo';
+        this.toastService.toastGeneral(this.toast);
+        this.credentialBeanService.setLoadInformation( true );
+        this.router.navigateByUrl('/app/credentials');
+      }
     );
   }
 
@@ -133,6 +138,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       () => {
         this.toast.message = 'Sincronización en proceso...';
         this.toastService.toastGeneral(this.toast);
+        this.credentialBeanService.setLoadInformation( true );
         this.router.navigateByUrl('/app/credentials');
       }
     );
@@ -152,6 +158,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       () => {
         this.toast.message = 'Credencial elminada correctamente';
         this.toastService.toastGeneral(this.toast);
+        this.credentialBeanService.setLoadInformation( true );
         this.router.navigateByUrl('/app/credentials');
       }
     );
@@ -178,6 +185,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       () => {
         this.toast.message = 'Cuenta elminada correctamente';
         this.toastService.toastGeneral(this.toast);
+        this.credentialBeanService.setLoadInformation( true );
         this.router.navigateByUrl('/app/credentials');
       }
     );

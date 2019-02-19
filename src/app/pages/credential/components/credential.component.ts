@@ -20,7 +20,6 @@ import * as M from 'materialize-css/dist/js/materialize';
 import { ToastService } from '@services/toast/toast.service';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
-import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-credential',
@@ -74,7 +73,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    if( isNullOrUndefined( this.credentialBean.getCredentials() ) ){
+    if( this.credentialBean.getLoadInformation() ){
       this.getAllCredentials();
       this.loadInstitutions();
     } else {
@@ -99,7 +98,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     });
     this.getBalance( this.accounts );
     this.accountsTable( this.accounts );
-    this.automaticSync( this.credentials );
+    //this.automaticSync( this.credentials );
     this.processCompleteForSpinner = true;
   }
 
@@ -115,7 +114,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
         this.checkStatusOfCredential(element);
       });
       this.processCompleteForSpinner = true;
-      this.automaticSync( this.credentials );
+      //this.automaticSync( this.credentials );
     }, error => {
       this.errorWithCredentials = true;
     });
@@ -132,6 +131,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
       this.credentialBean.setAccounts( this.accounts );
       this.getBalance(this.accounts);
       this.accountsTable( this.accounts );
+      this.credentialBean.setLoadInformation( false );
     });
   }
 
@@ -192,7 +192,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     this.toast.message = this.loaderMessagge;
   }
 
-  getNewInfoCredential(credentialId) {
+  getNewInfoCredential(credentialId:string) {
     this.credentialService.getCredential(credentialId).subscribe(res => {
       this.credentialInProcess = res.body;
       this.toast.code = res.status;
@@ -202,7 +202,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
           this.checkStatusOfCredential(res.body);
         }, 1000);
       } else if (this.credentialInProcess.status === 'ACTIVE') {
-        this.loaderMessagge = '¡Tus datos han sido sincronizados!';
+        this.loaderMessagge = '¡Tus datos han sido sincronizados en ' + this.credentialInProcess.institution.name + "!";
         this.toast.message = this.loaderMessagge;
         this.getAllCredentials();
         this.dashboardBean.setLoadInformation( true );
