@@ -199,7 +199,6 @@ export class ExpensesComponent implements OnInit {
   }
 
   setTitles( index:number ){
-    console.log( this.stackedBarData );
     this.titleMonth = this.stackedBarData[0].labels[index];
     this.titleYear = this.stackedBarData[0].year[index].toString();
 

@@ -11,8 +11,17 @@ export class CredentialBeanService {
   private credentials:CredentialInterface[];
   private accounts:AccountInterface[];
   private institutions:InstitutionInterface[];
+  private loadInformation:boolean = true;
 
   constructor() { }
+
+  public setLoadInformation( data:boolean ){
+    this.loadInformation = data;
+  }
+
+  public getLoadInformation(): boolean{
+    return this.loadInformation;
+  }
 
   public setCredentials( data:CredentialInterface[] ){
     this.credentials = data;
