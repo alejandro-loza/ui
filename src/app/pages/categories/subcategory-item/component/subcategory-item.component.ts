@@ -16,8 +16,8 @@ import { Category } from '@interfaces/category.interface';
   styleUrls: ['./subcategory-item.component.css']
 })
 export class SubcategoryItemComponent implements OnInit {
-  @Input() private category: Category;
-  @Output() private statusCategory: EventEmitter<Category>;
+  @Input() category: Category;
+  @Output() statusCategory: EventEmitter<Category>;
   @ViewChild('btnSubcategory') btnSubcategory: ElementRef;
   constructor(private renderer: Renderer2) {
     this.statusCategory = new EventEmitter();
@@ -63,5 +63,9 @@ export class SubcategoryItemComponent implements OnInit {
     const auxcategory = this.category.subCategories[i];
     auxcategory.parent.id = this.category.id;
     this.statusCategory.emit(auxcategory);
+  }
+
+  trackByFn(index: number, category: Category) {
+    return category.id;
   }
 }

@@ -7,10 +7,10 @@ import { Category } from '@interfaces/category.interface';
   styleUrls: ['./categories-list.component.css']
 })
 export class CategoriesListComponent implements OnInit {
-  @Input() private categoryList: Category[];
-  @Input() private flagCategory: boolean;
-  @Output() private filterStatus: EventEmitter<boolean>;
-  @Output() private statusCategory: EventEmitter<Category>;
+  @Input() categoryList: Category[];
+  @Input() flagCategory: boolean;
+  @Output() filterStatus: EventEmitter<boolean>;
+  @Output() statusCategory: EventEmitter<Category>;
 
   private category: Category;
 
