@@ -20,15 +20,15 @@ declare var $: any;
   styleUrls: ['./movements.component.css']
 })
 export class MovementsComponent implements OnInit, OnDestroy {
-  private paramsMovements: ParamsMovements;
-  private movementList: Movement[];
-  private categoryList: Category[];
-  private toast: ToastInterface;
+  paramsMovements: ParamsMovements;
+  movementList: Movement[];
+  categoryList: Category[];
+  toast: ToastInterface;
 
-  private status: boolean;
-  private filterflag: boolean;
-  private spinnerBoolean: boolean;
-  private auxSize: number;
+  status: boolean;
+  filterflag: boolean;
+  spinnerBoolean: boolean;
+  auxSize: number;
 
   constructor(
     private categoryService: CategoriesService,

@@ -61,12 +61,10 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     }
     this.movementList[indexValue].editAvailable = true;
     this.instanceCollapsible.open(indexValue);
-    this.instanceCollapsible.destroy();
   }
 
   collapsibleClose(index: number) {
     this.auxMovement.editAvailable = false;
     this.instanceCollapsible.close(index);
-    this.instanceCollapsible.destroy();
   }
 }

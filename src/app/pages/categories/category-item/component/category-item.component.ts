@@ -7,10 +7,8 @@ import { Category } from '@interfaces/category.interface';
   styleUrls: ['./category-item.component.css']
 })
 export class CategoryItemComponent implements OnInit {
-  @Input() private category: Category;
-  constructor() { }
+  @Input() category: Category;
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
