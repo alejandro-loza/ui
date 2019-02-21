@@ -41,10 +41,14 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.dashboardBean.getLoadInformation()) {
-      this.getCategoriesInfo();
+    if( !this.dashboardBean.getShowEmptyState() ){
+      if (this.dashboardBean.getLoadInformation()) {
+        this.getCategoriesInfo();
+      } else {
+        this.dataReadyValidator();
+      }
     } else {
-      this.dataReadyValidator();
+      this.dataReady = true;
     }
   }
 
@@ -64,10 +68,12 @@ export class DashboardComponent implements OnInit {
           this.movementsServiceResponse.forEach(movement => {
             this.movementsList.push(movement);
           });
-          this.dashboardService.mainMethod(
-            this.movementsList,
-            this.categoriesList
-          );
+          if( this.movementsList.length > 0){
+            this.dashboardService.mainMethod( this.movementsList, this.categoriesList );
+          } else {
+            this.dashboardBean.setShowEmptyState( true );
+            this.dataReady = true;
+          }
         }
       }
     );
@@ -91,12 +97,14 @@ export class DashboardComponent implements OnInit {
   }
 
   dataReadyValidator() {
-    if (this.dashboardBean.getDataIsReady()) {
-      this.dataReady = true;
-    } else {
-      setTimeout(() => {
-        this.dataReadyValidator();
-      }, 200);
+    if( !this.dashboardBean.getShowEmptyState() ){
+      if (this.dashboardBean.getDataIsReady()) {
+        this.dataReady = true;
+      } else {
+        setTimeout(() => {
+          this.dataReadyValidator();
+        }, 200);
+      }
     }
   }
 

@@ -36,8 +36,9 @@ export class CredentialService {
   }
 
   getAllCredentials( ): Observable<HttpResponse<Response<CredentialInterface>>> {
+    let url = `${environment.backendUrl}/users/${ sessionStorage.getItem('id-user') }/credentials?deep=true`;
     return this.httpClient.get<Response<CredentialInterface>>(
-      this.url,
+      url,
       {
         observe: 'response',
         headers: this.configService.getJsonHeaders()

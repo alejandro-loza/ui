@@ -16,8 +16,17 @@ export class DashboardBeanService {
   private dataExpensesTab:ResumeMainData[] = [];
   private dataIncomesBarChart:BarChart[] = [];
   private dataIncomesTab:ResumeMainData[] = [];
+  private showEmptyState:boolean = false;
 
   constructor() { }
+
+  public setShowEmptyState( data:boolean ){
+    this.showEmptyState = data;
+  }
+
+  public getShowEmptyState(): boolean {
+    return this.showEmptyState;
+  }
 
   public setDataIncomesTab( data:ResumeMainData[] ){
     this.dataIncomesTab = data;
