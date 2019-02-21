@@ -13,17 +13,17 @@ export class CategoryMovementComponent implements OnInit {
   @Input() private editAvailable: boolean;
 
   @Output() private statusModal: EventEmitter<boolean>;
-  @Output() private statusCategory: EventEmitter<Category>;
+  @Output() private statusConcepts: EventEmitter<Category>;
 
   constructor() {
     this.statusModal = new EventEmitter();
-    this.statusCategory = new EventEmitter();
+    this.statusConcepts = new EventEmitter();
   }
 
   ngOnInit() {}
 
   updateCategory(category: Category) {
-    this.category = category;
-    this.statusCategory.emit(category);
+    // this.category = category;
+    this.statusConcepts.emit(category);
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Concept } from '@interfaces/concept.interface';
 import { Category } from '@interfaces/category.interface';
+import { Movement } from '@interfaces/movement.interface';
 
 @Component({
   selector: 'app-concept-type-movement',
@@ -40,7 +41,6 @@ export class ConceptTypeMovementComponent implements OnInit {
 
   updateConcepts(category: Category) {
     this.concepts[0].category = category;
-    console.log(this.concepts);
     this.statusConcepts.emit(this.concepts);
   }
 }

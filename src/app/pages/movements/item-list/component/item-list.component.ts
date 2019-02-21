@@ -4,14 +4,14 @@ import {
   Input,
   ViewChild,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
+  Renderer2
 } from '@angular/core';
 import { Movement } from '@interfaces/movement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { isNullOrUndefined } from 'util';
+import { isUndefined } from 'util';
 import { Category } from '@interfaces/category.interface';
-import { Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-item-list',
@@ -39,7 +39,6 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.instanceCollapsible = M.Collapsible.getInstance(
       this.collapsibleElement.nativeElement
     );
-    this.instanceCollapsible.destroy();
   }
 
   trackByFn(index: number, movement: Movement) {
@@ -47,16 +46,21 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   collapsibleOpen(index: number) {
-    if (!isNullOrUndefined(this.auxMovement)) {
+    let indexValue: number;
+    if (!isUndefined(this.auxMovement)) {
       if (this.statusModal === true) {
         return;
       } else {
-        this.auxMovement.editAvailable = false;
+        indexValue = index;
+        this.auxMovement = this.movementList[indexValue];
       }
+      this.auxMovement.editAvailable = false;
+    } else {
+      indexValue = index;
+      this.auxMovement = this.movementList[indexValue];
     }
-    this.auxMovement = this.movementList[index];
-    this.auxMovement.editAvailable = true;
-    this.instanceCollapsible.open(index);
+    this.movementList[indexValue].editAvailable = true;
+    this.instanceCollapsible.open(indexValue);
     this.instanceCollapsible.destroy();
   }
 

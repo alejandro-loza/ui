@@ -25,7 +25,6 @@ export class ItemComponent implements OnInit {
   ngOnInit() {}
 
   updateConcepts(concepts: Concept[]) {
-    this.movement.concepts = concepts;
     // this.movementEdited.emit(this.movement);
   }
 }

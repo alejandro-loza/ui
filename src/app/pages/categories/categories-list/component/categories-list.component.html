@@ -1,15 +1,15 @@
 <ng-container *ngIf="categoryList; else elseSpinner">
-  <div class="container-fluid row category-container">
-    <ng-container *ngIf="flagCategory !== true; else elseSubcategory">
-      <ng-template ngFor let-category [ngForOf]="categoryList" let-i="index">
-        <app-category-item class="fast fadeIn" [category]="category" (click)="filterCategories(i)"></app-category-item>
-      </ng-template>
-    </ng-container>
-    <ng-template #elseSubcategory>
-      <app-subcategory-item [category]="category" (statusCategory)="statusCategory.emit($event)"></app-subcategory-item>
-    </ng-template>
-  </div>
+    <div class="container-fluid row category-container">
+        <ng-container *ngIf="flagCategory !== true; else elseSubcategory">
+            <ng-template ngFor let-category [ngForOf]="categoryList" let-i="index">
+                <app-category-item class="fast fadeIn" [category]="category" (click)="filterCategories(i)"></app-category-item>
+            </ng-template>
+        </ng-container>
+        <ng-template #elseSubcategory>
+            <app-subcategory-item [category]="category" (statusCategory)="updateCategory($event)"></app-subcategory-item>
+        </ng-template>
+    </div>
 </ng-container>
 <ng-template #elseSpinner>
-  <app-spinner></app-spinner>
+    <app-spinner></app-spinner>
 </ng-template>

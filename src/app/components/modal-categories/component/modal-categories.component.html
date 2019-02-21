@@ -1,15 +1,16 @@
 <!-- Modal Structure -->
 <div id="{{ modalTrigger }}" class="modal" #modalCateogry>
-  <div class="modal-content center-align black-text">
-    <ng-container *ngIf="backCategories !== true; else elseTemplate">
-      <h4>Selecciona una categoría: </h4>
-    </ng-container>
-    <ng-template #elseTemplate>
-      <h4>Selecciona una subcategoría: </h4>
-    </ng-template>
-    <app-categories-list [categoryList]="categoryList" [flagCategory]="backCategories" (filterStatus)="backCategories=$event" (statusCategory)="getSubcategory($event)"></app-categories-list>
-  </div>
-  <div class="container-fluid modal-footer">
-    <button class="modal-back btn-flat btn-back" (click)="backCategories = false" [disabled]="backCategories === false">Regresar</button>
-  </div>
+    <div class="modal-content center-align black-text">
+        <ng-container *ngIf="backCategories !== true; else elseTemplate">
+            <h4>Selecciona una categoría: </h4>
+        </ng-container>
+        <ng-template #elseTemplate>
+            <h4>Selecciona una subcategoría: </h4>
+        </ng-template>
+        <app-categories-list [categoryList]="categoryList" [flagCategory]="backCategories" (filterStatus)="backCategories=$event" (statusCategory)="updateCategory($event)">
+        </app-categories-list>
+    </div>
+    <div class="container-fluid modal-footer">
+        <button class="modal-back btn-flat btn-back" (click)="backCategories = false" [disabled]="backCategories === false">Regresar</button>
+    </div>
 </div>

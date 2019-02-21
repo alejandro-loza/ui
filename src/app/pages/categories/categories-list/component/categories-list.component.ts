@@ -19,12 +19,15 @@ export class CategoriesListComponent implements OnInit {
     this.statusCategory = new EventEmitter();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   filterCategories(index: number) {
     this.category = this.categoryList[index];
     this.flagCategory = true;
     this.filterStatus.emit(this.flagCategory);
+  }
+
+  updateCategory(category: Category) {
+    this.statusCategory.emit(category);
   }
 }

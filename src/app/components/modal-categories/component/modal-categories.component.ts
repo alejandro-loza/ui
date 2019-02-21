@@ -38,18 +38,19 @@ export class ModalCategoriesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const initModal = new M.Modal(this.modalCategory.nativeElement, {
-      onOpenStart: () => { this.statusModal.emit(true); },
-      onCloseStart: () => {
+      onOpenStart: () => {
+        this.statusModal.emit(true);
+      },
+      onCloseEnd: () => {
         this.backCategories = false;
         this.statusModal.emit(false);
       }
     });
-    this.instanceModal = M.Modal.getInstance( this.modalCategory.nativeElement );
+    this.instanceModal = M.Modal.getInstance(this.modalCategory.nativeElement);
   }
 
-  getSubcategory (subcategory: Category) {
+  updateCategory(category: Category) {
     this.instanceModal.close();
-    this.statusCategory.emit(subcategory);
+    this.statusCategory.emit(category);
   }
-
 }
