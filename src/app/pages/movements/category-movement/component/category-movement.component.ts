@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Category } from '@interfaces/category.interface';
+import { CategoriesService } from '@services/categories/categories.service';
 
 @Component({
   selector: 'app-category-movement',
@@ -15,7 +16,9 @@ export class CategoryMovementComponent implements OnInit {
   @Output() statusModal: EventEmitter<boolean>;
   @Output() statusConcepts: EventEmitter<Category>;
 
-  constructor() {
+  constructor(
+    private categoriesService: CategoriesService
+  ) {
     this.statusModal = new EventEmitter();
     this.statusConcepts = new EventEmitter();
   }
@@ -25,5 +28,13 @@ export class CategoryMovementComponent implements OnInit {
   updateCategory(category: Category) {
     // this.category = category;
     this.statusConcepts.emit(category);
+  }
+
+  setCategory(category: Category) {
+    if ( category.id === 'finerio-icon' ) {
+      this.categoriesService.setCategory = null;
+    } else {
+      this.categoriesService.setCategory = category;
+    }
   }
 }
