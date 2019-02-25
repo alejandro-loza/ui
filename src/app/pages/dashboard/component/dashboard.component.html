@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div *ngIf="!dashboardBean.getShowEmptyState()" class="container-fluid">
+<div *ngIf="!showEmptyState" class="container-fluid">
     <div class="row">
         <div class="col s12" id="childComponentsCol">
             <!-- Reference for ids on app-tabs -->
@@ -28,8 +28,8 @@
     </div> 
 </div>
 
-<div *ngIf="dashboardBean.getShowEmptyState()" class="emptyState">
-    <div class="row center">
+<div *ngIf="showEmptyState" class="emptyState">
+    <div class="row center"> 
         <div class="col s12">
             <h5>Empty State here!</h5>
         </div>

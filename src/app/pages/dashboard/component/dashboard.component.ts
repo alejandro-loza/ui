@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
   movementsServiceResponse: Movement[];
   categoriesList: Category[] = [];
   dataReady: boolean = false;
+  showEmptyState: boolean = this.dashboardBean.getShowEmptyState();
 
   /*0 INCOMES 1 EXPENSES 2 BALANCE */
   tabSelected: number = 1;
@@ -49,13 +50,14 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       this.dataReady = true;
+      this.showEmptyState = true;
     }
   }
 
   getMovementsData(categories: Category[]) {
     this.movementsService.getMovements(this.paramsMovements).subscribe(
       res => {
-        this.movementsServiceResponse = this.movementsService.getMovementList;
+        this.movementsServiceResponse = res.body.data;
       },
       error => {},
       () => {
@@ -75,6 +77,7 @@ export class DashboardComponent implements OnInit {
             );
           } else {
             this.dashboardBean.setShowEmptyState(true);
+            this.showEmptyState = true;
             this.dataReady = true;
           }
         }
