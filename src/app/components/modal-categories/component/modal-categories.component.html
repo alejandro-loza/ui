@@ -7,7 +7,7 @@
         <ng-template #elseTemplate>
             <h4>Selecciona una subcategoría: </h4>
         </ng-template>
-        <app-categories-list [categoryList]="categoryList" [flagCategory]="backCategories" (filterStatus)="backCategories=$event" (statusCategory)="updateCategory($event)">
+        <app-categories-list [categoryList]="categoryList" [flagCategory]="backCategories" (filterStatus)="backCategories=$event" (statusCategory)="statusCategory.emit($event)">
         </app-categories-list>
     </div>
     <div class="container-fluid modal-footer">

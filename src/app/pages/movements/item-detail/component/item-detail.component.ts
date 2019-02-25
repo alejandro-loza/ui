@@ -18,5 +18,6 @@ export class ItemDetailComponent implements OnInit {
     this.statusDelete = new EventEmitter();
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
+
 }

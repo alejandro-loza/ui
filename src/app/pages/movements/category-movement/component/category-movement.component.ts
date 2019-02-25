@@ -14,21 +14,16 @@ export class CategoryMovementComponent implements OnInit {
   @Input() editAvailable: boolean;
 
   @Output() statusModal: EventEmitter<boolean>;
-  @Output() statusConcepts: EventEmitter<Category>;
+  @Output() statusCategory: EventEmitter<boolean>;
 
   constructor(
     private categoriesService: CategoriesService
   ) {
     this.statusModal = new EventEmitter();
-    this.statusConcepts = new EventEmitter();
+    this.statusCategory = new EventEmitter();
   }
 
   ngOnInit() {}
-
-  updateCategory(category: Category) {
-    // this.category = category;
-    this.statusConcepts.emit(category);
-  }
 
   setCategory(category: Category) {
     if ( category.id === 'finerio-icon' ) {

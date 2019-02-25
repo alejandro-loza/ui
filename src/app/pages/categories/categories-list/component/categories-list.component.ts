@@ -10,7 +10,7 @@ export class CategoriesListComponent implements OnInit {
   @Input() categoryList: Category[];
   @Input() flagCategory: boolean;
   @Output() filterStatus: EventEmitter<boolean>;
-  @Output() statusCategory: EventEmitter<Category>;
+  @Output() statusCategory: EventEmitter<boolean>;
 
   private category: Category;
 
@@ -25,9 +25,5 @@ export class CategoriesListComponent implements OnInit {
     this.category = this.categoryList[index];
     this.flagCategory = true;
     this.filterStatus.emit(this.flagCategory);
-  }
-
-  updateCategory(category: Category) {
-    this.statusCategory.emit(category);
   }
 }
