@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
 	getMovementsData(categories: Category[]) {
 		this.movementsService.getMovements(this.paramsMovements).subscribe(
 			(res) => {
-				this.movementsServiceResponse = res.body.data;
+				this.movementsServiceResponse = this.movementsService.getMovementList;
 			},
 			(error) => {},
 			() => {
