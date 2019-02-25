@@ -3,12 +3,11 @@ import {
   OnInit,
   Input,
   Renderer2,
-  ViewChild,
-  ElementRef,
   Output,
   EventEmitter
 } from '@angular/core';
 import { Category } from '@interfaces/category.interface';
+import { CategoriesService } from '@services/categories/categories.service';
 
 @Component({
   selector: 'app-subcategory-item',
@@ -18,8 +17,10 @@ import { Category } from '@interfaces/category.interface';
 export class SubcategoryItemComponent implements OnInit {
   @Input() category: Category;
   @Output() statusCategory: EventEmitter<Category>;
-  @ViewChild('btnSubcategory') btnSubcategory: ElementRef;
-  constructor(private renderer: Renderer2) {
+  constructor(
+    private renderer: Renderer2,
+    private categorieService: CategoriesService
+  ) {
     this.statusCategory = new EventEmitter();
   }
 
@@ -62,7 +63,7 @@ export class SubcategoryItemComponent implements OnInit {
   selectCategory(i: number) {
     const auxcategory = this.category.subCategories[i];
     auxcategory.parent.id = this.category.id;
-    this.statusCategory.emit(auxcategory);
+    this.categorieService.setCategory = auxcategory;
   }
 
   trackByFn(index: number, category: Category) {

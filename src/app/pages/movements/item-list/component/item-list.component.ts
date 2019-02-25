@@ -25,8 +25,10 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   private auxMovement: Movement;
   private instanceCollapsible;
   private statusModal: boolean;
+  private indexMovement: number;
   constructor(private renderer: Renderer2) {
     this.statusModal = false;
+    this.indexMovement = undefined;
   }
 
   ngOnInit() {}
@@ -42,29 +44,36 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   trackByFn(index: number, movement: Movement) {
-    return movement.id;
+    return index;
   }
 
-  collapsibleOpen(index: number) {
-    let indexValue: number;
+  collapsibleFunction(index: number) {
+    /**
+     * Se valida si no es undefined _auxMovement_, si no lo es.
+     * Entonces su propiedad editAvailable se vuelve falso
+     */
     if (!isUndefined(this.auxMovement)) {
-      if (this.statusModal === true) {
-        return;
-      } else {
-        indexValue = index;
-        this.auxMovement = this.movementList[indexValue];
-      }
       this.auxMovement.editAvailable = false;
-    } else {
-      indexValue = index;
-      this.auxMovement = this.movementList[indexValue];
     }
-    this.movementList[indexValue].editAvailable = true;
-    this.instanceCollapsible.open(indexValue);
+    /**
+     * Si es undefined _auxMovement_, o el modal está activo
+     * se toma el indice actual y se le asigna a la variable auxMovemente.
+     */
+    if (isUndefined(this.auxMovement) || this.statusModal === false) {
+      this.indexMovement = index;
+      this.auxMovement = this.movementList[index];
+    } else {
+    /** Caso contrario solo se hace un return */
+      return;
+    }
+    this.auxMovement.editAvailable = true;
+    this.instanceCollapsible.open(index);
+    this.instanceCollapsible.destroy();
   }
 
   collapsibleClose(index: number) {
     this.auxMovement.editAvailable = false;
     this.instanceCollapsible.close(index);
+    this.instanceCollapsible.destroy();
   }
 }

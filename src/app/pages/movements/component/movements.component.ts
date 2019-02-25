@@ -11,6 +11,7 @@ import { ToastInterface } from '@interfaces/toast.interface';
 
 import { retry } from 'rxjs/operators';
 import { Category } from '@interfaces/category.interface';
+import { isUndefined } from 'util';
 
 declare var $: any;
 
@@ -29,6 +30,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   filterflag: boolean;
   spinnerBoolean: boolean;
   auxSize: number;
+  statusMovements: boolean;
 
   constructor(
     private categoryService: CategoriesService,
@@ -39,6 +41,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.status = false;
     this.spinnerBoolean = true;
     this.filterflag = false;
+    this.statusMovements = false;
     this.auxSize = 0;
     this.movementList = [];
     this.toast = {};
@@ -92,37 +95,23 @@ export class MovementsComponent implements OnInit, OnDestroy {
         this.getMovements();
       }
     }
-  };
+  }
 
   getMovements() {
     this.movementService.getMovements(this.paramsMovements).subscribe(
       res => {
         // Se le asigna el tamaño de la lista a la variable _auxSize_
         this.auxSize = res.body.data.length;
+        this.validateAllMovements();
 
         // Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
-        res.body.data.forEach(element => {
-          element['formatDate'] = this.dateApiService.dateFormatMovement(
-            element.customDate
+        res.body.data.forEach(movement => {
+          movement['formatDate'] = this.dateApiService.dateFormatMovement(
+            movement.customDate
           );
-          element['editAvailable'] = false;
+          movement['editAvailable'] = false;
+          this.movementList.push(movement);
         });
-
-        this.movementList = res.body.data;
-
-        // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
-        // Se manda un toast y se remueve la función del scroll.
-        if (
-          this.auxSize < this.paramsMovements.maxMovements ||
-          this.auxSize === 0
-        ) {
-          window.removeEventListener('scroll', this.offsetMovement, true);
-          this.toast = {
-            code: res.status,
-            message: 'Hemos cargamos todos tus movimientos'
-          };
-          this.toastService.toastGeneral(this.toast);
-        }
       },
       err => {
         this.toast.code = err.status;
@@ -167,5 +156,21 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.paramsMovements.offset = 0;
     this.movementList = [];
     this.getMovements();
+  }
+
+  validateAllMovements() {
+    // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
+    // Se manda un toast y se remueve la función del scroll.
+    if (
+      this.auxSize < this.paramsMovements.maxMovements ||
+      this.auxSize === 0
+    ) {
+      window.removeEventListener('scroll', this.offsetMovement, true);
+      this.toast = {
+        code: 200,
+        message: 'Hemos cargamos todos tus movimientos'
+      };
+      this.toastService.toastGeneral(this.toast);
+    }
   }
 }
