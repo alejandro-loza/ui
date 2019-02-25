@@ -17,17 +17,17 @@ import { Category } from '@interfaces/category.interface';
   styleUrls: ['./modal-categories.component.css']
 })
 export class ModalCategoriesComponent implements OnInit, AfterViewInit {
-  @Input() private modalTrigger: string;
-  @Input() private categoryList: Category[];
+  @Input() modalTrigger: string;
+  @Input() categoryList: Category[];
 
-  @Output() private statusModal: EventEmitter<boolean>;
-  @Output() private statusCategory: EventEmitter<Category>;
+  @Output() statusModal: EventEmitter<boolean>;
+  @Output() statusCategory: EventEmitter<Category>;
 
   @ViewChild('modalCateogry') modalCategory: ElementRef;
 
-  private auxCategoryList: Category[];
-  private instanceModal;
-  private backCategories: boolean;
+  auxCategoryList: Category[];
+  instanceModal;
+  backCategories: boolean;
   constructor() {
     this.backCategories = false;
     this.statusModal = new EventEmitter();

@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if( !this.dashboardBean.getShowEmptyState() ){
+    if (!this.dashboardBean.getShowEmptyState()) {
       if (this.dashboardBean.getLoadInformation()) {
         this.getCategoriesInfo();
       } else {
@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
   getMovementsData(categories: Category[]) {
     this.movementsService.getMovements(this.paramsMovements).subscribe(
       res => {
-        this.movementsServiceResponse = res.body.data;
+        this.movementsServiceResponse = this.movementsService.getMovementList;
       },
       error => {},
       () => {
@@ -68,10 +68,13 @@ export class DashboardComponent implements OnInit {
           this.movementsServiceResponse.forEach(movement => {
             this.movementsList.push(movement);
           });
-          if( this.movementsList.length > 0){
-            this.dashboardService.mainMethod( this.movementsList, this.categoriesList );
+          if (this.movementsList.length > 0) {
+            this.dashboardService.mainMethod(
+              this.movementsList,
+              this.categoriesList
+            );
           } else {
-            this.dashboardBean.setShowEmptyState( true );
+            this.dashboardBean.setShowEmptyState(true);
             this.dataReady = true;
           }
         }
@@ -97,7 +100,7 @@ export class DashboardComponent implements OnInit {
   }
 
   dataReadyValidator() {
-    if( !this.dashboardBean.getShowEmptyState() ){
+    if (!this.dashboardBean.getShowEmptyState()) {
       if (this.dashboardBean.getDataIsReady()) {
         this.dataReady = true;
       } else {

@@ -8,12 +8,12 @@ import { Category } from '@interfaces/category.interface';
   styleUrls: ['./category-movement.component.css']
 })
 export class CategoryMovementComponent implements OnInit {
-  @Input() private categoryList: Category[];
-  @Input() private category: Category;
-  @Input() private editAvailable: boolean;
+  @Input() categoryList: Category[];
+  @Input() category: Category;
+  @Input() editAvailable: boolean;
 
-  @Output() private statusModal: EventEmitter<boolean>;
-  @Output() private statusConcepts: EventEmitter<Category>;
+  @Output() statusModal: EventEmitter<boolean>;
+  @Output() statusConcepts: EventEmitter<Category>;
 
   constructor() {
     this.statusModal = new EventEmitter();

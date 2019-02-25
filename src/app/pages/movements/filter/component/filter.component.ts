@@ -46,8 +46,8 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.paramsMovementsService.setCharges = ngform.value.charges;
     this.paramsMovementsService.setDeposits = ngform.value.deposits;
     this.paramsMovementsService.setDuplicates = ngform.value.duplicates;
-    this.paramsMovementsService.setStartDate = this.dateApiService.dateWithFormat(this.startDate);
-    this.paramsMovementsService.setEndDate = this.dateApiService.dateWithFormat(this.endDate);
+    this.paramsMovementsService.setStartDate = this.startDate.toString();
+    this.paramsMovementsService.setEndDate = this.endDate.toString();
     this.filterMovementStatus.emit(true);
   }
 }

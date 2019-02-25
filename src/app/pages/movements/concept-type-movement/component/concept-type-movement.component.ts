@@ -11,13 +11,13 @@ import { Movement } from '@interfaces/movement.interface';
 export class ConceptTypeMovementComponent implements OnInit {
   private multiCategory: Category;
   private noCategory: Category;
-  @Input() private concepts: Concept[];
-  @Input() private editAvailable: boolean;
-  @Input() private categoryList: Category[];
+  @Input() concepts: Concept[];
+  @Input() editAvailable: boolean;
+  @Input() categoryList: Category[];
 
-  @Output() private statusModal: EventEmitter<boolean>;
-  @Output() private statusConcepts: EventEmitter<Concept[]>;
-  @Output() private valueCategoryColor: EventEmitter<string>;
+  @Output() statusModal: EventEmitter<boolean>;
+  @Output() statusConcepts: EventEmitter<Concept[]>;
+  @Output() valueCategoryColor: EventEmitter<string>;
 
   constructor() {
     this.statusModal = new EventEmitter();
