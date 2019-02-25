@@ -17,7 +17,12 @@
         <!-- Se recorren las subcategorías de la cateogria actual -->
         <ng-template ngFor let-subcategory [ngForOf]="category.subCategories" let-i="index" [ngForTrackBy]="trackByFn">
             <div class="col m6 center subcategory fast fadeIn">
-                <button [attr.id]="subcategory.id" class="btn btn-subcategory truncate" [ngStyle]="{'border-color': subcategory.color}" (mouseover)="overSubcategory(i)" (mouseout)="outSubcategory(i)" (click)="selectCategory(i)" #btnSubcategory> {{ subcategory.name }} </button>
+                <button class="btn btn-subcategory truncate modal-close"
+                  [attr.id]="subcategory.id"
+                  [ngStyle]="{'border-color': subcategory.color}"
+                  (mouseover)="overSubcategory(i)"
+                  (mouseout)="outSubcategory(i)"
+                  (click)="selectCategory(i)"> {{ subcategory.name }} </button>
             </div>
         </ng-template>
     </div>

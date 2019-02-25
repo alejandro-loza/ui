@@ -23,11 +23,9 @@ export class MovementsService {
     private configService: ConfigService
   ) {}
 
-
-  public get getMovementList() : Movement[] {
+  public get getMovementList(): Movement[] {
     return this.movementsList;
   }
-
 
   /**
    * @function allMovements Esta función lo que hace traer todos lo movimiento con los siguientes parametros
@@ -79,7 +77,7 @@ export class MovementsService {
           });
           return res;
         })
-      );;
+      );
   }
 
   createMovement(movement: NewMovement): Observable<HttpResponse<Movement>> {

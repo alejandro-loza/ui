@@ -50,13 +50,14 @@ export class DashboardComponent implements OnInit {
 			}
 		} else {
 			this.dataReady = true;
+			this.showEmptyState = true;
 		}
 	}
 
 	getMovementsData(categories: Category[]) {
 		this.movementsService.getMovements(this.paramsMovements).subscribe(
 			(res) => {
-				this.movementsServiceResponse = this.movementsService.getMovementList;
+				this.movementsServiceResponse = res.body.data;
 			},
 			(error) => {},
 			() => {
@@ -71,6 +72,7 @@ export class DashboardComponent implements OnInit {
 						this.dashboardService.mainMethod(this.movementsList, this.categoriesList);
 					} else {
 						this.dashboardBean.setShowEmptyState(true);
+						this.showEmptyState = true;
 						this.dataReady = true;
 					}
 				}

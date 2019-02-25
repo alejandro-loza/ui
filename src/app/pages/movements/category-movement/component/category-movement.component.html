@@ -1,13 +1,28 @@
 <ng-container *ngIf="editAvailable === true; else noEditable">
-    <input type="button" class="btn category-container modal-trigger" [attr.data-target]="'modal-target'" [ngModel]="category.name" [attr.value]="category.name" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}" />
+    <input type="button" class="btn category-container modal-trigger"
+      [attr.data-target]="'modal-target'"
+      [ngModel]="category.name"
+      [ngStyle]="{'background-color': category.color, 'color': category.textcolor}" />
 </ng-container>
 <ng-template #noEditable>
-    <button type="button" class="btn category-container truncate" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}">
-      <i class="mdi mdi-24px left">
-        <img src="https://cdn.finerio.mx/categories/web/{{ ( category.parent ) ? category.parent.id : category.id }}.svg"
-        [attr.alt]="category.name"
-        srcset="assets/media/img/categories/{{ ( category.parent ) ? category.parent.id : category.id }}.svg"
-        class="responsive-img sizeIcon">
+  <button type="button" class="btn category-container truncate" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}">
+    <i class="mdi mdi-24px left">
+        <ng-container *ngIf="category.user; else noCategoryUser">
+            <img
+            (click)="setCategory(category)"
+            src="https://cdn.finerio.mx/categories/web/finerio-icon.svg"
+            srcset="assets/media/img/categories/finerio-icon.svg"
+            [attr.alt]="category.name"
+            class="responsive-img sizeIcon">
+        </ng-container>
+        <ng-template #noCategoryUser>
+            <img
+            (click)="setCategory(category)"
+            src="https://cdn.finerio.mx/categories/web/{{ (category.parent) ? category.parent.id : category.id }}.svg"
+            srcset="assets/media/img/categories/{{ (category.parent) ? category.parent.id : category.id }}.svg"
+            [attr.alt]="category.name"
+            class="responsive-img sizeIcon">
+        </ng-template>
       </i>
     {{ category.name }}
   </button>

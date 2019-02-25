@@ -56,15 +56,14 @@ export class ItemListComponent implements OnInit, AfterViewInit {
       this.auxMovement.editAvailable = false;
     }
     /**
-     * Se valida si es undefined _auxMovement_, o el modal está activo
+     * Si es undefined _auxMovement_, o el modal está activo
      * se toma el indice actual y se le asigna a la variable auxMovemente.
-     *
-     * Caso contrario solo se hace un return
      */
     if (isUndefined(this.auxMovement) || this.statusModal === false) {
       this.indexMovement = index;
       this.auxMovement = this.movementList[index];
     } else {
+    /** Caso contrario solo se hace un return */
       return;
     }
     this.auxMovement.editAvailable = true;
@@ -75,5 +74,6 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   collapsibleClose(index: number) {
     this.auxMovement.editAvailable = false;
     this.instanceCollapsible.close(index);
+    this.instanceCollapsible.destroy();
   }
 }
