@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '@shared/shared.module';
 
 // Routes
 import { BUDGETS_ROUTES } from './budgets.route';
@@ -8,10 +9,7 @@ import { BUDGETS_ROUTES } from './budgets.route';
 import { BudgetsComponent } from './components/budgets.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    BUDGETS_ROUTES
-  ],
-  declarations: [ BudgetsComponent ]
+	imports: [ CommonModule, SharedModule, BUDGETS_ROUTES ],
+	declarations: [ BudgetsComponent ]
 })
-export class BudgetsModule { }
+export class BudgetsModule {}

@@ -1,3 +1,42 @@
-<p>
-  budgets works!
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col s12">
+      <app-spinner *ngIf="showSpinner"></app-spinner>
+      <div class="card white">
+        <div class="card-content">
+          <div class="row borderB-o">
+            <div class="col s12">
+              <div class="col s6 valign-wrapper">
+                <img src="/assets/media/img/budgets/default.jpg" alt="">
+                <p class="paddingL">Presupuesto Total</p>
+              </div>
+              <div class="col s6 right-align">
+                <p>$19,338 / <b>$22,267</b> <small>(89%)</small></p>
+              </div>
+            </div>
+            <div class="col s12">
+              <p class="text-inside-progress">Por Ejecutar: </p>
+              <div class="progress" id="totalProgressBar">
+                <div class="determinate" style="width: 80%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row finerio-blue">
+    <div class="col s12">
+      <div class="row right-align">
+        <div class="col m6">
+          <p>Categorías</p>
+        </div>
+        <div class="col m6">
+          <button class="btn"> Crear Presupuesto <i class="material-icons right">
+            edit
+          </i> </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
