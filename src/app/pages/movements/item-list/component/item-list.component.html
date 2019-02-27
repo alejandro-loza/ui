@@ -3,11 +3,21 @@
         <li class="fast fadeIn list" id="movement.id">
             <!-- Encabezado del collapsible -->
             <div class="collapsible-header" [ngClass]="{'grey lighten-2': movement.duplicated}" (click)="collapsibleFunction(i)">
-                <app-item class="item" [categoryList]="categoryList" [movement]="movementList[i]" (movementEdited)="movement=$event" (statusModal)="modalValue($event)">
+                <app-item class="item"
+                  [categoryList]="categoryList"
+                  [movement]="movementList[i]"
+                  (movementEdited)="movement=$event"
+                  (statusModal)="statusModal=$event"
+                  (statusCategory)="statusCategory($event)">
                 </app-item>
             </div>
             <div class="collapsible-body">
-                <app-item-detail class="item-detail" [movement]="movement" (status)="collapsibleClose(i)" (statusDelete)="movementList.splice(i, 1)">
+                <app-item-detail
+                  class="item-detail"
+                  [movement]="movement"
+                  (status)="collapsibleClose(i)"
+                  (statusDelete)="movementList.splice(i, 1)"
+                  (keyup)="eventHandler($event)">
                 </app-item-detail>
             </div>
         </li>

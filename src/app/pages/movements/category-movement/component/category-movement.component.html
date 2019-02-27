@@ -28,5 +28,5 @@
   </button>
 </ng-template>
 
-<app-modal-categories [categoryList]="categoryList" [modalTrigger]="'modal-target'" (statusModal)="statusModal.emit($event)" (statusCategory)="updateCategory($event)">
+<app-modal-categories [categoryList]="categoryList" [modalTrigger]="'modal-target'" (statusModal)="statusModal.emit($event)" (statusCategory)="statusCategory.emit($event)">
 </app-modal-categories>

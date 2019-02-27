@@ -5,13 +5,14 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  Renderer2
+  Renderer2,
 } from '@angular/core';
 import { Movement } from '@interfaces/movement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 import { isUndefined } from 'util';
 import { Category } from '@interfaces/category.interface';
+import { CategoriesService } from '@services/categories/categories.service';
 
 @Component({
   selector: 'app-item-list',
@@ -26,7 +27,10 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   private instanceCollapsible;
   private statusModal: boolean;
   private indexMovement: number;
-  constructor(private renderer: Renderer2) {
+  constructor(
+    private renderer: Renderer2,
+    private categoriesService: CategoriesService
+  ) {
     this.statusModal = false;
     this.indexMovement = undefined;
   }
@@ -52,23 +56,32 @@ export class ItemListComponent implements OnInit, AfterViewInit {
      * Se valida si no es undefined _auxMovement_, si no lo es.
      * Entonces su propiedad editAvailable se vuelve falso
      */
-    if (!isUndefined(this.auxMovement)) {
+    if (!isUndefined(this.auxMovement) && this.statusModal === false) {
       this.auxMovement.editAvailable = false;
     }
     /**
      * Si es undefined _auxMovement_, o el modal está activo
      * se toma el indice actual y se le asigna a la variable auxMovemente.
+     *
+     * Caso contrario solo se hace un return
      */
     if (isUndefined(this.auxMovement) || this.statusModal === false) {
       this.indexMovement = index;
       this.auxMovement = this.movementList[index];
     } else {
-    /** Caso contrario solo se hace un return */
       return;
     }
     this.auxMovement.editAvailable = true;
-    this.instanceCollapsible.open(index);
+    this.instanceCollapsible.open(this.indexMovement);
     this.instanceCollapsible.destroy();
+  }
+
+  statusCategory(status: boolean) {
+    if ( status === true ) {
+      this.auxMovement.concepts[0].category = this.categoriesService.getCategory;
+      this.statusModal = false;
+    }
+    this.auxMovement.editAvailable = true;
   }
 
   collapsibleClose(index: number) {

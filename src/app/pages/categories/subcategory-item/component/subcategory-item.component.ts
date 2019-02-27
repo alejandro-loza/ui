@@ -16,7 +16,8 @@ import { CategoriesService } from '@services/categories/categories.service';
 })
 export class SubcategoryItemComponent implements OnInit {
   @Input() category: Category;
-  @Output() statusCategory: EventEmitter<Category>;
+  @Input() statusCategoryValue: boolean;
+  @Output() statusCategory: EventEmitter<boolean>;
   constructor(
     private renderer: Renderer2,
     private categorieService: CategoriesService
@@ -64,6 +65,8 @@ export class SubcategoryItemComponent implements OnInit {
     const auxcategory = this.category.subCategories[i];
     auxcategory.parent.id = this.category.id;
     this.categorieService.setCategory = auxcategory;
+    this.statusCategoryValue = true;
+    this.statusCategory.emit(this.statusCategoryValue);
   }
 
   trackByFn(index: number, category: Category) {

@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
-import { retry } from 'rxjs/operators';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { Movement } from '@interfaces/movement.interface';
 
@@ -19,7 +18,6 @@ import { Movement } from '@interfaces/movement.interface';
   styleUrls: ['./save-movement.component.css']
 })
 export class SaveMovementComponent implements OnInit {
-  @ViewChild('guardarBtn') saveButton: ElementRef;
   @Input() movement: Movement;
   @Output() status: EventEmitter<boolean>;
 
@@ -33,7 +31,7 @@ export class SaveMovementComponent implements OnInit {
     this.toastInterface = {};
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   updateMovement() {
     this.movementService.updateMovement(this.movement).subscribe(
@@ -62,5 +60,9 @@ export class SaveMovementComponent implements OnInit {
         this.toastService.toastGeneral(this.toastInterface);
       }
     );
+  }
+
+  onEnter(movement: Movement) {
+    console.log(movement);
   }
 }
