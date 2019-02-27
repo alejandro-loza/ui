@@ -21,4 +21,12 @@ export class BudgetsService {
 			headers: this.configService.getJsonHeaders()
 		});
 	}
+
+	deleteBudget(budget: Budget): Observable<HttpResponse<Response<any>>> {
+		this.url = `${environment.backendUrl}/budgets/${budget.id}?deep=true`;
+		return this.http.delete<Response<any>>(this.url, {
+			observe: 'response',
+			headers: this.configService.getJsonHeaders()
+		});
+	}
 }
