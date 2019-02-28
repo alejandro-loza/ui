@@ -1,0 +1,42 @@
+.marginBottom-0 {
+	margin-bottom: 0px;
+}
+
+.py-10 {
+	padding-bottom: 15px;
+	padding-top: 10px;
+}
+
+#subcatsRow {
+	height: 50px;
+}
+
+#backgroundContainer {
+	position: relative;
+	text-align: center;
+}
+
+#backgroundContainer img {
+	max-width: 150px;
+	max-height: 150px;
+}
+
+#backgroundContainer h5 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.content {
+	padding-top: 15px;
+}
+
+.subCategoryElement {
+	height: 30px;
+	border-radius: 19px;
+	text-align: center;
+}
+
+.subCategoryElement span {
+	position: relative;
+	vertical-align: sub;
+}

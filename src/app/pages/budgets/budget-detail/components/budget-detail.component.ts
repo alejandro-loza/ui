@@ -48,9 +48,9 @@ export class BudgetDetailComponent implements OnInit {
 	getSubBudgets() {
 		if (!isNullOrUndefined(this.budget.subBudgets)) {
 			this.subBudgets = this.budget.subBudgets;
+			this.sortingSubbudgets();
 		}
 		this.doPercentage();
-		this.sortingSubbudgets();
 	}
 
 	doPercentage() {

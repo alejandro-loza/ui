@@ -1,0 +1,64 @@
+<app-back-button [ruta]="'/app/budgets/new-budget'"></app-back-button>
+<div class="container animated fadeIn" id="categorySelection">
+    <div class="row">
+      <div class="col s12 center">
+        <h5>Asigna montos a las Subcategorias que prefieras</h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col m6 l4">
+        <div id="backgroundContainer" [ngStyle]="{'background-color': categorySelected.color, 'height':setHeightToCol }">
+          <div class="content">
+            <img src="https://cdn.finerio.mx/categories/web/{{ categorySelected.id }}.svg"
+            onerror="this.src='/assets/media/img/categories/finerio-icon.svg'" alt="Category Name"><br>
+            <h5 [ngStyle]="{'color':categorySelected.textColor}">{{categorySelected.name}}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col m6 l8 z-depth-1 py-10" id="divToGetHeight">
+        <form #amount="ngForm" (ngSubmit)="submit(amount)">
+          <div class="row marginBottom-0 valign-wrapper" id="subcatsRow">
+            <div class="col m8 l8 center">
+              <div class="subCategoryElement" [ngStyle]="{'color':categorySelected.textColor, 'background-color':categorySelected.color}">
+                <span>{{ categorySelected.name }}</span>
+              </div>
+            </div>
+            <div class="col m4 l4">
+              <div class="input-field inline">
+                <input 
+                    [(ngModel)]="categoryInputModel"
+                    (keyup)="cleanSubcatsInput(amount)"
+                    id="{{categorySelected.name}}" 
+                    type="number" 
+                    name="{{categorySelected.name}}"
+                    >
+              </div>
+            </div>
+          </div>
+          <div class="row marginBottom-0 valign-wrapper" id="subcatsRow" *ngFor="let subCategory of categorySelected.subCategories">
+            <div class="col m8 l8 center">
+              <div class="subCategoryElement" [ngStyle]="{'color':subCategory.textColor, 'background-color':subCategory.color}">
+                <span>{{ subCategory.name }}</span>
+              </div>
+            </div>
+            <div class="col m4 l4">
+              <div class="input-field inline">
+                <input 
+                    (keyup)="getTotalAmount(amount)"
+                    ngModel
+                    id="{{subCategory.name}}" 
+                    type="number" 
+                    name="{{subCategory.name}}"
+                    >
+              </div>
+            </div>
+          </div>
+          <div class="col s12 right-align py-10">
+            <button type="submit" class="btn finerio-blue white-text right-align">
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

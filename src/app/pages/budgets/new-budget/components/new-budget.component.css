@@ -1,0 +1,34 @@
+.marginBottom-0 {
+	margin-bottom: 0px;
+}
+
+#categorySelection h4 {
+	margin-top: 0px !important;
+}
+
+.py-10 {
+	padding-bottom: 15px;
+	padding-top: 10px;
+}
+
+.divContainer {
+	padding: 5px 5px;
+}
+
+.categoryButton {
+	height: auto;
+	font-size: 0.8vw;
+	position: relative;
+	width: 100%;
+	min-height: 115px;
+}
+
+.categoryButton img {
+	width: 45px;
+	heigth: 15px;
+	padding-top: 5px;
+}
+
+.content {
+	padding-top: 15px;
+}

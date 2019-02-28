@@ -36,7 +36,7 @@
       <h5>Categorías</h5>
     </div>
     <div class="col s7 m5">
-      <button (click)="createBudget()"
+      <button [routerLink]="['/app/budgets/new-budget']"
               id="createButton" class="btn-flat white black-text right truncate"> Crear Presupuesto <i class="material-icons right">
         add
       </i> </button>

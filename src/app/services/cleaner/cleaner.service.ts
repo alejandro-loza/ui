@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
+import { CategoriesBeanService } from '@services/categories/categories-bean.service';
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -9,7 +11,8 @@ export class CleanerService {
 	constructor(
 		private dashboardBean: DashboardBeanService,
 		private credentialBeanService: CredentialBeanService,
-		private budgetsBeanService: BudgetsBeanService
+		private budgetsBeanService: BudgetsBeanService,
+		private categoriesBeanService: CategoriesBeanService
 	) {}
 
 	cleanAllVariables() {
@@ -32,5 +35,7 @@ export class CleanerService {
 		this.budgetsBeanService.setBudgets(null);
 		this.budgetsBeanService.setLoadInformation(true);
 		this.budgetsBeanService.setShowEmptyStates(false);
+		// Categories memory
+		this.categoriesBeanService.setCategories(null);
 	}
 }
