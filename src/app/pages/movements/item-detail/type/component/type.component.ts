@@ -17,11 +17,13 @@ import {
 export class TypeComponent implements OnInit {
   @Input() type: string;
   @Output() valueType: EventEmitter<string>;
+  @Output() keyEnterPressed: EventEmitter<string>;
   @ViewChild('charge') btnCharge: ElementRef;
   @ViewChild('deposit') btnDeposit: ElementRef;
 
   constructor(private renderer: Renderer2) {
     this.valueType = new EventEmitter();
+    this.keyEnterPressed = new EventEmitter();
   }
 
   ngOnInit() {}
