@@ -35,6 +35,7 @@ export class CleanerService {
 		this.budgetsBeanService.setBudgets(null);
 		this.budgetsBeanService.setLoadInformation(true);
 		this.budgetsBeanService.setShowEmptyStates(false);
+		this.budgetsBeanService.setCategoryToCreateNewBudget(null);
 		// Categories memory
 		this.categoriesBeanService.setCategories(null);
 	}

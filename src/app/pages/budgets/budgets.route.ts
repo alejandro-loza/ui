@@ -14,7 +14,7 @@ const BUDGETS_ROUTING: Routes = [
 		}
 	},
 	{
-		path: 'shared-budget',
+		path: 'shared-budget/:action',
 		loadChildren: './shared-budget-component/shared-budget-component.module#SharedBudgetComponentModule',
 		data: {
 			title: 'Edita tu Presupuesto'

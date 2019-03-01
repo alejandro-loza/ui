@@ -4,7 +4,6 @@ import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { BudgetsService } from '@services/budgets/budgets.service';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
 import * as M from 'materialize-css/dist/js/materialize';
-import { ToastInterface } from '@interfaces/toast.interface';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -34,6 +33,8 @@ export class BudgetDetailComponent implements OnInit {
 		this.getCategoryName();
 		if (!isNullOrUndefined(this.budgetsBeanService.getBudgetToViewDetails())) {
 			this.budget = this.budgetsBeanService.getBudgetToViewDetails();
+			this.budgetsBeanService.setBudgetToEdit(this.budget);
+			this.budgetsBeanService.setCategoryToSharedComponent(this.budget.category);
 			this.getSubBudgets();
 			this.showScreen = true;
 		} else {

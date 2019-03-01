@@ -13,4 +13,10 @@ export interface SubBudget {
 	amount: number;
 	category: Category;
 	name: string;
+	id: string;
+	spentAmount: number;
+	spentPercentage: number;
+	user: {
+		id: string;
+	};
 }

@@ -8,7 +8,8 @@ import { Category } from '@app/interfaces/category.interface';
 export class BudgetsBeanService {
 	private budgets: Budget[] = [];
 	private budgetToViewDetails: Budget = null;
-	private categoryToCreateNewBudget: Category = null;
+	private budgetToEdit: Budget = null;
+	private categoryToSharedComponent: Category = null;
 	private loadInformation: boolean = true;
 	private showEmptyState: boolean = false;
 
@@ -30,12 +31,20 @@ export class BudgetsBeanService {
 		return this.budgetToViewDetails;
 	}
 
-	public setCategoryToCreateNewBudget(data: Category) {
-		this.categoryToCreateNewBudget = data;
+	public setBudgetToEdit(data: Budget) {
+		this.budgetToEdit = data;
 	}
 
-	public getCategoryToCreateNewBudget(): Category {
-		return this.categoryToCreateNewBudget;
+	public getBudgetToEdit(): Budget {
+		return this.budgetToEdit;
+	}
+
+	public setCategoryToSharedComponent(data: Category) {
+		this.categoryToSharedComponent = data;
+	}
+
+	public getCategoryToSharedComponent(): Category {
+		return this.categoryToSharedComponent;
 	}
 
 	public setLoadInformation(data: boolean) {

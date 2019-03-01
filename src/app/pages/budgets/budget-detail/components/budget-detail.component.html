@@ -31,7 +31,8 @@
       <h5>{{ categoryName }}</h5>
     </div>
     <div class="col s7 m5">
-      <button id="editButton" class="btn-flat white black-text right truncate">Editar<i class="material-icons right">
+      <button id="editButton" [routerLink]="['/app/budgets/shared-budget', 'edit']"
+              class="btn-flat white black-text right truncate">Editar<i class="material-icons right">
         edit
       </i> </button>
     </div>

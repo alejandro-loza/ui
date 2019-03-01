@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { BudgetsService } from '@services/budgets/budgets.service';
 import { Category } from '@app/interfaces/category.interface';
 import { isNullOrUndefined } from 'util';
 import { NewBudget, SubBudget } from '@interfaces/budgets/new-budget.interface';
+import { Budget } from '@app/interfaces/budgets/budget.interface';
+import { editBudgetAux } from '@app/interfaces/budgets/editBudgetAux.interface';
 
 @Component({
 	selector: 'app-shared-budget-component',
@@ -13,7 +15,11 @@ import { NewBudget, SubBudget } from '@interfaces/budgets/new-budget.interface';
 	styleUrls: [ './shared-budget-component.component.css' ]
 })
 export class SharedBudgetComponentComponent implements OnInit {
+	routeForBackButton: string;
+	editModeOfTheComponent: boolean;
+	ngModelAux: editBudgetAux[] = [];
 	setHeightToCol: string = '';
+	budgetToEdit: Budget = null;
 	categorySelected: Category = null;
 	budgetToCreate: NewBudget = {
 		amount: 0,
@@ -27,24 +33,59 @@ export class SharedBudgetComponentComponent implements OnInit {
 	constructor(
 		private budgetsBeanService: BudgetsBeanService,
 		private router: Router,
-		private budgetsService: BudgetsService
+		private budgetsService: BudgetsService,
+		private activatedRoute: ActivatedRoute
 	) {
-		this.categorySelected = this.budgetsBeanService.getCategoryToCreateNewBudget();
-		if (isNullOrUndefined(this.categorySelected)) {
+		this.categorySelected = this.budgetsBeanService.getCategoryToSharedComponent();
+		this.budgetToEdit = this.budgetsBeanService.getBudgetToEdit();
+		if (isNullOrUndefined(this.categorySelected) && isNullOrUndefined(this.budgetToEdit)) {
 			this.router.navigateByUrl('/app/budgets');
 		}
+		this.activatedRoute.params.subscribe((params) => {
+			this.editModeOfTheComponent = params['action'] === 'edit' ? true : false;
+		});
 	}
 
 	ngOnInit() {
-		setTimeout(() => {
-			this.setHeightToCol = this.getHeightOfSubcatsContainer().toString() + 'px';
-		}, 50);
+		this.settingDimensionOfCatContainer();
+		this.settingFunctionalityOfTheComponent();
+	}
+
+	fillInputs() {
+		for (let i = 0; i < this.ngModelAux.length; i++) {
+			this.budgetToEdit.subBudgets.forEach((subBudget) => {
+				if (subBudget.name == this.ngModelAux[i].name) {
+					this.ngModelAux[i].value = subBudget.amount;
+				}
+			});
+		}
 	}
 
 	submit(form: NgForm) {
-		this.doDataProcessForPost(form);
+		this.editModeOfTheComponent ? this.doDataProcessForPUT(form) : this.doDataProcessForPost(form);
 	}
 
+	// MTHOD FOR UPDATES TO BUDGETS
+	doDataProcessForPUT(form: NgForm) {
+		const ARRAY_WITH_KEYS = Object.keys(form.value);
+		ARRAY_WITH_KEYS.forEach((key) => {
+			if (typeof form.value[key] === 'number' && key !== this.categorySelected.name) {
+				this.fillSubBudgetsForEditOption(form, key);
+			}
+		});
+		this.modifyingBudget();
+		this.budgetsService.updateBudget(this.budgetToEdit).subscribe(
+			(res) => {
+				this.budgetsBeanService.setLoadInformation(true);
+				this.router.navigateByUrl('/app/budgets');
+			},
+			(errors) => {
+				console.log(errors);
+			}
+		);
+	}
+
+	// MTHOD FOR NEW BUDGETS
 	doDataProcessForPost(form: NgForm) {
 		const ARRAY_WITH_KEYS = Object.keys(form.value);
 		ARRAY_WITH_KEYS.forEach((key) => {
@@ -52,8 +93,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 				this.fillSubBudgets(form, key);
 			}
 		});
-		this.makeBudgetStructure();
-		console.log(this.budgetToCreate);
+		this.makeNewBudgetStructure();
 		this.budgetsService.createBudget(this.budgetToCreate).subscribe(
 			(res) => {
 				if (res.status === 200) {
@@ -67,18 +107,43 @@ export class SharedBudgetComponentComponent implements OnInit {
 		);
 	}
 
-	makeBudgetStructure() {
+	modifyingBudget() {
+		this.budgetToEdit.amount = this.categoryInputModel;
+		this.budgetToEdit.subBudgets = this.subBudgets;
+	}
+
+	makeNewBudgetStructure() {
 		this.budgetToCreate.amount = this.categoryInputModel;
 		this.budgetToCreate.category = this.categorySelected;
 		this.budgetToCreate.subBudgets = this.subBudgets;
 		this.budgetToCreate.user.id = sessionStorage.getItem('id-user');
 	}
 
+	fillSubBudgetsForEditOption(form: NgForm, key: string) {
+		this.subBudgets.push({
+			amount: form.value[key],
+			category: this.getSubcategory(key),
+			name: key,
+			id: '',
+			spentAmount: 0,
+			spentPercentage: 0,
+			user: {
+				id: ''
+			}
+		});
+	}
+
 	fillSubBudgets(form: NgForm, key: string) {
 		this.subBudgets.push({
 			amount: form.value[key],
 			category: this.getSubcategory(key),
-			name: key
+			name: key,
+			id: '',
+			spentAmount: 0,
+			spentPercentage: 0,
+			user: {
+				id: ''
+			}
 		});
 	}
 
@@ -110,6 +175,25 @@ export class SharedBudgetComponentComponent implements OnInit {
 			subcategory.name == name ? (subcategoryVar = subcategory) : null;
 		});
 		return subcategoryVar;
+	}
+
+	settingFunctionalityOfTheComponent() {
+		if (this.editModeOfTheComponent) {
+			this.categorySelected.subCategories.forEach((subcat) => {
+				this.ngModelAux.push({ name: subcat.name });
+			});
+			this.categoryInputModel = this.budgetToEdit.amount;
+			this.fillInputs();
+			this.routeForBackButton = `/app/budgets/${this.categorySelected.name}`;
+		} else {
+			this.routeForBackButton = '/app/budgets/new-budget';
+		}
+	}
+
+	settingDimensionOfCatContainer() {
+		setTimeout(() => {
+			this.setHeightToCol = this.getHeightOfSubcatsContainer().toString() + 'px';
+		}, 50);
 	}
 
 	getHeightOfSubcatsContainer(): number {

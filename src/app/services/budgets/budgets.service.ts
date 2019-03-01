@@ -31,6 +31,14 @@ export class BudgetsService {
 		});
 	}
 
+	updateBudget(budget: Budget): Observable<HttpResponse<Response<Budget>>> {
+		this.url = `${environment.backendUrl}/budgets/${budget.id}/replace?deep=true`;
+		return this.http.put<Response<Budget>>(this.url, budget, {
+			observe: 'response',
+			headers: this.configService.getJsonHeaders()
+		});
+	}
+
 	/* METHOD FOR FINERIO 3.0
 	createBudget(budget: NewBudget): Observable<HttpResponse<Response<Budget>>> {
 		this.url = `${environment.backendUrl}/users/${sessionStorage.getItem('id-user')}/budgets?deep=true`;

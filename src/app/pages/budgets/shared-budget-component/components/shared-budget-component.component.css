@@ -9,11 +9,13 @@
 
 #subcatsRow {
 	height: 50px;
+	border-radius: 5px;
 }
 
 #backgroundContainer {
 	position: relative;
 	text-align: center;
+	border-radius: 5px;
 }
 
 #backgroundContainer img {
@@ -39,4 +41,8 @@
 .subCategoryElement span {
 	position: relative;
 	vertical-align: sub;
+}
+
+.input-field input[type=number] {
+	border-bottom: 2px solid #9e9e9e;
 }
