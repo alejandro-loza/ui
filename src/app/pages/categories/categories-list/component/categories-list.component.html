@@ -6,7 +6,7 @@
             </ng-template>
         </ng-container>
         <ng-template #elseSubcategory>
-            <app-subcategory-item [category]="category" (statusCategory)="updateCategory($event)"></app-subcategory-item>
+            <app-subcategory-item [category]="category" (statusCategory)="statusCategory.emit($event)"></app-subcategory-item>
         </ng-template>
     </div>
 </ng-container>

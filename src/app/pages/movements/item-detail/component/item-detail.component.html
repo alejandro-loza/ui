@@ -2,12 +2,13 @@
   <!-- Diseño para movimientos en efectivo-->
   <ng-container *ngIf="movement.account.name === 'Efectivo'; else tarjeta">
     <div class="col m6">
-      <app-type [type]="movement.type" (valueType)="movement.type=$event"></app-type>
+      <app-type (keyEnterPressed)="keyEnter=$event" [type]="movement.type" (valueType)="movement.type=$event"></app-type>
     </div>
     <!-- Diseño para editar movimientos -->
     <div class="col m6">
       <ng-container *ngIf="movement.editAvailable === true; else elseFlag">
-        <app-save-movement [movement]="movement" (status)="status.emit($event)"></app-save-movement>
+        <app-save-movement [keyEnter]="keyEnter" [movement]="movement"
+          (status)="status.emit($event)" (keyEnterPressed)="keyEnterPressed.emit($event)"></app-save-movement>
         <app-delete-movement (status)="statusDelete.emit($event)" [id]="movement.id"></app-delete-movement>
       </ng-container>
       <ng-template #elseFlag>
