@@ -4,7 +4,13 @@
 }
 .sizeIcon {
   margin: 12% auto;
+  margin-left: 30%;
   width: 100%;
+}
+.category-name {
+  margin: 0;
+  text-align: left;
+  padding-left: 20%;
 }
 
 @media only screen and (min-width: 993px) and (max-width: 1260px) {
