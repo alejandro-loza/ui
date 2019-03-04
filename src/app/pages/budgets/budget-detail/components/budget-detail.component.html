@@ -4,16 +4,13 @@
       <div class="card white" id="totalBudget">
         <div class="card-content">
           <div class="row borderB-o">
-            <div class="col s4 valign-wrapper">
+            <div class="col s8 valign-wrapper">
               <img src="/assets/media/img/categories/color/color_{{ budget.category.id }}.png"
                    onerror="this.src='/assets/media/img/categories/color/color_000000.svg'" alt="">
               <p class="paddingL" id="mainName">{{ categoryName }}</p>
             </div>
-            <div class="col s4 center">
-              <p>${{ budget.spentAmount | number:'1.2-2' }}/ <b>${{ budget.amount | number:'1.2-2' }}</b> <small>({{ percentageAmountTotal | number:'1.2-2' }}%)</small></p>
-            </div>
             <div class="col s4 right-align">
-              <a (click)="openDeleteModal()" class="modal-trigger btn-floating btn-small waves-effect waves-light red" data-target="deleteModal"><i class="material-icons">delete</i></a>
+              <p>${{ budget.spentAmount | number:'1.2-2' }}/ <b>${{ budget.amount | number:'1.2-2' }}</b> <small>({{ percentageAmountTotal | number:'1.2-2' }}%)</small></p>
             </div>
             <div class="col s12 ">
               <p class="text-inside-progress">Por Ejecutar: ${{ porEjecutarAmountTotal | number:'1.2-2' }}</p>
@@ -31,10 +28,14 @@
       <h5>{{ categoryName }}</h5>
     </div>
     <div class="col s7 m5">
-      <button id="editButton" [routerLink]="['/app/budgets/shared-budget', 'edit']"
-              class="btn-flat white black-text right truncate">Editar<i class="material-icons right">
-        edit
-      </i> </button>
+      <button [routerLink]="['/app/budgets/shared-budget', 'edit']"
+              class="btn-flat actionButton white black-text right truncate">Editar<i class="material-icons right">
+        edit</i> 
+      </button>
+      <button (click)="openDeleteModal()" data-target="deleteModal"
+              class="btn-flat actionButton modal-trigger red white-text right truncate">Eliminar<i class="material-icons right">
+        delete</i> 
+      </button>
     </div>
   </div>
 </div>

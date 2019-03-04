@@ -44,7 +44,7 @@ export class NewBudgetComponent implements OnInit {
 	cleanCategoriesWithExistingBudgets() {
 		this.budgets.forEach((budget) => {
 			for (let i = 0; i < this.categoriesList.length; i++) {
-				if (budget.name == this.categoriesList[i].name) {
+				if (budget.name == this.categoriesList[i].name || this.categoriesList[i].name == 'Ingresos') {
 					this.categoriesList.splice(i, 1);
 				}
 			}

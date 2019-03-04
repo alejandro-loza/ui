@@ -17,7 +17,7 @@
       </div>
       <div class="col m6 l8 z-depth-1 py-10" id="divToGetHeight">
         <form #amount="ngForm" (ngSubmit)="submit(amount)">
-          <div class="row marginBottom-0 valign-wrapper" id="subcatsRow">
+          <div class="row marginBottom-0 valign-wrapper" id="catRow">
             <div class="col m8 l8 center">
               <div class="subCategoryElement" [ngStyle]="{'color':categorySelected.textColor, 'background-color':categorySelected.color}">
                 <span><b>{{ categorySelected.name }}</b></span>
@@ -33,6 +33,11 @@
                     name="{{categorySelected.name}}"
                     >
               </div>
+            </div>
+          </div>
+          <div class="row marginBottom-0" id="subcatDividerRow">
+            <div class="col m12 center">
+              <p id="subcatsTextDivisor"><b>Subcategorías</b></p>
             </div>
           </div>
           <div class="row marginBottom-0 valign-wrapper" id="subcatsRow" *ngFor="let subCategory of categorySelected.subCategories; let i = index">

@@ -7,9 +7,22 @@
 	padding-top: 10px;
 }
 
+#catRow {
+	height: 50px;
+}
+
+#subcatDividerRow {
+	background-color: #e5f3fd;
+}
+
+#subcatsTextDivisor {
+	margin: 0px;
+	color: #0084dd;
+	font-size: 16px;
+}
+
 #subcatsRow {
 	height: 50px;
-	border-radius: 5px;
 }
 
 #backgroundContainer {
@@ -29,7 +42,8 @@
 }
 
 .content {
-	padding-top: 15px;
+	position: relative;
+	top: 25%;
 }
 
 .subCategoryElement {

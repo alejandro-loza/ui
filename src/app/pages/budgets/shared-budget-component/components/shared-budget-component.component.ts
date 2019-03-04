@@ -140,31 +140,35 @@ export class SharedBudgetComponentComponent implements OnInit {
 	}
 
 	fillSubBudgetsForEditOption(form: NgForm, key: string) {
-		this.subBudgets.push({
-			amount: form.value[key],
-			category: this.getSubcategory(key),
-			name: key,
-			id: '',
-			spentAmount: 0,
-			spentPercentage: 0,
-			user: {
-				id: ''
-			}
-		});
+		if (form.value[key] != 0) {
+			this.subBudgets.push({
+				amount: form.value[key],
+				category: this.getSubcategory(key),
+				name: key,
+				id: '',
+				spentAmount: 0,
+				spentPercentage: 0,
+				user: {
+					id: ''
+				}
+			});
+		}
 	}
 
 	fillSubBudgets(form: NgForm, key: string) {
-		this.subBudgets.push({
-			amount: form.value[key],
-			category: this.getSubcategory(key),
-			name: key,
-			id: '',
-			spentAmount: 0,
-			spentPercentage: 0,
-			user: {
-				id: ''
-			}
-		});
+		if (form.value[key] != 0) {
+			this.subBudgets.push({
+				amount: form.value[key],
+				category: this.getSubcategory(key),
+				name: key,
+				id: '',
+				spentAmount: 0,
+				spentPercentage: 0,
+				user: {
+					id: ''
+				}
+			});
+		}
 	}
 
 	getTotalAmount(form: NgForm) {
