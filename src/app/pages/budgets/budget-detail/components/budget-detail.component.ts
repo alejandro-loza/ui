@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
+import { CategoriesBeanService } from '@services/categories/categories-bean.service';
+import { ToastService } from '@services/toast/toast.service';
 import { BudgetsService } from '@services/budgets/budgets.service';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
+import { ToastInterface } from '@interfaces/toast.interface';
 import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
 
@@ -16,9 +19,12 @@ export class BudgetDetailComponent implements OnInit {
 		private activatedRoute: ActivatedRoute,
 		private budgetsBeanService: BudgetsBeanService,
 		private budgetsService: BudgetsService,
-		private router: Router
+		private categoriesBeanService: CategoriesBeanService,
+		private router: Router,
+		private toastService: ToastService
 	) {}
 
+	toast: ToastInterface = { code: null, message: null };
 	categoryName: string = '';
 	budget: Budget = null;
 	subBudgets: Budget[] = [];
@@ -126,13 +132,18 @@ export class BudgetDetailComponent implements OnInit {
 	deleteButton() {
 		this.budgetsService.deleteBudget(this.budget).subscribe(
 			(res) => {
+				this.toast.code = res.status;
 				if (res.status == 200) {
+					this.categoriesBeanService.setCategories([]);
 					this.budgetsBeanService.setLoadInformation(true);
 					this.router.navigateByUrl('/app/budgets');
+					this.toast.message = 'Presupuesto eliminado con éxito';
+					this.toastService.toastGeneral(this.toast);
 				}
 			},
 			(error) => {
-				console.log(error);
+				this.toast.message = 'Ocurrió un error, vuelve a intentarlo';
+				this.toastService.toastGeneral(this.toast);
 			}
 		);
 	}

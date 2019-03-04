@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
+import { ToastService } from '@services/toast/toast.service';
 import { BudgetsService } from '@services/budgets/budgets.service';
 import { Category } from '@app/interfaces/category.interface';
 import { isNullOrUndefined } from 'util';
 import { NewBudget, SubBudget } from '@interfaces/budgets/new-budget.interface';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
+import { ToastInterface } from '@interfaces/toast.interface';
 import { editBudgetAux } from '@app/interfaces/budgets/editBudgetAux.interface';
 
 @Component({
@@ -15,6 +17,7 @@ import { editBudgetAux } from '@app/interfaces/budgets/editBudgetAux.interface';
 	styleUrls: [ './shared-budget-component.component.css' ]
 })
 export class SharedBudgetComponentComponent implements OnInit {
+	toast: ToastInterface = { code: null, message: null };
 	routeForBackButton: string;
 	editModeOfTheComponent: boolean;
 	ngModelAux: editBudgetAux[] = [];
@@ -34,6 +37,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 		private budgetsBeanService: BudgetsBeanService,
 		private router: Router,
 		private budgetsService: BudgetsService,
+		private toastService: ToastService,
 		private activatedRoute: ActivatedRoute
 	) {
 		this.categorySelected = this.budgetsBeanService.getCategoryToSharedComponent();
@@ -53,11 +57,13 @@ export class SharedBudgetComponentComponent implements OnInit {
 
 	fillInputs() {
 		for (let i = 0; i < this.ngModelAux.length; i++) {
-			this.budgetToEdit.subBudgets.forEach((subBudget) => {
-				if (subBudget.name == this.ngModelAux[i].name) {
-					this.ngModelAux[i].value = subBudget.amount;
-				}
-			});
+			if (!isNullOrUndefined(this.budgetToEdit.subBudgets)) {
+				this.budgetToEdit.subBudgets.forEach((subBudget) => {
+					if (subBudget.name == this.ngModelAux[i].name) {
+						this.ngModelAux[i].value = subBudget.amount;
+					}
+				});
+			}
 		}
 	}
 
@@ -76,11 +82,19 @@ export class SharedBudgetComponentComponent implements OnInit {
 		this.modifyingBudget();
 		this.budgetsService.updateBudget(this.budgetToEdit).subscribe(
 			(res) => {
-				this.budgetsBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/budgets');
+				this.toast.code = res.status;
+				if (res.status == 200) {
+					this.toast.message = 'Presupuesto modificado con éxito';
+					this.toastService.toastGeneral(this.toast);
+					this.budgetsBeanService.setLoadInformation(true);
+					this.router.navigateByUrl('/app/budgets');
+				}
 			},
 			(errors) => {
-				console.log(errors);
+				this.toast.message = 'Ocurrió un error, porfavor intenta de nuevo';
+				this.toastService.toastGeneral(this.toast);
+				this.budgetsBeanService.setLoadInformation(true);
+				this.router.navigateByUrl('/app/budgets');
 			}
 		);
 	}
@@ -96,13 +110,19 @@ export class SharedBudgetComponentComponent implements OnInit {
 		this.makeNewBudgetStructure();
 		this.budgetsService.createBudget(this.budgetToCreate).subscribe(
 			(res) => {
+				this.toast.code = res.status;
 				if (res.status === 200) {
+					this.toast.message = 'Presupuesto creado con éxito';
+					this.toastService.toastGeneral(this.toast);
 					this.budgetsBeanService.setLoadInformation(true);
 					this.router.navigateByUrl('/app/budgets');
 				}
 			},
 			(error) => {
-				console.log(error);
+				this.toast.message = 'Ocurrió un error, porfavor intenta de nuevo';
+				this.toastService.toastGeneral(this.toast);
+				this.budgetsBeanService.setLoadInformation(true);
+				this.router.navigateByUrl('/app/budgets');
 			}
 		);
 	}

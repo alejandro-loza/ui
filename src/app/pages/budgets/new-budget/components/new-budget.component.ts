@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { CategoriesService } from '@services/categories/categories.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
@@ -13,15 +12,14 @@ import { Budget } from '@app/interfaces/budgets/budget.interface';
 })
 export class NewBudgetComponent implements OnInit {
 	showSpinner: boolean = true;
-	categoriesList: Category[] = [];
+	categoriesList: any[] = [];
 	categorySelectedToBudget: Category = null;
 	budgets: Budget[] = null;
 
 	constructor(
 		private budgetsBeanService: BudgetsBeanService,
 		private categoriesService: CategoriesService,
-		private categoriesBeanService: CategoriesBeanService,
-		private router: Router
+		private categoriesBeanService: CategoriesBeanService
 	) {}
 
 	ngOnInit() {
