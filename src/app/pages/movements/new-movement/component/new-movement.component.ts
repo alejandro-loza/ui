@@ -58,7 +58,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const initModal = new M.Modal(this.modalElement.nativeElement, {});
+    const initModal = new M.Modal(this.modalElement.nativeElement);
     this.instaceModal = M.Modal.getInstance(this.modalElement.nativeElement);
   }
 
