@@ -20,10 +20,10 @@
   <!-- Description Start-->
   <div class="col m3 customComponent left-align">
     <ng-container *ngIf="movement.editAvailable === true; else elseDescription">
-      <input [(ngModel)]="movement.customDescription" type="text" class="inputMovement center-align" name="description" />
+      <input [(ngModel)]="movement.customDescription" type="text" class="inputMovement inputPadding" name="description" />
     </ng-container>
     <ng-template #elseDescription>
-      <h6 class="truncate">{{ movement.customDescription | uppercase }}</h6>
+      <h6 class="truncate description">{{ movement.customDescription | uppercase }}</h6>
     </ng-template>
   </div>
   <!-- Description End-->
@@ -54,14 +54,14 @@
   <div class="col m2">
     <div class="switch">
       <label>
-            Si
-            <input
-              [(ngModel)]="movement.duplicated"
-              name="duplicated"
-              type="checkbox"/>
-            <span class="lever"></span>
-            No
-            </label>
+        Si
+        <input
+          [(ngModel)]="movement.duplicated"
+          name="duplicated"
+          type="checkbox"/>
+        <span class="lever"></span>
+        No
+      </label>
     </div>
   </div>
   <!-- Consider end -->

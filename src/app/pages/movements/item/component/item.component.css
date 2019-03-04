@@ -5,9 +5,17 @@
   margin-bottom: 0px;
 }
 
+.inputPadding {
+  padding-left: 10% !important;
+}
+
+.description {
+  margin-left: 10%;
+}
+
 .imgMovement {
   height: 42px;
-  margin-top: 5px;
+  margin: auto 5%;
 }
 
 .charge {
