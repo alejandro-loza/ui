@@ -39,12 +39,12 @@
   <div class="col m2 customComponent right-align">
     <ng-container *ngIf="movement.account.name === 'Efectivo'; else elseAmount">
       <ng-container *ngIf="movement.editAvailable === true; else elseAmount">
-        <input [(ngModel)]="movement.customAmount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" />
+        <input [(ngModel)]="movement.amount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" />
       </ng-container>
     </ng-container>
     <ng-template #elseAmount>
       <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">
-        {{ movement.customAmount | currency:'USD':'symbol-narrow':'0.2' }}
+        {{ movement.amount | currency:'USD':'symbol-narrow':'0.2' }}
       </h6>
     </ng-template>
   </div>

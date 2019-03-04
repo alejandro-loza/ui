@@ -94,8 +94,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     if ( isNull(this.auxMovement.customDate) ) {
       this.auxMovement.customDate = this.auxMovement.date;
     }
-    if ( isNull(this.auxMovement.customAmount) ) {
-      this.auxMovement.customAmount = this.auxMovement.amount;
+    if ( isNull(this.auxMovement.amount) ) {
+      this.auxMovement.amount = this.auxMovement.customAmount;
     }
     this.auxMovement.editAvailable = false;
     this.instanceCollapsible.close(index);
