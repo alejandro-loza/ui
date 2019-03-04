@@ -1,5 +1,5 @@
 <ng-container *ngIf="editAvailable === true; else noEditable">
-  <input type="button" class="btn category-container modal-trigger" [attr.data-target]="'modal-target'" [ngModel]="category.name" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}" />
+  <input type="button" class="btn category-container modal-trigger truncate" [attr.data-target]="'modal-target'" [ngModel]="category.name" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}" />
 </ng-container>
 <ng-template #noEditable>
   <div class="left-align">
@@ -22,7 +22,7 @@
             class="responsive-img sizeIcon">
           </ng-template>
         </i>
-        <p class="category-name">{{ category.name }}</p>
+        <p class="category-name truncate left-align">{{ category.name }}</p>
       </button>
   </div>
 </ng-template>
