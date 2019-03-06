@@ -10,7 +10,7 @@ import {
 import { Movement } from '@interfaces/movement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { isUndefined } from 'util';
+import { isUndefined, isNull } from 'util';
 import { Category } from '@interfaces/category.interface';
 import { CategoriesService } from '@services/categories/categories.service';
 
@@ -27,10 +27,12 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   private instanceCollapsible;
   private statusModal: boolean;
   private indexMovement: number;
+  private keyEnter: boolean;
   constructor(
     private renderer: Renderer2,
     private categoriesService: CategoriesService
   ) {
+    this.keyEnter = false;
     this.statusModal = false;
     this.indexMovement = undefined;
   }
@@ -68,6 +70,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     if (isUndefined(this.auxMovement) || this.statusModal === false) {
       this.indexMovement = index;
       this.auxMovement = this.movementList[index];
+      this.auxMovement.customAmount = this.auxMovement.amount;
     } else {
       return;
     }
@@ -85,8 +88,22 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   collapsibleClose(index: number) {
+    if ( this.auxMovement.customDescription === '' || this.auxMovement.customDescription === null ) {
+      this.auxMovement.customDescription = this.auxMovement.description;
+    }
+    if ( isNull(this.auxMovement.customDate) ) {
+      this.auxMovement.customDate = this.auxMovement.date;
+    }
+    if ( isNull(this.auxMovement.customAmount) ) {
+      this.auxMovement.customAmount = this.auxMovement.amount;
+    }
     this.auxMovement.editAvailable = false;
     this.instanceCollapsible.close(index);
     this.instanceCollapsible.destroy();
+    this.keyEnter = false;
+  }
+
+  updateMovement() {
+    this.keyEnter = true;
   }
 }

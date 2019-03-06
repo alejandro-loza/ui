@@ -1,25 +1,15 @@
 <ul class="collapsible" #collapsible>
-    <ng-template ngFor [ngForOf]="movementList" [ngForTrackBy]="trackByFn" let-movement let-i="index">
-        <li class="fast fadeIn list" id="movement.id">
-            <!-- Encabezado del collapsible -->
-            <div class="collapsible-header" [ngClass]="{'grey lighten-2': movement.duplicated}" (click)="collapsibleFunction(i)">
-                <app-item class="item"
-                  [categoryList]="categoryList"
-                  [movement]="movementList[i]"
-                  (movementEdited)="movement=$event"
-                  (statusModal)="statusModal=$event"
-                  (statusCategory)="statusCategory($event)">
-                </app-item>
-            </div>
-            <div class="collapsible-body">
-                <app-item-detail
-                  class="item-detail"
-                  [movement]="movement"
-                  (status)="collapsibleClose(i)"
-                  (statusDelete)="movementList.splice(i, 1)"
-                  (keyup)="eventHandler($event)">
-                </app-item-detail>
-            </div>
-        </li>
-    </ng-template>
+  <ng-template ngFor [ngForOf]="movementList" [ngForTrackBy]="trackByFn" let-movement let-i="index">
+    <li class="fast fadeIn list" id="movement.id" (keyup.esc)="collapsibleClose(i)" (keyup.enter)="updateMovement()">
+      <!-- Encabezado del collapsible -->
+      <div class="collapsible-header" [ngClass]="{'grey lighten-2': movement.duplicated}" (click)="collapsibleFunction(i)">
+        <app-item class="item" [categoryList]="categoryList" [movement]="movementList[i]" (movementEdited)="movement=$event" (statusModal)="statusModal=$event" (statusCategory)="statusCategory($event)">
+        </app-item>
+      </div>
+      <div class="collapsible-body">
+        <app-item-detail class="item-detail" [movement]="movement" [keyEnter]="keyEnter" (status)="collapsibleClose(i)" (statusDelete)="movementList.splice(i, 1)">
+        </app-item-detail>
+      </div>
+    </li>
+  </ng-template>
 </ul>

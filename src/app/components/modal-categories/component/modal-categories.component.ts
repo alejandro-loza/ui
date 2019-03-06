@@ -53,7 +53,6 @@ export class ModalCategoriesComponent implements OnInit, DoCheck, AfterViewInit 
 
   ngAfterViewInit() {
     this.initModal = new M.Modal(this.modalCategory.nativeElement, {
-      dismissible: false,
       onCloseEnd: () => {
         this.backCategories = false;
         this.statusModal.emit(this.initModal.isOpen);
