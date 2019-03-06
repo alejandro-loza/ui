@@ -6,10 +6,11 @@ import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
+import { ToastService } from '@services/toast/toast.service';
+import { CleanerService } from '@services/cleaner/cleaner.service';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
 import * as M from 'materialize-css/dist/js/materialize';
-import { ToastService } from '@services/toast/toast.service';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
 
@@ -49,6 +50,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		private credentialService: CredentialService,
 		private institutionService: InstitutionService,
 		private interactiveService: InteractiveFieldService,
+		private cleanerService: CleanerService,
 		private toastService: ToastService,
 		private credentialBean: CredentialBeanService
 	) {
@@ -178,7 +180,12 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		} else if (credential.status === 'INVALID') {
 			this.loaderMessagge = '¡Ha ocurrido algo con tu credencial ' + credential.institution.name + '!';
 		} else if (credential.status === 'VALIDATE') {
-			this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea. Esto puede durar unos minutos.';
+			this.loaderMessagge =
+				'Finerio se está sincronizando con tu banca en línea de ' +
+				credential.institution.name +
+				'. Esto puede durar unos minutos.';
+			this.cleanerService.cleanDashboardVariables();
+			this.cleanerService.cleanBudgetsVariables();
 			this.getNewInfoCredential(credential.id);
 		} else if (credential.status === 'TOKEN') {
 			this.loaderMessagge = 'Solicitando información adicional para ' + credential.institution.name + '...';

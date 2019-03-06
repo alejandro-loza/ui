@@ -7,6 +7,7 @@ import { FieldService } from '@services/field/field.service';
 import { ToastService } from '@services/toast/toast.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
+import { CleanerService } from '@services/cleaner/cleaner.service';
 
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { CredentialInterface } from '@interfaces/credential.interface';
@@ -45,6 +46,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		private accountService: AccountService,
 		private toastService: ToastService,
 		private credentialBeanService: CredentialBeanService,
+		private cleanerService: CleanerService,
 		private institutionService: InstitutionService
 	) {
 		this.fields = [];
@@ -134,6 +136,8 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 					this.toast.message = 'Sincronización en proceso...';
 					this.toastService.toastGeneral(this.toast);
 					this.credentialBeanService.setLoadInformation(true);
+					this.cleanerService.cleanDashboardVariables();
+					this.cleanerService.cleanBudgetsVariables();
 					this.router.navigateByUrl('/app/credentials');
 				}
 			);
@@ -173,6 +177,8 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 				this.toast.message = 'Credencial elminada correctamente';
 				this.toastService.toastGeneral(this.toast);
 				this.credentialBeanService.setLoadInformation(true);
+				this.cleanerService.cleanDashboardVariables();
+				this.cleanerService.cleanBudgetsVariables();
 				this.router.navigateByUrl('/app/credentials');
 			}
 		);

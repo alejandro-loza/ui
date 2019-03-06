@@ -85,9 +85,7 @@ export class DashboardComponent implements OnInit {
 		this.categoriesList = [];
 		this.dashboardBean.setLoadInformation(false);
 		this.categoriesService.getCategoriesInfo().subscribe((res) => {
-			res.body.data.forEach((category: Category) => {
-				this.categoriesList.push(category);
-			});
+			this.categoriesList = res.body.data;
 			this.getDatesForParams();
 			this.getMovementsData(this.categoriesList);
 		});
