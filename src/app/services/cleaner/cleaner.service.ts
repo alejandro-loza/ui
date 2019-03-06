@@ -17,26 +17,47 @@ export class CleanerService {
 
 	cleanAllVariables() {
 		// Dashboard Memory
-		this.dashboardBean.setDataStackedBar(null);
-		this.dashboardBean.setDataBalancePieChart(null);
+		this.dashboardBean.setDataStackedBar([]);
+		this.dashboardBean.setDataBalancePieChart([]);
 		this.dashboardBean.setLoadInformation(true);
 		this.dashboardBean.setDataIsReady(false);
-		this.dashboardBean.setDataExpensesTab(null);
-		this.dashboardBean.setDataIncomesBarChart(null);
-		this.dashboardBean.setDataIncomesTab(null);
+		this.dashboardBean.setDataExpensesTab([]);
+		this.dashboardBean.setDataIncomesBarChart([]);
+		this.dashboardBean.setDataIncomesTab([]);
 		this.dashboardBean.setShowEmptyState(false);
 		// Credentials Memory
-		this.credentialBeanService.setCredentials(null);
-		this.credentialBeanService.setAccounts(null);
-		this.credentialBeanService.setInstitutions(null);
+		this.credentialBeanService.setCredentials([]);
+		this.credentialBeanService.setAccounts([]);
+		this.credentialBeanService.setInstitutions([]);
 		this.credentialBeanService.setLoadInformation(true);
 		// Budgets Memory
 		this.budgetsBeanService.setBudgetToViewDetails(null);
-		this.budgetsBeanService.setBudgets(null);
+		this.budgetsBeanService.setBudgets([]);
 		this.budgetsBeanService.setLoadInformation(true);
 		this.budgetsBeanService.setShowEmptyStates(false);
 		this.budgetsBeanService.setCategoryToSharedComponent(null);
 		// Categories memory
-		this.categoriesBeanService.setCategories(null);
+		this.categoriesBeanService.setCategories([]);
+	}
+
+	cleanDashboardVariables() {
+		// Dashboard Memory
+		this.dashboardBean.setDataStackedBar([]);
+		this.dashboardBean.setDataBalancePieChart([]);
+		this.dashboardBean.setLoadInformation(true);
+		this.dashboardBean.setDataIsReady(false);
+		this.dashboardBean.setDataExpensesTab([]);
+		this.dashboardBean.setDataIncomesBarChart([]);
+		this.dashboardBean.setDataIncomesTab([]);
+		this.dashboardBean.setShowEmptyState(false);
+	}
+
+	cleanBudgetsVariables() {
+		// Budgets Memory
+		this.budgetsBeanService.setBudgetToViewDetails(null);
+		this.budgetsBeanService.setBudgets([]);
+		this.budgetsBeanService.setLoadInformation(true);
+		this.budgetsBeanService.setShowEmptyStates(false);
+		this.budgetsBeanService.setCategoryToSharedComponent(null);
 	}
 }

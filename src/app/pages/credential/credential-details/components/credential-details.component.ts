@@ -119,23 +119,44 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		);
 	}
 
-	updateCredential(credential) {
-		this.credentialService.updateCredential(credential).subscribe(
-			(res) => {
-				this.toast.code = res.status;
-			},
-			(error) => {
-				this.toast.code = error.status;
-				this.toast.message = 'Ocurrió un error al actualizar tu credencial';
-				this.toastService.toastGeneral(this.toast);
-			},
-			() => {
-				this.toast.message = 'Sincronización en proceso...';
-				this.toastService.toastGeneral(this.toast);
-				this.credentialBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/credentials');
-			}
-		);
+	updateCredential(credential: CredentialInterface) {
+		if (this.syncPossible(credential)) {
+			this.credentialService.updateCredential(credential).subscribe(
+				(res) => {
+					this.toast.code = res.status;
+				},
+				(error) => {
+					this.toast.code = error.status;
+					this.toast.message = 'Ocurrió un error al actualizar tu credencial';
+					this.toastService.toastGeneral(this.toast);
+				},
+				() => {
+					this.toast.message = 'Sincronización en proceso...';
+					this.toastService.toastGeneral(this.toast);
+					this.credentialBeanService.setLoadInformation(true);
+					this.router.navigateByUrl('/app/credentials');
+				}
+			);
+		} else {
+			this.toast.code = 200;
+			this.toast.message = 'Debes esperar 8 horas antes de volver a sincronizar tu credencial';
+			this.toastService.toastGeneral(this.toast);
+		}
+	}
+
+	syncPossible(credential: CredentialInterface): boolean {
+		let isPossible: boolean = false;
+		let currentMoment = new Date();
+		let dateObj = new Date(credential.lastUpdated);
+		let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+
+		if (credential.status == 'ACTIVE') {
+			isPossible = diff >= 8 ? true : false;
+		} else {
+			isPossible = true;
+		}
+
+		return isPossible;
 	}
 
 	deleteCredential() {

@@ -5,83 +5,80 @@ import { ResumeMainData } from '@app/interfaces/dashboard/resumeMainData.interfa
 import { BarChart } from '@app/interfaces/dashboard/BarChart.interface';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class DashboardBeanService {
+	private dataStackedBar: StackedBar[] = [];
+	private dataBalancePieChart: BalancePieChart[] = [];
+	private loadInformation: boolean = true;
+	private dataReady: boolean = false;
+	private dataExpensesTab: ResumeMainData[] = [];
+	private dataIncomesBarChart: BarChart[] = [];
+	private dataIncomesTab: ResumeMainData[] = [];
+	private showEmptyState: boolean = false;
+	constructor() {}
 
-  private dataStackedBar:StackedBar[] = [];
-  private dataBalancePieChart:BalancePieChart[] = [];
-  private loadInformation:boolean = true;
-  private dataReady:boolean = false;
-  private dataExpensesTab:ResumeMainData[] = [];
-  private dataIncomesBarChart:BarChart[] = [];
-  private dataIncomesTab:ResumeMainData[] = [];
-  private showEmptyState:boolean = false;
+	public setShowEmptyState(data: boolean) {
+		this.showEmptyState = data;
+	}
 
-  constructor() { }
+	public getShowEmptyState(): boolean {
+		return this.showEmptyState;
+	}
 
-  public setShowEmptyState( data:boolean ){
-    this.showEmptyState = data;
-  }
+	public setDataIncomesTab(data: ResumeMainData[]) {
+		this.dataIncomesTab = data;
+	}
 
-  public getShowEmptyState(): boolean {
-    return this.showEmptyState;
-  }
+	public getDataIncomesTab(): ResumeMainData[] {
+		return this.dataIncomesTab;
+	}
 
-  public setDataIncomesTab( data:ResumeMainData[] ){
-    this.dataIncomesTab = data;
-  }
+	public setDataIsReady(data: boolean) {
+		this.dataReady = data;
+	}
 
-  public getDataIncomesTab():ResumeMainData[] {
-    return this.dataIncomesTab;
-  }
+	public getDataIsReady(): boolean {
+		return this.dataReady;
+	}
 
-  public setDataIsReady( data:boolean ){
-    this.dataReady = data;
-  }
+	public setDataIncomesBarChart(data: BarChart[]) {
+		this.dataIncomesBarChart = data;
+	}
 
-  public getDataIsReady():boolean {
-    return this.dataReady;
-  }
+	public getDataIncomesBarChart(): BarChart[] {
+		return this.dataIncomesBarChart;
+	}
 
-  public setDataIncomesBarChart( data:BarChart[] ){
-    this.dataIncomesBarChart = data;
-  }
+	public setDataExpensesTab(data: ResumeMainData[]) {
+		this.dataExpensesTab = data;
+	}
 
-  public getDataIncomesBarChart():BarChart[] {
-    return this.dataIncomesBarChart;
-  }
+	public getDataExpensesTab(): ResumeMainData[] {
+		return this.dataExpensesTab;
+	}
 
-  public setDataExpensesTab( data: ResumeMainData[] ){
-    this.dataExpensesTab = data;
-  }
+	public setDataStackedBar(data: StackedBar[]) {
+		this.dataStackedBar = data;
+	}
 
-  public getDataExpensesTab():ResumeMainData[]{
-    return this.dataExpensesTab;
-  }
+	public getDataStackedBar(): StackedBar[] {
+		return this.dataStackedBar;
+	}
 
-  public setDataStackedBar( data: StackedBar[] ) {
-    this.dataStackedBar = data;
-  }
+	public setDataBalancePieChart(data: BalancePieChart[]) {
+		this.dataBalancePieChart = data;
+	}
 
-  public getDataStackedBar():StackedBar[]{
-    return this.dataStackedBar;
-  }
+	public getDataBalancePieChart(): BalancePieChart[] {
+		return this.dataBalancePieChart;
+	}
 
-  public setDataBalancePieChart( data:BalancePieChart[] ){
-    this.dataBalancePieChart = data;
-  }
+	public setLoadInformation(flag: boolean) {
+		this.loadInformation = flag;
+	}
 
-  public getDataBalancePieChart():BalancePieChart[]{
-    return this.dataBalancePieChart;
-  }
-
-  public setLoadInformation( flag:boolean ){
-    this.loadInformation = flag;
-  } 
-
-  public getLoadInformation():Boolean{
-    return this.loadInformation;
-  }
-
+	public getLoadInformation(): Boolean {
+		return this.loadInformation;
+	}
 }

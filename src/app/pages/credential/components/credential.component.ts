@@ -8,7 +8,6 @@ import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
-import { CleanerService } from '@services/cleaner/cleaner.service';
 import * as M from 'materialize-css/dist/js/materialize';
 import { ToastService } from '@services/toast/toast.service';
 import { ToastInterface } from '@interfaces/toast.interface';
@@ -50,7 +49,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		private credentialService: CredentialService,
 		private institutionService: InstitutionService,
 		private interactiveService: InteractiveFieldService,
-		private cleanerService: CleanerService,
 		private toastService: ToastService,
 		private credentialBean: CredentialBeanService
 	) {
@@ -88,7 +86,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		});
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
-		//this.automaticSync( this.credentials );
+		this.automaticSync(this.credentials);
 		this.processCompleteForSpinner = true;
 	}
 
@@ -98,6 +96,8 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.credentials = [];
 		this.debitAccounts = [];
 		this.creditAccounts = [];
+		this.credentialBean.setCredentials([]);
+
 		this.credentialService.getAllCredentials().subscribe(
 			(res) => {
 				res.body.data.forEach((element: CredentialInterface) => {
@@ -105,7 +105,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 					this.checkStatusOfCredential(element);
 				});
 				this.processCompleteForSpinner = true;
-				//this.automaticSync( this.credentials );
+				this.automaticSync(this.credentials);
 			},
 			(error) => {
 				this.errorWithCredentials = true;
@@ -134,8 +134,11 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 			let dateObj = new Date(credential.lastUpdated);
 			let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
 			if (diff >= 8) {
+				this.loaderMessagge =
+					'Finerio se está sincronizando con tu banca en línea. Esto puede durar unos minutos.';
+				this.validateStatusFinished = false;
 				this.credentialService.updateCredential(credential).subscribe((res) => {
-					this.checkStatusOfCredential(credential);
+					this.checkStatusOfCredential(res.body);
 				});
 			}
 		});
@@ -197,14 +200,14 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 				this.loaderMessagge =
 					'¡Tus datos han sido sincronizados en ' + this.credentialInProcess.institution.name + '!';
 				this.toast.message = this.loaderMessagge;
-				this.cleanerService.cleanAllVariables();
 				this.getAllCredentials();
 			} else if (this.credentialInProcess.status === 'TOKEN') {
 				this.validateStatusFinished = false;
 				//  Modal process
 				this.modalProcessForInteractive(res.body);
 			} else if (this.credentialInProcess.status === 'INVALID') {
-				this.loaderMessagge = '¡Ha ocurrido algo con una de tus credenciales!';
+				this.loaderMessagge =
+					'¡Ha ocurrido algo con tu credencial ' + this.credentialInProcess.institution.name + '!';
 				this.validateStatusFinished = false;
 				this.getAllCredentials();
 			}
