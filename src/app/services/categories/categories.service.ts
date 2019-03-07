@@ -20,16 +20,16 @@ export class CategoriesService {
 		private categoriesBeanService: CategoriesBeanService
 	) {}
 
-	getCategoriesInfo(): Observable<HttpResponse<Response<Category>>> {
-		const URL = `${environment.backendUrl}/categories?deep=true`;
+	getCategoriesInfo(): Observable<HttpResponse<Category[]>> {
+		const URL = `${environment.apiUrl}/apiv2/categories`;
 		return this.http
-			.get<Response<Category>>(URL, {
+			.get<Category[]>(URL, {
 				observe: 'response',
 				headers: this.configService.getJsonHeaders()
 			})
 			.pipe(
 				map((res) => {
-					this.categories = res.body.data;
+					this.categories = res.body;
 					this.categoriesBeanService.setCategories(this.categories);
 					return res;
 				})

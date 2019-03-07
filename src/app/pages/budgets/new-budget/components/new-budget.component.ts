@@ -30,7 +30,7 @@ export class NewBudgetComponent implements OnInit {
 	getCategoriesInfo() {
 		if (this.categoriesBeanService.getCategories().length === 0) {
 			this.categoriesService.getCategoriesInfo().subscribe((res) => {
-				this.categoriesList = res.body.data;
+				this.categoriesList = res.body;
 				this.cleanCategoriesWithExistingBudgets();
 				this.showSpinner = false;
 			});
