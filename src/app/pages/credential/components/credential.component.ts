@@ -237,7 +237,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	}
 
 	emptyStateProcess() {
-		console.log(this.credentials.length);
 		if (this.credentials.length == 0) {
 			this.credentialBean.setShowEmptyState(true);
 		} else {
