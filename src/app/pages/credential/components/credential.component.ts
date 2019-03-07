@@ -137,7 +137,9 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 			let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
 			if (diff >= 8) {
 				this.loaderMessagge =
-					'Finerio se está sincronizando con tu banca en línea. Esto puede durar unos minutos.';
+					'Finerio se está sincronizando con tu banca en línea de ' +
+					credential.institution.name +
+					'. Esto puede durar unos minutos.';
 				this.validateStatusFinished = false;
 				this.credentialService.updateCredential(credential).subscribe((res) => {
 					this.checkStatusOfCredential(res.body);
