@@ -110,6 +110,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
             movement.customDate
           );
           movement['editAvailable'] = false;
+          movement['customAmount'] = movement.amount;
           this.movementList.push(movement);
         });
       },

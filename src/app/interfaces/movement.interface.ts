@@ -6,6 +6,7 @@ export interface Movement {
   amount: number;
   balance: number;
   concepts: Concept[];
+  customAmount?: number;
   customDate: Date;
   customDescription: string;
   date: Date;
