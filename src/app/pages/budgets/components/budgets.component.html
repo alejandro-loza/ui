@@ -1,75 +1,86 @@
-<div *ngIf="showSpinner" class="container">
+<div *ngIf="showSpinner" id="spinner" class="container">
   <div class="row center">
     <div class="col s12">
       <app-spinner></app-spinner>
     </div>
   </div>
 </div>
-<div *ngIf="!showSpinner" class="container-fluid animated fadeIn">
-  <div class="row marginB-0">
-    <div class="col s12 center">
-      <div class="card white" id="totalBudget">
-        <div class="card-content">
-          <div class="row borderB-o">
-            <div class="col s12">
-              <div class="col s6 valign-wrapper">
-                <img src="/assets/media/img/budgets/default.jpg" alt="">
-                <p class="paddingL" id="mainName">Presupuesto Total</p>
+<div *ngIf="!showEmptyState" class="main">
+  <div *ngIf="!showSpinner" class="container-fluid animated fadeIn">
+    <div class="row marginB-0">
+      <div class="col s12 center">
+        <div class="card white" id="totalBudget">
+          <div class="card-content">
+            <div class="row borderB-o">
+              <div class="col s12">
+                <div class="col s6 valign-wrapper">
+                  <img src="/assets/media/img/budgets/default.jpg" alt="">
+                  <p class="paddingL" id="mainName">Presupuesto Total</p>
+                </div>
+                <div class="col s6 right-align">
+                  <p>${{ currentAmountTotal | number:'1.2-2' }}/ <b>${{ totalAmountTotal | number:'1.2-2' }}</b> <small>({{ percentageAmountTotal | number:'1.0-0' }}%)</small></p>
+                </div>
               </div>
-              <div class="col s6 right-align">
-                <p>${{ currentAmountTotal | number:'1.2-2' }}/ <b>${{ totalAmountTotal | number:'1.2-2' }}</b> <small>({{ percentageAmountTotal | number:'1.0-0' }}%)</small></p>
-              </div>
-            </div>
-            <div class="col s12">
-              <p class="text-inside-progress">Por Ejecutar: ${{ porEjecutarAmountTotal | number:'1.2-2' }}</p>
-              <div class="progress" id="totalProgressBar">
-                <div class="determinate" [ngStyle]="{'width': getTotalProgressBarWidth(), 'background-color': getColorOfBar( percentageAmountTotal ) }"></div>
+              <div class="col s12">
+                <p class="text-inside-progress">Por Ejecutar: ${{ porEjecutarAmountTotal | number:'1.2-2' }}</p>
+                <div class="progress" id="totalProgressBar">
+                  <div class="determinate" [ngStyle]="{'width': getTotalProgressBarWidth(), 'background-color': getColorOfBar( percentageAmountTotal ) }"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row right-align marginB-0 finerio-blue">
-    <div class="col s5 m7">
-      <h5>Categorías</h5>
+    <div class="row right-align marginB-0 finerio-blue">
+      <div class="col s5 m7">
+        <h5>Categorías</h5>
+      </div>
+      <div class="col s7 m5">
+        <button [routerLink]="['/app/budgets/new-budget']"
+                id="createButton" class="btn-flat white black-text right truncate"> Crear Presupuesto <i class="material-icons right">
+          add
+        </i> </button>
+      </div>
     </div>
-    <div class="col s7 m5">
-      <button [routerLink]="['/app/budgets/new-budget']"
-              id="createButton" class="btn-flat white black-text right truncate"> Crear Presupuesto <i class="material-icons right">
-        add
-      </i> </button>
+  </div>
+  <div *ngIf="!showSpinner "class="container animated fadeIn">
+    <div class="row marginB-0">
+      <div class="col s12">
+        <ul class="collection z-depth-2">
+          <li  (click)="clickEvent( budget )"
+              class="collection-item" *ngFor="let budget of budgets">
+            <div class="row marginB-0">
+              <div class="col s12">
+                  <div class="col s6 valign-wrapper">
+                    <i class="material-icons grey-text">more_vert</i>
+                    <img [src]="getIconImage( budget )"><p id="categoryName" class="details">{{ budget.name }}</p>
+                  </div>
+                  <div class="col s6 right-align" id="amounts">
+                    <p class="details">${{budget.spentAmount | number:'1.2-2'}}/ <b>${{ budget.amount | number:'1.2-2'}} </b>
+                      <small>({{ getpercentage(budget.spentAmount, budget.amount) | number:'1.0-0' }}%)</small>
+                    </p>
+                  </div>
+              </div>
+              <div class="col s12">
+                  <p class="text-inside">Por Ejecutar: {{ getPorEjecutar(budget) | number:'1.2-2'}}</p>
+                  <div class="progress" id="progressBar">
+                      <div class="determinate" [ngStyle]="{'width': getWidthPercentage( budget ) ,'background-color': getColorOfBar(percentageBudgets)}"></div>
+                  </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
-<div *ngIf="!showSpinner "class="container animated fadeIn">
-  <div class="row marginB-0">
-    <div class="col s12">
-      <ul class="collection z-depth-2">
-        <li  (click)="clickEvent( budget )"
-            class="collection-item" *ngFor="let budget of budgets">
-          <div class="row marginB-0">
-            <div class="col s12">
-                <div class="col s6 valign-wrapper">
-                  <i class="material-icons grey-text">more_vert</i>
-                  <img [src]="getIconImage( budget )"><p id="categoryName" class="details">{{ budget.name }}</p>
-                </div>
-                <div class="col s6 right-align" id="amounts">
-                  <p class="details">${{budget.spentAmount | number:'1.2-2'}}/ <b>${{ budget.amount | number:'1.2-2'}} </b>
-                    <small>({{ getpercentage(budget.spentAmount, budget.amount) | number:'1.0-0' }}%)</small>
-                  </p>
-                </div>
-            </div>
-            <div class="col s12">
-                <p class="text-inside">Por Ejecutar: {{ getPorEjecutar(budget) | number:'1.2-2'}}</p>
-                <div class="progress" id="progressBar">
-                    <div class="determinate" [ngStyle]="{'width': getWidthPercentage( budget ) ,'background-color': getColorOfBar(percentageBudgets)}"></div>
-                </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
+<div *ngIf="showEmptyState" class="emptyState">
+  <app-empty-states
+      [imgName]="imgName"
+      [title]="title"
+      [description]="description"
+      [buttonText]="buttonText"
+      [buttonUrl]="buttonUrl">
+  </app-empty-states>
 </div>

@@ -17,14 +17,23 @@ export class BudgetsComponent implements OnInit {
 	totalAmountTotal: number = 0;
 	percentageAmountTotal: number = 0;
 	porEjecutarAmountTotal: number = 0;
-
 	percentageBudgets: number = 0;
+	showEmptyState: boolean = false;
+
+	// EMPTY STATE
+	imgName: string;
+	title: string;
+	description: string;
+	buttonText: string;
+	buttonUrl: string;
 
 	constructor(
 		private budgetsService: BudgetsService,
 		private budgetsBeanService: BudgetsBeanService,
 		private router: Router
-	) {}
+	) {
+		this.fillInformationForEmptyState();
+	}
 
 	ngOnInit() {
 		if (this.budgetsBeanService.getLoadInformation()) {
@@ -32,6 +41,7 @@ export class BudgetsComponent implements OnInit {
 		} else {
 			this.budgets = this.budgetsBeanService.getBudgets();
 			this.doTotalBudget();
+			this.emptyStateProcess();
 			this.showSpinner = false;
 		}
 	}
@@ -46,6 +56,7 @@ export class BudgetsComponent implements OnInit {
 				this.sortingBudgets();
 				this.doTotalBudget();
 				this.budgetsBeanService.setBudgets(this.budgets);
+				this.emptyStateProcess();
 				this.showSpinner = false;
 			},
 			(error) => {
@@ -124,5 +135,22 @@ export class BudgetsComponent implements OnInit {
 		let percentage: number = budget.spentAmount * 100 / budget.amount;
 		this.percentageBudgets = percentage;
 		return `${percentage}%`;
+	}
+
+	emptyStateProcess() {
+		if (this.budgetsBeanService.getBudgets().length == 0) {
+			this.budgetsBeanService.setShowEmptyStates(true);
+		} else {
+			this.budgetsBeanService.setShowEmptyStates(false);
+		}
+		this.showEmptyState = this.budgetsBeanService.getShowEmptyStates();
+	}
+
+	fillInformationForEmptyState() {
+		this.imgName = 'budgets';
+		this.title = 'No tienes presupuestos';
+		this.description = "Pulsa el botón de 'Nuevo Presupuesto' para crear tus presupuestos de este mes.";
+		this.buttonText = 'Nuevo Presupuesto';
+		this.buttonUrl = '/app/budgets/new-budget';
 	}
 }
