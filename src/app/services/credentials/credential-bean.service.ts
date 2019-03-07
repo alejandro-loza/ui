@@ -4,47 +4,45 @@ import { AccountInterface } from '@app/interfaces/account.interfaces';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class CredentialBeanService {
+	private credentials: CredentialInterface[] = [];
+	private accounts: AccountInterface[] = [];
+	private institutions: InstitutionInterface[] = [];
+	private loadInformation: boolean = true;
 
-  private credentials:CredentialInterface[];
-  private accounts:AccountInterface[];
-  private institutions:InstitutionInterface[];
-  private loadInformation:boolean = true;
+	constructor() {}
 
-  constructor() { }
+	public setLoadInformation(data: boolean) {
+		this.loadInformation = data;
+	}
 
-  public setLoadInformation( data:boolean ){
-    this.loadInformation = data;
-  }
+	public getLoadInformation(): boolean {
+		return this.loadInformation;
+	}
 
-  public getLoadInformation(): boolean{
-    return this.loadInformation;
-  }
+	public setCredentials(data: CredentialInterface[]) {
+		this.credentials = data;
+	}
 
-  public setCredentials( data:CredentialInterface[] ){
-    this.credentials = data;
-  }
+	public getCredentials(): CredentialInterface[] {
+		return this.credentials;
+	}
 
-  public getCredentials(): CredentialInterface[] {
-    return this.credentials;
-  }
+	public setAccounts(data: AccountInterface[]) {
+		this.accounts = data;
+	}
 
-  public setAccounts( data:AccountInterface[] ){
-    this.accounts = data;
-  }
+	public getAccounts(): AccountInterface[] {
+		return this.accounts;
+	}
 
-  public getAccounts(): AccountInterface[] {
-    return this.accounts;
-  }
+	public setInstitutions(data: InstitutionInterface[]) {
+		this.institutions = data;
+	}
 
-  public setInstitutions( data:InstitutionInterface[] ){
-    this.institutions = data;
-  }
-
-  public getInstitutions(): InstitutionInterface[] {
-    return this.institutions;
-  }
-
+	public getInstitutions(): InstitutionInterface[] {
+		return this.institutions;
+	}
 }

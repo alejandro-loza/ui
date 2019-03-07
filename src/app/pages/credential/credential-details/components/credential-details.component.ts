@@ -58,7 +58,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		this.activated.params.subscribe((params: Params) => {
 			this.credentialId = params['credencialId'];
 		});
-		if (isNullOrUndefined(this.credentialBeanService.getInstitutions())) {
+		if (this.credentialBeanService.getInstitutions().length == 0) {
 			this.loadInstitutions();
 		} else {
 			this.getDetails();
