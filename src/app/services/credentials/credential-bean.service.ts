@@ -11,6 +11,7 @@ export class CredentialBeanService {
 	private accounts: AccountInterface[] = [];
 	private institutions: InstitutionInterface[] = [];
 	private loadInformation: boolean = true;
+	private showEmptyState: boolean = false;
 
 	constructor() {}
 
@@ -44,5 +45,13 @@ export class CredentialBeanService {
 
 	public getInstitutions(): InstitutionInterface[] {
 		return this.institutions;
+	}
+
+	public setShowEmptyState(data: boolean) {
+		this.showEmptyState = data;
+	}
+
+	public getShowEmptyState(): boolean {
+		return this.showEmptyState;
 	}
 }

@@ -42,6 +42,14 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	credentialInProcess: CredentialInterface;
 	errorWithCredentials: boolean = false;
 
+	// EMPTY STATE
+	imgName: string;
+	title: string;
+	description: string;
+	buttonText: string;
+	buttonUrl: string;
+	showEmptyState: boolean = false;
+
 	@ViewChild('modal') interactiveModal: ElementRef;
 	@ViewChild('collapsible') elementCollapsible: ElementRef;
 
@@ -63,6 +71,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.validateStatusFinished = true;
 		this.loaderMessagge = '';
 		this.toast = { classes: null, code: null, message: null };
+		this.fillInformationForEmptyState();
 	}
 
 	ngOnInit() {
@@ -75,8 +84,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		const initModal = new M.Modal(this.interactiveModal.nativeElement);
-		const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement, {});
+		if (!this.showEmptyState) {
+			const initModal = new M.Modal(this.interactiveModal.nativeElement);
+			const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement, {});
+		}
 	}
 
 	loadInformationFromRam() {
@@ -89,6 +100,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
 		this.automaticSync(this.credentials);
+		this.emptyStateProcess();
 		this.processCompleteForSpinner = true;
 	}
 
@@ -106,6 +118,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 					this.credentials.push(element);
 					this.checkStatusOfCredential(element);
 				});
+				this.emptyStateProcess();
 				this.processCompleteForSpinner = true;
 				this.automaticSync(this.credentials);
 			},
@@ -221,6 +234,24 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 				this.getAllCredentials();
 			}
 		});
+	}
+
+	emptyStateProcess() {
+		console.log(this.credentials.length);
+		if (this.credentials.length == 0) {
+			this.credentialBean.setShowEmptyState(true);
+		} else {
+			this.credentialBean.setShowEmptyState(false);
+		}
+		this.showEmptyState = this.credentialBean.getShowEmptyState();
+	}
+
+	fillInformationForEmptyState() {
+		this.imgName = 'credentials';
+		this.title = 'No tienes cuentas bancarias';
+		this.description = "Pulsa el botón de 'Agregar Credencial' para dar de alta tus cuentas bancarias.";
+		this.buttonText = 'Agregar Credencial';
+		this.buttonUrl = '/app/banks';
 	}
 
 	// InteractiveFields Process

@@ -30,6 +30,7 @@ export class CleanerService {
 		this.credentialBeanService.setAccounts([]);
 		this.credentialBeanService.setInstitutions([]);
 		this.credentialBeanService.setLoadInformation(true);
+		this.credentialBeanService.setShowEmptyState(false);
 		// Budgets Memory
 		this.budgetsBeanService.setBudgetToViewDetails(null);
 		this.budgetsBeanService.setBudgets([]);
