@@ -4,7 +4,6 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ConfigService } from '@services/config/config.service';
 import { environment } from '@env/environment';
 import { Observable, from } from 'rxjs';
-import { Response } from '@interfaces/response.interface';
 import { Category } from '@interfaces/category.interface';
 import { map } from 'rxjs/operators';
 
