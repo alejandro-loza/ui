@@ -103,7 +103,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.keyEnter = false;
   }
 
-  updateMovement() {
-    this.keyEnter = true;
+  deleteMovement(index: number) {
+    this.collapsibleClose(index);
+    this.movementList.splice(index, 1);
   }
 }
