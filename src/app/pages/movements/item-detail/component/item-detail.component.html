@@ -1,11 +1,14 @@
 <div class="row row-item-detail">
-  <div class="col m8">
-    <!-- Diseño para movimientos en efectivo-->
-    <ng-container *ngIf="movement.account.name === 'Efectivo'; then thenTemplate; else elseTemplate"></ng-container>
-    <ng-template #thenTemplate>
+
+  <!-- Diseño para movimientos en efectivo-->
+  <ng-container *ngIf="movement.account.name === 'Efectivo'; then thenTemplate; else elseTemplate"></ng-container>
+  <ng-template #thenTemplate>
+    <div class="col m6">
       <app-type (keyEnterPressed)="keyEnter=$event" [type]="movement.type" (valueType)="movement.type=$event"></app-type>
-    </ng-template>
-    <ng-template #elseTemplate>
+    </div>
+  </ng-template>
+  <ng-template #elseTemplate>
+    <div class="col m6">
       <div class="card-panel z-depth-0">
         <div class="row card-row">
           <div class="col s2">
@@ -22,13 +25,13 @@
           </div>
         </div>
       </div>
-    </ng-template>
-  </div>
+    </div>
+  </ng-template>
   <!-- Diseño para editar movimientos -->
-  <div class="col m4 right-align">
+  <div class="col m4 push-m2 center-align">
     <ng-template [ngIf]="movement.editAvailable === true">
       <app-save-movement [keyEnter]="keyEnter" [movement]="movement" (status)="status.emit($event)" (keyEnterPressed)="keyEnterPressed.emit($event)"></app-save-movement>
-      <app-cancel-movement></app-cancel-movement>
+      <app-cancel-movement (statusCancel)="status.emit($event)"></app-cancel-movement>
       <app-delete-movement (status)="statusDelete.emit($event)" [id]="movement.id"></app-delete-movement>
     </ng-template>
   </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-cancel-movement',
@@ -6,8 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cancel-movement.component.css']
 })
 export class CancelMovementComponent implements OnInit {
-
-  constructor() { }
+  @Output() statusCancel: EventEmitter<boolean>;
+  constructor() {
+    this.statusCancel = new EventEmitter();
+  }
 
   ngOnInit() {
   }
