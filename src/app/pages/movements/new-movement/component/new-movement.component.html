@@ -39,13 +39,8 @@
           <div class="col s12 m7">
             <div class="row rowFecha">
               <div class="input-field col m12">
-                <app-date
-                [formatDate]="formatDate"
-                [type]="'button'"
-                [classes]="'btn finerio-blue'"
-                [name]="'date'"
-                [date]="date"
-                (valueDate)="newMovement.date=$event"></app-date>
+                <app-date [formatDate]="formatDate" [type]="'button'" [classes]="'btn finerio-blue'" [name]="'date'" [date]="date" (valueDate)="newMovement.date=$event">
+                </app-date>
               </div>
             </div>
           </div>

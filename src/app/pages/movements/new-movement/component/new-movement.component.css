@@ -56,3 +56,19 @@
   color: #f5f5f5;
 }
 
+/* Responsive Modal for _newMovement_ */
+#newMovement {
+  padding: 1% 0%;
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1440px) {
+  #newMovement {
+     max-height: 78%;
+  }
+}
+
+@media only screen and (min-width: 1441px) {
+  #newMovement {
+     max-height: 60%;
+  }
+}
