@@ -16,6 +16,6 @@ export class EmptyStatesComponent implements OnInit {
 	constructor() {}
 
 	ngOnInit() {
-		this.assetsUrlDefault = `/assets/media/img/empty_states/${this.imgName}_empty_state.png`;
+		this.assetsUrlDefault = `/assets/media/img/empty_states/${this.imgName}_empty_state.svg`;
 	}
 }
