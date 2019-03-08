@@ -1,0 +1,77 @@
+#spinner {
+	padding-top: 50px;
+}
+img {
+	max-height: 30px;
+	max-width: 27px;
+}
+
+#createButton {
+	border-radius: 20px;
+	margin: 15px 0 15px 0;
+}
+
+#mainName {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.marginB-0 {
+	margin-bottom: 0px;
+}
+
+.borderB-o {
+	border-bottom: 0px;
+}
+
+.paddingL {
+	padding-left: 10px;
+}
+
+.details {
+	margin-bottom: 0px;
+	margin-top: 0px;
+	display: inline-block;
+	padding-left: 15px;
+}
+
+#totalProgressBar {
+	height: 35px;
+}
+
+#progressBar {
+	height: 25px;
+}
+
+.progress {
+	background-color: #9e9e9e !important;
+	border-radius: 5px;
+	margin-top: 0px;
+	margin-top: -10px;
+}
+
+.text-inside {
+	text-align: right;
+	margin-bottom: 0px;
+	position: relative;
+	margin-top: 0px;
+	transform: translateY(14px);
+	padding-right: 5px;
+	z-index: 2;
+	color: white;
+}
+
+.text-inside-progress {
+	text-align: right;
+	margin-bottom: 0px;
+	position: relative;
+	margin-top: 0px;
+	transform: translateY(20px);
+	padding-right: 5px;
+	z-index: 2;
+	color: white;
+}
+
+.collection-item {
+	cursor: pointer;
+}

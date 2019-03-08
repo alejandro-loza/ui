@@ -6,11 +6,11 @@ import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
+import { ToastService } from '@services/toast/toast.service';
+import { CleanerService } from '@services/cleaner/cleaner.service';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
-import { CleanerService } from '@services/cleaner/cleaner.service';
 import * as M from 'materialize-css/dist/js/materialize';
-import { ToastService } from '@services/toast/toast.service';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
 
@@ -42,6 +42,14 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	credentialInProcess: CredentialInterface;
 	errorWithCredentials: boolean = false;
 
+	// EMPTY STATE
+	imgName: string;
+	title: string;
+	description: string;
+	buttonText: string;
+	buttonUrl: string;
+	showEmptyState: boolean = false;
+
 	@ViewChild('modal') interactiveModal: ElementRef;
 	@ViewChild('collapsible') elementCollapsible: ElementRef;
 
@@ -63,6 +71,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.validateStatusFinished = true;
 		this.loaderMessagge = '';
 		this.toast = { classes: null, code: null, message: null };
+		this.fillInformationForEmptyState();
 	}
 
 	ngOnInit() {
@@ -75,8 +84,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		const initModal = new M.Modal(this.interactiveModal.nativeElement);
-		const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement, {});
+		if (!this.showEmptyState) {
+			const initModal = new M.Modal(this.interactiveModal.nativeElement);
+			const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement, {});
+		}
 	}
 
 	loadInformationFromRam() {
@@ -88,7 +99,8 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		});
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
-		//this.automaticSync( this.credentials );
+		this.automaticSync(this.credentials);
+		this.emptyStateProcess();
 		this.processCompleteForSpinner = true;
 	}
 
@@ -98,14 +110,17 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.credentials = [];
 		this.debitAccounts = [];
 		this.creditAccounts = [];
+		this.credentialBean.setCredentials([]);
+
 		this.credentialService.getAllCredentials().subscribe(
 			(res) => {
 				res.body.data.forEach((element: CredentialInterface) => {
 					this.credentials.push(element);
 					this.checkStatusOfCredential(element);
 				});
+				this.emptyStateProcess();
 				this.processCompleteForSpinner = true;
-				//this.automaticSync( this.credentials );
+				this.automaticSync(this.credentials);
 			},
 			(error) => {
 				this.errorWithCredentials = true;
@@ -134,8 +149,13 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 			let dateObj = new Date(credential.lastUpdated);
 			let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
 			if (diff >= 8) {
+				this.loaderMessagge =
+					'Finerio se está sincronizando con tu banca en línea de ' +
+					credential.institution.name +
+					'. Esto puede durar unos minutos.';
+				this.validateStatusFinished = false;
 				this.credentialService.updateCredential(credential).subscribe((res) => {
-					this.checkStatusOfCredential(credential);
+					this.checkStatusOfCredential(res.body);
 				});
 			}
 		});
@@ -175,7 +195,12 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		} else if (credential.status === 'INVALID') {
 			this.loaderMessagge = '¡Ha ocurrido algo con tu credencial ' + credential.institution.name + '!';
 		} else if (credential.status === 'VALIDATE') {
-			this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea. Esto puede durar unos minutos.';
+			this.loaderMessagge =
+				'Finerio se está sincronizando con tu banca en línea de ' +
+				credential.institution.name +
+				'. Esto puede durar unos minutos.';
+			this.cleanerService.cleanDashboardVariables();
+			this.cleanerService.cleanBudgetsVariables();
 			this.getNewInfoCredential(credential.id);
 		} else if (credential.status === 'TOKEN') {
 			this.loaderMessagge = 'Solicitando información adicional para ' + credential.institution.name + '...';
@@ -197,18 +222,36 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 				this.loaderMessagge =
 					'¡Tus datos han sido sincronizados en ' + this.credentialInProcess.institution.name + '!';
 				this.toast.message = this.loaderMessagge;
-				this.cleanerService.cleanAllVariables();
 				this.getAllCredentials();
 			} else if (this.credentialInProcess.status === 'TOKEN') {
 				this.validateStatusFinished = false;
 				//  Modal process
 				this.modalProcessForInteractive(res.body);
 			} else if (this.credentialInProcess.status === 'INVALID') {
-				this.loaderMessagge = '¡Ha ocurrido algo con una de tus credenciales!';
+				this.loaderMessagge =
+					'¡Ha ocurrido algo con tu credencial ' + this.credentialInProcess.institution.name + '!';
 				this.validateStatusFinished = false;
 				this.getAllCredentials();
 			}
 		});
+	}
+
+	emptyStateProcess() {
+		console.log(this.credentials.length);
+		if (this.credentials.length == 0) {
+			this.credentialBean.setShowEmptyState(true);
+		} else {
+			this.credentialBean.setShowEmptyState(false);
+		}
+		this.showEmptyState = this.credentialBean.getShowEmptyState();
+	}
+
+	fillInformationForEmptyState() {
+		this.imgName = 'credentials';
+		this.title = 'No tienes cuentas bancarias';
+		this.description = "Pulsa el botón de 'Agregar Credencial' para dar de alta tus cuentas bancarias.";
+		this.buttonText = 'Agregar Credencial';
+		this.buttonUrl = '/app/banks';
 	}
 
 	// InteractiveFields Process

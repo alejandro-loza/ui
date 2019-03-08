@@ -7,6 +7,7 @@ import { FieldService } from '@services/field/field.service';
 import { ToastService } from '@services/toast/toast.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
+import { CleanerService } from '@services/cleaner/cleaner.service';
 
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { CredentialInterface } from '@interfaces/credential.interface';
@@ -45,6 +46,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		private accountService: AccountService,
 		private toastService: ToastService,
 		private credentialBeanService: CredentialBeanService,
+		private cleanerService: CleanerService,
 		private institutionService: InstitutionService
 	) {
 		this.fields = [];
@@ -56,7 +58,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		this.activated.params.subscribe((params: Params) => {
 			this.credentialId = params['credencialId'];
 		});
-		if (isNullOrUndefined(this.credentialBeanService.getInstitutions())) {
+		if (this.credentialBeanService.getInstitutions().length == 0) {
 			this.loadInstitutions();
 		} else {
 			this.getDetails();
@@ -119,23 +121,46 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		);
 	}
 
-	updateCredential(credential) {
-		this.credentialService.updateCredential(credential).subscribe(
-			(res) => {
-				this.toast.code = res.status;
-			},
-			(error) => {
-				this.toast.code = error.status;
-				this.toast.message = 'Ocurrió un error al actualizar tu credencial';
-				this.toastService.toastGeneral(this.toast);
-			},
-			() => {
-				this.toast.message = 'Sincronización en proceso...';
-				this.toastService.toastGeneral(this.toast);
-				this.credentialBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/credentials');
-			}
-		);
+	updateCredential(credential: CredentialInterface) {
+		if (this.syncPossible(credential)) {
+			this.credentialService.updateCredential(credential).subscribe(
+				(res) => {
+					this.toast.code = res.status;
+				},
+				(error) => {
+					this.toast.code = error.status;
+					this.toast.message = 'Ocurrió un error al actualizar tu credencial';
+					this.toastService.toastGeneral(this.toast);
+				},
+				() => {
+					this.toast.message = 'Sincronización en proceso...';
+					this.toastService.toastGeneral(this.toast);
+					this.credentialBeanService.setLoadInformation(true);
+					this.cleanerService.cleanDashboardVariables();
+					this.cleanerService.cleanBudgetsVariables();
+					this.router.navigateByUrl('/app/credentials');
+				}
+			);
+		} else {
+			this.toast.code = 200;
+			this.toast.message = 'Debes esperar 8 horas antes de volver a sincronizar tu credencial';
+			this.toastService.toastGeneral(this.toast);
+		}
+	}
+
+	syncPossible(credential: CredentialInterface): boolean {
+		let isPossible: boolean = false;
+		let currentMoment = new Date();
+		let dateObj = new Date(credential.lastUpdated);
+		let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+
+		if (credential.status == 'ACTIVE') {
+			isPossible = diff >= 8 ? true : false;
+		} else {
+			isPossible = true;
+		}
+
+		return isPossible;
 	}
 
 	deleteCredential() {
@@ -152,6 +177,8 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 				this.toast.message = 'Credencial elminada correctamente';
 				this.toastService.toastGeneral(this.toast);
 				this.credentialBeanService.setLoadInformation(true);
+				this.cleanerService.cleanDashboardVariables();
+				this.cleanerService.cleanBudgetsVariables();
 				this.router.navigateByUrl('/app/credentials');
 			}
 		);

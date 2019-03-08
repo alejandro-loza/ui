@@ -33,13 +33,22 @@ export class DashboardComponent implements OnInit {
 	/*0 INCOMES 1 EXPENSES 2 BALANCE */
 	tabSelected: number = 1;
 
+	// EMPTY STATES
+	imgName: string;
+	title: string;
+	description: string;
+	buttonText: string;
+	buttonUrl: string;
+
 	constructor(
 		private movementsService: MovementsService,
 		private dateApi: DateApiService,
 		private dashboardService: DashboardService,
 		private categoriesService: CategoriesService,
 		private dashboardBean: DashboardBeanService
-	) {}
+	) {
+		this.fillInformationForEmptyState();
+	}
 
 	ngOnInit() {
 		if (!this.dashboardBean.getShowEmptyState()) {
@@ -85,9 +94,7 @@ export class DashboardComponent implements OnInit {
 		this.categoriesList = [];
 		this.dashboardBean.setLoadInformation(false);
 		this.categoriesService.getCategoriesInfo().subscribe((res) => {
-			res.body.data.forEach((category: Category) => {
-				this.categoriesList.push(category);
-			});
+			this.categoriesList = res.body;
 			this.getDatesForParams();
 			this.getMovementsData(this.categoriesList);
 		});
@@ -124,5 +131,14 @@ export class DashboardComponent implements OnInit {
 		startDateAux.setMilliseconds(0);
 		let startDate = this.dateApi.dateWithFormat(startDateAux);
 		this.paramsMovements.startDate = startDate;
+	}
+
+	fillInformationForEmptyState() {
+		this.imgName = 'resume';
+		this.title = 'Bienvenido a tu resumen de gastos';
+		this.description =
+			'En cuanto des de alta una cuenta bancaria o registres tus movimientos, aquí verás un resumen gráfico de tus gastos por categoría';
+		this.buttonText = 'Dar de alta una cuenta bancaria';
+		this.buttonUrl = '/app/banks';
 	}
 }

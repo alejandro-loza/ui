@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { isNullOrUndefined } from 'util';
+
+// JUST INTERFACES
 import { Movement } from '@interfaces/movement.interface';
 import { Category } from '@interfaces/category.interface';
-import { isNullOrUndefined } from 'util';
 import { StackedBar } from '@app/interfaces/dashboard/dashboardStackedBar.interface';
 import { monthMovement } from '@app/interfaces/dashboard/monthMovement.interface';
 import { BalancePieChart } from '@app/interfaces/dashboard/BalancePieChart.interface';
