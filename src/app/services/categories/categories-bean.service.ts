@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { Category } from '@app/interfaces/category.interface';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class CategoriesBeanService {
-	private categories: Category[] = [];
+  private categories: Category[] = [];
 
-	constructor() {}
+  constructor() {}
 
-	public setCategories(data: Category[]) {
-		this.categories = data;
-	}
+  public setCategories(data: Category[]) {
+    this.categories = data;
+  }
 
-	public getCategories(): Category[] {
-		return this.categories;
-	}
+  public getCategories(): Category[] {
+    return this.categories;
+  }
 }

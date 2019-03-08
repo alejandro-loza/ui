@@ -23,7 +23,7 @@ export class CategoryMovementComponent implements OnInit {
     this.statusCategory = new EventEmitter();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   setCategory(category: Category) {
     if ( category.id === 'finerio-icon' ) {
