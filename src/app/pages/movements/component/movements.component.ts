@@ -113,7 +113,6 @@ export class MovementsComponent implements OnInit, OnDestroy {
           movement['customAmount'] = movement.amount;
           this.movementList.push(movement);
         });
-        console.log(res.body.data);
       },
       err => {
         this.toast.code = err.status;

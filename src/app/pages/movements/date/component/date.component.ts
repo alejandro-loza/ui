@@ -22,6 +22,7 @@ export class DateComponent implements OnInit, AfterContentInit {
   @Input() name: string;
   @Input() classes: string;
   @Input() type: string;
+  @Input() id: string;
 
   @Output() valueDate: EventEmitter<string>;
   @Output() valueFormatDate: EventEmitter<string>;
@@ -61,7 +62,7 @@ export class DateComponent implements OnInit, AfterContentInit {
           monthsShort: [
             'Ene',
             'Feb',
-            'Marz',
+            'Mar',
             'Abr',
             'May',
             'Jun',

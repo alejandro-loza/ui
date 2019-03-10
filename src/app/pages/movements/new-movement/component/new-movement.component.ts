@@ -17,7 +17,6 @@ import { ToastInterface } from '@interfaces/toast.interface';
 import { NewMovement } from '@interfaces/newMovement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { retry } from 'rxjs/operators';
 import { DateApiService } from '@services/date-api/date-api.service';
 @Component({
   selector: 'app-new-movement',
@@ -44,6 +43,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     private toastService: ToastService,
     private renderer: Renderer2
   ) {
+    this.formatDate = 'Otro...';
     this.newMovement = {
       date: this.dateApiService.dateApi(new Date()),
       type: 'charge'
@@ -53,12 +53,17 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.toastInterface = { code: null, message: null };
   }
 
-  ngOnInit() {
-    this.formatDate = this.dateApiService.dateFormatMovement(this.date);
-  }
+  ngOnInit() { }
 
   ngAfterViewInit() {
-    const initModal = new M.Modal(this.modalElement.nativeElement);
+    const initModal = new M.Modal(this.modalElement.nativeElement, {
+      onCloseEnd: () => {
+        this.renderer.removeClass(document.querySelector('.btn-date.active'), 'active');
+        this.renderer.addClass(document.getElementById('todayDate'), 'active');
+        this.renderer.removeClass(document.querySelector('.btn-type.active'), 'active');
+        this.renderer.addClass(document.getElementById('charge'), 'active');
+      }
+    });
     this.instaceModal = M.Modal.getInstance(this.modalElement.nativeElement);
   }
 
@@ -86,21 +91,29 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
       () => {
         this.instaceModal.close();
         this.renderer.removeClass(this.buttonSubmit.nativeElement, 'disabled');
-        form.resetForm();
         this.toastInterface.message = 'Se creó su movimiento exitosamente';
         this.toastService.toastGeneral(this.toastInterface);
+        form.resetForm();
       }
     );
   }
 
-  valueType(type: string) {
-    if (type === 'deposit') {
-      document.getElementById('charge').classList.remove('active');
-      document.getElementById('deposit').classList.add('active');
-    } else {
-      document.getElementById('deposit').classList.remove('active');
-      document.getElementById('charge').classList.add('active');
+  valueType(id: string) {
+    this.renderer.removeClass(document.querySelector('.btn-type.active'), 'active');
+    this.renderer.addClass(document.getElementById(id), 'active');
+    this.newMovement.type = id;
+  }
+
+  changeClassDate(id: string) {
+    const auxDate = new Date();
+    this.renderer.removeClass(document.querySelector('.btn-date.active'), 'active');
+    this.renderer.addClass(document.getElementById(id), 'active');
+    if ( id === 'yesterdayDate' ) {
+      const newdate = auxDate.getDate() - 1;
+      auxDate.setDate(newdate);
+    } else if ( id === 'otherDate' ) {
+      return;
     }
-    this.newMovement.type = type;
+    this.newMovement.date = this.dateApiService.dateApi(auxDate);
   }
 }
