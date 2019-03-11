@@ -96,6 +96,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
       this.status = status;
       this.filterflag = false;
     }, 0);
+    this.showEmptyState = false;
     this.refreshMovement();
   }
 
