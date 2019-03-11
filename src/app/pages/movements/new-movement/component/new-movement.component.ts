@@ -94,10 +94,11 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
       () => {
         this.instaceModal.close();
         this.renderer.removeClass(this.buttonSubmit.nativeElement, 'disabled');
+        this.reset = true;
+        this.resetInputs();
+        form.resetForm();
         this.toastInterface.message = 'Se creó su movimiento exitosamente';
         this.toastService.toastGeneral(this.toastInterface);
-        this.reset = true;
-        form.resetForm();
       }
     );
   }
@@ -119,5 +120,12 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
       return;
     }
     this.newMovement.date = this.dateApiService.dateApi(auxDate);
+  }
+
+  resetInputs() {
+    this.renderer.removeClass(document.getElementById('description'), 'valid');
+    this.renderer.removeClass(document.getElementById('description'), 'invalid');
+    this.renderer.removeClass(document.getElementById('monto'), 'valid');
+    this.renderer.removeClass(document.getElementById('monto'), 'invalid');
   }
 }
