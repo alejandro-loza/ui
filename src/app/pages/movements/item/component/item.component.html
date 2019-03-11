@@ -18,12 +18,12 @@
   <!-- Date End -->
 
   <!-- Description Start-->
-  <div class="col m3 customComponent">
+  <div class="col m3 customComponent left-align">
     <ng-container *ngIf="movement.editAvailable === true; else elseDescription">
-      <input [(ngModel)]="movement.customDescription" type="text" class="inputMovement center-align" name="description" />
+      <input [(ngModel)]="movement.customDescription" type="text" class="inputMovement inputPadding" name="description" />
     </ng-container>
     <ng-template #elseDescription>
-      <h6 class="truncate">{{ movement.customDescription | uppercase }}</h6>
+      <h6 class="truncate description">{{ movement.customDescription | uppercase }}</h6>
     </ng-template>
   </div>
   <!-- Description End-->
@@ -39,12 +39,12 @@
   <div class="col m2 customComponent right-align">
     <ng-container *ngIf="movement.account.name === 'Efectivo'; else elseAmount">
       <ng-container *ngIf="movement.editAvailable === true; else elseAmount">
-        <input [(ngModel)]="movement.customAmount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" />
+        <input [(ngModel)]="movement.amount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" />
       </ng-container>
     </ng-container>
     <ng-template #elseAmount>
       <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">
-        {{ movement.customAmount | currency:'USD':'symbol-narrow':'0.2' }}
+        {{ movement.amount | currency:'USD':'symbol-narrow':'0.2' }}
       </h6>
     </ng-template>
   </div>
@@ -54,14 +54,14 @@
   <div class="col m2">
     <div class="switch">
       <label>
-            Si
-            <input
-              [(ngModel)]="movement.duplicated"
-              name="duplicated"
-              type="checkbox"/>
-            <span class="lever"></span>
-            No
-            </label>
+        Si
+        <input
+          [(ngModel)]="movement.duplicated"
+          name="duplicated"
+          type="checkbox"/>
+        <span class="lever"></span>
+        No
+      </label>
     </div>
   </div>
   <!-- Consider end -->

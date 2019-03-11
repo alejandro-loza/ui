@@ -26,15 +26,7 @@ export class SubcategoryItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.category.subCategories.sort((currentCategory, nextCategory) => {
-      if (currentCategory.color > nextCategory.color) {
-        return 1;
-      } else if (currentCategory.color < nextCategory.color) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
+    this.findAllCategoriesFromJsonArray(this.category);
   }
 
   overSubcategory(i: number) {
@@ -62,8 +54,7 @@ export class SubcategoryItemComponent implements OnInit {
   }
 
   selectCategory(i: number) {
-    const auxcategory = this.category.subCategories[i];
-    auxcategory.parent.id = this.category.id;
+    const auxcategory: Category = this.category.subCategories[i];
     this.categorieService.setCategory = auxcategory;
     this.statusCategoryValue = true;
     this.statusCategory.emit(this.statusCategoryValue);
@@ -71,5 +62,27 @@ export class SubcategoryItemComponent implements OnInit {
 
   trackByFn(index: number, category: Category) {
     return category.id;
+  }
+
+  private orderCategoriesByColor(category: Category) {
+    category.subCategories.sort((currentCategory, nextCategory) => {
+      if (currentCategory.color > nextCategory.color) {
+        return 1;
+      } else if (currentCategory.color < nextCategory.color) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
+  private findAllCategoriesFromJsonArray( category: Category ) {
+    this.orderCategoriesByColor(category);
+    for (let i = 0; i < category.subCategories.length; i++) {
+      const subcategory = category.subCategories[i];
+      subcategory.parent = {
+        id: category.id
+      };
+    }
   }
 }

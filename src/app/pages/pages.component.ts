@@ -6,8 +6,6 @@ import { ConfigService } from '@services/config/config.service';
 
 import { ToastInterface } from '@interfaces/toast.interface';
 
-import { retry } from 'rxjs/operators';
-
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',

@@ -1,12 +1,10 @@
 <ng-container *ngIf="editAvailable === true; else noEditable">
-    <input type="button" class="btn category-container modal-trigger"
-      [attr.data-target]="'modal-target'"
-      [ngModel]="category.name"
-      [ngStyle]="{'background-color': category.color, 'color': category.textcolor}" />
+  <input type="button" class="btn category-container modal-trigger truncate" [attr.data-target]="'modal-target'" [ngModel]="category.name" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}" />
 </ng-container>
 <ng-template #noEditable>
-  <button type="button" class="btn category-container truncate" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}">
-    <i class="mdi mdi-24px left">
+  <div class="left-align">
+    <button type="button" class="btn category-container truncate" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}">
+      <i class="mdi mdi-24px left">
         <ng-container *ngIf="category.user; else noCategoryUser">
             <img
             (click)="setCategory(category)"
@@ -14,18 +12,19 @@
             srcset="assets/media/img/categories/finerio-icon.svg"
             [attr.alt]="category.name"
             class="responsive-img sizeIcon">
-        </ng-container>
-        <ng-template #noCategoryUser>
+          </ng-container>
+          <ng-template #noCategoryUser>
             <img
             (click)="setCategory(category)"
             src="https://cdn.finerio.mx/categories/web/{{ (category.parent) ? category.parent.id : category.id }}.svg"
             srcset="assets/media/img/categories/{{ (category.parent) ? category.parent.id : category.id }}.svg"
             [attr.alt]="category.name"
             class="responsive-img sizeIcon">
-        </ng-template>
-      </i>
-    {{ category.name }}
-  </button>
+          </ng-template>
+        </i>
+        <p class="category-name truncate left-align">{{ category.name }}</p>
+      </button>
+  </div>
 </ng-template>
 
 <app-modal-categories [categoryList]="categoryList" [modalTrigger]="'modal-target'" (statusModal)="statusModal.emit($event)" (statusCategory)="statusCategory.emit($event)">

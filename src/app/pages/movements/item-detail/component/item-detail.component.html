@@ -1,45 +1,31 @@
-<div class="row center-align">
+<div class="row row-item-detail">
   <!-- Diseño para movimientos en efectivo-->
-  <ng-container *ngIf="movement.account.name === 'Efectivo'; else tarjeta">
+  <ng-container *ngIf="movement.account.name === 'Efectivo'; then thenTemplate; else elseTemplate"></ng-container>
+  <ng-template #thenTemplate>
     <div class="col m6">
       <app-type (keyEnterPressed)="keyEnter=$event" [type]="movement.type" (valueType)="movement.type=$event"></app-type>
     </div>
-    <!-- Diseño para editar movimientos -->
+  </ng-template>
+  <ng-template #elseTemplate>
     <div class="col m6">
-      <ng-container *ngIf="movement.editAvailable === true; else elseFlag">
-        <app-save-movement [keyEnter]="keyEnter" [movement]="movement"
-          (status)="status.emit($event)" (keyEnterPressed)="keyEnterPressed.emit($event)"></app-save-movement>
-        <app-delete-movement (status)="statusDelete.emit($event)" [id]="movement.id"></app-delete-movement>
-      </ng-container>
-      <ng-template #elseFlag>
-        <app-delete-movement (status)="statusDelete.emit($event)" [id]="movement.id"></app-delete-movement>
-      </ng-template>
-    </div>
-  </ng-container>
-
-  <!-- Diseño para movimientos de tarjetas -->
-  <ng-template #tarjeta>
-    <div class="extraInfo">
-      <div class="col s6 valign-wrapper">
-        <div class="row">
-          <div class="col s4">
-              <h6>Descripción Original: </h6>
+      <div class="card-panel z-depth-0">
+        <div class="row card-row">
+          <div class="col s6 center-align">
+            <p class="card-text"><b>Fecha Original:</b> {{ movement.date | date:'mediumDate' }}</p>
           </div>
-          <div class="col s8">
-              <p>{{ movement.description }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col s6">
-        <div class="row valign-wrapper">
-          <div class="col s4">
-              <h6>Fecha Original: </h6>
-          </div>
-          <div class="col s8">
-              <p>{{ movement.date | date: 'dd / MMMM / yyyy'}}</p>
+          <div class="col s6 left-align">
+            <p class="card-text"><b>Descripción Original:</b> {{ movement.description }}</p>
           </div>
         </div>
       </div>
     </div>
   </ng-template>
+  <!-- Diseño para editar movimientos -->
+  <div class="col m5 push-m1" id="buttons-movement-action">
+    <ng-template [ngIf]="movement.editAvailable === true">
+      <app-save-movement [keyEnter]="keyEnter" [movement]="movement" (status)="status.emit($event)" (keyEnterPressed)="keyEnterPressed.emit($event)"></app-save-movement>
+      <app-cancel-movement (statusCancel)="status.emit($event)"></app-cancel-movement>
+      <app-delete-movement (status)="statusDelete.emit($event)" [id]="movement.id"></app-delete-movement>
+    </ng-template>
+  </div>
 </div>

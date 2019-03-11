@@ -5,7 +5,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  Renderer2,
+  Renderer2
 } from '@angular/core';
 import { Movement } from '@interfaces/movement.interface';
 
@@ -49,8 +49,16 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     );
   }
 
+  /**
+   * @function trackByFn() - La función regresa el _id_ del movimiento, debido a que es un valor único que nos está dando el API, y para el compilador
+   * en JIT y/ o AOT mode, es mucho más rápido y eficiente. Si no hubiera el _id_, se recomienda usar el _index_..
+   *
+   * @param {number} index - Número en el arreglo del movimiento
+   * @param {Movement} movement - El movimiento en el indice;
+   *
+   */
   trackByFn(index: number, movement: Movement) {
-    return index;
+    return movement.id;
   }
 
   collapsibleFunction(index: number) {
@@ -80,7 +88,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   statusCategory(status: boolean) {
-    if ( status === true ) {
+    if (status === true) {
       this.auxMovement.concepts[0].category = this.categoriesService.getCategory;
       this.statusModal = false;
     }
@@ -88,14 +96,17 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   collapsibleClose(index: number) {
-    if ( this.auxMovement.customDescription === '' || this.auxMovement.customDescription === null ) {
+    if (
+      this.auxMovement.customDescription === '' ||
+      this.auxMovement.customDescription === null
+    ) {
       this.auxMovement.customDescription = this.auxMovement.description;
     }
-    if ( isNull(this.auxMovement.customDate) ) {
+    if (isNull(this.auxMovement.customDate)) {
       this.auxMovement.customDate = this.auxMovement.date;
     }
-    if ( isNull(this.auxMovement.customAmount) ) {
-      this.auxMovement.customAmount = this.auxMovement.amount;
+    if (isNull(this.auxMovement.amount)) {
+      this.auxMovement.amount = this.auxMovement.customAmount;
     }
     this.auxMovement.editAvailable = false;
     this.instanceCollapsible.close(index);
@@ -103,7 +114,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.keyEnter = false;
   }
 
-  updateMovement() {
-    this.keyEnter = true;
+  deleteMovement(index: number) {
+    this.collapsibleClose(index);
+    this.movementList.splice(index, 1);
   }
 }

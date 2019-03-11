@@ -10,6 +10,7 @@ import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { Movement } from '@interfaces/movement.interface';
+import { CleanerService } from '@services/cleaner/cleaner.service';
 import { isNull } from 'util';
 
 @Component({
@@ -29,29 +30,33 @@ export class SaveMovementComponent implements OnInit, OnChanges {
 
   constructor(
     private movementService: MovementsService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cleanerService: CleanerService
   ) {
     this.status = new EventEmitter();
     this.keyEnterPressed = new EventEmitter();
     this.toastInterface = {};
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngOnChanges(): void {
-    if ( this.keyEnter === true ) {
+    if (this.keyEnter === true) {
       this.updateMovement();
     }
   }
 
   updateMovement() {
-    if ( this.movement.customDescription === '' || this.movement.customDescription === null ) {
+    if (
+      this.movement.customDescription === '' ||
+      this.movement.customDescription === null
+    ) {
       this.movement.customDescription = this.movement.description;
     }
-    if ( isNull( this.movement.customDate ) ) {
+    if (isNull(this.movement.customDate)) {
       this.movement.customDate = this.movement.date;
     }
-    if ( isNull(this.movement.customAmount) ) {
+    if (isNull(this.movement.customAmount)) {
       this.movement.customAmount = this.movement.amount;
     }
     this.movementService.updateMovement(this.movement).subscribe(
@@ -75,6 +80,8 @@ export class SaveMovementComponent implements OnInit, OnChanges {
         }
       },
       () => {
+        this.cleanerService.cleanBudgetsVariables();
+        this.cleanerService.cleanDashboardVariables();
         this.toastInterface.message = 'Se actualizó su movimiento exitosamente';
         this.toastService.toastGeneral(this.toastInterface);
         this.status.emit(true);

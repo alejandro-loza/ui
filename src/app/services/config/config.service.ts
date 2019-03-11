@@ -79,7 +79,6 @@ export class ConfigService {
         }
       )
       .pipe(
-        retry(2),
         map(res => {
           sessionStorage.clear();
 

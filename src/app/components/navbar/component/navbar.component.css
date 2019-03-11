@@ -1,8 +1,11 @@
+.sidenav {
+  padding-top: 15px;
+}
 .nav-wrapper {
-  margin: 0px calc(var(--paddingPages) / 2 ) 0px var(--paddingPages);
+  margin: 0px 1%;
 }
 
-.pages-list { 
+.pages-list {
   height: 64px;
   line-height: 64px;
   font-size: 16px;
@@ -67,6 +70,6 @@
     width: 128px;
   }
   .sidenav {
-    margin-top: 64px;
+    margin-top: 63px;
   }
 }
