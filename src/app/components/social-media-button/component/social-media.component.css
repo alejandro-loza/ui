@@ -24,7 +24,7 @@
 
 .btn {
     margin: 1% 0%;
-    min-width: 65%;
+    min-width: 50%;
 }
 
 @media only screen and (max-width: 360px) {
