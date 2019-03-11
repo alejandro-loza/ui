@@ -5,10 +5,14 @@ import { ToastService } from '@services/toast/toast.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
+
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { Category } from '@interfaces/category.interface';
+
+import { fromEvent, interval, Subscription } from 'rxjs';
+import { debounce } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -22,6 +26,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   movementList: Movement[];
   categoryList: Category[];
   toast: ToastInterface;
+  scrollResult: Subscription;
 
   status: boolean;
   filterflag: boolean;
@@ -67,12 +72,15 @@ export class MovementsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getCategories();
     this.getMovements();
-    window.addEventListener('scroll', this.offsetMovement, true);
     this.fillInformationForEmptyState();
+
+    this.scrollResult = fromEvent(document, 'scroll')
+      .pipe(debounce(() => interval(100)))
+      .subscribe(() => this.offsetMovement());
   }
 
   ngOnDestroy() {
-    window.removeEventListener('scroll', this.offsetMovement, true);
+    this.scrollResult.unsubscribe();
   }
 
   /**
@@ -95,7 +103,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
    * @function offsetMovement() - It's anonymous functions, its used for eventListener Scroll
    */
 
-  offsetMovement = () => {
+  offsetMovement() {
     if (this.spinnerBoolean === false) {
       const scrollVertical = window.scrollY;
       let scrollLimit: number;
@@ -105,7 +113,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
         this.getMovements();
       }
     }
-  };
+  }
 
   getMovements() {
     this.movementService.getMovements(this.paramsMovements).subscribe(
@@ -137,7 +145,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
       },
       () => {
         if (!this.showEmptyState) {
-          this.auxSize == 0
+          this.auxSize === 0
             ? (this.emptyStateService.setShowEmptyState(true),
               (this.showEmptyState = true))
             : (this.emptyStateService.setShowEmptyState(false),
@@ -184,8 +192,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
       this.auxSize < this.paramsMovements.maxMovements ||
       this.auxSize === 0
     ) {
-      window.removeEventListener('scroll', this.offsetMovement, true);
       if (!this.showEmptyState) {
+        this.scrollResult.unsubscribe();
         this.toast = {
           code: 200,
           message: 'Hemos cargamos todos tus movimientos'
