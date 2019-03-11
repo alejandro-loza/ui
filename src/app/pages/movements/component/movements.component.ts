@@ -5,14 +5,10 @@ import { ToastService } from '@services/toast/toast.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
-
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { ToastInterface } from '@interfaces/toast.interface';
-
-import { retry } from 'rxjs/operators';
 import { Category } from '@interfaces/category.interface';
-import { isUndefined } from 'util';
 
 declare var $: any;
 
@@ -30,6 +26,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   status: boolean;
   filterflag: boolean;
   spinnerBoolean: boolean;
+  isLoading: boolean;
   auxSize: number;
   statusMovements: boolean;
 
@@ -49,6 +46,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
     private toastService: ToastService
   ) {
     this.showEmptyState = false;
+    this.isLoading = true;
     this.status = false;
     this.spinnerBoolean = true;
     this.filterflag = false;
@@ -69,8 +67,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getCategories();
     this.getMovements();
-    this.fillInformationForEmptyState();
     window.addEventListener('scroll', this.offsetMovement, true);
+    this.fillInformationForEmptyState();
   }
 
   ngOnDestroy() {
@@ -114,12 +112,6 @@ export class MovementsComponent implements OnInit, OnDestroy {
       res => {
         // Se le asigna el tamaño de la lista a la variable _auxSize_
         this.auxSize = res.body.data.length;
-        this.auxSize == 0
-          ? (this.emptyStateService.setShowEmptyState(true),
-            (this.showEmptyState = true))
-          : (this.emptyStateService.setShowEmptyState(false),
-            (this.showEmptyState = false));
-        this.validateAllMovements();
 
         // Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
         res.body.data.forEach(movement => {
@@ -144,7 +136,16 @@ export class MovementsComponent implements OnInit, OnDestroy {
         }
       },
       () => {
+        if (!this.showEmptyState) {
+          this.auxSize == 0
+            ? (this.emptyStateService.setShowEmptyState(true),
+              (this.showEmptyState = true))
+            : (this.emptyStateService.setShowEmptyState(false),
+              (this.showEmptyState = false));
+        }
+        this.validateAllMovements();
         this.spinnerBoolean = false;
+        this.isLoading = false;
         this.paramsMovements.offset += this.paramsMovements.maxMovements;
       }
     );

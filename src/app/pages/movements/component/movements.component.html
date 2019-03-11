@@ -1,59 +1,65 @@
-<div  *ngIf="!showEmptyState && !spinnerBoolean" class="stickyOptions">
-  <!-- Busqueda y filtrado -->
-  <div class="containerMovement">
-    <div class="row valign-wrapper">
-      <div class="col s12 m4 right-align">
-        <a class="btn btn-filter" (click)="filterflag = !filterflag">
-          <i class="material-icons left">filter_list</i>Filtrar
-        </a>
-      </div>
-      <div class="col s12 m4 right-align">
-        <!-- Modal Trigger -->
-        <a class="btn modal-trigger finerio-orange" href="#newMovement">
+<main *ngIf="!showEmptyState && !isLoading">
+  <div class="stickyOptions">
+    <!-- Busqueda y filtrado -->
+    <div class="containerMovement">
+      <div class="row valign-wrapper">
+        <div class="col s12 m4">
+          <div class="input-field">
+            <input placeholder="Busca la descripción de tu movimiento" id="first_name" type="text">
+            <label for="first_name"></label>
+            <span class="helper-text" data-error="No hemos encontrado ningún valor" data-success="Hemos encontrado algo">Ej. Starbucks</span>
+          </div>
+        </div>
+        <div class="col s12 m3 left-align">
+          <a class="btn btn-filter" (click)="filterflag = !filterflag">
+            <i class="material-icons left">filter_list</i>Filtrar
+          </a>
+        </div>
+        <div class="col s12 m4 right-align">
+          <!-- Modal Trigger -->
+          <a class="btn modal-trigger finerio-orange" href="#newMovement">
             <i class="material-icons right">add</i>Nuevo Movimiento
-        </a>
-        <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
+          </a>
+          <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
+        </div>
+      </div>
+    </div>
+    <app-filter *ngIf="filterflag !== false" (filterMovementStatus)="statusMovement($event)" [charges]="paramsMovements.charges" [deposits]="paramsMovements.deposits" [duplicates]="paramsMovements.duplicates" class="params-movement"></app-filter>
+    <!-- Encabezado de movimientos -->
+    <div class="containerMovement">
+      <div class="row center-align z-depth-1 white" id="header">
+        <div class="col m1 movementheader">Cuenta</div>
+        <div class="col m1 movementheader">Fecha</div>
+        <div class="col m3 movementheader">Descripción</div>
+        <div class="col m3 movementheader">Categoria</div>
+        <div class="col m2 movementheader">Monto</div>
+        <div class="col m2 movementheader">Considerar</div>
       </div>
     </div>
   </div>
-  <app-filter *ngIf="filterflag !== false" (filterMovementStatus)="statusMovement($event)" [charges]="paramsMovements.charges" [deposits]="paramsMovements.deposits" [duplicates]="paramsMovements.duplicates" class="params-movement"></app-filter>
-  <!-- Encabezado de movimientos -->
+  <!-- Lista de Movimientos -->
   <div class="containerMovement">
-    <div class="row center-align z-depth-1 white" id="header">
-      <div class="col m1 movementheader">Cuenta</div>
-      <div class="col m1 movementheader">Fecha</div>
-      <div class="col m3 movementheader">Descripción</div>
-      <div class="col m3 movementheader">Categoria</div>
-      <div class="col m2 movementheader">Monto</div>
-      <div class="col m2 movementheader">Considerar</div>
-    </div>
+    <app-item-list [categoryList]="categoryList" [movementList]="movementList"></app-item-list>
+  </div>
+</main>
+
+<div class="containerMovement">
+  <div class="center-align" *ngIf="spinnerBoolean !== false">
+    <app-spinner></app-spinner>
   </div>
 </div>
 
 <div *ngIf="showEmptyState" class="emptyState">
-  <app-empty-states
-      [imgName]="imgName"
-      [title]="title"
-      [description]="description"
-      [buttonText]="buttonText"
-      [buttonUrl]="buttonUrl">
+  <app-empty-states [imgName]="imgName" [title]="title" [description]="description" [buttonText]="buttonText" [buttonUrl]="buttonUrl">
   </app-empty-states>
   <div class="container">
     <div class="row">
       <div class="col s12 center">
-          <a class="btn-flat modal-trigger blue-text" href="#newMovement">
+        <a class="btn-flat modal-trigger blue-text" href="#newMovement">
             Nuevo Movimiento
           </a>
       </div>
     </div>
   </div>
   <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
-</div>
-
-<!-- Lista de Movimientos -->
-<div class="containerMovement">
-    <app-item-list *ngIf="!showEmptyState && !spinnerBoolean" [categoryList]="categoryList" [movementList]="movementList"></app-item-list>
-    <div class="center-align" *ngIf="spinnerBoolean !== false">
-      <app-spinner></app-spinner>
-    </div>
 </div>
