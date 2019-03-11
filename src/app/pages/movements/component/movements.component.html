@@ -1,4 +1,4 @@
-<div class="stickyOptions">
+<div  *ngIf="!showEmptyState && !spinnerBoolean" class="stickyOptions">
   <!-- Busqueda y filtrado -->
   <div class="containerMovement">
     <div class="row valign-wrapper">
@@ -33,9 +33,19 @@
   </div>
 </div>
 
+<div *ngIf="showEmptyState" class="emptyState">
+  <app-empty-states
+      [imgName]="imgName"
+      [title]="title"
+      [description]="description"
+      [buttonText]="buttonText"
+      [buttonUrl]="buttonUrl">
+  </app-empty-states>
+</div>
+
 <!-- Lista de Movimientos -->
 <div class="containerMovement">
-    <app-item-list [categoryList]="categoryList" [movementList]="movementList"></app-item-list>
+    <app-item-list *ngIf="!showEmptyState && !spinnerBoolean" [categoryList]="categoryList" [movementList]="movementList"></app-item-list>
     <div class="center-align" *ngIf="spinnerBoolean !== false">
       <app-spinner></app-spinner>
     </div>

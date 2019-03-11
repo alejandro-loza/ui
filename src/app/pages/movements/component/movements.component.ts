@@ -4,6 +4,7 @@ import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { DateApiService } from '@services/date-api/date-api.service';
+import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
@@ -32,12 +33,22 @@ export class MovementsComponent implements OnInit, OnDestroy {
 	auxSize: number;
 	statusMovements: boolean;
 
+	// EMPTY STATE
+	showEmptyState: boolean;
+	imgName: string;
+	title: string;
+	description: string;
+	buttonText: string;
+	buttonUrl: string;
+
 	constructor(
 		private categoryService: CategoriesService,
 		private movementService: MovementsService,
 		private dateApiService: DateApiService,
+		private emptyStateService: EmptyStateService,
 		private toastService: ToastService
 	) {
+		this.showEmptyState = false;
 		this.status = false;
 		this.spinnerBoolean = true;
 		this.filterflag = false;
@@ -58,6 +69,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.getCategories();
 		this.getMovements();
+		this.fillInformationForEmptyState();
 		window.addEventListener('scroll', this.offsetMovement, true);
 	}
 
@@ -102,6 +114,9 @@ export class MovementsComponent implements OnInit, OnDestroy {
 			(res) => {
 				// Se le asigna el tamaño de la lista a la variable _auxSize_
 				this.auxSize = res.body.data.length;
+				this.auxSize == 0
+					? (this.emptyStateService.setShowEmptyState(true), (this.showEmptyState = true))
+					: (this.emptyStateService.setShowEmptyState(false), (this.showEmptyState = false));
 				this.validateAllMovements();
 
 				// Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
@@ -160,11 +175,22 @@ export class MovementsComponent implements OnInit, OnDestroy {
 		// Se manda un toast y se remueve la función del scroll.
 		if (this.auxSize < this.paramsMovements.maxMovements || this.auxSize === 0) {
 			window.removeEventListener('scroll', this.offsetMovement, true);
-			this.toast = {
-				code: 200,
-				message: 'Hemos cargamos todos tus movimientos'
-			};
-			this.toastService.toastGeneral(this.toast);
+			if (!this.showEmptyState) {
+				this.toast = {
+					code: 200,
+					message: 'Hemos cargamos todos tus movimientos'
+				};
+				this.toastService.toastGeneral(this.toast);
+			}
 		}
+	}
+
+	fillInformationForEmptyState() {
+		this.imgName = 'transactions';
+		this.title = 'No tienes Movimientos';
+		this.description =
+			'Al dar de alta tus cuentas, verás una lista con todos tus movimientos. Olvídate de registrar cada uno.';
+		this.buttonText = 'Dar de alta una cuenta bancaria';
+		this.buttonUrl = '/app/banks';
 	}
 }
