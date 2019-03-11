@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col s6 m2 push-m11 right-align">
-    <button class="btn btn-flat btn-small btn-charge" type="button" (click)="tipoIngresoGasto('CHARGE')" [ngClass]="{ 'active': type === 'CHARGE'}" (keyup.enter)="keyEnterPressed.emit($event.isTrusted)" #charge>Gasto</button>
+  <div class="col s6 m2 push-m10" id="container-charge">
+    <button class="btn btn-flat btn-small btn-type btn-charge" type="button" (click)="tipoIngresoGasto('CHARGE')" [ngClass]="{ 'active': type === 'CHARGE'}" (keyup.enter)="keyEnterPressed.emit($event.isTrusted)" #charge>Gasto</button>
   </div>
-  <div class="col s6 m2 push-m11">
-    <button class="btn btn-flat btn-small btn-deposit" type="button" (click)="tipoIngresoGasto('DEPOSIT')" [ngClass]="{ 'active': type === 'DEPOSIT' }" (keyup.enter)="keyEnterPressed.emit($event.isTrusted)" #deposit>Ingreso</button>
+  <div class="col s6 m2 push-m10">
+    <button class="btn btn-flat btn-small btn-type btn-deposit" type="button" (click)="tipoIngresoGasto('DEPOSIT')" [ngClass]="{ 'active': type === 'DEPOSIT' }" (keyup.enter)="keyEnterPressed.emit($event.isTrusted)" #deposit>Ingreso</button>
   </div>
 </div>
