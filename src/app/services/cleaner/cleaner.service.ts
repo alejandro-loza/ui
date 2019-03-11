@@ -3,6 +3,7 @@ import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
+import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,7 +13,8 @@ export class CleanerService {
 		private dashboardBean: DashboardBeanService,
 		private credentialBeanService: CredentialBeanService,
 		private budgetsBeanService: BudgetsBeanService,
-		private categoriesBeanService: CategoriesBeanService
+		private categoriesBeanService: CategoriesBeanService,
+		private emptyStateService: EmptyStateService
 	) {}
 
 	cleanAllVariables() {
@@ -39,6 +41,8 @@ export class CleanerService {
 		this.budgetsBeanService.setCategoryToSharedComponent(null);
 		// Categories memory
 		this.categoriesBeanService.setCategories([]);
+		// Movements memeory
+		this.emptyStateService.setShowEmptyState(false);
 	}
 
 	cleanDashboardVariables() {

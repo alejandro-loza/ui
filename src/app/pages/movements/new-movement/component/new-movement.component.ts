@@ -12,12 +12,13 @@ import { NgForm } from '@angular/forms';
 
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
+import { CleanerService } from '@services/cleaner/cleaner.service';
+import { DateApiService } from '@services/date-api/date-api.service';
 
 import { ToastInterface } from '@interfaces/toast.interface';
 import { NewMovement } from '@interfaces/newMovement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { DateApiService } from '@services/date-api/date-api.service';
 @Component({
   selector: 'app-new-movement',
   templateUrl: './new-movement.component.html',
@@ -42,6 +43,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   constructor(
     private movementService: MovementsService,
     private dateApiService: DateApiService,
+    private cleanerService: CleanerService,
     private toastService: ToastService,
     private renderer: Renderer2
   ) {
@@ -56,14 +58,20 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.reset = false;
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     const initModal = new M.Modal(this.modalElement.nativeElement, {
       onCloseEnd: () => {
-        this.renderer.removeClass(document.querySelector('.btn-date.active'), 'active');
+        this.renderer.removeClass(
+          document.querySelector('.btn-date.active'),
+          'active'
+        );
         this.renderer.addClass(document.getElementById('todayDate'), 'active');
-        this.renderer.removeClass(document.querySelector('.btn-type.active'), 'active');
+        this.renderer.removeClass(
+          document.querySelector('.btn-type.active'),
+          'active'
+        );
         this.renderer.addClass(document.getElementById('charge'), 'active');
       }
     });
@@ -92,6 +100,8 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
         }
       },
       () => {
+        this.cleanerService.cleanBudgetsVariables();
+        this.cleanerService.cleanDashboardVariables();
         this.instaceModal.close();
         this.renderer.removeClass(this.buttonSubmit.nativeElement, 'disabled');
         this.reset = true;
@@ -104,19 +114,25 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   valueType(id: string) {
-    this.renderer.removeClass(document.querySelector('.btn-type.active'), 'active');
+    this.renderer.removeClass(
+      document.querySelector('.btn-type.active'),
+      'active'
+    );
     this.renderer.addClass(document.getElementById(id), 'active');
     this.newMovement.type = id;
   }
 
   changeClassDate(id: string) {
     const auxDate = new Date();
-    this.renderer.removeClass(document.querySelector('.btn-date.active'), 'active');
+    this.renderer.removeClass(
+      document.querySelector('.btn-date.active'),
+      'active'
+    );
     this.renderer.addClass(document.getElementById(id), 'active');
-    if ( id === 'yesterdayDate' ) {
+    if (id === 'yesterdayDate') {
       const newdate = auxDate.getDate() - 1;
       auxDate.setDate(newdate);
-    } else if ( id === 'otherDate' ) {
+    } else if (id === 'otherDate') {
       return;
     }
     this.newMovement.date = this.dateApiService.dateApi(auxDate);
@@ -124,7 +140,10 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 
   resetInputs() {
     this.renderer.removeClass(document.getElementById('description'), 'valid');
-    this.renderer.removeClass(document.getElementById('description'), 'invalid');
+    this.renderer.removeClass(
+      document.getElementById('description'),
+      'invalid'
+    );
     this.renderer.removeClass(document.getElementById('monto'), 'valid');
     this.renderer.removeClass(document.getElementById('monto'), 'invalid');
   }
