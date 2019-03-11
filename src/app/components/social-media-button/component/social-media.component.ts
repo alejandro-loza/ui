@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, isDevMode } from '@angular/core';
+
 
 @Component({
   selector: 'app-social-media',
@@ -10,9 +11,16 @@ export class SocialMediaComponent implements OnInit {
   @Input() facebookText: string;
   @Input() googleText: string;
 
-  constructor() { }
+  url: string;
+
+  constructor( ) { }
 
   ngOnInit() {
+    if ( isDevMode() === true ) {
+      this.url = 'http://localhost:4200';
+    } else {
+      this.url = 'https://app.finerio.mx';
+    }
   }
 
 }
