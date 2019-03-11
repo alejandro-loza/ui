@@ -105,14 +105,12 @@ export class MovementsComponent implements OnInit, OnDestroy {
    */
 
   offsetMovement() {
-    if (this.spinnerBoolean === false) {
-      const scrollVertical = window.scrollY;
-      let scrollLimit: number;
-      scrollLimit = $(document).height() - $(window).height();
-      if (scrollVertical >= scrollLimit) {
-        this.spinnerBoolean = true;
-        this.getMovements();
-      }
+    const scrollVertical = window.scrollY;
+    let scrollLimit: number;
+    scrollLimit = $(document).height() - $(window).height();
+    if (scrollVertical >= scrollLimit) {
+      this.spinnerBoolean = true;
+      this.getMovements();
     }
   }
 
@@ -153,7 +151,6 @@ export class MovementsComponent implements OnInit, OnDestroy {
               (this.showEmptyState = false));
         }
         this.validateAllMovements();
-        this.spinnerBoolean = false;
         this.isLoading = false;
         this.paramsMovements.offset += this.paramsMovements.maxMovements;
       }
@@ -201,6 +198,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
         };
         this.toastService.toastGeneral(this.toast);
       }
+      this.spinnerBoolean = false;
     }
   }
 
