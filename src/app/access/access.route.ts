@@ -3,9 +3,9 @@ import { AccessComponent } from '@access/access.component';
 
 const AcessRouting: Routes = [
   {
-    path:  '',
+    path: '',
     component: AccessComponent,
-    children:[
+    children: [
       {
         path: 'login',
         loadChildren: './login/login.module#LoginModule'
@@ -16,19 +16,27 @@ const AcessRouting: Routes = [
       },
       {
         path: 'recovery',
-        loadChildren: './recoverypassword/recoverypassword.module#RecoverypasswordModule'
+        loadChildren:
+          './recoverypassword/recoverypassword.module#RecoverypasswordModule'
       },
       {
         path: 'forgot',
-        loadChildren: './forgotpassword/forgotpassword.module#ForgotpasswordModule'
+        loadChildren:
+          './forgotpassword/forgotpassword.module#ForgotpasswordModule'
       },
       {
         path: 'welcome',
         loadChildren: './welcome/welcome.module#WelcomeModule'
       },
       {
+        path: 'socialNetworks',
+        loadChildren:
+          './social-networks/social-networks.module#SocialNetworksModule'
+      },
+      {
         path: '',
-        pathMatch: 'full', redirectTo: 'login'
+        pathMatch: 'full',
+        redirectTo: 'login'
       },
       {
         path: '**',

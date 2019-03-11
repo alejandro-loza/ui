@@ -5,6 +5,7 @@ import { Router } from                     '@angular/router';
 
 import { AuthService } from                '@services/auth/auth.service';
 import { ToastService } from               '@services/toast/toast.service';
+import { AccountService } from             '@services/account/account.service';
 
 import { ToastInterface } from             '@interfaces/toast.interface';
 
@@ -16,9 +17,10 @@ import { ToastInterface } from             '@interfaces/toast.interface';
 export class WelcomeComponent implements OnInit {
   toastInterface: ToastInterface;
   constructor(
+    private accountService: AccountService,
+    private authService: AuthService,
     private router: Router,
     private renderer: Renderer2,
-    private authService: AuthService,
     private toastService: ToastService
   ) {
     this.toastInterface = { code: null, message: null, classes: null };
@@ -41,7 +43,6 @@ export class WelcomeComponent implements OnInit {
           this.toastService.toastGeneral(this.toastInterface);
           this.router.navigate(['access/login']);
         }
-        return res;
       },
       err => {
         this.toastInterface = {
@@ -54,8 +55,19 @@ export class WelcomeComponent implements OnInit {
         this.router.navigate(['access/login']);
       },
       () => {
-        this.router.navigate(['/app/dashboard']);
+        this.getAccount();
       }
-    );
+      );
+  }
+
+  getAccount() {
+    const id = sessionStorage.getItem('id-user');
+    this.accountService.getAccounts(id).subscribe( res => {
+      if (res.body.size > 0) {
+        this.router.navigate(['/app/dashboard']);
+      } else {
+        this.router.navigate(['/app/banks']);
+      }
+    })
   }
 }
