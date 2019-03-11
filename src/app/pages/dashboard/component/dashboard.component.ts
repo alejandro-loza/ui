@@ -61,6 +61,7 @@ export class DashboardComponent implements OnInit {
 			this.dataReady = true;
 			this.showEmptyState = true;
 		}
+		this.windowPosition();
 	}
 
 	getMovementsData(categories: Category[]) {
@@ -131,6 +132,12 @@ export class DashboardComponent implements OnInit {
 		startDateAux.setMilliseconds(0);
 		let startDate = this.dateApi.dateWithFormat(startDateAux);
 		this.paramsMovements.startDate = startDate;
+	}
+
+	windowPosition() {
+		window.scrollTo(0, 0);
+		let html = document.querySelector('html');
+		html.style.overflowX = 'hidden';
 	}
 
 	fillInformationForEmptyState() {
