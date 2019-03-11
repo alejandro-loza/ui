@@ -5,14 +5,10 @@ import { ToastService } from '@services/toast/toast.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
-
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { ToastInterface } from '@interfaces/toast.interface';
-
-import { retry } from 'rxjs/operators';
 import { Category } from '@interfaces/category.interface';
-import { isUndefined } from 'util';
 
 declare var $: any;
 
