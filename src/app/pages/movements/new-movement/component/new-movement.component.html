@@ -45,7 +45,16 @@
                 <input type="button" ngModel="Ayer" class="btn btn-date" id="yesterdayDate" (click)="changeClassDate('yesterdayDate')" [ngModelOptions]="{standalone: true}">
               </div>
               <div class="input-field col m1" id="date-right-section">
-                <app-date [formatDate]="formatDate" [type]="'button'" [classes]="'btn btn-date'" (click)="changeClassDate('otherDate')" [id]="'otherDate'" [name]="'date'" [date]="date" (valueDate)="newMovement.date=$event">
+                <app-date
+                  [formatDate]="formatDate"
+                  [type]="'button'"
+                  [classes]="'btn btn-date'"
+                  [reset]="reset"
+                  [id]="'otherDate'"
+                  [date]="date"
+
+                  (valueDate)="newMovement.date=$event"
+                  (click)="changeClassDate('otherDate')">
                   </app-date>
               </div>
             </div>

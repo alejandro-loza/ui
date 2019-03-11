@@ -32,9 +32,11 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   @Output() createMovementStatus: EventEmitter<boolean>;
 
   newMovement: NewMovement;
-  formatDate: string;
-  date: Date;
   toastInterface: ToastInterface;
+  date: Date;
+
+  formatDate: string;
+  reset: boolean;
   instaceModal;
 
   constructor(
@@ -51,6 +53,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.date = new Date();
     this.createMovementStatus = new EventEmitter();
     this.toastInterface = { code: null, message: null };
+    this.reset = false;
   }
 
   ngOnInit() { }
@@ -93,6 +96,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
         this.renderer.removeClass(this.buttonSubmit.nativeElement, 'disabled');
         this.toastInterface.message = 'Se creó su movimiento exitosamente';
         this.toastService.toastGeneral(this.toastInterface);
+        this.reset = true;
         form.resetForm();
       }
     );
