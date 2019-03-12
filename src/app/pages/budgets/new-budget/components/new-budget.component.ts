@@ -31,11 +31,13 @@ export class NewBudgetComponent implements OnInit {
 		if (this.categoriesBeanService.getCategories().length === 0) {
 			this.categoriesService.getCategoriesInfo().subscribe((res) => {
 				this.categoriesList = res.body;
+				this.categoriesBeanService.setCategories(res.body);
 				this.cleanCategoriesWithExistingBudgets();
 				this.showSpinner = false;
 			});
 		} else {
-			this.categoriesList = this.categoriesBeanService.getCategories();
+			// No se debe de igualar o se modificara el valor del servicio
+			this.categoriesBeanService.getCategories().forEach((category) => this.categoriesList.push(category));
 			this.cleanCategoriesWithExistingBudgets();
 			this.showSpinner = false;
 		}
