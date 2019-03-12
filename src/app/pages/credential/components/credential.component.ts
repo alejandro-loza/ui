@@ -85,8 +85,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit() {
 		if (!this.showEmptyState) {
-			const initModal = new M.Modal(this.interactiveModal.nativeElement);
-			const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement, {});
+			setTimeout(() => {
+				const initModal = new M.Modal(this.interactiveModal.nativeElement);
+				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
+			}, 100);
 		}
 	}
 
@@ -149,10 +151,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 			let dateObj = new Date(credential.lastUpdated);
 			let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
 			if (diff >= 8) {
-				this.loaderMessagge =
-					'Finerio se está sincronizando con tu banca en línea de ' +
-					credential.institution.name +
-					'. Esto puede durar unos minutos.';
 				this.validateStatusFinished = false;
 				this.credentialService.updateCredential(credential).subscribe((res) => {
 					this.checkStatusOfCredential(res.body);
@@ -170,6 +168,12 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 					this.debitAccounts.push(account);
 				}
 			}
+		});
+		this.debitAccounts.sort((a, b) => {
+			return b.balance - a.balance;
+		});
+		this.creditAccounts.sort((a, b) => {
+			return a.balance - b.balance;
 		});
 	}
 
@@ -195,10 +199,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		} else if (credential.status === 'INVALID') {
 			this.loaderMessagge = '¡Ha ocurrido algo con tu credencial ' + credential.institution.name + '!';
 		} else if (credential.status === 'VALIDATE') {
-			this.loaderMessagge =
-				'Finerio se está sincronizando con tu banca en línea de ' +
-				credential.institution.name +
-				'. Esto puede durar unos minutos.';
+			this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede durar unos minutos.';
 			this.cleanerService.cleanDashboardVariables();
 			this.cleanerService.cleanBudgetsVariables();
 			this.getNewInfoCredential(credential.id);
@@ -237,7 +238,6 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	}
 
 	emptyStateProcess() {
-		console.log(this.credentials.length);
 		if (this.credentials.length == 0) {
 			this.credentialBean.setShowEmptyState(true);
 		} else {
@@ -257,6 +257,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	// InteractiveFields Process
 
 	getInteractiveFields(credential: CredentialInterface) {
+		this.interactiveFields = [];
 		this.interactiveService.findAllFields(credential).subscribe((data: any) => {
 			data.forEach((element) => {
 				this.interactiveFields.push(element);

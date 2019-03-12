@@ -28,7 +28,6 @@ export class CategoriesService {
       })
       .pipe(
         map(res => {
-          console.log(res.body);
           this.categories = res.body;
           this.categoriesBeanService.setCategories(this.categories);
           return res;

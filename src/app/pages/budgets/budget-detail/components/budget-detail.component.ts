@@ -105,7 +105,7 @@ export class BudgetDetailComponent implements OnInit {
 
 		if (percentage < 70) {
 			return budget_green;
-		} else if (percentage >= 70 && percentage < 100) {
+		} else if (percentage >= 70 && percentage <= 100) {
 			return budget_yellow;
 		} else {
 			return budget_red;

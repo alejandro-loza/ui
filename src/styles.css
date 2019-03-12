@@ -2,61 +2,65 @@
 
 body,
 html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
 }
 
 :root {
-    --navyblue-color: #18537b;
-    --orange-color: #EE883A;
-    --paddingPages: 128px;
-    --widthAmout: 50%;
+	--navyblue-color: #18537b;
+	--orange-color: #ee883a;
+	--paddingPages: 128px;
+	--widthAmout: 50%;
 }
 
 .finerio-blue-text {
-    color: var(--navyblue-color);
+	color: var(--navyblue-color);
 }
 
 .finerio-blue {
-    background-color: var(--navyblue-color) !important;
-    color: white !important;
+	background-color: var(--navyblue-color) !important;
+	color: white !important;
 }
 
 .finerio-orange {
-    background-color: var(--orange-color) !important;
-    color: white !important;
+	background-color: var(--orange-color) !important;
+	color: white !important;
 }
 
 .finerio-orange-text {
-    color: var(--orange-color);
+	color: var(--orange-color);
 }
 
 .waves-effect.waves-blue .waves-ripple {
-    /* The alpha value allows the text and background color
+	/* The alpha value allows the text and background color
     of the button to still show through. */
-    background-color: rgba(30, 136, 229, 0.65);
+	background-color: rgba(30, 136, 229, 0.65);
 }
 
 .material-icons.md-18 {
-    font-size: 18px;
+	font-size: 18px;
 }
 
 .material-icons.md-24 {
-    font-size: 24px;
+	font-size: 24px;
 }
 
 .material-icons.md-36 {
-    font-size: 36px;
+	font-size: 36px;
 }
 
 .material-icons.md-48 {
-    font-size: 48px;
+	font-size: 48px;
 }
 
 .inputMovement {
-    border-bottom: none !important;
-    height: 100% !important;
+	border-bottom: none !important;
+	height: 100% !important;
+}
+
+.collection {
+	border: 0px solid #e0e0e0 !important;
 }
 
 input:not([type]):focus:not([readonly]),
@@ -69,55 +73,55 @@ input[type=tel]:not(.browser-default):focus:not([readonly]),
 input[type=number]:not(.browser-default):focus:not([readonly]),
 input[type=search]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-    border-bottom: 1px solid var(--orange-color) !important;
-    box-shadow: 0 1px 0 0 var(--orange-color) !important;
+	border-bottom: 1px solid var(--orange-color) !important;
+	box-shadow: 0 1px 0 0 var(--orange-color) !important;
 }
 
-input:not([type]):focus:not([readonly])+label,
-input[type=text]:not(.browser-default):focus:not([readonly])+label,
-input[type=password]:not(.browser-default):focus:not([readonly])+label,
-input[type=email]:not(.browser-default):focus:not([readonly])+label,
-input[type=url]:not(.browser-default):focus:not([readonly])+label,
-input[type=time]:not(.browser-default):focus:not([readonly])+label,
-input[type=tel]:not(.browser-default):focus:not([readonly])+label,
-input[type=number]:not(.browser-default):focus:not([readonly])+label,
-input[type=search]:not(.browser-default):focus:not([readonly])+label,
-textarea.materialize-textarea:focus:not([readonly])+label {
-    color: var(--orange-color) !important;
+input:not([type]):focus:not([readonly]) + label,
+input[type=text]:not(.browser-default):focus:not([readonly]) + label,
+input[type=password]:not(.browser-default):focus:not([readonly]) + label,
+input[type=email]:not(.browser-default):focus:not([readonly]) + label,
+input[type=url]:not(.browser-default):focus:not([readonly]) + label,
+input[type=time]:not(.browser-default):focus:not([readonly]) + label,
+input[type=tel]:not(.browser-default):focus:not([readonly]) + label,
+input[type=number]:not(.browser-default):focus:not([readonly]) + label,
+input[type=search]:not(.browser-default):focus:not([readonly]) + label,
+textarea.materialize-textarea:focus:not([readonly]) + label {
+	color: var(--orange-color) !important;
 }
 
-[type="checkbox"].filled-in:checked+label:after {
-    border: 2px solid var(--orange-color) !important;
-    background-color: var(--orange-color) !important;
+[type="checkbox"].filled-in:checked + label:after {
+	border: 2px solid var(--orange-color) !important;
+	background-color: var(--orange-color) !important;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0;
-    /* <-- Apparently some margin are still there even though it's hidden */
+	/* display: none; <- Crashes Chrome on hover */
+	-webkit-appearance: none;
+	margin: 0;
+	/* <-- Apparently some margin are still there even though it's hidden */
 }
 
 .animated {
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
+	-webkit-animation-duration: 1s;
+	animation-duration: 1s;
 }
 
 .fast {
-    -webkit-animation-duration: 0.4s;
-    animation-duration: 0.4s;
+	-webkit-animation-duration: 0.4s;
+	animation-duration: 0.4s;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 
 .fadeIn {
-    animation-name: fadeIn;
+	animation-name: fadeIn;
 }

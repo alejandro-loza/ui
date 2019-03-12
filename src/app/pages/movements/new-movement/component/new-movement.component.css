@@ -20,6 +20,11 @@
   color: black;
 }
 
+.btn-date {
+  background-color: whitesmoke;
+  border: thin solid rgba(119, 136, 153, 1);
+}
+
 .btn-charge {
   border: 1px solid rgb(198, 40, 40);
   background-color: rgb(198, 40, 40, 0.1);
@@ -32,16 +37,25 @@
 
 .btn:hover {
   transition: 0.3s;
+  color: #f5f5f5;
 }
 
 .btn-charge:hover {
   background-color: rgb(198, 40, 40);
-  color: #f5f5f5;
 }
 
 .btn-deposit:hover {
   background-color: rgb(67, 160, 71);
-  color: #f5f5f5;
+}
+
+.btn-date:hover {
+  border-color: rgb(29, 91, 135);
+  background-color: rgb(29, 91, 135);
+}
+
+.btn-date.active {
+  border-color: #18537b;
+  background-color: #18537b;
 }
 
 .btn-charge.active {
@@ -52,8 +66,21 @@
   background-color: rgb(67, 160, 71);
 }
 
+
 .active {
   color: #f5f5f5;
+}
+
+#type-section {
+  padding-top: 2%;
+  padding-bottom: 1%;
+}
+
+#date-left-section {
+  margin-right: 1%;
+}
+#date-mid-section {
+  margin-right: 2%;
 }
 
 /* Responsive Modal for _newMovement_ */
@@ -63,12 +90,18 @@
 
 @media only screen and (min-width: 1201px) and (max-width: 1440px) {
   #newMovement {
-     max-height: 78%;
+     max-height: 79%;
+  }
+  #date-left-section {
+    margin-right: 5%;
+  }
+  #date-mid-section {
+    margin-right: 6.5%;
   }
 }
 
 @media only screen and (min-width: 1441px) {
   #newMovement {
-     max-height: 60%;
+     max-height: 61%;
   }
 }

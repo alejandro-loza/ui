@@ -7,7 +7,8 @@ import {
   ViewChild,
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  OnChanges
 } from '@angular/core';
 
 declare var M;
@@ -16,12 +17,14 @@ declare var M;
   templateUrl: './date.component.html',
   styleUrls: ['./date.component.css']
 })
-export class DateComponent implements OnInit, AfterContentInit {
+export class DateComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() date: Date;
   @Input() formatDate: string;
   @Input() name: string;
   @Input() classes: string;
   @Input() type: string;
+  @Input() id: string;
+  @Input() reset: boolean;
 
   @Output() valueDate: EventEmitter<string>;
   @Output() valueFormatDate: EventEmitter<string>;
@@ -35,6 +38,14 @@ export class DateComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {}
+
+  ngOnChanges() {
+    if ( this.reset === true ) {
+      this.formatDate = 'Otro...';
+      this.date = new Date();
+      this.reset = false;
+    }
+  }
 
   ngAfterContentInit() {
     const initDatepicker = new M.Datepicker(
@@ -61,7 +72,7 @@ export class DateComponent implements OnInit, AfterContentInit {
           monthsShort: [
             'Ene',
             'Feb',
-            'Marz',
+            'Mar',
             'Abr',
             'May',
             'Jun',

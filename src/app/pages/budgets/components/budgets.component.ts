@@ -47,9 +47,9 @@ export class BudgetsComponent implements OnInit {
 	}
 
 	getAllBudgets() {
-		this.budgetsBeanService.setLoadInformation(false);
 		this.budgetsService.getAllBudgets().subscribe(
 			(res) => {
+				this.budgetsBeanService.setLoadInformation(false);
 				res.body.data.forEach((budget) => {
 					this.budgets.push(budget);
 				});
