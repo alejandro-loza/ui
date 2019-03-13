@@ -27,6 +27,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
   params: ParamsMovements;
   endDate: Date;
   startDate: Date;
+  private changeDate: boolean;
 
   constructor(
     private paramsMovementsService: ParamsMovementsService,
@@ -37,6 +38,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.endDate = new Date();
     const year = new Date().getFullYear() - 1;
     this.startDate.setFullYear(year);
+    this.changeDate = false;
   }
 
   ngOnInit() {
@@ -49,8 +51,20 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.paramsMovementsService.setCharges = ngform.value.charges;
     this.paramsMovementsService.setDeposits = ngform.value.deposits;
     this.paramsMovementsService.setDuplicates = ngform.value.duplicates;
-    this.paramsMovementsService.setStartDate = this.dateApiService.dateApi(this.startDate);
-    this.paramsMovementsService.setEndDate = this.dateApiService.dateApi(this.endDate);
     this.filterMovementStatus.emit(true);
+  }
+
+  changedStartDate(date: string) {
+    const auxStart = this.dateApiService.dateApi(this.startDate);
+    if (  auxStart !== date ) {
+      this.paramsMovementsService.setStartDate = date;
+    }
+  }
+
+  changedEndDate(date: string) {
+    const auxEnd = this.dateApiService.dateApi(this.endDate);
+    if (  auxEnd !== date ) {
+      this.paramsMovementsService.setEndDate = date;
+    }
   }
 }
