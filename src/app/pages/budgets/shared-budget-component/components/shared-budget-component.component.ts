@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵConsole, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
@@ -10,6 +10,7 @@ import { NewBudget, SubBudget } from '@interfaces/budgets/new-budget.interface';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { editBudgetAux } from '@app/interfaces/budgets/editBudgetAux.interface';
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
 	selector: 'app-shared-budget-component',
@@ -32,6 +33,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 	};
 	categoryInputModel: number = 0;
 	subBudgets: SubBudget[] = [];
+	@ViewChild('modal') elModal: ElementRef;
 
 	constructor(
 		private budgetsBeanService: BudgetsBeanService,
@@ -55,6 +57,10 @@ export class SharedBudgetComponentComponent implements OnInit {
 		this.settingFunctionalityOfTheComponent();
 	}
 
+	ngAfterViewInit() {
+		const modal = new M.Modal(this.elModal.nativeElement);
+	}
+
 	fillInputs() {
 		for (let i = 0; i < this.ngModelAux.length; i++) {
 			if (!isNullOrUndefined(this.budgetToEdit.subBudgets)) {
@@ -68,6 +74,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 	}
 
 	submit(form: NgForm) {
+		this.openLoadingModal();
 		this.editModeOfTheComponent ? this.doDataProcessForPUT(form) : this.doDataProcessForPost(form);
 	}
 
@@ -174,10 +181,11 @@ export class SharedBudgetComponentComponent implements OnInit {
 	getTotalAmount(form: NgForm) {
 		let totalAmount: number = 0;
 		this.categoryInputModel = 0;
+		let ARRAY_WITH_KEYS: any[] = [];
 
-		const ARRAY_WITH_KEYS = Object.keys(form.value);
+		ARRAY_WITH_KEYS = Object.keys(form.value);
 		ARRAY_WITH_KEYS.forEach((key) => {
-			if (typeof form.value[key] === 'number' && key !== this.categorySelected.name) {
+			if (typeof form.value[key] === 'number' && key != this.categorySelected.name) {
 				totalAmount += form.value[key];
 			}
 		});
@@ -186,11 +194,13 @@ export class SharedBudgetComponentComponent implements OnInit {
 
 	cleanSubcatsInput(form: NgForm) {
 		const ARRAY_WITH_KEYS = Object.keys(form.value);
-		ARRAY_WITH_KEYS.forEach((key) => {
-			if (key !== this.categorySelected.name) {
-				(<HTMLInputElement>document.getElementById(key)).value = '';
+
+		for (let i = 0; i < ARRAY_WITH_KEYS.length; i++) {
+			if (ARRAY_WITH_KEYS[i] !== this.categorySelected.name) {
+				form.controls[ARRAY_WITH_KEYS[i]].setValue(0);
+				(<HTMLInputElement>document.getElementById(ARRAY_WITH_KEYS[i])).value = '';
 			}
-		});
+		}
 	}
 
 	getSubcategory(name: string): Category {
@@ -224,5 +234,10 @@ export class SharedBudgetComponentComponent implements OnInit {
 		let height = 0;
 		height = document.getElementById('divToGetHeight').clientHeight;
 		return height;
+	}
+
+	openLoadingModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
+		instanceModal.open();
 	}
 }

@@ -34,6 +34,7 @@ export class BudgetDetailComponent implements OnInit {
 	showScreen: boolean = false;
 
 	@ViewChild('deleteModal') elModal: ElementRef;
+	@ViewChild('modal') elModal2: ElementRef;
 
 	ngOnInit() {
 		this.getCategoryName();
@@ -50,6 +51,7 @@ export class BudgetDetailComponent implements OnInit {
 
 	ngAfterViewInit() {
 		const ELMODAL = new M.Modal(this.elModal.nativeElement);
+		const modal = new M.Modal(this.elModal2.nativeElement);
 	}
 
 	getSubBudgets() {
@@ -130,6 +132,7 @@ export class BudgetDetailComponent implements OnInit {
 	}
 
 	deleteButton() {
+		this.openLoadingModal();
 		this.budgetsService.deleteBudget(this.budget).subscribe(
 			(res) => {
 				this.toast.code = res.status;
@@ -146,5 +149,10 @@ export class BudgetDetailComponent implements OnInit {
 				this.toastService.toastGeneral(this.toast);
 			}
 		);
+	}
+
+	openLoadingModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal2.nativeElement);
+		instanceModal.open();
 	}
 }

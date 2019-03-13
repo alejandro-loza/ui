@@ -37,7 +37,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	// Aux properties
 	processCompleteForSpinner: boolean;
 	validateStatusFinished: boolean;
-	loaderMessagge: string = 'Tus datos han sido sincronizados!';
+	loaderMessagge: string;
 	credentialInProcess: CredentialInterface;
 	errorWithCredentials: boolean = false;
 
@@ -163,7 +163,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		if (credential.status === 'ACTIVE') {
 			this.validateStatusFinished = true;
 		} else if (credential.status === 'INVALID') {
-			this.loaderMessagge = '¡Ha ocurrido algo con tu credencial ' + credential.institution.name + '!';
+			this.loaderMessagge = '¡Ha ocurrido algo con tus credenciales!';
 		} else if (credential.status === 'VALIDATE') {
 			this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede durar unos minutos.';
 			this.cleanerService.cleanDashboardVariables();
@@ -192,8 +192,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 				//  Modal process
 				this.modalProcessForInteractive(res.body);
 			} else if (this.credentialInProcess.status === 'INVALID') {
-				this.loaderMessagge =
-					'¡Ha ocurrido algo con tu credencial ' + this.credentialInProcess.institution.name + '!';
+				this.loaderMessagge = '¡Ha ocurrido algo con tus credenciales!';
 				this.validateStatusFinished = false;
 				this.getAllCredentials();
 			}

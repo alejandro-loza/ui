@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
@@ -22,6 +22,8 @@ export class BankFormComponent implements OnInit {
 	credential: CreateCredentialInterface;
 	institutionField: InstitutionFieldInterface[];
 	showSpinner: boolean;
+
+	@ViewChild('modal') elModal: ElementRef;
 
 	constructor(
 		private field: FieldService,
@@ -49,6 +51,13 @@ export class BankFormComponent implements OnInit {
 			this.getFields();
 		} else {
 			this.router.navigateByUrl('/app/banks');
+		}
+	}
+
+	ngAfterViewInit() {
+		const modal = new M.Modal(this.elModal.nativeElement);
+		if (this.institutionCode === 'BBVA') {
+			this.openBBVAModal();
 		}
 	}
 
@@ -86,5 +95,10 @@ export class BankFormComponent implements OnInit {
 			}
 		});
 		return currentInstitution;
+	}
+
+	openBBVAModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
+		instanceModal.open();
 	}
 }
