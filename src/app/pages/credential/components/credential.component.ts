@@ -85,8 +85,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit() {
 		if (!this.showEmptyState) {
-			const initModal = new M.Modal(this.interactiveModal.nativeElement);
-			const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement, {});
+			setTimeout(() => {
+				const initModal = new M.Modal(this.interactiveModal.nativeElement);
+				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
+			}, 100);
 		}
 	}
 
