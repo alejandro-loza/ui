@@ -83,14 +83,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	ngAfterViewInit() {
-		if (!this.showEmptyState) {
-			setTimeout(() => {
-				const initModal = new M.Modal(this.interactiveModal.nativeElement);
-				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
-			}, 100);
-		}
-	}
+	ngAfterViewInit() {}
 
 	loadInformationFromRam() {
 		this.credentials = this.credentialBean.getCredentials();
@@ -104,6 +97,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.automaticSync(this.credentials);
 		this.emptyStateProcess();
 		this.processCompleteForSpinner = true;
+		this.initMaterialize();
 	}
 
 	// Main methods for getting data
@@ -132,6 +126,13 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.getAccounts();
 	}
 
+	initMaterialize() {
+		setTimeout(() => {
+			const initModal = new M.Modal(this.interactiveModal.nativeElement);
+			const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
+		}, 100);
+	}
+
 	getAccounts() {
 		this.accounts = [];
 		this.accountService.getAccounts(this.userId).subscribe((res) => {
@@ -142,19 +143,22 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 			this.getBalance(this.accounts);
 			this.accountsTable(this.accounts);
 			this.credentialBean.setLoadInformation(false);
+			this.initMaterialize();
 		});
 	}
 
 	automaticSync(credentials: CredentialInterface[]) {
 		let currentMoment = new Date();
 		credentials.forEach((credential) => {
-			let dateObj = new Date(credential.lastUpdated);
-			let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
-			if (diff >= 8) {
-				this.validateStatusFinished = false;
-				this.credentialService.updateCredential(credential).subscribe((res) => {
-					this.checkStatusOfCredential(res.body);
-				});
+			if (credential.institution.code != 'BBVA') {
+				let dateObj = new Date(credential.lastUpdated);
+				let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+				if (diff >= 8) {
+					this.validateStatusFinished = false;
+					this.credentialService.updateCredential(credential).subscribe((res) => {
+						this.checkStatusOfCredential(res.body);
+					});
+				}
 			}
 		});
 	}

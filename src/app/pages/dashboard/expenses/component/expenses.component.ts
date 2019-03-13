@@ -60,6 +60,15 @@ export class ExpensesComponent implements OnInit {
 				},
 				options: {
 					responsive: true,
+					tooltips: {
+						mode: 'label',
+						callbacks: {
+							label: function(tooltipItem, data) {
+								var indice = tooltipItem.index;
+								return data.labels[indice] + ': ' + Math.round(data.datasets[0].data[indice]) + '';
+							}
+						}
+					},
 					animation: {
 						animateScale: false
 					},
