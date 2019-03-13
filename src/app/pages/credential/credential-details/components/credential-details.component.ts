@@ -25,6 +25,7 @@ import { InstitutionInterface } from '@app/interfaces/institution.interface';
 	providers: [ FieldService, InstitutionService ]
 })
 export class CredentialDetailsComponent implements OnInit, AfterViewInit {
+	showSpinner: boolean = false;
 	fields: InstitutionFieldInterface[];
 	accounts: AccountInterface[];
 	institutionDetails: CredentialInterface;
@@ -37,6 +38,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
 	@ViewChild('modal') elModal: ElementRef;
 	@ViewChild('modal2') elModal2: ElementRef;
+	@ViewChild('modal3') elModal3: ElementRef;
 
 	constructor(
 		private activated: ActivatedRoute,
@@ -55,6 +57,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	}
 
 	ngOnInit() {
+		this.showSpinner = true;
 		this.activated.params.subscribe((params: Params) => {
 			this.credentialId = params['credencialId'];
 		});
@@ -68,6 +71,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	ngAfterViewInit() {
 		const modal = new M.Modal(this.elModal.nativeElement);
 		const modal2 = new M.Modal(this.elModal2.nativeElement);
+		const modal3 = new M.Modal(this.elModal3.nativeElement);
 	}
 
 	loadInstitutions() {
@@ -99,6 +103,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 					this.accounts.push(element);
 				}
 			});
+			this.showSpinner = false;
 		});
 	}
 
@@ -164,6 +169,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	}
 
 	deleteCredential() {
+		this.openLoaderModal();
 		this.credentialService.deleteCredential(this.credentialId).subscribe(
 			(res) => {
 				this.toast.code = res.status;
@@ -179,11 +185,23 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 				this.credentialBeanService.setLoadInformation(true);
 				this.cleanerService.cleanDashboardVariables();
 				this.cleanerService.cleanBudgetsVariables();
+				this.closeLoaderModal();
 				this.router.navigateByUrl('/app/credentials');
 			}
 		);
-	} // Delete Account's process
+	}
 
+	openLoaderModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal3.nativeElement);
+		instanceModal.open();
+	}
+
+	closeLoaderModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal3.nativeElement);
+		instanceModal.close();
+	}
+
+	// Delete Account's process
 	deleteAccount(account) {
 		this.accountAuxForDelete = account;
 		const instanceModal = M.Modal.getInstance(this.elModal2.nativeElement);
@@ -191,6 +209,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	}
 
 	deleteAccountConfirmed() {
+		this.openLoaderModal();
 		this.accountService.deleteAccount(this.accountAuxForDelete.id).subscribe(
 			(res) => {
 				this.toast.code = res.status;
@@ -204,6 +223,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 				this.toast.message = 'Cuenta elminada correctamente';
 				this.toastService.toastGeneral(this.toast);
 				this.credentialBeanService.setLoadInformation(true);
+				this.closeLoaderModal();
 				this.router.navigateByUrl('/app/credentials');
 			}
 		);

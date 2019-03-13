@@ -3,7 +3,8 @@
     <div class="row">
         <div class="col s8 offset-s2 center">
             <h5>Nueva cuenta bancaria</h5>
-            <img max-width="100px" max-height="100px" src="https://cdn.finerio.mx/banks/{{institutionCode}}.png" alt="Bank Logo">
+            <img max-width="100px" max-height="100px"
+            src="assets/media/img/banks/{{institutionCode | lowercase}}.png">
             <p>Introduce tus claves de acceso a <b>banca en línea</b></p>
         </div>
     </div>
@@ -26,11 +27,6 @@
                         name="{{ field.name }}"
                         [required]="field.name != 'sec_code'">
                 </div>
-                <p>
-                    <a class="py-10">
-                        ¿Qué claves de acceso y porqué las pedimos?
-                    </a>
-                </p>
                 <button class="btn background" [disabled]="!bank.valid" type="submit">
                     Agregar
                 </button>

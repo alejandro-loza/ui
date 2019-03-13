@@ -1,32 +1,32 @@
-.pt-50{
-  padding-top: 50px;
+.pt-50 {
+	padding-top: 50px;
 }
 
-.pt-30{
-  padding-top: 30px;
+.pt-30 {
+	padding-top: 30px;
 }
 
-.backBtn{
-  background-color: #1D3865;
+.backBtn {
+	background-color: #1d3865;
 }
 
-.background{
-  background-color: #1D3865;
+.background {
+	background-color: #1d3865;
 }
 
-.imgBanks{
-  padding: 10px;
-  border:1px solid #AAA;
-  border-radius: 5px;
-  max-height: 100px;
-  max-width: 100px;
-  cursor: pointer;
+.imgBanks {
+	padding: 10px;
+	border: 1px solid #aaa;
+	border-radius: 5px;
+	max-height: 140px;
+	max-width: 140px;
+	cursor: pointer;
 }
 
-.imgBanks:hover{
-  border:0px;
+.imgBanks:hover {
+	border: 0px;
 }
 
-.intitutionCol{
- padding-top: 10px;
+.intitutionCol {
+	padding-top: 10px;
 }
