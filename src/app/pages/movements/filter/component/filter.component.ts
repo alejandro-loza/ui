@@ -9,6 +9,7 @@ import {
 import { NgForm } from '@angular/forms';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
+import { ParamsMovements } from '@app/interfaces/paramsMovements.interface';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
   @Output() filterMovementStatus: EventEmitter<boolean>;
 
-
+  params: ParamsMovements;
   endDate: Date;
   startDate: Date;
 
@@ -38,7 +39,9 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.startDate.setFullYear(year);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.params = this.paramsMovementsService.getParamsMovements;
+  }
 
   ngAfterViewInit() { }
 
@@ -46,8 +49,8 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.paramsMovementsService.setCharges = ngform.value.charges;
     this.paramsMovementsService.setDeposits = ngform.value.deposits;
     this.paramsMovementsService.setDuplicates = ngform.value.duplicates;
-    this.paramsMovementsService.setStartDate = this.startDate.toString();
-    this.paramsMovementsService.setEndDate = this.endDate.toString();
+    this.paramsMovementsService.setStartDate = this.dateApiService.dateApi(this.startDate);
+    this.paramsMovementsService.setEndDate = this.dateApiService.dateApi(this.endDate);
     this.filterMovementStatus.emit(true);
   }
 }

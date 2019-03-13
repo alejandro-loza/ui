@@ -24,6 +24,10 @@ export class ParamsMovementsService {
     return this.paramsMovements;
   }
 
+  public set setParamsMovements(params: ParamsMovements) {
+    this.paramsMovements = params;
+  }
+
   public set setStartDate(startDate: string) {
     this.paramsMovements.startDate = startDate;
   }

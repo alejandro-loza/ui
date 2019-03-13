@@ -5,6 +5,7 @@ import { ToastService } from '@services/toast/toast.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
+import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
@@ -48,7 +49,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
     private movementService: MovementsService,
     private dateApiService: DateApiService,
     private emptyStateService: EmptyStateService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private paramsMovementsService: ParamsMovementsService,
   ) {
     this.showEmptyState = false;
     this.isLoading = true;
@@ -178,6 +180,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   }
 
   refreshMovement() {
+    this.paramsMovements = this.paramsMovementsService.getParamsMovements;
     this.paramsMovements.offset = 0;
     this.movementList = [];
     this.getMovements();
