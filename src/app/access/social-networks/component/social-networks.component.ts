@@ -6,7 +6,6 @@ import {ToastService} from '@services/toast/toast.service';
 import {AuthService} from '@services/auth/auth.service';
 
 import {ToastInterface} from '@interfaces/toast.interface';
-import {isCombinedNodeFlagSet} from "tslint";
 @Component({
   selector: 'app-social-networks',
   templateUrl: './social-networks.component.html',

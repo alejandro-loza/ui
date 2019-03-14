@@ -11,6 +11,7 @@ import { ActivationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
+import {ConfigService} from "@services/config/config.service";
 
 @Component({
   selector: 'app-navbar',
@@ -28,7 +29,8 @@ export class NavbarComponent implements OnInit, AfterContentInit {
   constructor(
     private renderer: Renderer2,
     private router: Router,
-    private cleanerService: CleanerService
+    private cleanerService: CleanerService,
+    private configService: ConfigService
   ) {
     this.getDataRoute().subscribe(res => {
       const textDOM = document.querySelector('.brand-logo');
@@ -53,9 +55,8 @@ export class NavbarComponent implements OnInit, AfterContentInit {
   }
 
   logout() {
-    this.router.navigate(['/access/login']);
-    sessionStorage.clear();
     this.cleanerService.cleanAllVariables();
+    this.configService.resetVariable();
     this.router.navigate(['/access/login']);
   }
 
