@@ -35,6 +35,12 @@ export class ConfigService {
     this.user = user;
   }
 
+  set setAccessToken(token: string) {
+    this.jwt = {
+      access_token: token
+    };
+  }
+
   get getJWT(): JWT {
     return this.jwt;
   }
@@ -62,5 +68,10 @@ export class ConfigService {
           return res;
         })
       );
+  }
+
+  resetVariable() {
+    this.setJWT = undefined;
+    this.setUser = undefined;
   }
 }
