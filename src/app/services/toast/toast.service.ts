@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
-import { ConfigService } from '@services/config/config.service';
-import { ToastInterface } from '@interfaces/toast.interface';
-import { isNullOrUndefined } from 'util';
+import {Injectable} from '@angular/core';
+import {ConfigService} from '@services/config/config.service';
+import {ToastInterface} from '@interfaces/toast.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 

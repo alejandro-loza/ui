@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { environment } from '@env/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {environment} from '@env/environment';
 
-import { ConfigService } from '@services/config/config.service';
-import { ConfigParamsService } from '@params/config-params/config-params.service';
+import {ConfigService} from '@services/config/config.service';
+import {ConfigParamsService} from '@params/config/config-params.service';
 
-import { CredentialInterface } from '@interfaces/credential.interface';
-import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
-import { Response } from '@interfaces/response.interface';
+import {CredentialInterface} from '@interfaces/credential.interface';
+import {CreateCredentialInterface} from '@interfaces/createCredential.interface';
+import {Response} from '@interfaces/response.interface';
 
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

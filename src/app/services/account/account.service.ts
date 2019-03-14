@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 
-import { environment } from '@env/environment';
+import {environment} from '@env/environment';
 
-import { Response } from '@interfaces/response.interface';
-import { AccountInterface } from '@interfaces/account.interfaces';
+import {Response} from '@interfaces/response.interface';
+import {AccountInterface} from '@interfaces/account.interfaces';
 
-import { ConfigService } from '@services/config/config.service';
-import { ConfigParamsService } from '@params/config-params/config-params.service';
+import {ConfigService} from '@services/config/config.service';
+import {ConfigParamsService} from '@params/config/config-params.service';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

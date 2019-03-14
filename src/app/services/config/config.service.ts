@@ -1,15 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 
-import { environment } from '@env/environment.prod';
+import {environment} from '@env/environment.prod';
 
-import { JWT } from '@interfaces/jwt.interface';
-import { User } from '@interfaces/user.interface';
+import {JWT} from '@interfaces/jwt.interface';
+import {User} from '@interfaces/user.interface';
 
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-
-import { isNullOrUndefined } from 'util';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

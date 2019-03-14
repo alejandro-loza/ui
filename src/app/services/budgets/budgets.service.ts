@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { environment } from '@env/environment';
-import { ConfigService } from '@services/config/config.service';
-import { Observable } from 'rxjs';
-import { Budget } from '@interfaces/budgets/budget.interface';
-import { NewBudget } from '@interfaces/budgets/new-budget.interface';
-import { Response } from '@interfaces/response.interface';
-import { ConfigParamsService } from '@params/config-params/config-params.service';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {environment} from '@env/environment';
+import {ConfigService} from '@services/config/config.service';
+import {Observable} from 'rxjs';
+import {Budget} from '@interfaces/budgets/budget.interface';
+import {NewBudget} from '@interfaces/budgets/new-budget.interface';
+import {Response} from '@interfaces/response.interface';
+import {ConfigParamsService} from '@params/config/config-params.service';
 
 @Injectable({
   providedIn: 'root'
