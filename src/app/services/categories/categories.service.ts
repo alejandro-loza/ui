@@ -11,8 +11,6 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class CategoriesService {
-  category: Category;
-  categories: Category[];
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
@@ -24,22 +22,13 @@ export class CategoriesService {
     return this.http
       .get<Category[]>(URL, {
         observe: 'response',
-        headers: this.configService.getJsonHeaders()
+        headers: this.configService.getHeaders
       })
       .pipe(
         map(res => {
-          this.categories = res.body;
-          this.categoriesBeanService.setCategories(this.categories);
+          this.categoriesBeanService.setCategories(res.body);
           return res;
         })
       );
-  }
-
-  public set setCategory(category: Category) {
-    this.category = category;
-  }
-
-  public get getCategory(): Category {
-    return this.category;
   }
 }

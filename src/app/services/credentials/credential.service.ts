@@ -3,6 +3,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
+import { ConfigParamsService } from '@params/config-params/config-params.service';
 
 import { CredentialInterface } from '@interfaces/credential.interface';
 import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
@@ -20,28 +21,31 @@ export class CredentialService {
 
   constructor(
     private httpClient: HttpClient,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private configParams: ConfigParamsService
   ) {
-    this.userId = sessionStorage.getItem('id-user');
+    this.userId = this.configService.getUser.id;
     this.urlCredential = `${environment.backendUrl}/credentials`;
-    this.url = `${environment.backendUrl}/users/${ this.userId }/credentials?deep=true`;
+    this.url = `${environment.backendUrl}/users/${ this.userId }/credentials`;
   }
 
   getCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
-    const urlCredential = `${this.urlCredential}/${credentialId}?deep=true`;
+    const urlCredential = `${this.urlCredential}/${credentialId}`;
     return this.httpClient.get<CredentialInterface>( urlCredential, {
       observe: 'response',
-      headers: this.configService.getJsonHeaders()
+      headers: this.configService.getHeaders,
+      params: this.configParams.getParams
     });
   }
 
   getAllCredentials( ): Observable<HttpResponse<Response<CredentialInterface>>> {
-    let url = `${environment.backendUrl}/users/${ sessionStorage.getItem('id-user') }/credentials?deep=true`;
+    let url = `${environment.backendUrl}/users/${ this.userId }/credentials`;
     return this.httpClient.get<Response<CredentialInterface>>(
       url,
       {
         observe: 'response',
-        headers: this.configService.getJsonHeaders()
+        headers: this.configService.getHeaders,
+        params: this.configParams.getParams
       }
     );
   }
@@ -50,7 +54,8 @@ export class CredentialService {
     const postBody = JSON.stringify(credential);
     return this.httpClient.post<CredentialInterface>(this.url, postBody, {
       observe: 'response',
-      headers: this.configService.getJsonHeaders()
+      headers: this.configService.getHeaders,
+      params: this.configParams.getParams
     });
   }
 
@@ -59,7 +64,7 @@ export class CredentialService {
     const urlCredential = `${this.urlCredential}/${ credential.id }`;
     return this.httpClient.put<CredentialInterface>(urlCredential, postBody, {
       observe: 'response',
-      headers: this.configService.getJsonHeaders()
+      headers: this.configService.getHeaders
     });
   }
 
@@ -67,7 +72,7 @@ export class CredentialService {
     const urlCredential = `${this.urlCredential}/${credentialId}`;
     return this.httpClient.delete<CredentialInterface>(urlCredential, {
       observe: 'response',
-      headers: this.configService.getJsonHeaders()
+      headers: this.configService.getHeaders
     });
   }
 }
