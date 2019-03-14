@@ -1,12 +1,11 @@
-import { Component, OnInit } from                   '@angular/core';
-import { ActivatedRoute, Params, Router } from      '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
-import { ConfigService  } from                      '@services/config/config.service';
-import { ToastService  } from                       '@services/toast/toast.service';
-import { AuthService } from                         '@services/auth/auth.service';
+import {ConfigService} from '@services/config/config.service';
+import {ToastService} from '@services/toast/toast.service';
+import {AuthService} from '@services/auth/auth.service';
 
-import { ToastInterface } from                      '@interfaces/toast.interface';
-2
+import {ToastInterface} from '@interfaces/toast.interface';
 @Component({
   selector: 'app-social-networks',
   templateUrl: './social-networks.component.html',
@@ -58,8 +57,7 @@ export class SocialNetworksComponent implements OnInit {
   }
 
   loadUser() {
-    this.configService.setAccessToken = this.token;
-    sessionStorage.setItem('access-token', this.token);
+    this.configService.setJWT.access_token = this.token;
     this.router.navigate(['/access/welcome']);
   }
 }
