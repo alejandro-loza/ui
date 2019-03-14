@@ -6,6 +6,7 @@ import {ToastService} from '@services/toast/toast.service';
 import {AuthService} from '@services/auth/auth.service';
 
 import {ToastInterface} from '@interfaces/toast.interface';
+import {isCombinedNodeFlagSet} from "tslint";
 @Component({
   selector: 'app-social-networks',
   templateUrl: './social-networks.component.html',
@@ -57,7 +58,7 @@ export class SocialNetworksComponent implements OnInit {
   }
 
   loadUser() {
-    this.configService.setJWT.access_token = this.token;
+    this.configService.setAccessToken = this.token;
     this.router.navigate(['/access/welcome']);
   }
 }
