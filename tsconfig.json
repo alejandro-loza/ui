@@ -20,13 +20,14 @@
     ],
     "paths": {
       "@app/*": ["app/*"],
-      "@env/*": ["environments/*"],
       "@access/*": ["app/access/*"],
       "@components/*": ["app/components/*"],
-      "@services/*": ["app/services/*"],
+      "@env/*": ["environments/*"],
+      "@guards/*": ["app/guards/*"],
       "@pages/*": ["app/pages/*"],
       "@params/*": ["app/params/*"],
       "@shared/*": ["app/shared/*"],
+      "@services/*": ["app/services/*"],
       "@interfaces/*": ["app/interfaces/*"],
     }
   }

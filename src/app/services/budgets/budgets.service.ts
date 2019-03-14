@@ -27,7 +27,7 @@ export class BudgetsService {
     return this.http.get<Response<Budget>>(this.url, {
       observe: 'response',
       headers: this.configService.getHeaders,
-      params: this.configParams.getParams
+      params: this.configParams.getConfigParams
     });
   }
 
@@ -36,7 +36,7 @@ export class BudgetsService {
     return this.http.put<Response<Budget>>(this.url, budget, {
       observe: 'response',
       headers: this.configService.getHeaders,
-      params: this.configParams.getParams
+      params: this.configParams.getConfigParams
     });
   }
 
@@ -45,7 +45,7 @@ export class BudgetsService {
     return this.http.put<Response<Budget>>(this.url, budget, {
       observe: 'response',
       headers: this.configService.getHeaders,
-      params: this.configParams.getParams
+      params: this.configParams.getConfigParams
     });
   }
 
@@ -64,7 +64,7 @@ export class BudgetsService {
     return this.http.delete<Response<any>>(this.url, {
       observe: 'response',
       headers: this.configService.getHeaders,
-      params: this.configParams.getParams
+      params: this.configParams.getConfigParams
     });
   }
 }

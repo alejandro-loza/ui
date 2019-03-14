@@ -33,7 +33,7 @@ export class AccountService {
       {
         observe: 'response',
         headers: this.configService.getHeaders,
-        params: this.configParamsService.getParams
+        params: this.configParamsService.getConfigParams
       }
     ).pipe(
       map( res => {

@@ -1,5 +1,5 @@
 import { Component,
-         OnInit, } from                     '@angular/core';
+  OnInit, } from                     '@angular/core';
 import { NgForm } from                      '@angular/forms';
 import { Router } from                      '@angular/router';
 
@@ -24,17 +24,16 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private configService: ConfigService,
     private toastService: ToastService
-    ) {
-      this.user = { email: '', password: '' };
-      this.toastInterface = { code: 0, message: null, classes: null };
-      this.configService.setJWT = null;
+  ) {
+    this.user = { email: '', password: '' };
+    this.toastInterface = { code: 0, message: null, classes: null };
   }
 
   ngOnInit() { }
 
   login(loginForm: NgForm) {
     this.user.email = loginForm.value.email,
-    this.user.password = loginForm.value.password;
+      this.user.password = loginForm.value.password;
 
     this.loginService.login( this.user ).subscribe(
       res => res,

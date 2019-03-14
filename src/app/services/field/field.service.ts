@@ -24,7 +24,7 @@ export class FieldService {
     private credentialBean: CredentialBeanService,
     private institutionParams: InstitutionParamsService
   ) {
-    this.paramsInstitution = this.institutionParams.getParams;
+    this.paramsInstitution = this.institutionParams.getInstitutionParams;
     }
 
   findAllFieldsByInstitution( institutionCode: string ): Observable<HttpResponse<InstitutionFieldInterface[]>> {
@@ -33,10 +33,9 @@ export class FieldService {
 
     institutions.forEach((element: InstitutionInterface) => {
       if (element.code === institutionCode) {
-        this.paramsInstitution.set('institutionId', element.id.toString());
+        // this.institutionParams.setInstitutionID(element.id.toString());
       }
     });
-
 
     return this.httpClient
       .get<InstitutionFieldInterface[]>(url, {

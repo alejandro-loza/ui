@@ -1,8 +1,9 @@
 import { NgModule } from                    '@angular/core';
 import { BrowserModule } from               '@angular/platform-browser';
 import { BrowserAnimationsModule } from     '@angular/platform-browser/animations';
+import {HttpClientModule} from              "@angular/common/http";
 
-import { AuthGuard } from                   '@services/guards/auth/auth.guard';
+import { AuthGuard } from                   '@guards/auth/auth.guard';
 import { ConfigService } from               '@services/config/config.service';
 import { AuthService } from                 '@services/auth/auth.service';
 import { HttpInterceptorProvider } from     '@services/http-interceptors/http-interceptors.service';
@@ -13,7 +14,6 @@ import { AppRoutes } from                   '@app/app.route';
 
 import { AppComponent } from                '@app/app.component';
 import { ConfigParamsService } from         '@params/config/config-params.service';
-import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({

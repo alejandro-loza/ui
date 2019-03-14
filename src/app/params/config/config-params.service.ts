@@ -5,13 +5,13 @@ import { HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ConfigParamsService {
-  private params: HttpParams;
+  private readonly params: HttpParams;
   constructor() {
     this.params = new HttpParams();
     this.params = this.params.append('deep', 'true');
   }
 
-  get getParams(): HttpParams {
+  get getConfigParams(): HttpParams {
     return this.params;
   }
 }

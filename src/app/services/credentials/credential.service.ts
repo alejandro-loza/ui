@@ -34,7 +34,7 @@ export class CredentialService {
     return this.httpClient.get<CredentialInterface>( urlCredential, {
       observe: 'response',
       headers: this.configService.getHeaders,
-      params: this.configParams.getParams
+      params: this.configParams.getConfigParams
     });
   }
 
@@ -45,7 +45,7 @@ export class CredentialService {
       {
         observe: 'response',
         headers: this.configService.getHeaders,
-        params: this.configParams.getParams
+        params: this.configParams.getConfigParams
       }
     );
   }
@@ -55,7 +55,7 @@ export class CredentialService {
     return this.httpClient.post<CredentialInterface>(this.url, postBody, {
       observe: 'response',
       headers: this.configService.getHeaders,
-      params: this.configParams.getParams
+      params: this.configParams.getConfigParams
     });
   }
 
