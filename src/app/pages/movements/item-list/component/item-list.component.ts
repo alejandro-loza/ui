@@ -1,18 +1,11 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
-  Renderer2
-} from '@angular/core';
-import { Movement } from '@interfaces/movement.interface';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Movement} from '@interfaces/movement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { isUndefined, isNull } from 'util';
-import { Category } from '@interfaces/category.interface';
-import { CategoriesService } from '@services/categories/categories.service';
+import {isNull, isUndefined} from 'util';
+import {Category} from '@interfaces/category.interface';
+import {CategoriesService} from '@services/categories/categories.service';
+import {CategoriesBeanService} from "@services/categories/categories-bean.service";
 
 @Component({
   selector: 'app-item-list',
@@ -30,7 +23,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   private keyEnter: boolean;
   constructor(
     private renderer: Renderer2,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private categoriesBeanService: CategoriesBeanService
   ) {
     this.keyEnter = false;
     this.statusModal = false;
@@ -89,7 +83,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
 
   statusCategory(status: boolean) {
     if (status === true) {
-      this.auxMovement.concepts[0].category = this.categoriesService.getCategory;
+      this.auxMovement.concepts[0].category = this.categoriesBeanService.getCategory;
       this.statusModal = false;
     }
     this.auxMovement.editAvailable = true;

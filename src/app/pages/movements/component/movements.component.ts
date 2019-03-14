@@ -134,10 +134,6 @@ export class MovementsComponent implements OnInit, OnDestroy {
       },
       err => {
         this.toast.code = err.status;
-        if (err.status === 401) {
-          this.toastService.toastGeneral(this.toast);
-          this.getMovements();
-        }
         if (err.status === 500) {
           this.toast.message =
             '¡Ha ocurrido un error al obterner tus movimiento!';
