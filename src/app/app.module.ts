@@ -12,7 +12,8 @@ import { SharedModule } from                '@shared/shared.module';
 import { AppRoutes } from                   '@app/app.route';
 
 import { AppComponent } from                '@app/app.component';
-import { ConfigParamsService } from         '@params/config-params/config-params.service';
+import { ConfigParamsService } from         '@params/config/config-params.service';
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { ConfigParamsService } from         '@params/config-params/config-params
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     SharedModule,
     AppRoutes
   ],
