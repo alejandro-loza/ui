@@ -9,9 +9,6 @@ import { SIGNUP_ROUTES } from './signup.route';
 import { SignupComponent } from './components/signup.component';
 import { SharedModule } from    '@shared/shared.module';
 
-// Service
-import { SignupService } from   '@services/signup/signup.service';
-
 @NgModule({
   imports: [
     SharedModule,
@@ -22,6 +19,6 @@ import { SignupService } from   '@services/signup/signup.service';
   declarations: [
     SignupComponent
   ],
-  providers:[ SignupService ]
+  providers:[ ]
 })
 export class SignupModule { }

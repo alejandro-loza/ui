@@ -14,8 +14,19 @@ import { MovementsComponent } from './component/movements.component';
 import { NewMovementModule } from './new-movement/new-movement.module';
 
 @NgModule({
-	imports: [ SharedModule, ItemListModule, NewMovementModule, FilterModule, EmptyStateModule, MovementsRoutes ],
-	declarations: [ MovementsComponent ],
-	providers: [ ParamsMovementsService, ToastService, MovementsService ]
+  imports: [
+    SharedModule,
+    ItemListModule,
+    NewMovementModule,
+    FilterModule,
+    EmptyStateModule,
+    MovementsRoutes
+  ],
+  declarations: [
+    MovementsComponent
+  ],
+  providers: [
+    ParamsMovementsService,
+  ]
 })
 export class MovementsModule {}

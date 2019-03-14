@@ -1,8 +1,8 @@
 export interface JWT {
-  accessToken: string;
-  expiresIn: number;
-  refreshToken: string;
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
   roles: string[];
-  tokenType: string;
+  token_type: string;
   username: string;
 }

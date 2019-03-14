@@ -3,10 +3,11 @@ import { Component,
 import { NgForm } from                      '@angular/forms';
 import { Router } from                      '@angular/router';
 
-import { AuthService } from                 '@services/auth/auth.service';
+import { LoginService } from                '@services/login/login.service';
 import { ToastService } from                '@services/toast/toast.service';
+import { ConfigService } from               '@services/config/config.service';
 
-import { LoginInterface } from                        '@interfaces/authLogin.interface';
+import { User } from                        '@interfaces/user.interface';
 import { ToastInterface } from              '@interfaces/toast.interface';
 
 @Component({
@@ -16,29 +17,28 @@ import { ToastInterface } from              '@interfaces/toast.interface';
 })
 
 export class LoginComponent implements OnInit {
-  errorMsg: string;
-  user: LoginInterface;
+  private user: User;
   toastInterface: ToastInterface;
   constructor(
     private router: Router,
-    private authService: AuthService,
+    private loginService: LoginService,
+    private configService: ConfigService,
     private toastService: ToastService
     ) {
-      this.errorMsg =  '';
       this.user = { email: '', password: '' };
       this.toastInterface = { code: 0, message: null, classes: null };
+      this.configService.setJWT = null;
   }
 
   ngOnInit() { }
 
-  ingresar(loginForm: NgForm) {
+  login(loginForm: NgForm) {
     this.user.email = loginForm.value.email,
     this.user.password = loginForm.value.password;
 
-    this.authService.login( this.user ).subscribe(
-      res => {
-        this.router.navigate(['/access/welcome']);
-      }, err => {
+    this.loginService.login( this.user ).subscribe(
+      res => res,
+      err => {
         this.toastInterface.code = err.status;
         if ( err.status === 0 ) {
           this.toastService.toastGeneral(this.toastInterface);
@@ -55,6 +55,9 @@ export class LoginComponent implements OnInit {
           this.toastInterface.message = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
           this.toastService.toastGeneral(this.toastInterface);
         }
+      },
+      () => {
+        this.router.navigate(['/access/welcome']);
       }
     );
     loginForm.reset();

@@ -6,43 +6,43 @@ import { InstitutionInterface } from '@interfaces/institution.interface';
 import { isNullOrUndefined } from 'util';
 
 @Component({
-	selector: 'app-banks',
-	templateUrl: './banks.component.html',
-	styleUrls: [ './banks.component.css' ]
+  selector: 'app-banks',
+  templateUrl: './banks.component.html',
+  styleUrls: ['./banks.component.css']
 })
 export class BanksComponent implements OnInit {
-	institutions: InstitutionInterface[];
+  institutions: InstitutionInterface[];
 
-	constructor(
-		private intitutionService: InstitutionService,
-		private route: Router,
-		private credentialBeanService: CredentialBeanService
-	) {
-		this.institutions = [];
-	}
+  constructor(
+    private intitutionService: InstitutionService,
+    private route: Router,
+    private credentialBeanService: CredentialBeanService
+  ) {
+    this.institutions = [];
+  }
 
-	ngOnInit() {
-		this.getInstitutions();
-	}
+  ngOnInit() {
+    this.getInstitutions();
+  }
 
-	institutionClick(institution: InstitutionInterface) {
-		if (institution.status === 'ACTIVE') {
-			this.route.navigateByUrl('/app/banks/' + institution.code);
-		}
-	}
+  institutionClick(institution: InstitutionInterface) {
+    if (institution.status === 'ACTIVE') {
+      this.route.navigateByUrl('/app/banks/' + institution.code);
+    }
+  }
 
-	getInstitutions() {
-		if (this.credentialBeanService.getInstitutions().length == 0) {
-			this.intitutionService.getAllInstitutions().subscribe((res) => {
-				res.body.data.forEach((element: InstitutionInterface) => {
-					if (element.code !== 'DINERIO') {
-						this.institutions.push(element);
-					}
-				});
-				this.credentialBeanService.setInstitutions(this.institutions);
-			});
-		} else {
-			this.institutions = this.credentialBeanService.getInstitutions();
-		}
-	}
+  getInstitutions() {
+    if (this.credentialBeanService.getInstitutions().length == 0) {
+      this.intitutionService.getAllInstitutions().subscribe(res => {
+        res.body.data.forEach((element: InstitutionInterface) => {
+          if (element.code !== 'DINERIO') {
+            this.institutions.push(element);
+          }
+        });
+        this.credentialBeanService.setInstitutions(this.institutions);
+      });
+    } else {
+      this.institutions = this.credentialBeanService.getInstitutions();
+    }
+  }
 }

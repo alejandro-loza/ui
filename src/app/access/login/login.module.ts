@@ -1,10 +1,7 @@
 import { NgModule } from                             '@angular/core';
 
-import { ServicesModule } from                       '@services/services.module';
 import { SharedModule } from                         '@shared/shared.module';
 import { SocialMediaModule } from                    '@components/social-media-button/social-media.module';
-
-import { AuthService } from                          '@services/auth/auth.service';
 
 import { LoginRoutes } from                          './login.route';
 
@@ -14,7 +11,6 @@ import { LoginComponent } from                       './components/login.compone
 @NgModule({
   imports: [
     SharedModule,
-    ServicesModule,
     SocialMediaModule,
     LoginRoutes
   ],
@@ -22,8 +18,6 @@ import { LoginComponent } from                       './components/login.compone
     LoginComponent,
     RegisterLoginComponent
   ],
-  providers: [
-    AuthService,
-  ]
+  providers: []
 })
 export class LoginModule { }

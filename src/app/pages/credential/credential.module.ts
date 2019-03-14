@@ -11,7 +11,12 @@ import { CREDENTIAL_ROUTES } from './credential.route';
 import { BackButtonModule } from '@components/back-button/back-button.module';
 
 @NgModule({
-	imports: [ SharedModule, FormsModule, BackButtonModule, EmptyStateModule, CREDENTIAL_ROUTES ],
+  imports: [
+    SharedModule,
+    BackButtonModule,
+    EmptyStateModule,
+    CREDENTIAL_ROUTES
+  ],
 	declarations: [ CredentialComponent ]
 })
 export class CredentialModule {}

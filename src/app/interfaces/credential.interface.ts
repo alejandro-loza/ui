@@ -1,6 +1,6 @@
 import { InstitutionInterface } from '@interfaces/institution.interface';
 import { ProviderInterface } from '@interfaces/provider.interface';
-import { UserInterface } from '@interfaces/user.interface';
+import { User } from '@interfaces/user.interface';
 
 export interface CredentialInterface {
   customerId: number;
@@ -9,6 +9,6 @@ export interface CredentialInterface {
   lastUpdated: string;
   provider: ProviderInterface;
   status: string;
-  user: UserInterface;
+  user: User;
   username: string;
 }

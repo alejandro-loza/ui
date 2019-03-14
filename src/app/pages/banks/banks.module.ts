@@ -8,6 +8,8 @@ import { BanksComponent } from './component/banks.component';
 
 import { BanksRoutes } from './banks.routes';
 import { BackButtonModule } from '@components/back-button/back-button.module';
+import { FieldService } from '@app/services/field/field.service';
+import { CredentialService } from '@app/services/credentials/credential.service';
 
 @NgModule({
   imports: [
@@ -19,7 +21,7 @@ import { BackButtonModule } from '@components/back-button/back-button.module';
     BanksComponent
   ],
   providers: [
-    InstitutionService
+
   ]
 })
 export class BanksModule { }

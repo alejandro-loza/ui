@@ -3,8 +3,6 @@ import { SharedModule } from         '@shared/shared.module';
 
 import { WelcomeComponent } from     './components/welcome.component';
 import { WelcomeRoutes } from        './welcome.routes';
-import { AuthService } from          '@services/auth/auth.service';
-
 
 @NgModule({
   imports: [
@@ -14,8 +12,6 @@ import { AuthService } from          '@services/auth/auth.service';
   declarations: [
     WelcomeComponent,
   ],
-  providers: [
-    AuthService,
-  ]
+  providers: [ ]
 })
 export class WelcomeModule { }

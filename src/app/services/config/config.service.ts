@@ -1,76 +1,56 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
+
 import { environment } from '@env/environment.prod';
 
-import { map, retry } from 'rxjs/operators';
+import { JWT } from '@interfaces/jwt.interface';
+import { User } from '@interfaces/user.interface';
+
+import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { isNullOrUndefined } from 'util';
-
-import { Token } from '@app/interfaces/token.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
   private headers: HttpHeaders;
-  private token_access: string;
-  private token_refresh: string;
-  private idUser: string;
+  private jwt: JWT;
+  private user: User;
 
   constructor(private httpClient: HttpClient) {
     this.headers = new HttpHeaders();
-    this.token_access = null;
-    this.token_refresh = null;
-    this.idUser = null;
+    this.headers = this.headers.append('Content-Type', 'application/json');
+    this.headers = this.headers.append('Accept', 'application/json');
   }
 
-  public set setAccessToken(token: string) {
-    this.token_access = token;
-  }
-
-  public get getAccessToken(): string {
-    return this.token_access;
-  }
-
-  public set setRefreshToken(refreshToken: string) {
-    this.token_refresh = refreshToken;
-  }
-
-  public get getRefreshToken(): string {
-    return this.token_refresh;
-  }
-
-  public set setId(id: string) {
-    this.idUser = id;
-  }
-
-  public get getId(): string {
-    return this.idUser;
-  }
-
-  getJsonHeaders() {
-    this.headers = this.headers.set('Content-Type', 'application/json');
-    this.headers = this.headers.set('Accept', 'application/json');
-    if (sessionStorage.getItem('access-token') !== null) {
-      this.headers = this.headers.set(
-        'Authorization',
-        `Bearer ${sessionStorage.getItem('access-token')}`
-      );
-    }
+  get getHeaders(): HttpHeaders {
     return this.headers;
   }
 
-  refreshToken(): Observable<HttpResponse<Token>> {
+  set setJWT(jwt: JWT) {
+    this.jwt = jwt;
+  }
+
+  set setUser(user: User) {
+    this.user = user;
+  }
+
+  get getJWT(): JWT {
+    return this.jwt;
+  }
+
+  get getUser(): User {
+    return this.user;
+  }
+
+  refreshToken(): Observable<HttpResponse<JWT>> {
     const url = `${environment.apiUrl}/oauth/access_token`;
-
-    this.setRefreshToken = sessionStorage.getItem('refresh-token');
-    this.setId = sessionStorage.getItem('id-user');
-
+    const body = `grant_type=refresh_token&refresh_token=${this.getJWT.refresh_token}`;
     return this.httpClient
-      .post<Token>(
-        url,
-        `grant_type=refresh_token&refresh_token=${this.getRefreshToken}`,
+      .post<JWT>(
+        url, body,
         {
           observe: 'response',
           headers: new HttpHeaders({
@@ -80,14 +60,7 @@ export class ConfigService {
       )
       .pipe(
         map(res => {
-          sessionStorage.clear();
-
-          sessionStorage.setItem('access-token', res.body.access_token);
-          sessionStorage.setItem('refresh-token', res.body.refresh_token);
-          sessionStorage.setItem('id-user', this.getId);
-
-          this.setAccessToken = res.body.access_token;
-          this.setRefreshToken = res.body.refresh_token;
+          this.setJWT = res.body;
           return res;
         })
       );

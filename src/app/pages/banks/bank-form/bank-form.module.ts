@@ -21,9 +21,6 @@ import { BankFormRoutes } from './bank-form.routes';
     BackButtonModule,
     BankFormRoutes
   ],
-  providers: [
-    FieldService,
-    CredentialService
-  ]
+  providers: [ ]
 })
 export class BankFormModule { }

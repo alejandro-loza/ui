@@ -9,7 +9,7 @@
         </div>
         <div class="col s12 m4 offset-m1 section">
             <div class="formContainer center">
-                <form ngNativeValidate #f="ngForm" (ngSubmit)="ingresar(f)">
+                <form ngNativeValidate #f="ngForm" (ngSubmit)="login(f)">
                     <div class="input-field">
                         <input ngModel name="email" required id="Input_email" type="email" class="validate" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
                         <label for="Input_email">Correo Electrónico</label>
