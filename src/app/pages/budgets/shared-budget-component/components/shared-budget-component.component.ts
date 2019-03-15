@@ -18,7 +18,7 @@ import * as M from 'materialize-css/dist/js/materialize';
 	styleUrls: [ './shared-budget-component.component.css' ]
 })
 export class SharedBudgetComponentComponent implements OnInit {
-	toast: ToastInterface = { code: null, message: null };
+	toast: ToastInterface = {};
 	routeForBackButton: string;
 	editModeOfTheComponent: boolean;
 	ngModelAux: editBudgetAux[] = [];
@@ -131,18 +131,19 @@ export class SharedBudgetComponentComponent implements OnInit {
 		this.budgetsService.createBudget(this.budgetToCreate).subscribe(
 			(res) => {
 				this.toast.code = res.status;
-				if (res.status === 200) {
-					this.toast.message = 'Presupuesto creado con éxito';
-					this.toastService.toastGeneral(this.toast);
-					this.budgetsBeanService.setLoadInformation(true);
-					this.router.navigateByUrl('/app/budgets');
-				}
+				this.toast.message = 'Presupuesto creado con éxito';
+				this.toastService.toastGeneral(this.toast);
 			},
 			(error) => {
+				this.toast.code = error.error.status;
 				this.toast.message = 'Ocurrió un error, porfavor intenta de nuevo';
 				this.toastService.toastGeneral(this.toast);
 				this.budgetsBeanService.setLoadInformation(true);
 				this.router.navigateByUrl('/app/budgets');
+			},
+			() => {
+				this.budgetsBeanService.setLoadInformation(true);
+				return this.router.navigateByUrl('/app/budgets');
 			}
 		);
 	}

@@ -57,10 +57,12 @@ export class BudgetsComponent implements OnInit {
 				this.doTotalBudget();
 				this.budgetsBeanService.setBudgets(this.budgets);
 				this.emptyStateProcess();
-				this.showSpinner = false;
 			},
 			(error) => {
 				console.log(error);
+			},
+			() => {
+				this.showSpinner = false;
 			}
 		);
 	}
