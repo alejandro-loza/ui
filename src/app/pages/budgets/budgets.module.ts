@@ -16,6 +16,7 @@ import { BudgetsComponent } from './components/budgets.component';
   ],
   declarations: [
     BudgetsComponent
-  ]
+  ],
+  providers: [ ]
 })
 export class BudgetsModule {}
