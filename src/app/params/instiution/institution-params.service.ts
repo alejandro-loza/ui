@@ -16,7 +16,7 @@ export class InstitutionParamsService extends ConfigParamsService {
   }
 
   set setInstitutionID( id: string ) {
-    if( !isNullOrUndefined(id) || id !== '' ) {
+    if ( !isNullOrUndefined(id) || id !== '' ) {
       this.paramsInstitution = this.paramsInstitution.set('institutionId', id);
     }
   }

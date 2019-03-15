@@ -33,7 +33,7 @@ export class FieldService {
 
     institutions.forEach((element: InstitutionInterface) => {
       if (element.code === institutionCode) {
-        // this.institutionParams.setInstitutionID(element.id.toString());
+        this.institutionParams.setInstitutionID = element.id.toString();
       }
     });
 
