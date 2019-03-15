@@ -55,7 +55,7 @@ export class IncomesComponent implements OnInit {
 
   PieChartOfCats( index:number ){
     if( !isNullOrUndefined( index ) ){
-      this.transformIncomesData( this.incomesData[index] )
+      this.transformIncomesData( this.incomesData[index] );
       let pieChart = document.querySelector("#incomesPieChart");
       this.doughnutChart = new Chart(pieChart, {
         type: 'doughnut',
@@ -105,8 +105,8 @@ export class IncomesComponent implements OnInit {
     this.dataForPieChart.labels = [];
     this.dataForPieChart.backgroundColor = [];
     data.data.forEach( element => {
-      this.dataForPieChart.labels.push( element.label )
-      this.dataForPieChart.amount.push( element.totalAmount )
+      this.dataForPieChart.labels.push( element.label );
+      this.dataForPieChart.amount.push( element.totalAmount );
       this.dataForPieChart.backgroundColor.push( element.backgroundColor )
     });
   }
