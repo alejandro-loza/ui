@@ -16,7 +16,7 @@ import {isNullOrUndefined} from 'util';
 @Injectable()
 export class MovementsService {
   private url = `${environment.backendUrl}/users`;
-  private id: string;
+  private readonly id: string;
   movementsList: Movement[];
 
   constructor(

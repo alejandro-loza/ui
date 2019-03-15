@@ -6,7 +6,7 @@ import {HttpClientModule} from              "@angular/common/http";
 import { AuthGuard } from                   '@guards/auth/auth.guard';
 import { ConfigService } from               '@services/config/config.service';
 import { AuthService } from                 '@services/auth/auth.service';
-import { HttpInterceptorProvider } from     '@services/http-interceptors/http-interceptors.service';
+import { InterceptorProvider } from         '@security/interceptors.index';
 import { AccountService } from              '@services/account/account.service';
 
 import { SharedModule } from                '@shared/shared.module';
@@ -31,7 +31,7 @@ import { ConfigParamsService } from         '@params/config/config-params.servic
     ConfigParamsService,
     AuthService,
     AccountService,
-    HttpInterceptorProvider,
+    InterceptorProvider,
   ],
   bootstrap: [AppComponent]
 })
