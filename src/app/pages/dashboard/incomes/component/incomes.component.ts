@@ -9,18 +9,18 @@ import { PieChart } from '@app/interfaces/dashboard/pieChart.interface';
 import { TableData } from '@app/interfaces/dashboard/dataForTables.interface';
 
 @Component({
-	selector: 'app-incomes',
-	templateUrl: './incomes.component.html',
-	styleUrls: [ './incomes.component.css' ]
+  selector: 'app-incomes',
+  templateUrl: './incomes.component.html',
+  styleUrls: [ './incomes.component.css' ]
 })
 export class IncomesComponent implements OnInit {
-	incomesData: ResumeMainData[] = [];
-	dataForPieChart: PieChart = { labels: [], amount: [], backgroundColor: [] };
-	dataForTable: TableData[] = [];
-	monthOfCategorySelected: MonthChartEvent = {
-		label: null,
-		index: null
-	};
+  incomesData: ResumeMainData[] = [];
+  dataForPieChart: PieChart = { labels: [], amount: [], backgroundColor: [] };
+  dataForTable: TableData[] = [];
+  monthOfCategorySelected: MonthChartEvent = {
+    label: null,
+    index: null
+  };
 
   incomesData:ResumeMainData[] = [];
   dataForPieChart:PieChart = {labels:[], amount:[], backgroundColor:[]};
