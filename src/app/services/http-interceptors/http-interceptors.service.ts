@@ -34,6 +34,7 @@ export class HttpInterceptorsService {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           this.configService.refreshToken();
+          this.intercept(req, next);
         }
         return throwError(error);
       })
