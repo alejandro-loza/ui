@@ -6,12 +6,14 @@ import {
   ViewChild,
   Renderer2
 } from '@angular/core';
-import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ActivationEnd, Router } from '@angular/router';
+import { CleanerService } from '@services/cleaner/cleaner.service';
+import {ConfigService} from '@services/config/config.service';
+
 import { filter, map } from 'rxjs/operators';
-import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
-import {ConfigService} from "@services/config/config.service";
+
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-navbar',
@@ -21,8 +23,9 @@ import {ConfigService} from "@services/config/config.service";
 export class NavbarComponent implements OnInit, AfterContentInit {
   @ViewChild('sidenav') elemSidenav: ElementRef;
   @ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
-  @ViewChild('collapsible') elemCollapsible: ElementRef;
   @ViewChild('chevronRight') elemIcon: ElementRef;
+  private sideNavInit: M.Sidenav;
+  private sideNavInstance: M.Sidenav;
   value: boolean;
   titlePage: string;
 
@@ -44,20 +47,15 @@ export class NavbarComponent implements OnInit, AfterContentInit {
   ngOnInit() {}
 
   ngAfterContentInit() {
-    const initSidenav = new M.Sidenav(this.elemSidenav.nativeElement, {});
-    const instanceSidenav = M.Sidenav.getInstance(
-      this.elemSidenav.nativeElement
-    );
-    const initCollapsible = new M.Collapsible(
-      this.elemCollapsible.nativeElement,
-      {}
-    );
+    this.sideNavInit = new M.Sidenav(this.elemSidenav.nativeElement, {});
+    this.sideNavInstance = M.Sidenav.getInstance( this.elemSidenav.nativeElement );
   }
 
   logout() {
     this.cleanerService.cleanAllVariables();
     this.configService.resetVariable();
-    this.router.navigate(['/access/login']);
+    this.sideNavInstance.close();
+    return this.router.navigate(['/access/login']);
   }
 
   getDataRoute() {
