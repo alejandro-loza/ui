@@ -52,7 +52,7 @@ export class SignupComponent {
             message: '¡Se creó tu cuenta!'
           };
           this.toastService.toastGeneral(this.toastInterface);
-          this.router.navigate(['/access/login']);
+          return this.router.navigate(['/access/login']);
         }
       );
     }

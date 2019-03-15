@@ -9,7 +9,6 @@ import { User } from '@interfaces/user.interface';
 import { ConfigService } from '@services/config/config.service';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SignupService {
@@ -31,11 +30,6 @@ export class SignupService {
       .post<User>(`${this.url}/users`, body, {
         observe: 'response',
         headers: this.configService.getHeaders
-      }).pipe(
-        map( res => {
-          this.configService.setUser = res.body;
-          return res;
-        })
-      );
+      });
   }
 }
