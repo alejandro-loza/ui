@@ -17,6 +17,7 @@ import { ToastInterface } from '@interfaces/toast.interface';
 import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
+import { NgForm } from '@angular/forms';
 
 @Component({
 	selector: 'app-credential-details',
@@ -26,6 +27,7 @@ import { InstitutionInterface } from '@app/interfaces/institution.interface';
 })
 export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	showSpinner: boolean = false;
+	showForm: boolean = false;
 	fields: InstitutionFieldInterface[];
 	accounts: AccountInterface[];
 	institutionDetails: CredentialInterface;
@@ -126,31 +128,59 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		);
 	}
 
-	updateCredential(credential: CredentialInterface) {
+	updateCredential(credential: CredentialInterface, data: NgForm) {
 		if (this.syncPossible(credential)) {
-			this.credentialService.updateCredential(credential).subscribe(
-				(res) => {
-					this.toast.code = res.status;
-				},
-				(error) => {
-					this.toast.code = error.status;
-					this.toast.message = 'Ocurrió un error al actualizar tu credencial';
-					this.toastService.toastGeneral(this.toast);
-				},
-				() => {
-					this.toast.message = 'Sincronización en proceso...';
-					this.toastService.toastGeneral(this.toast);
-					this.credentialBeanService.setLoadInformation(true);
-					this.cleanerService.cleanDashboardVariables();
-					this.cleanerService.cleanBudgetsVariables();
-					this.router.navigateByUrl('/app/credentials');
-				}
-			);
+			credential.status == 'Active'
+				? this.activeCredential(credential)
+				: this.invalidCredential(credential, data);
 		} else {
 			this.toast.code = 200;
 			this.toast.message = 'Debes esperar 8 horas antes de volver a sincronizar tu credencial';
 			this.toastService.toastGeneral(this.toast);
 		}
+	}
+
+	invalidCredential(credential: CredentialInterface, data: NgForm) {
+		credential.password = data.value.password;
+		this.credentialService.updateCredential(credential).subscribe(
+			(res) => {
+				this.toast.code = res.status;
+			},
+			(error) => {
+				this.toast.code = error.status;
+				this.toast.message = 'Ocurrió un error al actualizar tu credencial';
+				this.toastService.toastGeneral(this.toast);
+			},
+			() => {
+				this.toast.message = 'Sincronización en proceso...';
+				this.toastService.toastGeneral(this.toast);
+				this.credentialBeanService.setLoadInformation(true);
+				this.cleanerService.cleanDashboardVariables();
+				this.cleanerService.cleanBudgetsVariables();
+				this.router.navigateByUrl('/app/credentials');
+			}
+		);
+	}
+
+	activeCredential(credential: CredentialInterface) {
+		this.credentialService.updateCredential(credential).subscribe(
+			(res) => {
+				this.toast.code = res.status;
+			},
+			(error) => {
+				this.toast.code = error.status;
+				this.toast.message = 'Ocurrió un error al actualizar tu credencial';
+				this.toastService.toastGeneral(this.toast);
+			},
+			() => {
+				this.toast.message = 'Sincronización en proceso...';
+				this.toastService.toastGeneral(this.toast);
+				this.credentialBeanService.setLoadInformation(true);
+				this.cleanerService.cleanDashboardVariables();
+				this.cleanerService.cleanBudgetsVariables();
+				this.router.navigateByUrl('/app/credentials');
+			}
+		);
 	}
 
 	syncPossible(credential: CredentialInterface): boolean {

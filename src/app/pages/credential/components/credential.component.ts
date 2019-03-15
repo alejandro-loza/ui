@@ -89,10 +89,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.institutions = this.credentialBean.getInstitutions();
 		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
+			this.automaticSync(credential);
 		});
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
-		this.automaticSync(this.credentials);
 		this.emptyStateProcess();
 		this.processCompleteForSpinner = true;
 		this.initMaterialize();
@@ -111,10 +111,10 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 				res.body.data.forEach((element: CredentialInterface) => {
 					this.credentials.push(element);
 					this.checkStatusOfCredential(element);
+					this.automaticSync(element);
 				});
 				this.emptyStateProcess();
 				this.processCompleteForSpinner = true;
-				this.automaticSync(this.credentials);
 			},
 			(error) => {
 				this.errorWithCredentials = true;
@@ -139,22 +139,20 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		});
 	}
 
-	automaticSync(credentials: CredentialInterface[]) {
+	automaticSync(credential: CredentialInterface) {
 		let currentMoment = new Date();
-		credentials.forEach((credential) => {
-			if (credential.institution.code != 'BBVA') {
-				if (credential.status == 'ACTIVE') {
-					let dateObj = new Date(credential.lastUpdated);
-					let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
-					if (diff >= 8) {
-						this.validateStatusFinished = false;
-						this.credentialService.updateCredential(credential).subscribe((res) => {
-							this.checkStatusOfCredential(res.body);
-						});
-					}
+		if (credential.institution.code != 'BBVA') {
+			if (credential.status == 'ACTIVE') {
+				let dateObj = new Date(credential.lastUpdated);
+				let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+				if (diff >= 8) {
+					this.validateStatusFinished = false;
+					this.credentialService.updateCredential(credential).subscribe((res) => {
+						this.checkStatusOfCredential(res.body);
+					});
 				}
 			}
-		});
+		}
 	}
 
 	// Checking status of credencials methods
@@ -170,7 +168,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 			this.cleanerService.cleanBudgetsVariables();
 			this.getNewInfoCredential(credential.id);
 		} else if (credential.status === 'TOKEN') {
-			this.loaderMessagge = 'Solicitando información adicional para ' + credential.institution.name + '...';
+			this.loaderMessagge = 'Solicitando información adicional...';
 			this.getNewInfoCredential(credential.id);
 		}
 	}
@@ -184,8 +182,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 					this.checkStatusOfCredential(res.body);
 				}, 1000);
 			} else if (this.credentialInProcess.status === 'ACTIVE') {
-				this.loaderMessagge =
-					'¡Tus datos han sido sincronizados en ' + this.credentialInProcess.institution.name + '!';
+				this.loaderMessagge = '¡Tus datos han sido sincronizados!';
 				this.getAllCredentials();
 			} else if (this.credentialInProcess.status === 'TOKEN') {
 				this.validateStatusFinished = false;

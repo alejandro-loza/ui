@@ -55,10 +55,23 @@ export class SharedBudgetComponentComponent implements OnInit {
 	ngOnInit() {
 		this.settingDimensionOfCatContainer();
 		this.settingFunctionalityOfTheComponent();
+		this.sortingColors();
 	}
 
 	ngAfterViewInit() {
 		const modal = new M.Modal(this.elModal.nativeElement);
+	}
+
+	sortingColors() {
+		this.categorySelected.subCategories.sort((a, b) => {
+			if (a.color > b.color) {
+				return 1;
+			} else if (a.color < b.color) {
+				return -1;
+			} else {
+				return 0;
+			}
+		});
 	}
 
 	fillInputs() {

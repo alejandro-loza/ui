@@ -21,6 +21,7 @@
 	max-height: 140px;
 	max-width: 140px;
 	cursor: pointer;
+	background-color: white;
 }
 
 .imgBanks:hover {
