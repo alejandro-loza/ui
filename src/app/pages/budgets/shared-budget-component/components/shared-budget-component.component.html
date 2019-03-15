@@ -31,6 +31,7 @@
                     id="{{categorySelected.name}}" 
                     type="number" 
                     name="{{categorySelected.name}}"
+                    required
                     >
               </div>
             </div>
@@ -66,7 +67,7 @@
             </div>
           </div>
           <div class="col s12 right-align py-10">
-            <button type="submit" class="btn finerio-blue white-text right-align">
+            <button type="submit" [disabled]="!amount.valid" class="btn finerio-blue white-text right-align">
               Guardar
             </button>
           </div>
@@ -74,3 +75,9 @@
       </div>
     </div>
   </div>
+<!-- LOADING MODAL -->
+<div id="modal" class="modal" #modal>
+  <div class="modal-content center">
+      <app-spinner></app-spinner>
+  </div>
+</div>

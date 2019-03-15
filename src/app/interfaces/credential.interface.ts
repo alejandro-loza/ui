@@ -11,4 +11,5 @@ export interface CredentialInterface {
   status: string;
   user: User;
   username: string;
+  password?: string;
 }

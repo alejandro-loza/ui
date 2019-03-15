@@ -17,7 +17,7 @@
                     <div class="input-field">
                         <input required formControlName="password" name="password" pattern="^(?=.*?[A-ZÑ])(?=.*?[a-zñ])(?=.*?[\d])(?=.*?[\W]).{8,}$" class="form-control" id="password-input" type="password" class="validate">
                         <label for="password-input">Contraseña</label>
-                        <span class="helper-text" data-error="La contraseña debe tener al menos 8 caracteres y debe incluir tanto un número como un símbolo"></span>
+                        <span class="helper-text" data-error="La contraseña debe tener al menos 8 caracteres, una mayúscula y debe incluir tanto un número como un símbolo"></span>
                     </div>
                     <div class="input-field">
                         <input required formControlName="passwordConfirm" name="confirmPassword" class="form-control" id="confirm-input" (keyup)="passwordMatch()" type="password">

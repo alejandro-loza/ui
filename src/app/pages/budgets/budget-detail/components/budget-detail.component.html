@@ -69,7 +69,6 @@
     </div>
   </div>
 </div>
-
 <!-- DELETE BUDGET MODAL -->
 <div id="deleteModal" class="modal" #deleteModal>
   <div class="modal-content">
@@ -79,5 +78,12 @@
   <div class="modal-footer">
     <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
     <a (click)="deleteButton()" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+  </div>
+</div>
+
+<!-- LOADING MODAL -->
+<div id="modal" class="modal" #modal>
+  <div class="modal-content center">
+      <app-spinner></app-spinner>
   </div>
 </div>

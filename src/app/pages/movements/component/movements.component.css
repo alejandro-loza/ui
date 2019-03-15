@@ -5,46 +5,46 @@
 }
 
 .btn-filter:hover {
-    background-color: var(--orange-color);
-    color: #f5f5f5;
+	background-color: var(--orange-color);
+	color: #f5f5f5;
 }
 
 .collapsible-header {
-    padding: 0%;
-    border-bottom: 1px solid #757575;
+	padding: 0%;
+	border-bottom: 1px solid #757575;
 }
 
 .collapsible-body {
-    padding-bottom: 0rem;
+	padding-bottom: 0rem;
 }
 
 .btn-collapsible {
-    width: 100%;
+	width: 100%;
 }
 
 .btn-collapsible:hover {
-    background-color: rgb(211, 211, 211, 0.4);
+	background-color: rgb(211, 211, 211, 0.4);
 }
 
 .containerMovement {
-    padding: 0% 2%;
+	padding: 0% 2%;
 }
 
 .input-field {
-    margin: 0%;
+	margin: 0%;
 }
 
 .movementheader {
-    padding: 1% 0%;
-    border: 1px solid #757575;
+	padding: 1% 0%;
+	border: 1px solid #757575;
 }
 
 .stickyOptions {
-    position: -webkit-sticky;
-    /* Safari */
-    position: sticky;
-    padding-top: 1%;
-    top: 64px;
-    background-color: #f5f5f5;
-    z-index: 2;
+	position: -webkit-sticky;
+	/* Safari */
+	position: sticky;
+	padding-top: 1%;
+	top: 64px;
+	background-color: #f5f5f5;
+	z-index: 2;
 }
