@@ -34,6 +34,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
+    const collapsibleinit: M.Collapsible = new M.Collapsible(this.collapsibleElement.nativeElement, {});
     this.instanceCollapsible = M.Collapsible.getInstance( this.collapsibleElement.nativeElement );
   }
 
