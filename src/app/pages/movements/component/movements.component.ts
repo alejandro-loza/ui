@@ -52,10 +52,10 @@ export class MovementsComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private paramsMovementsService: ParamsMovementsService,
   ) {
-    this.showEmptyState = false;
+    this.showEmptyState = true;
     this.isLoading = true;
     this.status = false;
-    this.spinnerBoolean = true;
+    this.spinnerBoolean = false;
     this.filterflag = false;
     this.statusMovements = false;
     this.auxSize = 0;
@@ -72,10 +72,9 @@ export class MovementsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.fillInformationForEmptyState();
     this.getCategories();
     this.getMovements();
-    this.fillInformationForEmptyState();
-
     this.scrollResult = fromEvent(document, 'scroll')
       .pipe(debounce(() => interval(100)))
       .subscribe(() => this.offsetMovement());
@@ -111,7 +110,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
     let scrollLimit: number;
     scrollLimit = $(document).height() - $(window).height();
     if (scrollVertical >= scrollLimit) {
-      this.spinnerBoolean = true;
+      this.spinnerBoolean = false;
       this.getMovements();
     }
   }
@@ -141,15 +140,10 @@ export class MovementsComponent implements OnInit, OnDestroy {
         }
       },
       () => {
-        if (!this.showEmptyState) {
-          this.auxSize === 0
-            ? (this.emptyStateService.setShowEmptyState(true),
-              (this.showEmptyState = true))
-            : (this.emptyStateService.setShowEmptyState(false),
-              (this.showEmptyState = false));
+        if (this.movementService.getMovementList.length !== 0) {
+          this.showEmptyState = false;
         }
         this.validateAllMovements();
-        this.isLoading = false;
         this.paramsMovements.offset += this.paramsMovements.maxMovements;
       }
     );
@@ -185,20 +179,16 @@ export class MovementsComponent implements OnInit, OnDestroy {
   validateAllMovements() {
     // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
     // Se manda un toast y se remueve la función del scroll.
-    if (
-      this.auxSize < this.paramsMovements.maxMovements ||
-      this.auxSize === 0
-    ) {
-      if (!this.showEmptyState) {
-        this.scrollResult.unsubscribe();
-        this.toast = {
-          code: 200,
-          message: 'Hemos cargamos todos tus movimientos'
-        };
-        this.toastService.toastGeneral(this.toast);
-      }
-      this.spinnerBoolean = false;
+    if ( (this.auxSize < this.paramsMovements.maxMovements || this.movementService.getMovementList.length === 0) && this.showEmptyState === false ) {
+      this.scrollResult.unsubscribe();
+      this.toast = {
+        code: 200,
+        message: 'Hemos cargamos todos tus movimientos'
+      };
+      this.toastService.toastGeneral(this.toast);
+      this.spinnerBoolean = true;
     }
+    this.isLoading = false;
   }
 
   fillInformationForEmptyState() {

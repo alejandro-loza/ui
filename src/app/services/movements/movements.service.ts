@@ -23,7 +23,7 @@ export class MovementsService {
     private configService: ConfigService
   ) { }
 
-  public get getMovementList(): Movement[] {
+  get getMovementList(): Movement[] {
     return this.movementsList;
   }
 
