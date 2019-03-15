@@ -1,6 +1,5 @@
 import { Injectable } from                   '@angular/core';
 import { HttpResponse, HttpClient } from     '@angular/common/http';
-import { Router } from                       '@angular/router';
 
 import { ConfigService } from                '../config/config.service';
 
@@ -20,7 +19,6 @@ export class LoginService {
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService,
-    private router: Router
   ) { }
 
   login( user: User ): Observable<HttpResponse<JWT>> {

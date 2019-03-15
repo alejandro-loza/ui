@@ -13,17 +13,16 @@ import {ConfigParamsService} from '@params/config/config-params.service';
 })
 export class BudgetsService {
   private url: string;
-  private id: string;
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
     private configParams: ConfigParamsService
   ) {
-    this.id = this.configService.getUser.id;
   }
 
   getAllBudgets(): Observable<HttpResponse<Response<Budget>>> {
-    this.url = `${environment.backendUrl}/users/${ this.id }/budgets/current`;
+    const id = this.configService.getUser.id;
+    this.url = `${environment.backendUrl}/users/${ id }/budgets/current`;
     return this.http.get<Response<Budget>>(this.url, {
       observe: 'response',
       headers: this.configService.getHeaders,

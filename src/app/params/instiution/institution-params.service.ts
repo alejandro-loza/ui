@@ -12,11 +12,10 @@ export class InstitutionParamsService extends ConfigParamsService {
     super();
     this.paramsInstitution = new HttpParams();
     this.paramsInstitution = this.getConfigParams;
-
   }
 
-  set setInstitutionID( id: string ) {
-    if ( !isNullOrUndefined(id) || id !== '' ) {
+  set setInstitutionID( id: string) {
+    if( !isNullOrUndefined(id) || id !== '' ) {
       this.paramsInstitution = this.paramsInstitution.set('institutionId', id);
     }
   }

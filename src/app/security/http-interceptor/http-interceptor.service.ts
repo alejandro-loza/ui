@@ -3,11 +3,10 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HTTP_INTERCEPTORS,
   HttpErrorResponse
 } from '@angular/common/http';
 
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from '@services/config/config.service';
 
 import { JWT } from '@interfaces/jwt.interface';
 
@@ -18,7 +17,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class HttpInterceptorsService {
+export class HttpInterceptorService {
   constructor(private configService: ConfigService) {}
 
   intercept( req: HttpRequest<any>, next: HttpHandler ): Observable<HttpEvent<any>> {
@@ -34,13 +33,10 @@ export class HttpInterceptorsService {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           this.configService.refreshToken();
+          this.intercept(req, next);
         }
         return throwError(error);
       })
     );
   }
 }
-
-export const HttpInterceptorProvider = [
-  { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorsService, multi: true }
-];

@@ -27,8 +27,9 @@
       "@pages/*": ["app/pages/*"],
       "@params/*": ["app/params/*"],
       "@shared/*": ["app/shared/*"],
+      "@security/*": ["app/security/*"],
       "@services/*": ["app/services/*"],
-      "@interfaces/*": ["app/interfaces/*"],
+      "@interfaces/*": ["app/interfaces/*"]
     }
   }
 }

@@ -24,8 +24,6 @@ export class SaveMovementComponent implements OnInit, OnChanges {
   @Output() status: EventEmitter<boolean>;
   @Output() keyEnterPressed: EventEmitter<boolean>;
 
-  auxAmount: number;
-
   toastInterface: ToastInterface;
 
   constructor(

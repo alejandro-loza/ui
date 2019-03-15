@@ -12,7 +12,7 @@ export class InteractiveFieldService {
   ) {}
 
   findAllFields(credential: CredentialInterface) {
-    let url = `${environment.backendUrl}/interactiveField`;
+    const url = `${environment.backendUrl}/interactiveField`;
     let params: HttpParams = new HttpParams();
     params = params.append('credentialId', `${credential.id}`);
 
@@ -23,11 +23,12 @@ export class InteractiveFieldService {
   }
 
   sendToken(credential: CredentialInterface, data: any) {
-    let url = `${environment.backendUrl}/interactiveField/send`;
-    let body = {};
-    body['credentialId'] = credential.id;
-    body['interactiveFields'] = data;
-    let postBody = JSON.stringify(body);
+    const url = `${environment.backendUrl}/interactiveField/send`;
+    const body = {
+      credentialId: credential.id,
+      interactiveFields: data
+    };
+    const postBody = JSON.stringify(body);
 
     return this.http.post(url, postBody, {
       headers: this.finerioService.getHeaders

@@ -22,243 +22,225 @@ export class IncomesComponent implements OnInit {
 		index: null
 	};
 
-	amountsBarChart: number[] = [];
-	labelsBarChart: string[] = [];
-	dataFromServiceForBarChart: BarChart[] = [];
-	titleMonth: string = '';
-	titleYear: string = '';
-	showBackButton: boolean = false;
+  incomesData:ResumeMainData[] = [];
+  dataForPieChart:PieChart = {labels:[], amount:[], backgroundColor:[]};
+  dataForTable:TableData[] = [];
+  monthOfCategorySelected:MonthChartEvent = {
+    label:null,
+    index: null
+  };
 
-	doughnutChart: Chart = [];
-	totalAmount: number = 0;
-	assetsUrl: string = '../../../assets/media/img/categories/color';
-	monthOnScreen: number = 0;
+  amountsBarChart:number[] = [];
+  labelsBarChart:string[] = [];
+  dataFromServiceForBarChart:BarChart[] = [];
+  titleMonth:string = "";
+  titleYear:string = "";
+  showBackButton:boolean = false;
 
-	constructor(private dashboardBeanService: DashboardBeanService) {}
+  doughnutChart:Chart = [];
+  totalAmount:number = 0;
+  assetsUrl:string = "../../../assets/media/img/categories/color";
+  monthOnScreen:number = 0;
 
-	ngOnInit() {
-		this.getDataForIncomes();
-		this.getDataForBarChart();
-		this.dataForIncomesBarChart();
-		this.firstData();
-	}
+  constructor( private dashboardBeanService:DashboardBeanService ) { }
 
-	firstData() {
-		this.PieChartOfCats(0);
-		this.dataForTableOfCats(0);
-		this.setMainMessage(this.dataFromServiceForBarChart.length - 1);
-		this.setTitles(this.dataFromServiceForBarChart.length - 1);
-		this.monthOnScreen = this.incomesData.length - 1;
-		this.showBackButton = false;
-	}
+  ngOnInit() {
+    this.getDataForIncomes();
+    this.getDataForBarChart();
+    this.dataForIncomesBarChart();
+    this.firstData();
+  }
 
-	PieChartOfCats(index: number) {
-		if (!isNullOrUndefined(index)) {
-			this.transformIncomesData(this.incomesData[index]);
-			let pieChart = document.querySelector('#incomesPieChart');
-			this.doughnutChart = new Chart(pieChart, {
-				type: 'doughnut',
-				data: {
-					labels: this.dataForPieChart.labels,
-					datasets: [
-						{
-							data: this.dataForPieChart.amount,
-							backgroundColor: this.dataForPieChart.backgroundColor
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					tooltips: {
-						mode: 'label',
-						callbacks: {
-							label: function(tooltipItem, data) {
-								var indice = tooltipItem.index;
-								return data.labels[indice] + ': ' + Math.round(data.datasets[0].data[indice]) + '';
-							}
-						}
-					},
-					animation: {
-						animateScale: false
-					},
-					legend: { display: false }
-				}
-			});
-		} else {
-			this.doughnutChart.destroy();
-		}
-	}
+  firstData(){
+    this.PieChartOfCats(0);
+    this.dataForTableOfCats(0);
+    this.setMainMessage(this.dataFromServiceForBarChart.length - 1);
+    this.setTitles(this.dataFromServiceForBarChart.length - 1);
+    this.monthOnScreen = this.incomesData.length - 1;
+    this.showBackButton = false;
+  }
 
-	pieChartOfSubcats() {
-		let pieChart = document.querySelector('#incomesPieChart');
-		this.doughnutChart = new Chart(pieChart, {
-			type: 'doughnut',
-			data: {
-				labels: this.dataForPieChart.labels,
-				datasets: [
-					{
-						data: this.dataForPieChart.amount,
-						backgroundColor: this.dataForPieChart.backgroundColor
-					}
-				]
-			},
-			options: {
-				responsive: true,
-				animation: {
-					animateScale: false
-				},
-				legend: { display: false }
-			}
-		});
-	}
+  PieChartOfCats( index:number ){
+    if( !isNullOrUndefined( index ) ){
+      this.transformIncomesData( this.incomesData[index] );
+      let pieChart = document.querySelector("#incomesPieChart");
+      this.doughnutChart = new Chart(pieChart, {
+        type: 'doughnut',
+        data:{
+          labels: this.dataForPieChart.labels,
+          datasets:[{
+            data: this.dataForPieChart.amount,
+            backgroundColor: this.dataForPieChart.backgroundColor
+          }],
+        },
+        options: {
+          responsive: true,
+          animation:{
+            animateScale : false
+          },
+          legend: { display: false },
+        }
+      });
+    } else {
+      this.doughnutChart.destroy();
+    }
+  }
 
-	transformIncomesData(data: ResumeMainData) {
-		this.dataForPieChart.amount = [];
-		this.dataForPieChart.labels = [];
-		this.dataForPieChart.backgroundColor = [];
-		data.data.forEach((element) => {
-			this.dataForPieChart.labels.push(element.label);
-			this.dataForPieChart.amount.push(element.totalAmount);
-			this.dataForPieChart.backgroundColor.push(element.backgroundColor);
-		});
-	}
+  pieChartOfSubcats() {
+    let pieChart = document.querySelector("#incomesPieChart");
+    this.doughnutChart = new Chart(pieChart, {
+      type: 'doughnut',
+      data:{
+        labels: this.dataForPieChart.labels,
+        datasets:[{
+          data: this.dataForPieChart.amount,
+          backgroundColor: this.dataForPieChart.backgroundColor
+        }],
+      },
+      options: {
+        responsive: true,
+        animation:{
+          animateScale : false
+        },
+        legend: { display: false },
+      }
+    });
+  }
 
-	dataForTableOfCats(index: number) {
-		this.dataForTable = [];
-		this.dataForPieChart.amount = [];
-		this.dataForPieChart.labels = [];
-		this.incomesData[index].data.forEach((data) => {
-			this.dataForTable.push({
-				catId: data.categoryId,
-				label: data.label,
-				amount: data.totalAmount,
-				isSubCat: false,
-				index: index
-			});
-		});
-	}
+  transformIncomesData( data:ResumeMainData ){
+    this.dataForPieChart.amount = [];
+    this.dataForPieChart.labels = [];
+    this.dataForPieChart.backgroundColor = [];
+    data.data.forEach( element => {
+      this.dataForPieChart.labels.push( element.label );
+      this.dataForPieChart.amount.push( element.totalAmount );
+      this.dataForPieChart.backgroundColor.push( element.backgroundColor )
+    });
+  }
 
-	dataForTableOfSubcats(index: number, catId: string) {
-		this.dataForTable = [];
-		this.dataForPieChart.amount = [];
-		this.dataForPieChart.labels = [];
-		this.dataForPieChart.backgroundColor = [];
-		this.incomesData[index].data.forEach((data) => {
-			if (data.categoryId == catId) {
-				data.details.forEach((details) => {
-					if (!isNullOrUndefined(details.subCategory.parent)) {
-						this.dataForTable.push({
-							catId: details.subCategory.parent.id,
-							label: details.subCategory.name,
-							amount: details.totalAmount,
-							isSubCat: true,
-							index: index
-						});
-					} else {
-						this.dataForTable.push({
-							catId: details.subCategory.id,
-							label: details.subCategory.name,
-							amount: details.totalAmount,
-							isSubCat: true,
-							index: index
-						});
-					}
-					this.dataForPieChart.labels.push(details.subCategory.name);
-					this.dataForPieChart.amount.push(details.totalAmount);
-					this.dataForPieChart.backgroundColor.push(details.subCategory.color);
-				});
-			}
-		});
-	}
+  dataForTableOfCats( index:number ){
+    this.dataForTable = [];
+    this.dataForPieChart.amount = [];
+    this.dataForPieChart.labels = [];
+    this.incomesData[index].data.forEach( data => {
+      this.dataForTable.push({
+        catId: data.categoryId,
+        label: data.label,
+        amount: data.totalAmount,
+        isSubCat:false,
+        index: index
+      });
+    });
+  }
 
-	selectedMonthChart(event: MonthChartEvent) {
-		this.setMainMessage(event.index);
-		this.setTitles(event.index);
-		this.doughnutChart.destroy();
-		this.showBackButton = false;
-		this.PieChartOfCats(this.correctIndex(event));
-		this.dataForTableOfCats(this.correctIndex(event));
-	}
+  dataForTableOfSubcats( index:number, catId:string ){
+    this.dataForTable = [];
+    this.dataForPieChart.amount = [];
+    this.dataForPieChart.labels = [];
+    this.dataForPieChart.backgroundColor = [];
+    this.incomesData[index].data.forEach( data => {
+      if( data.categoryId == catId ){
+        data.details.forEach( details => {
+          if( !isNullOrUndefined( details.subCategory.parent ) ){
+            this.dataForTable.push({
+              catId: details.subCategory.parent.id,
+              label: details.subCategory.name,
+              amount: details.totalAmount,
+              isSubCat:true,
+              index: index
+            });
+          } else {
+            this.dataForTable.push({
+              catId: details.subCategory.id,
+              label: details.subCategory.name,
+              amount: details.totalAmount,
+              isSubCat:true,
+              index: index
+            });
+          }
+          this.dataForPieChart.labels.push( details.subCategory.name );
+          this.dataForPieChart.amount.push( details.totalAmount );
+          this.dataForPieChart.backgroundColor.push( details.subCategory.color );
+        });
+      }
+    });
+  }
 
-	clickOnCategory(element: TableData) {
-		if (!element.isSubCat) {
-			this.doughnutChart.destroy();
-			this.showBackButton = true;
-			this.dataForTableOfSubcats(element.index, element.catId);
-			this.pieChartOfSubcats();
-			this.setMainMessage(element.index, element.amount);
-			this.monthOnScreen = element.index;
-		}
-	}
+  selectedMonthChart( event:MonthChartEvent ){
+    this.setMainMessage( event.index );
+    this.setTitles( event.index );
+    this.doughnutChart.destroy();
+    this.showBackButton = false;
+    this.PieChartOfCats( this.correctIndex( event ) );
+    this.dataForTableOfCats( this.correctIndex( event ) );
+  }
 
-	returnButton(event: number) {
-		let auxAmount: number = 0;
-		this.doughnutChart.destroy();
-		this.PieChartOfCats(event);
-		this.dataForTableOfCats(event);
-		this.showBackButton = false;
-		this.incomesData[event].data.forEach((data) => {
-			auxAmount += data.totalAmount;
-		});
-		this.setMainMessage(event, auxAmount);
-	}
+  clickOnCategory( element:TableData ){
+    if( !element.isSubCat ){
+      this.doughnutChart.destroy();
+      this.showBackButton = true;
+      this.dataForTableOfSubcats( element.index, element.catId );
+      this.pieChartOfSubcats();
+      this.setMainMessage( element.index, element.amount );
+      this.monthOnScreen = element.index;
+    }
+  }
 
-	correctIndex(event: MonthChartEvent): number {
-		let index: number = null;
-		let months: string[] = [
-			'Enero',
-			'Febrero',
-			'Marzo',
-			'Abril',
-			'Mayo',
-			'Junio',
-			'Julio',
-			'Agosto',
-			'Septiembre',
-			'Octubre',
-			'Noviembre',
-			'Diciembre'
-		];
-		for (let i = 0; i < months.length; i++) {
-			if (months[i] == event.label) {
-				for (let j = 0; j < this.incomesData.length; j++) {
-					if (this.incomesData[j].month == i) {
-						index = j;
-					}
-				}
-			}
-		}
-		return index;
-	}
+  returnButton( event:number ){
+    let auxAmount:number = 0;
+    this.doughnutChart.destroy();
+    this.PieChartOfCats( event );
+    this.dataForTableOfCats( event );
+    this.showBackButton = false;
+    this.incomesData[ event ].data.forEach( data => {
+      auxAmount += data.totalAmount;
+    });
+    this.setMainMessage( event, auxAmount );
+  }
 
-	setTitles(index: number) {
-		this.titleMonth = this.dataFromServiceForBarChart[index].label;
-		this.titleYear = this.dataFromServiceForBarChart[index].year.toString();
+  correctIndex( event:MonthChartEvent ):number {
+    let index:number = null;
+    let months:string[] = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    for(let i=0; i<months.length; i++ ){
+      if( months[i] == event.label ){
+        for( let j = 0; j < this.incomesData.length; j ++){
+          if( this.incomesData[j].month == i ){
+            index = j;
+          }
+        }
+      }
+    }
+    return index
+  }
 
-		let titleOfThePage = document.querySelector('.brand-logo');
-		titleOfThePage.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
-	}
+  setTitles( index:number ){
+    this.titleMonth = this.dataFromServiceForBarChart[index].label;
+    this.titleYear = this.dataFromServiceForBarChart[index].year.toString();
 
-	setMainMessage(index: number, amount?: number) {
-		if (isNullOrUndefined(amount)) {
-			this.totalAmount = this.dataFromServiceForBarChart[index].amount;
-		} else {
-			this.totalAmount = amount;
-		}
-	}
+    let titleOfThePage = document.querySelector(".brand-logo");
+    titleOfThePage.innerHTML = "Resumen "+ this.titleMonth + " "+ this.titleYear;
+  }
 
-	getDataForBarChart() {
-		this.dataFromServiceForBarChart = this.dashboardBeanService.getDataIncomesBarChart();
-	}
+  setMainMessage( index:number, amount?:number ){
+    if( isNullOrUndefined( amount ) ){
+      this.totalAmount = this.dataFromServiceForBarChart[index].amount;
+    } else {
+      this.totalAmount = amount;
+    }
+  }
 
-	getDataForIncomes() {
-		this.incomesData = this.dashboardBeanService.getDataIncomesTab();
-	}
+  getDataForBarChart(){
+    this.dataFromServiceForBarChart = this.dashboardBeanService.getDataIncomesBarChart();
+  }
 
-	dataForIncomesBarChart() {
-		this.dataFromServiceForBarChart.forEach((element) => {
-			this.amountsBarChart.push(element.amount);
-			this.labelsBarChart.push(element.label);
-		});
-	}
+  getDataForIncomes(){
+    this.incomesData = this.dashboardBeanService.getDataIncomesTab();
+  }
+
+  dataForIncomesBarChart(){
+    this.dataFromServiceForBarChart.forEach( element => {
+      this.amountsBarChart.push( element.amount );
+      this.labelsBarChart.push( element.label );
+    });
+  }
 }

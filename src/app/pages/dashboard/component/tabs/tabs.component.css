@@ -8,19 +8,19 @@
 }
 
 .tab a {
-  color: rgb(1, 87, 155, 0.7);
+  color: rgba(1, 87, 155, 0.7);
   font-size: 18px;
   font-weight: bold;
 }
 
 .tab a:hover,
 .tab a.active {
-  color: rgb(1, 87, 155, 0.7);
-  background: rgb(1, 87, 155, 0.1)
+  color: rgba(1, 87, 155, 0.7);
+  background: rgba(1, 87, 155, 0.1)
 }
 
 .tab a:focus.active {
-  background-color: rgb(1, 87, 155, 0.1);
+  background-color: rgba(1, 87, 155, 0.1);
 }
 
 .tab a:focus {
@@ -29,7 +29,7 @@
 
 .tabs .tab.disabled a,
 .tabs .tab.disabled a:hover{
-  color: rgb(1, 87, 155, 0.4);
+  color: rgba(1, 87, 155, 0.4);
 }
 
 .tabs .indicator {

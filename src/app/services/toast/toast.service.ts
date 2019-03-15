@@ -20,7 +20,7 @@ export class ToastService {
       const toastElement = document.querySelector('.toast');
       const toastInstance = M.Toast.getInstance(toastElement);
       toastInstance.dismiss();">
-      <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+      <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right" />
     </button>`;
     this.displayLength = 2500;
   }

@@ -21,7 +21,7 @@ export class AuthService {
   ) {}
 
   isAuth() {
-    if(this.configService.getJWT) {
+    if (this.configService.getJWT) {
       const accessToken = this.configService.getJWT.access_token;
       if (accessToken.length > 0) {
         return true;
