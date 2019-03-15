@@ -11,16 +11,17 @@
             <div class="formContainer center">
                 <form ngNativeValidate #f="ngForm" (ngSubmit)="login(f)">
                     <div class="input-field">
-                        <input ngModel name="email" required id="Input_email" type="email" class="validate" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
-                        <label for="Input_email">Correo Electrónico</label>
+                        <input ngModel name="email" required id="Inputemail" type="email" class="validate" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$">
+                        <label for="Inputemail">Correo Electrónico</label>
                         <span class="helper-text" data-error="Correo invalido. Ej: contacto@finerio.mx" data-success="Correo Valido">Ej: contacto@finerio.mx</span>
                     </div>
                     <div class="input-field">
-                        <input ngModel name="password" required id="Input_password" type="password" class="validate">
-                        <label for="Input_password">Contraseña</label>
+                        <input ngModel name="password" required id="Inputpassword" type="password" class="validate">
+                        <label for="Inputpassword">Contraseña</label>
                         <span class="helper-text" data-error="Ingresa tu Contraseña"></span>
                     </div>
-                    <button class="btn waves-effect waves-blue finerio-blue white-text" type="submit" name="action">Entrar
+                    <button class="btn waves-effect waves-blue finerio-blue white-text" type="submit"
+                            name="action" [id]="'buttonElement'" [disabled]="f.invalid">Entrar
                         <i class="material-icons right">send</i>
                     </button>
                 </form>

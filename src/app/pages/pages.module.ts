@@ -12,6 +12,7 @@ import { MovementsService } from         '@services/movements/movements.service'
 import { PagesRoutes } from              './pages.route';
 
 import { PagesComponent } from           '@pages/pages.component';
+import {InterceptorProvider} from '@security/interceptors.index';
 @NgModule({
   declarations: [ PagesComponent ],
   imports: [
