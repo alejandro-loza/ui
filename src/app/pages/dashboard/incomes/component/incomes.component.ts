@@ -22,14 +22,6 @@ export class IncomesComponent implements OnInit {
     index: null
   };
 
-  incomesData:ResumeMainData[] = [];
-  dataForPieChart:PieChart = {labels:[], amount:[], backgroundColor:[]};
-  dataForTable:TableData[] = [];
-  monthOfCategorySelected:MonthChartEvent = {
-    label:null,
-    index: null
-  };
-
   amountsBarChart:number[] = [];
   labelsBarChart:string[] = [];
   dataFromServiceForBarChart:BarChart[] = [];
