@@ -1,18 +1,11 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
-  Renderer2
-} from '@angular/core';
-import { Movement } from '@interfaces/movement.interface';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Movement} from '@interfaces/movement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { isUndefined, isNull } from 'util';
-import { Category } from '@interfaces/category.interface';
-import { CategoriesService } from '@services/categories/categories.service';
+import {isNull, isUndefined} from 'util';
+import {Category} from '@interfaces/category.interface';
+import {CategoriesService} from '@services/categories/categories.service';
+import {CategoriesBeanService} from "@services/categories/categories-bean.service";
 
 @Component({
   selector: 'app-item-list',
@@ -30,23 +23,19 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   private keyEnter: boolean;
   constructor(
     private renderer: Renderer2,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private categoriesBeanService: CategoriesBeanService
   ) {
     this.keyEnter = false;
     this.statusModal = false;
     this.indexMovement = undefined;
   }
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
-  ngAfterViewInit() {
-    const initCollapsible = new M.Collapsible(
-      this.collapsibleElement.nativeElement,
-      {}
-    );
-    this.instanceCollapsible = M.Collapsible.getInstance(
-      this.collapsibleElement.nativeElement
-    );
+  ngAfterViewInit(): void {
+    const collapsibleinit: M.Collapsible = new M.Collapsible(this.collapsibleElement.nativeElement, {});
+    this.instanceCollapsible = M.Collapsible.getInstance( this.collapsibleElement.nativeElement );
   }
 
   /**
@@ -57,11 +46,11 @@ export class ItemListComponent implements OnInit, AfterViewInit {
    * @param {Movement} movement - El movimiento en el indice;
    *
    */
-  trackByFn(index: number, movement: Movement) {
+  trackByFn(index: number, movement: Movement): string {
     return movement.id;
   }
 
-  collapsibleFunction(index: number) {
+  collapsibleFunction(index: number): void {
     /**
      * Se valida si no es undefined _auxMovement_, si no lo es.
      * Entonces su propiedad editAvailable se vuelve falso
@@ -87,15 +76,15 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.instanceCollapsible.destroy();
   }
 
-  statusCategory(status: boolean) {
+  statusCategory(status: boolean): void {
     if (status === true) {
-      this.auxMovement.concepts[0].category = this.categoriesService.getCategory;
+      this.auxMovement.concepts[0].category = this.categoriesBeanService.getCategory;
       this.statusModal = false;
     }
     this.auxMovement.editAvailable = true;
   }
 
-  collapsibleClose(index: number) {
+  collapsibleClose(index: number): void {
     if (
       this.auxMovement.customDescription === '' ||
       this.auxMovement.customDescription === null
@@ -114,7 +103,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.keyEnter = false;
   }
 
-  deleteMovement(index: number) {
+  deleteMovement(index: number): void {
     this.collapsibleClose(index);
     this.movementList.splice(index, 1);
   }

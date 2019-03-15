@@ -15,7 +15,6 @@ import * as M from 'materialize-css/dist/js/materialize';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-
 export class SignupComponent {
   passwordValidate: boolean = true;
   termsAccepted: boolean = true;
@@ -39,21 +38,21 @@ export class SignupComponent {
   signup() {
     this.passwordMatch();
     this.termsValidate();
-    if ( this.passwordValidate && this.termsAccepted ) {
+    if (this.passwordValidate && this.termsAccepted) {
       this.signupService.signup(this.signupData.value).subscribe(
-        res => {
-          this.router.navigate(['/access/login']);
-        },
+        res => res,
         error => {
           this.toastInterface.code = error.status;
           this.toastInterface.message = error.error.message;
           this.toastService.toastGeneral(this.toastInterface);
-        }, () => {
+        },
+        () => {
           this.toastInterface = {
             code: 200,
             message: '¡Se creó tu cuenta!'
-          }
+          };
           this.toastService.toastGeneral(this.toastInterface);
+          return this.router.navigate(['/access/login']);
         }
       );
     }

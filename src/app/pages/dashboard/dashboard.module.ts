@@ -10,25 +10,26 @@ import { TabsComponent } from './component/tabs/tabs.component';
 // Routes
 import { DashboardRoutes } from './dashboard.route';
 
-import { MovementsService } from '@services/movements/movements.service';
-
 import { BalanceModule } from './balance/balance.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { DiagnosticModule } from './diagnostic/diagnostic.module';
 import { IncomesModule } from './incomes/incomes.module';
 
 @NgModule({
-	imports: [
-		SharedModule,
-		BalanceModule,
-		ExpensesModule,
-		DiagnosticModule,
-		IncomesModule,
-		DashboardRoutes,
-		SharedDashboardModule,
-		EmptyStateModule
-	],
-	declarations: [ DashboardComponent, TabsComponent ],
-	providers: [ MovementsService ]
+  imports: [
+    SharedModule,
+    BalanceModule,
+    ExpensesModule,
+    DiagnosticModule,
+    IncomesModule,
+    DashboardRoutes,
+    SharedDashboardModule,
+    EmptyStateModule
+  ],
+  declarations: [
+    DashboardComponent,
+    TabsComponent
+  ],
+  providers: []
 })
 export class DashboardModule {}

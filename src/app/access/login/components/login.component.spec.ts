@@ -9,7 +9,7 @@ import { AuthService, FinerioService } from        '@services/services.index';
 
 import { LoginComponent } from                     './login.component';
 import { SocialMediaComponent } from               '@components/social-media-button/social-media.component';
-import { RegisterLoginComponent } from             '@app/components/register-login-button/register-login.component';
+import { RegisterLoginComponent } from '@app/components/register-login-button/component/register-login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

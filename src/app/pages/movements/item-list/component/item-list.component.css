@@ -7,7 +7,7 @@ li,
 li.active {
     border-left-width: 0px;
     border-left-style: solid;
-    border-left-color: rgba(238, 136, 58);
+    border-left-color: rgba(238, 136, 58, 1);
     transition: all .3s ease-in-out;
 }
 

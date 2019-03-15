@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
@@ -22,6 +22,9 @@ export class BankFormComponent implements OnInit {
 	credential: CreateCredentialInterface;
 	institutionField: InstitutionFieldInterface[];
 	showSpinner: boolean;
+	showVideos: boolean = false;
+
+	@ViewChild('modal') elModal: ElementRef;
 
 	constructor(
 		private field: FieldService,
@@ -44,7 +47,13 @@ export class BankFormComponent implements OnInit {
 	ngOnInit() {
 		this.activated.params.subscribe((params: Params) => {
 			this.institutionCode = params['bankCode'];
+			this.showvideoBBVA();
 		});
+		this.initProcess();
+	}
+
+	initProcess() {
+		const modal = new M.Modal(this.elModal.nativeElement);
 		if (this.credentialBeanService.getInstitutions().length > 0) {
 			this.getFields();
 		} else {
@@ -58,6 +67,7 @@ export class BankFormComponent implements OnInit {
 				this.institutionField.push(fieldBank);
 			});
 			res.body.length > 0 ? (this.showSpinner = false) : null;
+			this.openBBVAModal();
 		});
 	}
 
@@ -86,5 +96,18 @@ export class BankFormComponent implements OnInit {
 			}
 		});
 		return currentInstitution;
+	}
+
+	showvideoBBVA() {
+		if (this.institutionCode === 'BBVA') {
+			this.showVideos = true;
+		}
+	}
+
+	openBBVAModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
+		if (this.institutionCode === 'BBVA') {
+			instanceModal.open();
+		}
 	}
 }

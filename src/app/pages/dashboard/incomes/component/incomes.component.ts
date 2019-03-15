@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart } from "chart.js";
+import { Chart } from 'chart.js';
 import { MonthChartEvent } from '@app/interfaces/dashboard/monthChartEvent.interface';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
 import { BarChart } from '@app/interfaces/dashboard/BarChart.interface';
@@ -11,15 +11,14 @@ import { TableData } from '@app/interfaces/dashboard/dataForTables.interface';
 @Component({
   selector: 'app-incomes',
   templateUrl: './incomes.component.html',
-  styleUrls: ['./incomes.component.css']
+  styleUrls: [ './incomes.component.css' ]
 })
 export class IncomesComponent implements OnInit {
-
-  incomesData:ResumeMainData[] = [];
-  dataForPieChart:PieChart = {labels:[], amount:[], backgroundColor:[]};
-  dataForTable:TableData[] = [];
-  monthOfCategorySelected:MonthChartEvent = {
-    label:null,
+  incomesData: ResumeMainData[] = [];
+  dataForPieChart: PieChart = { labels: [], amount: [], backgroundColor: [] };
+  dataForTable: TableData[] = [];
+  monthOfCategorySelected: MonthChartEvent = {
+    label: null,
     index: null
   };
 
@@ -34,7 +33,7 @@ export class IncomesComponent implements OnInit {
   totalAmount:number = 0;
   assetsUrl:string = "../../../assets/media/img/categories/color";
   monthOnScreen:number = 0;
-  
+
   constructor( private dashboardBeanService:DashboardBeanService ) { }
 
   ngOnInit() {
@@ -55,7 +54,7 @@ export class IncomesComponent implements OnInit {
 
   PieChartOfCats( index:number ){
     if( !isNullOrUndefined( index ) ){
-      this.transformIncomesData( this.incomesData[index] )
+      this.transformIncomesData( this.incomesData[index] );
       let pieChart = document.querySelector("#incomesPieChart");
       this.doughnutChart = new Chart(pieChart, {
         type: 'doughnut',
@@ -101,19 +100,19 @@ export class IncomesComponent implements OnInit {
   }
 
   transformIncomesData( data:ResumeMainData ){
-    this.dataForPieChart.amount = []; 
+    this.dataForPieChart.amount = [];
     this.dataForPieChart.labels = [];
     this.dataForPieChart.backgroundColor = [];
     data.data.forEach( element => {
-      this.dataForPieChart.labels.push( element.label )
-      this.dataForPieChart.amount.push( element.totalAmount )
+      this.dataForPieChart.labels.push( element.label );
+      this.dataForPieChart.amount.push( element.totalAmount );
       this.dataForPieChart.backgroundColor.push( element.backgroundColor )
     });
   }
 
   dataForTableOfCats( index:number ){
     this.dataForTable = [];
-    this.dataForPieChart.amount = []; 
+    this.dataForPieChart.amount = [];
     this.dataForPieChart.labels = [];
     this.incomesData[index].data.forEach( data => {
       this.dataForTable.push({
@@ -128,7 +127,7 @@ export class IncomesComponent implements OnInit {
 
   dataForTableOfSubcats( index:number, catId:string ){
     this.dataForTable = [];
-    this.dataForPieChart.amount = []; 
+    this.dataForPieChart.amount = [];
     this.dataForPieChart.labels = [];
     this.dataForPieChart.backgroundColor = [];
     this.incomesData[index].data.forEach( data => {

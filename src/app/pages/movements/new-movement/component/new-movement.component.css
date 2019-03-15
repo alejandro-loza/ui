@@ -1,6 +1,6 @@
 .finerio-blue:hover {
   background-color: transparent !important;
-  color: var(--Navyblue-color) !important;
+  color: #18537b;
 }
 
 .charge {
@@ -27,12 +27,12 @@
 
 .btn-charge {
   border: 1px solid rgb(198, 40, 40);
-  background-color: rgb(198, 40, 40, 0.1);
+  background-color: rgba(198, 40, 40, 0.1);
 }
 
 .btn-deposit {
   border: 1px solid #2e7d32;
-  background-color: rgb(67, 160, 71, 0.1);
+  background-color: rgba(67, 160, 71, 0.1);
 }
 
 .btn:hover {

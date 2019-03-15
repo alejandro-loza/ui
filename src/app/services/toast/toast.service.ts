@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
-import { ConfigService } from '@services/config/config.service';
-import { ToastInterface } from '@interfaces/toast.interface';
-import { isNullOrUndefined } from 'util';
+import {Injectable} from '@angular/core';
+import {ConfigService} from '@services/config/config.service';
+import {ToastInterface} from '@interfaces/toast.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 
@@ -11,8 +10,8 @@ import * as M from 'materialize-css/dist/js/materialize';
 export class ToastService {
   private message: string;
   private classes: string;
-  private button: string;
-  private displayLength: number;
+  private readonly  button: string;
+  private readonly  displayLength: number;
 
   constructor(private configService: ConfigService) {
     this.button = `<button
@@ -21,7 +20,7 @@ export class ToastService {
       const toastElement = document.querySelector('.toast');
       const toastInstance = M.Toast.getInstance(toastElement);
       toastInstance.dismiss();">
-      <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right"><i/>
+      <i class="mdi mdi-24px mdi-close grey-text text-lighten-4 right" />
     </button>`;
     this.displayLength = 2500;
   }
@@ -57,7 +56,7 @@ export class ToastService {
         break;
       case 4011:
         this.message =
-          'Tus datos son incorrectos, por favor verifica<br>que los hayas escrito bien';
+          'Tus datos son incorrectos, por favor verifica <br> que los hayas escrito bien';
         this.classes = 'light-blue darken-4';
         break;
       case 422:

@@ -10,7 +10,12 @@ import { CredentialDetailsComponent } from './components/credential-details.comp
 import { CREDENTIAL_DETAILS_ROUTES } from './credential-details.route';
 
 @NgModule({
-	imports: [ SharedModule, FormsModule, BackButtonModule, CREDENTIAL_DETAILS_ROUTES ],
-	declarations: [ CredentialDetailsComponent ]
+  imports: [
+    SharedModule,
+    BackButtonModule,
+    CREDENTIAL_DETAILS_ROUTES ],
+  declarations: [
+    CredentialDetailsComponent
+  ]
 })
 export class CredentialDetailsModule {}

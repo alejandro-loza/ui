@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Renderer2, Output, EventEmitter } from '@angular/core';
 import { Category } from '@interfaces/category.interface';
 import { CategoriesService } from '@services/categories/categories.service';
+import {CategoriesBeanService} from "@services/categories/categories-bean.service";
 
 @Component({
 	selector: 'app-subcategory-item',
@@ -8,10 +9,15 @@ import { CategoriesService } from '@services/categories/categories.service';
 	styleUrls: [ './subcategory-item.component.css' ]
 })
 export class SubcategoryItemComponent implements OnInit {
+
 	@Input() category: Category;
 	@Input() statusCategoryValue: boolean;
 	@Output() statusCategory: EventEmitter<boolean>;
-	constructor(private renderer: Renderer2, private categorieService: CategoriesService) {
+	constructor(
+	  private renderer: Renderer2,
+    private categorieService: CategoriesService,
+    private categoriesBeanService: CategoriesBeanService
+  ) {
 		this.statusCategory = new EventEmitter();
 	}
 
@@ -38,8 +44,8 @@ export class SubcategoryItemComponent implements OnInit {
 	}
 
 	selectCategory(i: number) {
-		const auxcategory: Category = this.category.subCategories[i];
-		this.categorieService.setCategory = auxcategory;
+		const auxcategory = this.category.subCategories[i];
+		this.categoriesBeanService.setCategory = auxcategory;
 		this.statusCategoryValue = true;
 		this.statusCategory.emit(this.statusCategoryValue);
 	}
@@ -48,7 +54,7 @@ export class SubcategoryItemComponent implements OnInit {
 		return category.id;
 	}
 
-	private orderCategoriesByColor(category: Category) {
+	orderCategoriesByColor(category: Category) {
 		category.subCategories.sort((currentCategory, nextCategory) => {
 			if (currentCategory.color > nextCategory.color) {
 				return 1;

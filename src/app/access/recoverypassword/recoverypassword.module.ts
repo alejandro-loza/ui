@@ -1,24 +1,23 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PasswordService } from '@services/password/password.service';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { SharedModule } from '@shared/shared.module';
 
 // ROUTE
 import { RECOVERY_ROUTES } from './recoverypassword.route';
 
 // COMPONENT
 import { RecoverypasswordComponent } from './components/recoverypassword.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
-    CommonModule,
-    FormsModule,
+    SharedModule,
     ReactiveFormsModule,
     RECOVERY_ROUTES,
   ],
   declarations: [
     RecoverypasswordComponent
   ],
-  providers: [ PasswordService ]
+  providers: [ ]
 })
 export class RecoverypasswordModule { }

@@ -6,11 +6,14 @@ import {
   ViewChild,
   Renderer2
 } from '@angular/core';
-import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ActivationEnd, Router } from '@angular/router';
+import { CleanerService } from '@services/cleaner/cleaner.service';
+import {ConfigService} from '@services/config/config.service';
+
 import { filter, map } from 'rxjs/operators';
-import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
+
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-navbar',
@@ -20,15 +23,17 @@ import { isNullOrUndefined } from 'util';
 export class NavbarComponent implements OnInit, AfterContentInit {
   @ViewChild('sidenav') elemSidenav: ElementRef;
   @ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
-  @ViewChild('collapsible') elemCollapsible: ElementRef;
   @ViewChild('chevronRight') elemIcon: ElementRef;
+  private sideNavInit: M.Sidenav;
+  private sideNavInstance: M.Sidenav;
   value: boolean;
   titlePage: string;
 
   constructor(
     private renderer: Renderer2,
     private router: Router,
-    private cleanerService: CleanerService
+    private cleanerService: CleanerService,
+    private configService: ConfigService
   ) {
     this.getDataRoute().subscribe(res => {
       const textDOM = document.querySelector('.brand-logo');
@@ -42,21 +47,15 @@ export class NavbarComponent implements OnInit, AfterContentInit {
   ngOnInit() {}
 
   ngAfterContentInit() {
-    const initSidenav = new M.Sidenav(this.elemSidenav.nativeElement, {});
-    const instanceSidenav = M.Sidenav.getInstance(
-      this.elemSidenav.nativeElement
-    );
-    const initCollapsible = new M.Collapsible(
-      this.elemCollapsible.nativeElement,
-      {}
-    );
+    this.sideNavInit = new M.Sidenav(this.elemSidenav.nativeElement, {});
+    this.sideNavInstance = M.Sidenav.getInstance( this.elemSidenav.nativeElement );
   }
 
   logout() {
-    this.router.navigate(['/access/login']);
-    sessionStorage.clear();
     this.cleanerService.cleanAllVariables();
-    this.router.navigate(['/access/login']);
+    this.configService.resetVariable();
+    this.sideNavInstance.close();
+    return this.router.navigate(['/access/login']);
   }
 
   getDataRoute() {

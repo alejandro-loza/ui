@@ -1,5 +1,5 @@
 import { RouterModule, Routes  } from '@angular/router';
-import { AuthGuard } from './services/guards/auth/auth.guard';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 const AppRouting: Routes = [
     {

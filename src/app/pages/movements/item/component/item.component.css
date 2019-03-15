@@ -28,7 +28,7 @@
 
 .customComponent:hover {
   transition: all .2s ease-in-out;
-  background-color: rgb(189, 189, 189, .2);
+  background-color: rgba(189, 189, 189, .2);
 }
 
 .switch label input[type=checkbox]:checked+.lever:after {

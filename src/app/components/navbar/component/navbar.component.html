@@ -28,34 +28,8 @@
 <ul id="slide-out" class="sidenav sidenav-fixed finerio-blue white-text z-depth-0" #sidenav>
   <app-link [icon]="'chart-donut'" [route]="'Dashboard'" [nombre]="'Resumen'"></app-link>
   <app-link [icon]="'format-list-bulleted'" [route]="'Movements'" [nombre]="'Movimientos'"></app-link>
-  <app-link [icon]="'chart-bar'" [route]="'Budgets'" [nombre]="'Presupuestos'"></app-link>
   <app-link [icon]="'credit-card'" [route]="'Credentials'" [nombre]="'Cuentas Bancarias'"></app-link>
+  <app-link [icon]="'chart-bar'" [route]="'Budgets'" [nombre]="'Presupuestos'"></app-link>
   <!--app-link [icon]="'label'" [route]="'Categories'" [nombre]="'Categorías'"></app-link-->
-
-  <li class="hide-on-large-only">
-    <ul class="collapsible collapsible-accordion" #collapsible>
-      <li>
-        <div class="collapsible-header finerio-blue">
-          <div class="pages-list valign-wrapper">
-            <i class="mdi mdi-48px mdi-face left icon-list"></i> Perfil
-            <i class="mdi mdi-36px mdi-chevron-up right"></i>
-          </div>
-        </div>
-        <div class="collapsible-body">
-          <ul>
-            <li>
-              <a class="white-text user-list sidenav-close" routerLink="#!">
-                <i class="mdi mdi-36px mdi-lock-reset right white-text"></i>Cambiar Contraseña
-              </a>
-            </li>
-            <li class="hide-on-large-only">
-              <a class="white-text user-list sidenav-close" (click)="logout()">
-                <i class="mdi mdi-36px mdi-exit-to-app right white-text"></i>Cerrar Sesión
-              </a>
-            </li>
-          </ul>
-        </div>
-      </li>
-    </ul>
-  </li>
+  <app-link class="hide-on-large-only" [icon]="'logout'" [route]="'/access/login'" [nombre]="'Cerrar Sesión'" (click)="logout()"></app-link>
 </ul>
