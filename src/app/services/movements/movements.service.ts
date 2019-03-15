@@ -16,15 +16,12 @@ import {isNullOrUndefined} from 'util';
 @Injectable()
 export class MovementsService {
   private url = `${environment.backendUrl}/users`;
-  private readonly id: string;
   movementsList: Movement[];
 
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
-  ) {
-    this.id = this.configService.getUser.id;
-  }
+  ) { }
 
   public get getMovementList(): Movement[] {
     return this.movementsList;
@@ -40,12 +37,13 @@ export class MovementsService {
    */
 
   getMovements( paramsMovements: ParamsMovements ): Observable<HttpResponse<Response<Movement>>> {
+    const id = this.configService.getUser.id;
     if (paramsMovements.offset === 0) {
       this.movementsList = [];
     }
     let urlMovements =
       `${this.url}/` +
-      `${this.id}/movements` +
+      `${id}/movements` +
       `?deep=${paramsMovements.deep}` +
       `&offset=${paramsMovements.offset}` +
       `&max=${paramsMovements.maxMovements}` +
@@ -77,8 +75,9 @@ export class MovementsService {
   }
 
   createMovement(movement: NewMovement): Observable<HttpResponse<Movement>> {
+    const id = this.configService.getUser.id;
     return this.httpClient.post<Movement>(
-      `${this.url}/${this.id}/movements`,
+      `${this.url}/${id}/movements`,
       JSON.stringify({
         amount: movement.amount,
         balance: 0,

@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { MovementsService } from '@services/movements/movements.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
-import { ToastService } from '@services/toast/toast.service';
 
 import { SharedModule } from '@shared/shared.module';
 import { ItemListModule } from './item-list/item-list.module';

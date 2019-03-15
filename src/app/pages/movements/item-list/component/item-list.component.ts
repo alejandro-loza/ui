@@ -31,16 +31,10 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.indexMovement = undefined;
   }
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
-  ngAfterViewInit() {
-    const initCollapsible = new M.Collapsible(
-      this.collapsibleElement.nativeElement,
-      {}
-    );
-    this.instanceCollapsible = M.Collapsible.getInstance(
-      this.collapsibleElement.nativeElement
-    );
+  ngAfterViewInit(): void {
+    this.instanceCollapsible = M.Collapsible.getInstance( this.collapsibleElement.nativeElement );
   }
 
   /**
@@ -51,11 +45,11 @@ export class ItemListComponent implements OnInit, AfterViewInit {
    * @param {Movement} movement - El movimiento en el indice;
    *
    */
-  trackByFn(index: number, movement: Movement) {
+  trackByFn(index: number, movement: Movement): string {
     return movement.id;
   }
 
-  collapsibleFunction(index: number) {
+  collapsibleFunction(index: number): void {
     /**
      * Se valida si no es undefined _auxMovement_, si no lo es.
      * Entonces su propiedad editAvailable se vuelve falso
@@ -81,7 +75,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.instanceCollapsible.destroy();
   }
 
-  statusCategory(status: boolean) {
+  statusCategory(status: boolean): void {
     if (status === true) {
       this.auxMovement.concepts[0].category = this.categoriesBeanService.getCategory;
       this.statusModal = false;
@@ -89,7 +83,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.auxMovement.editAvailable = true;
   }
 
-  collapsibleClose(index: number) {
+  collapsibleClose(index: number): void {
     if (
       this.auxMovement.customDescription === '' ||
       this.auxMovement.customDescription === null
@@ -108,7 +102,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
     this.keyEnter = false;
   }
 
-  deleteMovement(index: number) {
+  deleteMovement(index: number): void {
     this.collapsibleClose(index);
     this.movementList.splice(index, 1);
   }

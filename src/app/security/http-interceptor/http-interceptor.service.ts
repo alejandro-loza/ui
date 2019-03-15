@@ -3,13 +3,12 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HTTP_INTERCEPTORS,
   HttpErrorResponse
 } from '@angular/common/http';
 
-import { ConfigService } from '../../services/config/config.service';
+import { ConfigService } from '@services/config/config.service';
 
-import { JWT } from '../../interfaces/jwt.interface';
+import { JWT } from '@interfaces/jwt.interface';
 
 import { Observable, throwError } from 'rxjs';
 import { isNullOrUndefined } from 'util';

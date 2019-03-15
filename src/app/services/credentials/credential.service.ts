@@ -15,23 +15,16 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class CredentialService {
-  private url: string;
-  private urlCredential: string;
-  private userId: string;
 
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService,
     private configParams: ConfigParamsService
-  ) {
-    this.userId = this.configService.getUser.id;
-    this.urlCredential = `${environment.backendUrl}/credentials`;
-    this.url = `${environment.backendUrl}/users/${ this.userId }/credentials`;
-  }
+  ) { }
 
   getCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
-    const urlCredential = `${this.urlCredential}/${credentialId}`;
-    return this.httpClient.get<CredentialInterface>( urlCredential, {
+    const url = `${environment.backendUrl}/credentials/${credentialId}`;
+    return this.httpClient.get<CredentialInterface>( url, {
       observe: 'response',
       headers: this.configService.getHeaders,
       params: this.configParams.getConfigParams
@@ -39,7 +32,8 @@ export class CredentialService {
   }
 
   getAllCredentials( ): Observable<HttpResponse<Response<CredentialInterface>>> {
-    let url = `${environment.backendUrl}/users/${ this.userId }/credentials`;
+    const id = this.configService.getUser.id;
+    const url = `${environment.backendUrl}/users/${ id }/credentials`;
     return this.httpClient.get<Response<CredentialInterface>>(
       url,
       {
@@ -51,8 +45,10 @@ export class CredentialService {
   }
 
   createCredential( credential: CreateCredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
+    const id = this.configService.getUser.id;
+    const url = `${environment.backendUrl}/users/${ id }/credentials`;
     const postBody = JSON.stringify(credential);
-    return this.httpClient.post<CredentialInterface>(this.url, postBody, {
+    return this.httpClient.post<CredentialInterface>(url, postBody, {
       observe: 'response',
       headers: this.configService.getHeaders,
       params: this.configParams.getConfigParams
@@ -61,16 +57,16 @@ export class CredentialService {
 
   updateCredential( credential: CredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
     const postBody = JSON.stringify(credential);
-    const urlCredential = `${this.urlCredential}/${ credential.id }`;
-    return this.httpClient.put<CredentialInterface>(urlCredential, postBody, {
+    const url = `${environment.backendUrl}/credentials/${credential.id}`;
+    return this.httpClient.put<CredentialInterface>(url, postBody, {
       observe: 'response',
       headers: this.configService.getHeaders
     });
   }
 
   deleteCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
-    const urlCredential = `${this.urlCredential}/${credentialId}`;
-    return this.httpClient.delete<CredentialInterface>(urlCredential, {
+    const url = `${environment.backendUrl}/credentials/${credentialId}`;
+    return this.httpClient.delete<CredentialInterface>(url, {
       observe: 'response',
       headers: this.configService.getHeaders
     });
