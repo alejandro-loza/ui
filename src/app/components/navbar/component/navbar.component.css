@@ -39,12 +39,14 @@
 }
 
 #finerio-logo {
-  height: 64px;
+  height: 55px;
+  margin-top: 5px;
 }
 
 @media only screen and (max-width: 600px) {
   #finerio-logo {
-    height: 56px;
+    height: 51px;
+    margin-top: 7px;
   }
 }
 
@@ -72,3 +74,11 @@
     margin-top: 63px;
   }
 }
+
+@media only screen and (min-width: 993px) {
+  #finerio-logo {
+    height: 51px;
+    margin-top: 7px;
+  }
+}
+

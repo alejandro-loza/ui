@@ -28,15 +28,16 @@ export class HttpInterceptorService {
           Authorization: `Bearer ${jwt.access_token}`
         }
       });
+      return next.handle(req).pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.configService.refreshToken();
+            this.intercept(req, next);
+          }
+          return throwError(error);
+        })
+      );
     }
-    return next.handle(req).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.configService.refreshToken();
-          this.intercept(req, next);
-        }
-        return throwError(error);
-      })
-    );
+    return next.handle(req);
   }
 }

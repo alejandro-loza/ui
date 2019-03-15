@@ -1,5 +1,7 @@
-import { Component,
-  OnInit, } from                     '@angular/core';
+import {
+  Component,
+  OnInit, Renderer2,
+} from '@angular/core';
 import { NgForm } from                      '@angular/forms';
 import { Router } from                      '@angular/router';
 
@@ -21,6 +23,7 @@ export class LoginComponent implements OnInit {
   private readonly toastInterface: ToastInterface;
   constructor(
     private router: Router,
+    private renderer: Renderer2,
     private loginService: LoginService,
     private configService: ConfigService,
     private toastService: ToastService
@@ -34,6 +37,8 @@ export class LoginComponent implements OnInit {
   login(loginForm: NgForm) {
     this.user.email = loginForm.value.email;
     this.user.password = loginForm.value.password;
+    this.renderer.addClass(document.getElementById('buttonElement'), 'disabled');
+    this.renderer.setAttribute(document.getElementById('buttonElement'), 'disabled', 'disabled');
 
     this.loginService.login( this.user ).subscribe(
       res => res,
@@ -51,11 +56,18 @@ export class LoginComponent implements OnInit {
           this.toastInterface.message = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
           this.toastService.toastGeneral(this.toastInterface);
         }
+        this.renderer.removeClass(document.getElementById('buttonElement'), 'disabled');
+        this.renderer.removeAttribute(document.getElementById('buttonElement'), 'disabled');
+
       },
       () => {
         loginForm.reset();
         return this.router.navigate(['/access/welcome']);
       }
     );
+    this.renderer.removeClass(document.getElementById('Inputemail'), 'valid');
+    this.renderer.removeClass(document.getElementById('Inputemail'), 'invalid');
+    this.renderer.removeClass(document.getElementById('Inputpassword'), 'invalid');
+    this.renderer.removeClass(document.getElementById('Inputpassword'), 'invalid');
   }
 }
