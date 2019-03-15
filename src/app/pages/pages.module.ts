@@ -8,7 +8,6 @@ import { CredentialService } from        '@services/credentials/credential.servi
 import { FieldService } from             '@services/field/field.service';
 import { InstitutionService } from       '@services/institution/institution.service';
 import { MovementsService } from         '@services/movements/movements.service';
-import { ToastService } from             '@services/toast/toast.service';
 
 import { PagesRoutes } from              './pages.route';
 
@@ -26,8 +25,7 @@ import { PagesComponent } from           '@pages/pages.component';
     CredentialService,
     MovementsService,
     InstitutionService,
-    FieldService,
-    ToastService
+    FieldService
   ],
 })
 export class PagesModule {}

@@ -7,4 +7,4 @@ const SIGNUP_ROUTING: Routes = [
     { path: '', component: SignupComponent }
 ];
 
-export const SIGNUP_ROUTES: ModuleWithProviders = RouterModule.forChild( SIGNUP_ROUTING );
+export const SIGNUP_ROUTES = RouterModule.forChild( SIGNUP_ROUTING );

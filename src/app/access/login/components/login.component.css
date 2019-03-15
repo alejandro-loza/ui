@@ -6,12 +6,12 @@
     margin-left: 10%;
 }
 
-#rowForm {
-    margin: 3% 0%;
-}
-
 .red-opacity-08 {
     background-color: rgba(229, 57, 53, 0.7)
+}
+
+#rowForm {
+    margin: 3% 0;
 }
 
 #registerResponsive {

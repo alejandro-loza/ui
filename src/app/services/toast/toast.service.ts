@@ -10,8 +10,8 @@ import * as M from 'materialize-css/dist/js/materialize';
 export class ToastService {
   private message: string;
   private classes: string;
-  private button: string;
-  private displayLength: number;
+  private readonly  button: string;
+  private readonly  displayLength: number;
 
   constructor(private configService: ConfigService) {
     this.button = `<button
@@ -56,7 +56,7 @@ export class ToastService {
         break;
       case 4011:
         this.message =
-          'Tus datos son incorrectos, por favor verifica<br>que los hayas escrito bien';
+          'Tus datos son incorrectos, por favor verifica <br> que los hayas escrito bien';
         this.classes = 'light-blue darken-4';
         break;
       case 422:
