@@ -37,6 +37,8 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 	processCompleteForSpinner: boolean;
 	validateStatusFinished: boolean;
 	loaderMessagge: string;
+	successMessage: string;
+	failMessage: string;
 	credentialInProcess: CredentialInterface;
 	errorWithCredentials: boolean = false;
 
@@ -109,6 +111,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 			(res) => {
 				res.body.data.forEach((element: CredentialInterface) => {
 					this.credentials.push(element);
+					console.log('dentro del sub', this.credentials.length);
 					this.checkStatusOfCredential(element);
 					this.automaticSync(element);
 				});
@@ -119,6 +122,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 				this.errorWithCredentials = true;
 			}
 		);
+		console.log('terminado', this.credentials.length);
 		this.credentialBean.setCredentials(this.credentials);
 		this.getAccounts();
 	}

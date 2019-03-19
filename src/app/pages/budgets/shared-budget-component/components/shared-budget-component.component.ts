@@ -1,4 +1,4 @@
-import { Component, OnInit, ɵConsole, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
@@ -50,7 +50,6 @@ export class SharedBudgetComponentComponent implements OnInit {
 		this.activatedRoute.params.subscribe((params) => {
 			this.editModeOfTheComponent = params['action'] === 'edit' ? true : false;
 		});
-		this.toast = {};
 	}
 
 	ngOnInit() {
@@ -104,12 +103,10 @@ export class SharedBudgetComponentComponent implements OnInit {
 		this.budgetsService.updateBudget(this.budgetToEdit).subscribe(
 			(res) => {
 				this.toast.code = res.status;
-				if (res.status === 200) {
-					this.toast.message = 'Presupuesto modificado con éxito';
-					this.toastService.toastGeneral(this.toast);
-					this.budgetsBeanService.setLoadInformation(true);
-					return this.router.navigateByUrl('/app/budgets');
-				}
+				this.toast.message = 'Presupuesto modificado con éxito';
+				this.toastService.toastGeneral(this.toast);
+				this.budgetsBeanService.setLoadInformation(true);
+				this.router.navigateByUrl('/app/budgets');
 			},
 			(errors) => {
 				this.toast.message = 'Ocurrió un error, porfavor intenta de nuevo';
@@ -133,18 +130,17 @@ export class SharedBudgetComponentComponent implements OnInit {
 			(res) => {
 				this.toast.code = res.status;
 				this.toast.message = 'Presupuesto creado con éxito';
-				this.toastService.toastGeneral(this.toast);
 			},
 			(error) => {
 				this.toast.code = error.error.status;
 				this.toast.message = 'Ocurrió un error, porfavor intenta de nuevo';
-				this.toastService.toastGeneral(this.toast);
 				this.budgetsBeanService.setLoadInformation(true);
 				this.router.navigateByUrl('/app/budgets');
 			},
 			() => {
+				this.toastService.toastGeneral(this.toast);
 				this.budgetsBeanService.setLoadInformation(true);
-				return this.router.navigateByUrl('/app/budgets');
+				this.router.navigateByUrl('/app/budgets');
 			}
 		);
 	}
@@ -158,7 +154,6 @@ export class SharedBudgetComponentComponent implements OnInit {
 		this.budgetToCreate.amount = this.categoryInputModel;
 		this.budgetToCreate.category = this.categorySelected;
 		this.budgetToCreate.subBudgets = this.subBudgets;
-		this.budgetToCreate.user.id = sessionStorage.getItem('id-user');
 	}
 
 	fillSubBudgetsForEditOption(form: NgForm, key: string) {

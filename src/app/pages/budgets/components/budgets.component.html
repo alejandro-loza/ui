@@ -5,8 +5,8 @@
     </div>
   </div>
 </div>
-<div *ngIf="!showEmptyState" class="main">
-  <div *ngIf="!showSpinner" class="container-fluid animated fadeIn">
+<div *ngIf="!showEmptyState && !showSpinner" class="main">
+  <div class="container-fluid animated fadeIn">
     <div class="row marginB-0">
       <div class="col s12 center">
         <div class="card white" id="totalBudget">
@@ -44,7 +44,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!showSpinner "class="container animated fadeIn">
+  <div class="container animated fadeIn">
     <div class="row marginB-0">
       <div class="col s12">
         <ul class="collection z-depth-2">

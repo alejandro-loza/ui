@@ -5,7 +5,7 @@ export interface NewBudget {
 	category: Category;
 	subBudgets: SubBudget[];
 	user: {
-		id: string;
+		id?: string;
 	};
 }
 

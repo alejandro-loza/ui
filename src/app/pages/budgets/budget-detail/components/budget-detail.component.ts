@@ -138,8 +138,6 @@ export class BudgetDetailComponent implements OnInit {
 				this.toast.code = res.status;
 				if (res.status == 200) {
 					this.categoriesBeanService.setCategories([]);
-					this.budgetsBeanService.setLoadInformation(true);
-					this.router.navigateByUrl('/app/budgets');
 					this.toast.message = 'Presupuesto eliminado con éxito';
 					this.toastService.toastGeneral(this.toast);
 				}
@@ -147,6 +145,10 @@ export class BudgetDetailComponent implements OnInit {
 			(error) => {
 				this.toast.message = 'Ocurrió un error, vuelve a intentarlo';
 				this.toastService.toastGeneral(this.toast);
+			},
+			() => {
+				this.budgetsBeanService.setLoadInformation(true);
+				this.router.navigateByUrl('/app/budgets');
 			}
 		);
 	}
