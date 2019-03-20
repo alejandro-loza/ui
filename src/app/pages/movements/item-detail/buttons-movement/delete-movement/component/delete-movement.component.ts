@@ -1,17 +1,19 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { CleanerService } from '@services/cleaner/cleaner.service';
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-delete-movement',
   templateUrl: './delete-movement.component.html',
   styleUrls: [ './delete-movement.component.css' ]
 })
-export class DeleteMovementComponent implements OnInit {
+export class DeleteMovementComponent implements OnInit, AfterViewInit {
   @Input() id: string;
   @Output() status: EventEmitter<boolean>;
+  @ViewChild('deleteModal') modalElement: ElementRef;
 
   toastInterface: ToastInterface;
 
@@ -25,6 +27,9 @@ export class DeleteMovementComponent implements OnInit {
   }
 
   ngOnInit() {}
+  ngAfterViewInit(): void {
+    const modalInit = new M.Modal(this.modalElement.nativeElement, {});
+  }
 
   deleteMovement() {
     this.movementService.deleteMovement(this.id).subscribe(

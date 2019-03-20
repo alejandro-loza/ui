@@ -5,7 +5,8 @@ import * as M from 'materialize-css/dist/js/materialize';
 import {isNull, isUndefined} from 'util';
 import {Category} from '@interfaces/category.interface';
 import {CategoriesService} from '@services/categories/categories.service';
-import {CategoriesBeanService} from "@services/categories/categories-bean.service";
+import {CategoriesBeanService} from '@services/categories/categories-bean.service';
+import {MovementsService} from '@services/movements/movements.service';
 
 @Component({
   selector: 'app-item-list',
@@ -17,14 +18,16 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   @Input() categoryList: Category[];
   @ViewChild('collapsible') collapsibleElement: ElementRef;
   private auxMovement: Movement;
-  private instanceCollapsible;
+  private instanceCollapsible: M.Collapsible;
+  private collapsibleinit: M.Collapsible;
   private statusModal: boolean;
   private indexMovement: number;
-  private keyEnter: boolean;
+  keyEnter: boolean;
   constructor(
     private renderer: Renderer2,
     private categoriesService: CategoriesService,
-    private categoriesBeanService: CategoriesBeanService
+    private categoriesBeanService: CategoriesBeanService,
+    private movementService: MovementsService
   ) {
     this.keyEnter = false;
     this.statusModal = false;
@@ -34,7 +37,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    const collapsibleinit: M.Collapsible = new M.Collapsible(this.collapsibleElement.nativeElement, {});
+    this.collapsibleinit = new M.Collapsible( this.collapsibleElement.nativeElement, {} );
     this.instanceCollapsible = M.Collapsible.getInstance( this.collapsibleElement.nativeElement );
   }
 
@@ -85,10 +88,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   collapsibleClose(index: number): void {
-    if (
-      this.auxMovement.customDescription === '' ||
-      this.auxMovement.customDescription === null
-    ) {
+
+    if ( this.auxMovement.customDescription === '' || this.auxMovement.customDescription === null ) {
       this.auxMovement.customDescription = this.auxMovement.description;
     }
     if (isNull(this.auxMovement.customDate)) {

@@ -25,12 +25,7 @@
       <!-- Busqueda y filtrado -->
       <div class="containerMovement">
         <div class="row valign-wrapper">
-          <div class="col s12 m6">
-            <a class="btn btn-filter" (click)="filterflag = !filterflag">
-              <i class="material-icons left">filter_list</i>Filtrar
-            </a>
-          </div>
-          <div class="col s12 m6 right-align">
+          <div class="col s12 right-align">
             <!-- Modal Trigger -->
             <a class="btn modal-trigger finerio-orange" href="#newMovement">
               <i class="material-icons right">add</i>Nuevo Movimiento
@@ -39,7 +34,6 @@
           </div>
         </div>
       </div>
-      <app-filter *ngIf="filterflag !== false" (filterMovementStatus)="statusMovement($event)" [charges]="paramsMovements.charges" [deposits]="paramsMovements.deposits" [duplicates]="paramsMovements.duplicates" class="params-movement"></app-filter>
       <!-- Encabezado de movimientos -->
       <div class="containerMovement">
         <div class="row center-align z-depth-1 white" id="header">
