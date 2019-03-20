@@ -227,6 +227,7 @@ export class ExpensesComponent implements OnInit {
 
 		let largeTitle = document.querySelector('#largeTitle');
 		let medTitle = document.querySelector('#medTitle');
+
 		largeTitle.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
 		medTitle.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
 	}
