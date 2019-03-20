@@ -134,7 +134,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 				: this.invalidCredential(credential, data);
 		} else {
 			this.toast.code = 200;
-			this.toast.message = 'Debes esperar 8 horas antes de volver a sincronizar tu credencial';
+			this.toast.message = 'Debes esperar 8 horas antes de volver a sincronizar tu cuenta bancaria';
 			this.toastService.toastGeneral(this.toast);
 		}
 	}

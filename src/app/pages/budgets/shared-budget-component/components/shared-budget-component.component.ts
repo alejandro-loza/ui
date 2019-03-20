@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
@@ -10,7 +10,6 @@ import { NewBudget, SubBudget } from '@interfaces/budgets/new-budget.interface';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
 import { ToastInterface } from '@interfaces/toast.interface';
 import { editBudgetAux } from '@app/interfaces/budgets/editBudgetAux.interface';
-import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
 	selector: 'app-shared-budget-component',
@@ -33,7 +32,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 	};
 	categoryInputModel: number = 0;
 	subBudgets: SubBudget[] = [];
-	@ViewChild('modal') elModal: ElementRef;
+	showSpinner: boolean = false;
 
 	constructor(
 		private budgetsBeanService: BudgetsBeanService,
@@ -54,12 +53,8 @@ export class SharedBudgetComponentComponent implements OnInit {
 
 	ngOnInit() {
 		this.settingDimensionOfCatContainer();
-		this.settingFunctionalityOfTheComponent();
 		this.sortingColors();
-	}
-
-	ngAfterViewInit() {
-		const modal = new M.Modal(this.elModal.nativeElement);
+		this.settingFunctionalityOfTheComponent();
 	}
 
 	sortingColors() {
@@ -87,8 +82,10 @@ export class SharedBudgetComponentComponent implements OnInit {
 	}
 
 	submit(form: NgForm) {
-		this.openLoadingModal();
-		this.editModeOfTheComponent ? this.doDataProcessForPUT(form) : this.doDataProcessForPost(form);
+		this.showSpinner = true;
+		setTimeout(() => {
+			this.editModeOfTheComponent ? this.doDataProcessForPUT(form) : this.doDataProcessForPost(form);
+		}, 100);
 	}
 
 	// MTHOD FOR UPDATES TO BUDGETS
@@ -121,7 +118,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 	doDataProcessForPost(form: NgForm) {
 		const ARRAY_WITH_KEYS = Object.keys(form.value);
 		ARRAY_WITH_KEYS.forEach((key) => {
-			if (typeof form.value[key] === 'number' && key !== this.categorySelected.name) {
+			if (typeof form.value[key] == 'number' && key != this.categorySelected.name) {
 				this.fillSubBudgets(form, key);
 			}
 		});
@@ -244,10 +241,5 @@ export class SharedBudgetComponentComponent implements OnInit {
 		let height = 0;
 		height = document.getElementById('divToGetHeight').clientHeight;
 		return height;
-	}
-
-	openLoadingModal() {
-		const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
-		instanceModal.open();
 	}
 }

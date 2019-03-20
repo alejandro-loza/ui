@@ -1,74 +1,83 @@
-<div *ngIf="showScreen" class="container-fluid animated fadeIn">
-  <div class="row marginB-0">
+<div *ngIf="showSpinner" class="container">
+  <div class="row">
     <div class="col s12 center">
-      <div class="card white" id="totalBudget">
-        <div class="card-content">
-          <div class="row borderB-o">
-            <div class="col s8 valign-wrapper">
-              <img src="/assets/media/img/categories/color/color_{{ budget.category.id }}.png"
-                   onerror="this.src='/assets/media/img/categories/color/color_000000.svg'" alt="">
-              <p class="paddingL" id="mainName">{{ categoryName }}</p>
-            </div>
-            <div class="col s4 right-align">
-              <p>${{ budget.spentAmount | number:'1.2-2' }}/ <b>${{ budget.amount | number:'1.2-2' }}</b> <small>({{ percentageAmountTotal | number:'1.2-2' }}%)</small></p>
-            </div>
-            <div class="col s12 ">
-              <p class="text-inside-progress">Por Ejecutar: ${{ porEjecutarAmountTotal | number:'1.2-2' }}</p>
-              <div class="progress" id="totalProgressBar">
-                <div class="determinate" [ngStyle]="{'width': getTotalProgressBarWidth(), 'background-color': getColorOfBar( percentageAmountTotal ) }"></div>
+      <app-spinner class="spinnerPosition"></app-spinner>
+    </div>
+  </div>
+</div>
+<div *ngIf="!showSpinner" class="main">
+  <div *ngIf="showScreen" class="container-fluid animated fadeIn">
+    <div class="row marginB-0">
+      <div class="col s12 center">
+        <div class="card white" id="totalBudget">
+          <div class="card-content">
+            <div class="row borderB-o">
+              <div class="col s8 valign-wrapper">
+                <img src="/assets/media/img/categories/color/color_{{ budget.category.id }}.png"
+                     onerror="this.src='/assets/media/img/categories/color/color_000000.svg'" alt="">
+                <p class="paddingL" id="mainName">{{ categoryName }}</p>
+              </div>
+              <div class="col s4 right-align">
+                <p>${{ budget.spentAmount | number:'1.2-2' }}/ <b>${{ budget.amount | number:'1.2-2' }}</b> <small>({{ percentageAmountTotal | number:'1.2-2' }}%)</small></p>
+              </div>
+              <div class="col s12 ">
+                <p class="text-inside-progress">Por Ejecutar: ${{ porEjecutarAmountTotal | number:'1.2-2' }}</p>
+                <div class="progress" id="totalProgressBar">
+                  <div class="determinate" [ngStyle]="{'width': getTotalProgressBarWidth(), 'background-color': getColorOfBar( percentageAmountTotal ) }"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row right-align marginB-0 finerio-blue">
-    <div class="col s5 m7">
-      <h5>{{ categoryName }}</h5>
+    <div class="row right-align marginB-0 finerio-blue">
+      <div class="col s5 m7">
+        <h5>{{ categoryName }}</h5>
+      </div>
+      <div class="col s7 m5">
+        <button [routerLink]="['/app/budgets/shared-budget', 'edit']"
+                class="btn-flat actionButton white black-text right truncate">Editar<i class="material-icons right">
+          edit</i> 
+        </button>
+        <button (click)="openDeleteModal()" data-target="deleteModal"
+                class="btn-flat actionButton modal-trigger red white-text right truncate">Eliminar<i class="material-icons right">
+          delete</i> 
+        </button>
+      </div>
     </div>
-    <div class="col s7 m5">
-      <button [routerLink]="['/app/budgets/shared-budget', 'edit']"
-              class="btn-flat actionButton white black-text right truncate">Editar<i class="material-icons right">
-        edit</i> 
-      </button>
-      <button (click)="openDeleteModal()" data-target="deleteModal"
-              class="btn-flat actionButton modal-trigger red white-text right truncate">Eliminar<i class="material-icons right">
-        delete</i> 
-      </button>
+  </div>
+  <app-back-button [ruta]="'/app/budgets'"></app-back-button>
+  <div *ngIf="subBudgets.length > 0" class="container animated fadeIn">
+    <div class="row">
+      <div class="col s12">
+        <ul class="collection z-depth-2">
+          <li class="collection-item" *ngFor="let subBudget of subBudgets">
+            <div class="row marginB-0">
+              <div class="col s12">
+                  <div class="col s6 valign-wrapper">
+                    <img [src]="getIconImage()"><p id="categoryName" class="details">{{ subBudget.name }}</p>
+                  </div>
+                  <div class="col s6 right-align" id="amounts">
+                    <p class="details">${{subBudget.spentAmount | number:'1.2-2'}}/ <b>${{ subBudget.amount | number:'1.2-2'}}</b> 
+                      <small>({{ getpercentage(subBudget.spentAmount, subBudget.amount) | number:'1.2-2' }}%)</small>
+                    </p>
+                  </div>
+              </div>
+              <div class="col s12">
+                  <p class="text-inside">Por Ejecutar: {{ getPorEjecutar(subBudget) | number:'1.2-2'}}</p>
+                  <div class="progress" id="progressBar">
+                      <div class="determinate" [ngStyle]="{'width': getWidthPercentage( subBudget ) ,'background-color': getColorOfBar(percentageBudgets)}"></div>
+                  </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
-<app-back-button [ruta]="'/app/budgets'"></app-back-button>
-<div *ngIf="subBudgets.length > 0" class="container animated fadeIn">
-  <div class="row">
-    <div class="col s12">
-      <ul class="collection z-depth-2">
-        <li class="collection-item" *ngFor="let subBudget of subBudgets">
-          <div class="row marginB-0">
-            <div class="col s12">
-                <div class="col s6 valign-wrapper">
-                  <img [src]="getIconImage()"><p id="categoryName" class="details">{{ subBudget.name }}</p>
-                </div>
-                <div class="col s6 right-align" id="amounts">
-                  <p class="details">${{subBudget.spentAmount | number:'1.2-2'}}/ <b>${{ subBudget.amount | number:'1.2-2'}}</b> 
-                    <small>({{ getpercentage(subBudget.spentAmount, subBudget.amount) | number:'1.2-2' }}%)</small>
-                  </p>
-                </div>
-            </div>
-            <div class="col s12">
-                <p class="text-inside">Por Ejecutar: {{ getPorEjecutar(subBudget) | number:'1.2-2'}}</p>
-                <div class="progress" id="progressBar">
-                    <div class="determinate" [ngStyle]="{'width': getWidthPercentage( subBudget ) ,'background-color': getColorOfBar(percentageBudgets)}"></div>
-                </div>
-            </div>
-          </div>
-        </li>
-      </ul>
 
-    </div>
-  </div>
-</div>
 <!-- DELETE BUDGET MODAL -->
 <div id="deleteModal" class="modal" #deleteModal>
   <div class="modal-content">
@@ -78,12 +87,5 @@
   <div class="modal-footer">
     <a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
     <a (click)="deleteButton()" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
-  </div>
-</div>
-
-<!-- LOADING MODAL -->
-<div id="modal" class="modal" #modal>
-  <div class="modal-content center">
-      <app-spinner></app-spinner>
   </div>
 </div>

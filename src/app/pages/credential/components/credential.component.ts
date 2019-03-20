@@ -87,10 +87,12 @@ export class CredentialComponent implements OnInit {
 		this.credentials = this.credentialBean.getCredentials();
 		this.accounts = this.credentialBean.getAccounts();
 		this.institutions = this.credentialBean.getInstitutions();
+		// =====================
 		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
 			this.automaticSync(credential);
 		});
+		// ============================
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
 		this.emptyStateProcess();
@@ -105,20 +107,20 @@ export class CredentialComponent implements OnInit {
 		this.credentialService.getAllCredentials().subscribe(
 			(res) => {
 				this.credentials = res.body.data;
-				this.emptyStateProcess();
-				this.showSpinner = false;
 			},
 			(error) => {
 				this.errorWithCredentials = true;
 				this.showSpinner = false;
 			},
 			() => {
+				this.emptyStateProcess();
 				this.credentials.forEach((element: CredentialInterface) => {
 					this.checkStatusOfCredential(element);
 					this.automaticSync(element);
 				});
 				this.credentialBean.setCredentials(this.credentials);
 				this.getAccounts();
+				this.showSpinner = false;
 			}
 		);
 	}

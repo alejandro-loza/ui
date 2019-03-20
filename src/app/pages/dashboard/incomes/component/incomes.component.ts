@@ -72,6 +72,13 @@ export class IncomesComponent implements OnInit {
 					animation: {
 						animateScale: false
 					},
+					/*onClick: (evt, item) => {
+						this.dataForTable.forEach((data) => {
+							if (data.label == item[0]._model.label) {
+								this.clickOnCategory(data);
+							}
+						});
+					},*/
 					legend: { display: false }
 				}
 			});
@@ -101,6 +108,17 @@ export class IncomesComponent implements OnInit {
 				legend: { display: false }
 			}
 		});
+	}
+
+	clickOnCategory(element: TableData) {
+		if (!element.isSubCat) {
+			this.dataForTableOfSubcats(element.index, element.catId);
+			this.setMainMessage(element.index, element.amount);
+			this.monthOnScreen = element.index;
+			this.showBackButton = true;
+			this.doughnutChart.destroy();
+			this.pieChartOfSubcats();
+		}
 	}
 
 	transformIncomesData(data: ResumeMainData) {
@@ -169,17 +187,6 @@ export class IncomesComponent implements OnInit {
 		this.showBackButton = false;
 		this.PieChartOfCats(this.correctIndex(event));
 		this.dataForTableOfCats(this.correctIndex(event));
-	}
-
-	clickOnCategory(element: TableData) {
-		if (!element.isSubCat) {
-			this.doughnutChart.destroy();
-			this.showBackButton = true;
-			this.dataForTableOfSubcats(element.index, element.catId);
-			this.pieChartOfSubcats();
-			this.setMainMessage(element.index, element.amount);
-			this.monthOnScreen = element.index;
-		}
 	}
 
 	returnButton(event: number) {

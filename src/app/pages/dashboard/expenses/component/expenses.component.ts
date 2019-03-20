@@ -65,7 +65,7 @@ export class ExpensesComponent implements OnInit {
 						callbacks: {
 							label: function(tooltipItem, data) {
 								var indice = tooltipItem.index;
-								return data.labels[indice] + ': ' + Math.round(data.datasets[0].data[indice]) + '';
+								return data.labels[indice] + ': $' + Math.round(data.datasets[0].data[indice]) + '';
 							}
 						}
 					},

@@ -15,15 +15,6 @@ import { isNullOrUndefined } from 'util';
 	styleUrls: [ './budget-detail.component.css' ]
 })
 export class BudgetDetailComponent implements OnInit {
-	constructor(
-		private activatedRoute: ActivatedRoute,
-		private budgetsBeanService: BudgetsBeanService,
-		private budgetsService: BudgetsService,
-		private categoriesBeanService: CategoriesBeanService,
-		private router: Router,
-		private toastService: ToastService
-	) {}
-
 	toast: ToastInterface = { code: null, message: null };
 	categoryName: string = '';
 	budget: Budget = null;
@@ -32,9 +23,17 @@ export class BudgetDetailComponent implements OnInit {
 	percentageBudgets: number = 0;
 	porEjecutarAmountTotal: number = 0;
 	showScreen: boolean = false;
-
+	showSpinner: boolean = false;
 	@ViewChild('deleteModal') elModal: ElementRef;
-	@ViewChild('modal') elModal2: ElementRef;
+
+	constructor(
+		private activatedRoute: ActivatedRoute,
+		private budgetsBeanService: BudgetsBeanService,
+		private budgetsService: BudgetsService,
+		private categoriesBeanService: CategoriesBeanService,
+		private router: Router,
+		private toastService: ToastService
+	) {}
 
 	ngOnInit() {
 		this.getCategoryName();
@@ -51,7 +50,6 @@ export class BudgetDetailComponent implements OnInit {
 
 	ngAfterViewInit() {
 		const ELMODAL = new M.Modal(this.elModal.nativeElement);
-		const modal = new M.Modal(this.elModal2.nativeElement);
 	}
 
 	getSubBudgets() {
@@ -132,29 +130,26 @@ export class BudgetDetailComponent implements OnInit {
 	}
 
 	deleteButton() {
-		this.openLoadingModal();
-		this.budgetsService.deleteBudget(this.budget).subscribe(
-			(res) => {
-				this.toast.code = res.status;
-				if (res.status == 200) {
-					this.categoriesBeanService.setCategories([]);
-					this.toast.message = 'Presupuesto eliminado con éxito';
+		this.showSpinner = true;
+		setTimeout(() => {
+			this.budgetsService.deleteBudget(this.budget).subscribe(
+				(res) => {
+					this.toast.code = res.status;
+					if (res.status == 200) {
+						this.categoriesBeanService.setCategories([]);
+						this.toast.message = 'Presupuesto eliminado con éxito';
+						this.toastService.toastGeneral(this.toast);
+					}
+				},
+				(error) => {
+					this.toast.message = 'Ocurrió un error, vuelve a intentarlo';
 					this.toastService.toastGeneral(this.toast);
+				},
+				() => {
+					this.budgetsBeanService.setLoadInformation(true);
+					this.router.navigateByUrl('/app/budgets');
 				}
-			},
-			(error) => {
-				this.toast.message = 'Ocurrió un error, vuelve a intentarlo';
-				this.toastService.toastGeneral(this.toast);
-			},
-			() => {
-				this.budgetsBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/budgets');
-			}
-		);
-	}
-
-	openLoadingModal() {
-		const instanceModal = M.Modal.getInstance(this.elModal2.nativeElement);
-		instanceModal.open();
+			);
+		}, 1000);
 	}
 }
