@@ -13,21 +13,3 @@
 .background {
 	background-color: #1d3865;
 }
-
-.imgBanks {
-	padding: 10px;
-	border: 1px solid #aaa;
-	border-radius: 5px;
-	max-height: 140px;
-	max-width: 140px;
-	cursor: pointer;
-	background-color: white;
-}
-
-.imgBanks:hover {
-	border: 0px;
-}
-
-.intitutionCol {
-	padding-top: 10px;
-}

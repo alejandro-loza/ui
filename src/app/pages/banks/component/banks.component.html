@@ -12,15 +12,12 @@
     </div>
   </div>
   <div class="row">
-    <div class="col s6 m3 l2 center intitutionCol" *ngFor="let institution of institutions">
-        <a (click)="institutionClick( institution )">
-        <img *ngIf="institution.status === 'ACTIVE'" class="imgBanks hoverable"
-             [alt]="institution.code"
-             [src]="'assets/media/img/banks/'+institution.code+'.png'" />
-        <img *ngIf="institution.status !== 'ACTIVE'" class="imgBanks hoverable"
-             [alt]="institution.code"
-             [src]="'assets/media/img/banks/'+institution.code+'_gray.png'"/>
-        </a>
+    <div class="col s12">
+      <ul>
+        <li *ngFor="let institution of institutions">
+          <app-bank-item [institution]="institution"></app-bank-item>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

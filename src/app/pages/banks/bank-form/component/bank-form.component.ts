@@ -1,10 +1,12 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { HelpTexts } from '../../../../services/banks/help-texts';
 
 import { FieldService } from '@services/field/field.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
+import { Patterns } from '@services/banks/patterns.service';
 
 import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
@@ -23,6 +25,9 @@ export class BankFormComponent implements OnInit {
 	institutionField: InstitutionFieldInterface[];
 	showSpinner: boolean;
 	showVideos: boolean = false;
+	helpText: string = '';
+	usernameErrorMessage: string;
+	passwordErrorMessage: string;
 
 	@ViewChild('modal') elModal: ElementRef;
 
@@ -31,6 +36,8 @@ export class BankFormComponent implements OnInit {
 		private activated: ActivatedRoute,
 		private credentialService: CredentialService,
 		private router: Router,
+		private helpTexts: HelpTexts,
+		private patterns: Patterns,
 		private credentialBeanService: CredentialBeanService
 	) {
 		this.institutionCode = '';
@@ -42,11 +49,14 @@ export class BankFormComponent implements OnInit {
 			securityCode: null,
 			username: null
 		};
+		this.usernameErrorMessage = '';
+		this.passwordErrorMessage = '';
 	}
 
 	ngOnInit() {
 		this.activated.params.subscribe((params: Params) => {
 			this.institutionCode = params['bankCode'];
+			this.settingTexts();
 			this.showvideoBBVA();
 		});
 		this.initProcess();
@@ -64,7 +74,10 @@ export class BankFormComponent implements OnInit {
 	getFields() {
 		this.field.findAllFieldsByInstitution(this.institutionCode).subscribe((res) => {
 			res.body.forEach((fieldBank: InstitutionFieldInterface) => {
-				this.institutionField.push(fieldBank);
+				if (fieldBank.name !== 'sec_code') {
+					this.getErrorMessage(fieldBank);
+					this.institutionField.push(fieldBank);
+				}
 			});
 			res.body.length > 0 ? (this.showSpinner = false) : null;
 			this.openBBVAModal();
@@ -96,6 +109,21 @@ export class BankFormComponent implements OnInit {
 			}
 		});
 		return currentInstitution;
+	}
+
+	getPattern(field: InstitutionFieldInterface): string {
+		let pattern = this.patterns.getPattern(field, this.institutionCode);
+		return pattern;
+	}
+
+	getErrorMessage(field: InstitutionFieldInterface) {
+		field.name == 'username'
+			? (this.usernameErrorMessage = this.patterns.getErrorMessage(field, this.institutionCode))
+			: (this.passwordErrorMessage = this.patterns.getErrorMessage(field, this.institutionCode));
+	}
+
+	settingTexts() {
+		this.helpText = this.helpTexts.getText(this.institutionCode);
 	}
 
 	showvideoBBVA() {
