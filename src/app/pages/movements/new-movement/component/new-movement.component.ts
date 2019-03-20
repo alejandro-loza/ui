@@ -15,7 +15,6 @@ import { ToastService } from '@services/toast/toast.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 
-import { ToastInterface } from '@interfaces/toast.interface';
 import { NewMovement } from '@interfaces/newMovement.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
@@ -33,7 +32,6 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   @Output() createMovementStatus: EventEmitter<boolean>;
 
   newMovement: NewMovement;
-  toastInterface: ToastInterface;
   date: Date;
 
   formatDate: string;
@@ -54,7 +52,6 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     };
     this.date = new Date();
     this.createMovementStatus = new EventEmitter();
-    this.toastInterface = { code: null, message: null };
     this.reset = false;
   }
 
@@ -85,18 +82,17 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     this.movementService.createMovement(form.value).subscribe(
       res => {
         this.createMovementStatus.emit(true);
-        this.toastInterface.code = res.status;
+        this.toastService.setCode = res.status;
       },
       err => {
-        this.toastInterface.code = err.status;
+        this.toastService.setCode = err.status;
         if (err.status === 401) {
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.toastGeneral();
           this.createMovement(form);
         }
         if (err.status === 500) {
-          this.toastInterface.message =
-            '¡Ha ocurrido un error al obterner tus movimiento!';
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.toastGeneral();
         }
       },
       () => {
@@ -107,8 +103,8 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
         this.reset = true;
         this.resetInputs();
         form.resetForm();
-        this.toastInterface.message = 'Se creó su movimiento exitosamente';
-        this.toastService.toastGeneral(this.toastInterface);
+        this.toastService.setMessage = 'Se creó su movimiento exitosamente';
+        this.toastService.toastGeneral();
       }
     );
   }

@@ -9,7 +9,6 @@ import { ParamsMovementsService } from '@services/movements/params-movements/par
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
-import { ToastInterface } from '@interfaces/toast.interface';
 import { Category } from '@interfaces/category.interface';
 
 import { fromEvent, interval, Subscription } from 'rxjs';
@@ -26,7 +25,6 @@ export class MovementsComponent implements OnInit, OnDestroy {
   paramsMovements: ParamsMovements;
   movementList: Movement[];
   categoryList: Category[];
-  toast: ToastInterface;
   scrollResult: Subscription;
 
   status: boolean;
@@ -60,7 +58,6 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.statusMovements = false;
     this.auxSize = 0;
     this.movementList = [];
-    this.toast = {};
     this.paramsMovements = {
       charges: true,
       deep: true,
@@ -132,11 +129,10 @@ export class MovementsComponent implements OnInit, OnDestroy {
         });
       },
       err => {
-        this.toast.code = err.status;
+        this.toastService.setCode = err.status;
         if (err.status === 500) {
-          this.toast.message =
-            '¡Ha ocurrido un error al obterner tus movimiento!';
-          this.toastService.toastGeneral(this.toast);
+          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.toastGeneral();
         }
       },
       () => {
@@ -155,15 +151,14 @@ export class MovementsComponent implements OnInit, OnDestroy {
         this.categoryList = res.body;
       },
       err => {
-        this.toast.code = err.status;
+        this.toastService.setCode = err.status;
         if (err.status === 401) {
-          this.toastService.toastGeneral(this.toast);
+          this.toastService.toastGeneral();
           this.getCategories();
         }
         if (err.status === 500) {
-          this.toast.message =
-            '¡Ha ocurrido un error al obterner tus movimiento!';
-          this.toastService.toastGeneral(this.toast);
+          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.toastGeneral();
         }
       }
     );
@@ -181,11 +176,9 @@ export class MovementsComponent implements OnInit, OnDestroy {
     // Se manda un toast y se remueve la función del scroll.
     if ( (this.auxSize < this.paramsMovements.maxMovements || this.movementService.getMovementList.length === 0) && this.showEmptyState === false ) {
       this.scrollResult.unsubscribe();
-      this.toast = {
-        code: 200,
-        message: 'Hemos cargamos todos tus movimientos'
-      };
-      this.toastService.toastGeneral(this.toast);
+      this.toastService.setCode = 200;
+      this.toastService.setMessage = 'Hemos cargamos todos tus movimientos';
+      this.toastService.toastGeneral();
       this.spinnerBoolean = true;
     }
     this.isLoading = false;
