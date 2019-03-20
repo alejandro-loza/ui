@@ -44,7 +44,7 @@ export class NavbarComponent implements OnInit, AfterContentInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterContentInit() {
     this.sideNavInit = new M.Sidenav(this.elemSidenav.nativeElement, {});

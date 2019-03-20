@@ -24,8 +24,6 @@ export class SaveMovementComponent implements OnInit, OnChanges {
   @Output() status: EventEmitter<boolean>;
   @Output() keyEnterPressed: EventEmitter<boolean>;
 
-  toastInterface: ToastInterface;
-
   constructor(
     private movementService: MovementsService,
     private toastService: ToastService,
@@ -33,7 +31,6 @@ export class SaveMovementComponent implements OnInit, OnChanges {
   ) {
     this.status = new EventEmitter();
     this.keyEnterPressed = new EventEmitter();
-    this.toastInterface = {};
   }
 
   ngOnInit() {}
@@ -59,29 +56,28 @@ export class SaveMovementComponent implements OnInit, OnChanges {
     }
     this.movementService.updateMovement(this.movement).subscribe(
       res => {
-        this.toastInterface.code = res.status;
+        this.toastService.setCode = res.status;
       },
       err => {
-        this.toastInterface.code = err.status;
+        this.toastService.setCode = err.status;
         if (err.status === 401) {
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.toastGeneral();
           this.updateMovement();
         }
         if (err.status === 404) {
-          this.toastInterface.message = 'No sé encontró tu movimiento';
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.setMessage = 'No sé encontró tu movimiento';
+          this.toastService.toastGeneral();
         }
         if (err.status === 500) {
-          this.toastInterface.message =
-            '¡Ha ocurrido un error al obterner tus movimiento!';
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.toastGeneral();
         }
       },
       () => {
         this.cleanerService.cleanBudgetsVariables();
         this.cleanerService.cleanDashboardVariables();
-        this.toastInterface.message = 'Se actualizó su movimiento exitosamente';
-        this.toastService.toastGeneral(this.toastInterface);
+        this.toastService.setMessage = 'Se actualizó su movimiento exitosamente';
+        this.toastService.toastGeneral();
         this.status.emit(true);
         this.keyEnterPressed.emit(false);
       }

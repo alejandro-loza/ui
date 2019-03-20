@@ -20,7 +20,6 @@ import { ToastInterface } from              '@interfaces/toast.interface';
 
 export class LoginComponent implements OnInit {
   private user: User;
-  private readonly toastInterface: ToastInterface;
   constructor(
     private router: Router,
     private renderer: Renderer2,
@@ -29,7 +28,6 @@ export class LoginComponent implements OnInit {
     private toastService: ToastService
   ) {
     this.user = { };
-    this.toastInterface = { };
   }
 
   ngOnInit() { }
@@ -43,18 +41,18 @@ export class LoginComponent implements OnInit {
     this.loginService.login( this.user ).subscribe(
       res => res,
       err => {
-        this.toastInterface.code = err.status;
+        this.toastService.setCode = err.status;
         if ( err.status === 0 ) {
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.toastGeneral();
         } else if ( err.status === 400 ) {
-          this.toastInterface.message = 'Te falto llenar un campo del formulario';
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.setMessage = 'Te falto llenar un campo del formulario';
+          this.toastService.toastGeneral();
         } else if ( err.status === 401 ) {
-          this.toastInterface.code = 4011;
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.setCode = 4011;
+          this.toastService.toastGeneral();
         } else if ( err.status === 500) {
-          this.toastInterface.message = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.setMessage = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
+          this.toastService.toastGeneral();
         }
         this.renderer.removeClass(document.getElementById('buttonElement'), 'disabled');
         this.renderer.removeAttribute(document.getElementById('buttonElement'), 'disabled');

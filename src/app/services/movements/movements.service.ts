@@ -16,17 +16,23 @@ import {isNullOrUndefined} from 'util';
 @Injectable()
 export class MovementsService {
   private url = `${environment.backendUrl}/users`;
-  movementsList: Movement[];
+  private  movement: Movement;
+  private movementsList: Movement[];
 
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
   ) { }
 
-  public get getMovementList(): Movement[] {
+  get getMovementList(): Movement[] {
     return this.movementsList;
   }
-
+  set setMovement(movement: Movement) {
+    this.movement = movement;
+  }
+  get getMovement(): Movement {
+    return this.movement;
+  }
   /**
    * @function allMovements Esta funcion lo que hace traer todos lo movimiento con los siguientes parametros
    *
