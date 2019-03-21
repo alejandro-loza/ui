@@ -7,6 +7,9 @@ import {UserIdleService} from 'angular-user-idle';
   styleUrls: ['./pages.component.css']
 })
 export class PagesComponent implements OnInit {
-  constructor( private  userIdleService: UserIdleService) { }
+  constructor(private  userIdleService: UserIdleService) {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
+}
