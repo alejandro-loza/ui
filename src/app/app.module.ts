@@ -3,13 +3,15 @@ import { BrowserModule } from               '@angular/platform-browser';
 import { BrowserAnimationsModule } from     '@angular/platform-browser/animations';
 import {HttpClientModule} from              '@angular/common/http';
 
+import { NgIdleKeepaliveModule } from "@ng-idle/keepalive";
+
 import { AuthGuard } from                   '@guards/auth/auth.guard';
 
 import { InterceptorProvider } from         '@security/interceptors.index';
 
 import { ConfigService } from               '@services/config/config.service';
 import { AuthService } from                 '@services/auth/auth.service';
-import {ToastService} from                  '@services/toast/toast.service';
+import { ToastService } from                  '@services/toast/toast.service';
 import { AccountService } from              '@services/account/account.service';
 
 import { SharedModule } from                '@shared/shared.module';
@@ -26,6 +28,7 @@ import { ConfigParamsService } from         '@params/config/config-params.servic
     BrowserAnimationsModule,
     HttpClientModule,
     SharedModule,
+    NgIdleKeepaliveModule.forRoot(),
     AppRoutes
   ],
   providers: [
