@@ -12,7 +12,7 @@ import { isNullOrUndefined } from 'util';
 })
 export class BudgetsComponent implements OnInit {
 	budgets: Budget[] = [];
-	showSpinner: boolean = true;
+	showSpinner: boolean;
 	currentAmountTotal: number = 0;
 	totalAmountTotal: number = 0;
 	percentageAmountTotal: number = 0;
@@ -33,6 +33,7 @@ export class BudgetsComponent implements OnInit {
 		private router: Router
 	) {
 		this.fillInformationForEmptyState();
+		this.showSpinner = true;
 	}
 
 	ngOnInit() {

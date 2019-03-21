@@ -1,33 +1,44 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  Renderer2,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {Movement} from '@interfaces/movement.interface';
-
-import * as M from 'materialize-css/dist/js/materialize';
-import {isNull, isUndefined} from 'util';
 import {Category} from '@interfaces/category.interface';
+
+import {isNull, isNullOrUndefined, isUndefined} from 'util';
+
 import {CategoriesService} from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
-import {MovementsService} from '@services/movements/movements.service';
+
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.css']
 })
-export class ItemListComponent implements OnInit, AfterViewInit {
+export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() movementList: Movement[];
   @Input() categoryList: Category[];
   @ViewChild('collapsible') collapsibleElement: ElementRef;
   private auxMovement: Movement;
   private instanceCollapsible: M.Collapsible;
   private collapsibleinit: M.Collapsible;
+  private firstStateMovement: Movement;
   private statusModal: boolean;
-  private indexMovement: number;
+  indexMovement: number;
   keyEnter: boolean;
   constructor(
     private renderer: Renderer2,
     private categoriesService: CategoriesService,
-    private categoriesBeanService: CategoriesBeanService,
-    private movementService: MovementsService
+    private categoriesBeanService: CategoriesBeanService
   ) {
     this.keyEnter = false;
     this.statusModal = false;
@@ -36,8 +47,15 @@ export class ItemListComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.renderer.listen('document','click', () => {
+    });
+  }
+
   ngAfterViewInit(): void {
-    this.collapsibleinit = new M.Collapsible( this.collapsibleElement.nativeElement, {} );
+    this.collapsibleinit = new M.Collapsible( this.collapsibleElement.nativeElement, {
+      onOpenStart: () => this.firstStateMovement= JSON.parse(JSON.stringify(this.auxMovement))
+    });
     this.instanceCollapsible = M.Collapsible.getInstance( this.collapsibleElement.nativeElement );
   }
 
@@ -88,17 +106,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   }
 
   collapsibleClose(index: number): void {
-
-    if ( this.auxMovement.customDescription === '' || this.auxMovement.customDescription === null ) {
-      this.auxMovement.customDescription = this.auxMovement.description;
-    }
-    if (isNull(this.auxMovement.customDate)) {
-      this.auxMovement.customDate = this.auxMovement.date;
-    }
-    if (isNull(this.auxMovement.amount)) {
-      this.auxMovement.amount = this.auxMovement.customAmount;
-    }
-    this.auxMovement.editAvailable = false;
+    this.movementList[index] = this.firstStateMovement;
+    this.movementList[index].editAvailable = false;
     this.instanceCollapsible.close(index);
     this.instanceCollapsible.destroy();
     this.keyEnter = false;

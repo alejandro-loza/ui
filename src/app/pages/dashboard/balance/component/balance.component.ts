@@ -89,8 +89,10 @@ export class BalanceComponent implements OnInit {
 		this.titleMonth = this.dataForBarChart[0].labels[index];
 		this.titleYear = this.dataForBarChart[0].year[index].toString();
 
-		let titleOfThePage = document.querySelector('.brand-logo');
-		titleOfThePage.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
+		let largeTitle = document.querySelector('#largeTitle');
+		let medTitle = document.querySelector('#medTitle');
+		largeTitle.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
+		medTitle.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
 	}
 
 	getDataStackedBar() {

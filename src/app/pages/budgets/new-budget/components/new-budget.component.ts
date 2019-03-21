@@ -29,26 +29,36 @@ export class NewBudgetComponent implements OnInit {
 
 	getCategoriesInfo() {
 		if (this.categoriesBeanService.getCategories().length === 0) {
-			this.categoriesService.getCategoriesInfo().subscribe((res) => {
-				this.categoriesList = res.body;
-				this.cleanCategoriesWithExistingBudgets();
-				this.showSpinner = false;
-			});
+			this.categoriesService.getCategoriesInfo().subscribe(
+				(res) => {
+					this.categoriesList = res.body;
+				},
+				(error) => {},
+				() => {
+					this.cleanCategories();
+					this.showSpinner = false;
+				}
+			);
 		} else {
 			this.categoriesList = this.categoriesBeanService.getCategories();
-			this.cleanCategoriesWithExistingBudgets();
+			this.cleanCategories();
 			this.showSpinner = false;
 		}
 	}
 
-	cleanCategoriesWithExistingBudgets() {
+	cleanCategories() {
 		this.budgets.forEach((budget) => {
 			for (let i = 0; i < this.categoriesList.length; i++) {
-				if (budget.name == this.categoriesList[i].name || this.categoriesList[i].name == 'Ingresos') {
+				if (budget.name == this.categoriesList[i].name) {
 					this.categoriesList.splice(i, 1);
 				}
 			}
 		});
+		for (let i = 0; i < this.categoriesList.length; i++) {
+			if (this.categoriesList[i].name == 'Ingresos') {
+				this.categoriesList.splice(i, 1);
+			}
+		}
 	}
 
 	selectCategory(category: Category) {

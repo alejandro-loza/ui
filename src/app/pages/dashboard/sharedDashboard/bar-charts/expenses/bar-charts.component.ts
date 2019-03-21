@@ -37,7 +37,7 @@ export class BarChartsComponent implements OnInit {
 			options: {
 				tooltips: {
 					callbacks: {
-						labels: function(tooltipItem) {
+						label: function(tooltipItem) {
 							return '$' + Math.round(Number(tooltipItem.yLabel));
 						}
 					}
@@ -46,7 +46,11 @@ export class BarChartsComponent implements OnInit {
 					yAxes: [
 						{
 							ticks: {
-								beginAtZero: true
+								beginAtZero: true,
+								fontSize: 14,
+								callback: function(label, index, labels) {
+									return '$' + String(label).replace(/(.)(?=(\d{3})+$)/g, '$1,');
+								}
 							}
 						}
 					],
