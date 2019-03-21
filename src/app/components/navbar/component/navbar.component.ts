@@ -13,8 +13,6 @@ import {ConfigService} from '@services/config/config.service';
 import { filter, map } from 'rxjs/operators';
 import { isNullOrUndefined } from 'util';
 
-import {DEFAULT_INTERRUPTSOURCES, Idle} from "@ng-idle/core";
-
 import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
@@ -28,7 +26,6 @@ export class NavbarComponent implements OnInit, AfterContentInit {
   @ViewChild('chevronRight') elemIcon: ElementRef;
   sideNavInit: M.Sidenav;
   sideNavInstance: M.Sidenav;
-  private timedOut = false;
   value: boolean;
   titlePage: string;
 
@@ -37,7 +34,6 @@ export class NavbarComponent implements OnInit, AfterContentInit {
     private router: Router,
     private cleanerService: CleanerService,
     private configService: ConfigService,
-    private idle: Idle,
   ) {
     this.getDataRoute().subscribe(res => {
       const textDOM = document.querySelector('.brand-logo');
@@ -47,18 +43,7 @@ export class NavbarComponent implements OnInit, AfterContentInit {
       }
     });
 
-    this.idle.setIdle(890); // sets an idle timeout of 890 seconds, for testing purposes.
-    this.idle.setTimeout(10); // sets a timeout period of 900 seconds. after 10 seconds of inactivity, the user will be considered timed out.
-    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES); // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
-    this.idle.onTimeout.subscribe(() => {
-      this.timedOut = true;
-    }, err => {
-      console.error(err);
-    }, () => {
-      this.logout();
-    });
-    this.idle.watch();
-    this.timedOut = false;
+
   }
 
   ngOnInit() { }
