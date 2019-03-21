@@ -22,6 +22,7 @@
       "@app/*": ["app/*"],
       "@access/*": ["app/access/*"],
       "@components/*": ["app/components/*"],
+      "@directives/*": ["app/directives/*"],
       "@env/*": ["environments/*"],
       "@guards/*": ["app/guards/*"],
       "@pages/*": ["app/pages/*"],
