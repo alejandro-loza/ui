@@ -12,11 +12,13 @@ export class ItemDetailComponent implements OnInit {
   @Input() keyEnter: boolean;
 
   @Output() status: EventEmitter<boolean>;
+  @Output() statusCancel: EventEmitter<boolean>;
   @Output() statusDelete: EventEmitter<boolean>;
   @Output() keyEnterPressed: EventEmitter<boolean>;
 
   constructor( ) {
     this.status = new EventEmitter();
+    this.statusCancel = new EventEmitter();
     this.statusDelete = new EventEmitter();
     this.keyEnterPressed = new EventEmitter();
   }

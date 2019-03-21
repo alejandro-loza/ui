@@ -13,16 +13,13 @@ import { ToastInterface } from '@interfaces/toast.interface';
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
-  private toastInterface: ToastInterface;
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
     private router: Router,
     private renderer: Renderer2,
     private toastService: ToastService
-  ) {
-    this.toastInterface = { code: null, message: null, classes: null };
-  }
+  ) { }
 
   ngOnInit() {
     this.renderer.addClass(document.querySelector('img.logo-white'), 'hide');
@@ -33,23 +30,18 @@ export class WelcomeComponent implements OnInit {
     this.authService.personalInfo().subscribe(
       res => {
         if (res.body.accountLocked === true) {
-          this.toastInterface = {
-            code: 401,
-            message:
-              'Tu cuenta fue bloqueada, por favor <br> ponte en contacto con nosotros'
-          };
-          this.toastService.toastGeneral(this.toastInterface);
-          this.router.navigate(['access/login']);
+          this.toastService.setCode = 401;
+          this.toastService.setMessage = 'Tu cuenta fue bloqueada, por favor <br> ponte en contacto con nosotros';
+          this.toastService.toastGeneral();
+          return this.router.navigate(['access/login']);
         }
       },
       err => {
-        this.toastInterface = {
-          code: 400,
-          message: 'Ocurrió un error al obtener tus datos'
-        };
-        this.toastService.toastGeneral(this.toastInterface);
+        this.toastService.setCode = err.status;
+        this.toastService.setMessage = 'Ocurrió un error al obtener tus datos';
+        this.toastService.toastGeneral();
         this.renderer.removeClass( document.querySelector('img.logo-white'), 'hide' );
-        this.router.navigate(['access/login']);
+        return this.router.navigate(['access/login']);
       },
       () => {
         this.getAccount();

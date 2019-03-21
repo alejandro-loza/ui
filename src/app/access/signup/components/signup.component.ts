@@ -6,8 +6,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastService } from '@services/toast/toast.service';
 import { SignupService } from '@services/signup/signup.service';
 
-import { ToastInterface } from '@interfaces/toast.interface';
-
 @Component({
 	selector: 'app-signup',
 	templateUrl: './signup.component.html',
@@ -16,7 +14,6 @@ import { ToastInterface } from '@interfaces/toast.interface';
 export class SignupComponent {
 	passwordValidate: boolean = true;
 	termsAccepted: boolean = true;
-	toastInterface: ToastInterface;
 	signupData: FormGroup = new FormGroup({
 		email: new FormControl(),
 		password: new FormControl(),
@@ -24,30 +21,25 @@ export class SignupComponent {
 		blog: new FormControl(true),
 		termsAndConditions: new FormControl({ value: true }, Validators.required)
 	});
-	showSpinner: boolean = false;
 
-	constructor(private signupService: SignupService, private router: Router, private toastService: ToastService) {
-		this.toastInterface = { code: null, message: null, classes: null };
-	}
+	constructor(private signupService: SignupService, private router: Router, private toastService: ToastService) {}
 
 	signup() {
-		this.showSpinner = true;
 		this.passwordMatch();
 		this.termsValidate();
 		if (this.passwordValidate && this.termsAccepted) {
 			this.signupService.signup(this.signupData.value).subscribe(
-				(res) => res,
+				(res) => {
+					this.toastService.setCode = res.status;
+				},
 				(error) => {
-					this.toastInterface.code = error.status;
-					this.toastInterface.message = error.error.message;
-					this.toastService.toastGeneral(this.toastInterface);
+					this.toastService.setCode = error.status;
+					this.toastService.setMessage = error.error.message;
+					this.toastService.toastGeneral();
 				},
 				() => {
-					this.toastInterface = {
-						code: 200,
-						message: '¡Se creó tu cuenta!'
-					};
-					this.toastService.toastGeneral(this.toastInterface);
+					this.toastService.setMessage = '¡Se creó tu cuenta!';
+					this.toastService.toastGeneral();
 					return this.router.navigate([ '/access/login' ]);
 				}
 			);

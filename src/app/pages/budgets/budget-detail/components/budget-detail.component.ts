@@ -5,7 +5,6 @@ import { CategoriesBeanService } from '@services/categories/categories-bean.serv
 import { ToastService } from '@services/toast/toast.service';
 import { BudgetsService } from '@services/budgets/budgets.service';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
-import { ToastInterface } from '@interfaces/toast.interface';
 import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
 
@@ -15,7 +14,6 @@ import { isNullOrUndefined } from 'util';
 	styleUrls: [ './budget-detail.component.css' ]
 })
 export class BudgetDetailComponent implements OnInit {
-	toast: ToastInterface = { code: null, message: null };
 	categoryName: string = '';
 	budget: Budget = null;
 	subBudgets: Budget[] = [];
@@ -124,30 +122,24 @@ export class BudgetDetailComponent implements OnInit {
 		return `${percentage}%`;
 	}
 
-	openDeleteModal() {
-		const INSTANCEMODAL = M.Modal.getInstance(this.elModal.nativeElement);
-		INSTANCEMODAL.open();
-	}
-
 	deleteButton() {
 		this.showSpinner = true;
 		setTimeout(() => {
 			this.budgetsService.deleteBudget(this.budget).subscribe(
 				(res) => {
-					this.toast.code = res.status;
-					if (res.status == 200) {
-						this.categoriesBeanService.setCategories([]);
-						this.toast.message = 'Presupuesto eliminado con éxito';
-						this.toastService.toastGeneral(this.toast);
-					}
+					this.toastService.setCode = res.status;
 				},
 				(error) => {
-					this.toast.message = 'Ocurrió un error, vuelve a intentarlo';
-					this.toastService.toastGeneral(this.toast);
+					this.toastService.setCode = error.status;
+					this.toastService.setMessage = 'Ocurrió un error, vuelve a intentarlo';
+					this.toastService.toastGeneral();
 				},
 				() => {
+					this.categoriesBeanService.setCategories([]);
 					this.budgetsBeanService.setLoadInformation(true);
-					this.router.navigateByUrl('/app/budgets');
+					this.toastService.setMessage = 'Presupuesto eliminado con éxito';
+					this.toastService.toastGeneral();
+					return this.router.navigateByUrl('/app/budgets');
 				}
 			);
 		}, 1000);

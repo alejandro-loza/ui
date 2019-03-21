@@ -8,7 +8,6 @@ import { Category } from '@app/interfaces/category.interface';
 import { isNullOrUndefined } from 'util';
 import { NewBudget, SubBudget } from '@interfaces/budgets/new-budget.interface';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
-import { ToastInterface } from '@interfaces/toast.interface';
 import { editBudgetAux } from '@app/interfaces/budgets/editBudgetAux.interface';
 
 @Component({
@@ -17,7 +16,6 @@ import { editBudgetAux } from '@app/interfaces/budgets/editBudgetAux.interface';
 	styleUrls: [ './shared-budget-component.component.css' ]
 })
 export class SharedBudgetComponentComponent implements OnInit {
-	toast: ToastInterface = {};
 	routeForBackButton: string;
 	editModeOfTheComponent: boolean;
 	ngModelAux: editBudgetAux[] = [];
@@ -86,60 +84,6 @@ export class SharedBudgetComponentComponent implements OnInit {
 		setTimeout(() => {
 			this.editModeOfTheComponent ? this.doDataProcessForPUT(form) : this.doDataProcessForPost(form);
 		}, 100);
-	}
-
-	// MTHOD FOR UPDATES TO BUDGETS
-	doDataProcessForPUT(form: NgForm) {
-		const ARRAY_WITH_KEYS = Object.keys(form.value);
-		ARRAY_WITH_KEYS.forEach((key) => {
-			if (typeof form.value[key] === 'number' && key !== this.categorySelected.name) {
-				this.fillSubBudgetsForEditOption(form, key);
-			}
-		});
-		this.modifyingBudget();
-		this.budgetsService.updateBudget(this.budgetToEdit).subscribe(
-			(res) => {
-				this.toast.code = res.status;
-				this.toast.message = 'Presupuesto modificado con éxito';
-				this.toastService.toastGeneral(this.toast);
-				this.budgetsBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/budgets');
-			},
-			(errors) => {
-				this.toast.message = 'Ocurrió un error, porfavor intenta de nuevo';
-				this.toastService.toastGeneral(this.toast);
-				this.budgetsBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/budgets');
-			}
-		);
-	}
-
-	// MTHOD FOR NEW BUDGETS
-	doDataProcessForPost(form: NgForm) {
-		const ARRAY_WITH_KEYS = Object.keys(form.value);
-		ARRAY_WITH_KEYS.forEach((key) => {
-			if (typeof form.value[key] == 'number' && key != this.categorySelected.name) {
-				this.fillSubBudgets(form, key);
-			}
-		});
-		this.makeNewBudgetStructure();
-		this.budgetsService.createBudget(this.budgetToCreate).subscribe(
-			(res) => {
-				this.toast.code = res.status;
-				this.toast.message = 'Presupuesto creado con éxito';
-			},
-			(error) => {
-				this.toast.code = error.error.status;
-				this.toast.message = 'Ocurrió un error, porfavor intenta de nuevo';
-				this.budgetsBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/budgets');
-			},
-			() => {
-				this.toastService.toastGeneral(this.toast);
-				this.budgetsBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/budgets');
-			}
-		);
 	}
 
 	modifyingBudget() {
@@ -241,5 +185,63 @@ export class SharedBudgetComponentComponent implements OnInit {
 		let height = 0;
 		height = document.getElementById('divToGetHeight').clientHeight;
 		return height;
+	}
+
+	// MTHOD FOR UPDATES TO BUDGETS
+	doDataProcessForPUT(form: NgForm) {
+		const ARRAY_WITH_KEYS = Object.keys(form.value);
+		ARRAY_WITH_KEYS.forEach((key) => {
+			if (typeof form.value[key] === 'number' && key !== this.categorySelected.name) {
+				this.fillSubBudgetsForEditOption(form, key);
+			}
+		});
+		this.modifyingBudget();
+		this.budgetsService.updateBudget(this.budgetToEdit).subscribe(
+			(res) => {
+				this.toastService.setCode = res.status;
+			},
+			(errors) => {
+				this.toastService.setCode = errors.status;
+				this.toastService.setMessage = 'Ocurrió un error, porfavor intenta de nuevo';
+				this.toastService.toastGeneral();
+				this.budgetsBeanService.setLoadInformation(true);
+				return this.router.navigateByUrl('/app/budgets');
+			},
+			() => {
+				this.toastService.setMessage = 'Presupuesto modificado con éxito';
+				this.toastService.toastGeneral();
+				this.budgetsBeanService.setLoadInformation(true);
+				return this.router.navigateByUrl('/app/budgets');
+			}
+		);
+	}
+
+	// MTHOD FOR NEW BUDGETS
+	doDataProcessForPost(form: NgForm) {
+		const ARRAY_WITH_KEYS = Object.keys(form.value);
+		ARRAY_WITH_KEYS.forEach((key) => {
+			if (typeof form.value[key] === 'number' && key !== this.categorySelected.name) {
+				this.fillSubBudgets(form, key);
+			}
+		});
+		this.makeNewBudgetStructure();
+		this.budgetsService.createBudget(this.budgetToCreate).subscribe(
+			(res) => {
+				this.toastService.setCode = res.status;
+			},
+			(error) => {
+				this.toastService.setCode = error.error.status;
+				this.toastService.setMessage = 'Ocurrió un error, porfavor intenta de nuevo';
+				this.toastService.toastGeneral();
+				this.budgetsBeanService.setLoadInformation(true);
+				return this.router.navigateByUrl('/app/budgets');
+			},
+			() => {
+				this.budgetsBeanService.setLoadInformation(true);
+				this.toastService.setMessage = 'Presupuesto creado con éxito';
+				this.toastService.toastGeneral();
+				return this.router.navigateByUrl('/app/budgets');
+			}
+		);
 	}
 }

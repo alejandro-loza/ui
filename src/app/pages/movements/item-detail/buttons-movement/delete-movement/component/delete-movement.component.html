@@ -1,3 +1,16 @@
-<button class="btn btn-small btn-flat btn-delete" (click)="deleteMovement()">
-    <i class="mdi mdi-24px mdi-delete"></i>
-  </button>
+<button class="btn btn-small btn-flat btn-delete modal-trigger" data-target="deleteMovementModal">
+  <i class="mdi mdi-24px mdi-delete"></i>
+</button>
+
+<div id="deleteMovementModal" class="modal customModal center-align" #deleteModal>
+  <div class="modal-content">
+    <h4>¿ Quieres eliminar este movimiento?</h4>
+    <h6> Está acción no se podrá revertir</h6>
+  </div>
+  <div class="modal-footer">
+    <div class="center-align">
+    <button type="button" class="modal-close btn btn-flat btn-cancel">Cancelar</button>
+    <button type="button" class="modal-close btn btn-flat btn-delete" (keyup.enter)="deleteMovement()" (click)="deleteMovement()">Eliminar</button>
+    </div>
+  </div>
+</div>

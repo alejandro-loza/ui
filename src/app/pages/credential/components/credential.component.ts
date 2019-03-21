@@ -9,8 +9,8 @@ import { InteractiveFieldService } from '@services/interactive-field/interactive
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
-import * as M from 'materialize-css/dist/js/materialize';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
 	selector: 'app-credential',
@@ -78,6 +78,7 @@ export class CredentialComponent implements OnInit {
 		if (this.credentialBean.getLoadInformation()) {
 			this.getAllCredentials();
 			this.loadInstitutions();
+			this.getAccounts();
 		} else {
 			this.loadInformationFromRam();
 		}
@@ -103,6 +104,7 @@ export class CredentialComponent implements OnInit {
 	// Main methods for getting data
 
 	getAllCredentials() {
+		console.log('AllCredentials');
 		this.clearMemory();
 		this.credentialService.getAllCredentials().subscribe(
 			(res) => {
@@ -119,7 +121,6 @@ export class CredentialComponent implements OnInit {
 					this.automaticSync(element);
 				});
 				this.credentialBean.setCredentials(this.credentials);
-				this.getAccounts();
 				this.showSpinner = false;
 			}
 		);
@@ -128,6 +129,7 @@ export class CredentialComponent implements OnInit {
 	// Checking status of credencials methods
 
 	checkStatusOfCredential(credential: CredentialInterface) {
+		console.log('check', credential.status);
 		if (credential.status === 'ACTIVE') {
 			this.validateStatusFinished = true;
 		} else if (credential.status === 'INVALID') {
@@ -145,6 +147,7 @@ export class CredentialComponent implements OnInit {
 	getNewInfoCredential(credentialId: string) {
 		this.credentialService.getCredential(credentialId).subscribe((res) => {
 			this.credentialInProcess = res.body;
+			console.log('newInfo', res.body.status);
 			if (this.credentialInProcess.status === 'VALIDATE') {
 				this.validateStatusFinished = false;
 				setTimeout(() => {
@@ -152,18 +155,35 @@ export class CredentialComponent implements OnInit {
 				}, 1500);
 			} else if (this.credentialInProcess.status === 'ACTIVE') {
 				this.successMessage = '¡Tus datos han sido sincronizados';
+				this.validateStatusFinished = true;
 				this.showGoMovementsButton = true;
-				this.clearMemory();
-				this.getAllCredentials();
+				this.loadNewCredentials();
 			} else if (this.credentialInProcess.status === 'TOKEN') {
 				this.validateStatusFinished = false;
 				this.modalProcessForInteractive(res.body);
 			} else if (this.credentialInProcess.status === 'INVALID') {
 				this.validateStatusFinished = true;
-				this.clearMemory();
-				this.getAllCredentials();
+				this.loadNewCredentials();
 			}
 		});
+	}
+
+	// Method for each conclusion of sync
+	loadNewCredentials() {
+		this.clearMemory();
+		this.credentialService.getAllCredentials().subscribe(
+			(res) => {
+				this.credentials = res.body.data;
+			},
+			(error) => {
+				this.errorWithCredentials = true;
+			},
+			() => {
+				console.log('newCredentialslength', this.credentials.length);
+				this.credentialBean.setCredentials(this.credentials);
+				this.getAccounts();
+			}
+		);
 	}
 
 	// AUTOMATIC SYNC PROCESS FOR EACH CREDENTIAL
@@ -234,6 +254,7 @@ export class CredentialComponent implements OnInit {
 
 	clearMemory() {
 		this.credentials = [];
+		this.accounts = [];
 		this.debitAccounts = [];
 		this.creditAccounts = [];
 		this.debitBalance = 0;

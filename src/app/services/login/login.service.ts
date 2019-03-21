@@ -18,14 +18,11 @@ import {catchError, map} from                'rxjs/operators';
 })
 export class LoginService {
   private url = `${environment.backendUrl}/login`;
-  private readonly toast: ToastInterface;
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService,
     private toastService: ToastService
-  ) {
-    this.toast = {};
-  }
+  ) { }
 
   login( user: User ): Observable<HttpResponse<JWT>> {
     return this.httpClient
@@ -40,18 +37,18 @@ export class LoginService {
           return res;
         }),
         catchError( (error: HttpErrorResponse) => {
-          this.toast.code = error.status;
+          this.toastService.setCode = error.status;
           if ( error.status === 0 ) {
-            this.toastService.toastGeneral(this.toast);
+            this.toastService.toastGeneral();
           } else if ( error.status === 400 ) {
-            this.toast.message = 'Te falto llenar un campo del formulario';
-            this.toastService.toastGeneral(this.toast);
+            this.toastService.setMessage = 'Te falto llenar un campo del formulario';
+            this.toastService.toastGeneral();
           } else if ( error.status === 401 ) {
-            this.toast.code = 4011;
-            this.toastService.toastGeneral(this.toast);
+            this.toastService.setCode = 4011;
+            this.toastService.toastGeneral();
           } else if ( error.status === 500) {
-            this.toast.message = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
-            this.toastService.toastGeneral(this.toast);
+            this.toastService.setMessage = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
+            this.toastService.toastGeneral();
           }
           return throwError(error);
         })
