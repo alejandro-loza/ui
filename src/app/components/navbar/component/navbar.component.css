@@ -73,6 +73,9 @@
   .sidenav {
     margin-top: 63px;
   }
+  .brand-logo {
+    padding-left: 128px;
+  }
 }
 
 @media only screen and (min-width: 993px) {
