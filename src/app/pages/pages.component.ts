@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UserIdleService} from 'angular-user-idle';
 
 @Component({
   selector: 'app-pages',
@@ -6,8 +7,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pages.component.css']
 })
 export class PagesComponent implements OnInit {
-  constructor( ) { }
+  constructor( private  userIdleService: UserIdleService) { }
 
   ngOnInit() { }
-
-}
