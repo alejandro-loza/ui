@@ -1,13 +1,14 @@
 <ul class="collapsible" #collapsible>
   <ng-template ngFor [ngForOf]="movementList" [ngForTrackBy]="trackByFn" let-movement let-i="index">
     <li class="fast fadeIn list" id="{{movement.id}}" (keyup.esc)="collapsibleClose(i)" (keyup.enter)="keyEnter=true">
-      <!-- Encabezado del collapsible -->
+      <!-- Collapsible Header -->
       <div class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}" (click)="collapsibleFunction(i)">
-        <app-item class="item" [categoryList]="categoryList" [movement]="movementList[i]" (movementEdited)="movement=$event" (statusModal)="statusModal=$event" (statusCategory)="statusCategory($event)">
+        <app-item class="item" [categoryList]="categoryList" [movement]="movement" (statusModal)="statusModal=$event" (statusCategory)="statusCategory($event)">
         </app-item>
       </div>
+      <!-- Collapsible Body -->
       <div class="collapsible-body">
-        <app-item-detail class="item-detail" [movement]="movement" [keyEnter]="keyEnter" (statusCancel)="collapsibleClose(i)" (status)="collapsibleClose(i)" (statusDelete)="deleteMovement(i)">
+        <app-item-detail class="item-detail" [movement]="movement" [auxMovement]="firstStateMovement" [keyEnter]="keyEnter" (statusCancel)="collapsibleCancel(i)" (status)="collapsibleClose(i)" (statusDelete)="deleteMovement(i)">
         </app-item-detail>
       </div>
     </li>

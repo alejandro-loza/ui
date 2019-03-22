@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
-import { ToastInterface } from '@interfaces/toast.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { isNull } from 'util';
@@ -20,6 +19,7 @@ import { isNull } from 'util';
 })
 export class SaveMovementComponent implements OnInit, OnChanges {
   @Input() movement: Movement;
+  @Input() auxMovement: Movement;
   @Input() keyEnter: boolean;
   @Output() status: EventEmitter<boolean>;
   @Output() keyEnterPressed: EventEmitter<boolean>;
@@ -42,17 +42,14 @@ export class SaveMovementComponent implements OnInit, OnChanges {
   }
 
   updateMovement() {
-    if (
-      this.movement.customDescription === '' ||
-      this.movement.customDescription === null
-    ) {
-      this.movement.customDescription = this.movement.description;
+    if ( this.movement.customDescription === '' || this.movement.customDescription === null ) {
+      this.movement.customDescription = this.auxMovement.description;
     }
     if (isNull(this.movement.customDate)) {
-      this.movement.customDate = this.movement.date;
+      this.movement.customDate = this.auxMovement.customDate;
     }
-    if (isNull(this.movement.customAmount)) {
-      this.movement.customAmount = this.movement.amount;
+    if (isNull(this.movement.amount)) {
+      this.movement.amount = this.auxMovement.amount;
     }
     this.movementService.updateMovement(this.movement).subscribe(
       res => {
