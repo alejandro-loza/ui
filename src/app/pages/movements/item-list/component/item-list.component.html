@@ -8,7 +8,7 @@
       </div>
       <!-- Collapsible Body -->
       <div class="collapsible-body">
-        <app-item-detail class="item-detail" [movement]="movement" [keyEnter]="keyEnter" (statusCancel)="collapsibleClose(i)" (status)="collapsibleClose(i)" (statusDelete)="deleteMovement(i)">
+        <app-item-detail class="item-detail" [movement]="movement" [auxMovement]="firstStateMovement" [keyEnter]="keyEnter" (statusCancel)="collapsibleCancel(i)" (status)="collapsibleClose(i)" (statusDelete)="deleteMovement(i)">
         </app-item-detail>
       </div>
     </li>

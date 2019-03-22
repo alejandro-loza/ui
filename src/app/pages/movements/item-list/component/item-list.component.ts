@@ -105,9 +105,25 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     this.auxMovement.editAvailable = true;
   }
 
-  collapsibleClose(index: number): void {
+  collapsibleCancel(index: number): void {
     this.movementList[index] = this.firstStateMovement;
     this.movementList[index].editAvailable = false;
+    this.instanceCollapsible.close(index);
+    this.instanceCollapsible.destroy();
+    this.keyEnter = false;
+  }
+
+  collapsibleClose(index: number): void {
+    if ( this.auxMovement.customDescription === '' || this.auxMovement.customDescription === null ) {
+      this.auxMovement.customDescription = this.firstStateMovement.customDescription;
+    }
+    if (isNull(this.auxMovement.customDate)) {
+      this.auxMovement.customDate = this.firstStateMovement.date;
+    }
+    if (isNull(this.auxMovement.amount)) {
+      this.auxMovement.amount = this.firstStateMovement.amount;
+    }
+    this.auxMovement.editAvailable = false;
     this.instanceCollapsible.close(index);
     this.instanceCollapsible.destroy();
     this.keyEnter = false;

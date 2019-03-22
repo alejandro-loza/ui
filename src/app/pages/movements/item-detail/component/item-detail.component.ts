@@ -8,6 +8,7 @@ import { Movement } from '@interfaces/movement.interface';
 })
 export class ItemDetailComponent implements OnInit {
   @Input() movement: Movement;
+  @Input() auxMovement: Movement;
   @Input() statusUpdate: boolean;
   @Input() keyEnter: boolean;
 
