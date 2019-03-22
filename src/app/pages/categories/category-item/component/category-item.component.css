@@ -11,14 +11,15 @@
 
 .categorySize {
 	padding: 1px;
-	height: 11rem;
+	height: 9rem;
+	border-radius: 5px;
 }
 
 img.imageCategory {
-	width: 50%;
+	width: 40%;
 	margin: 10px 0px -10px;
 }
 
 p.category-name {
-	margin: 12px;
+	margin: 7px;
 }

@@ -1,17 +1,22 @@
+h5 {
+	margin-top: 0px;
+}
+
 .modal-footer {
-  text-align: left;
+	text-align: left;
+	padding-left: 25px;
 }
 
 .btn-back {
-  border: 1px solid rgba(66, 66, 66, .7);
-  background-color: transparent;
-  transition: background-color .3s ease-in-out;
+	border: 1px solid rgba(66, 66, 66, .7);
+	background-color: transparent;
+	transition: background-color .3s ease-in-out;
 }
 
 .btn-back:hover {
-  background-color: #424242;
-  color: #fafafa;
+	background-color: #424242;
+	color: #fafafa;
 }
 .btn-back[disabled] {
-  border: 1px solid rgba(66, 66, 66, .3);
+	border: 1px solid rgba(66, 66, 66, .3);
 }

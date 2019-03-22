@@ -2,10 +2,10 @@
 <div id="{{ modalTrigger }}" class="modal" #modalCateogry>
     <div class="modal-content center-align black-text">
         <ng-container *ngIf="backCategories !== true; else elseTemplate">
-            <h4>Selecciona una categoría: </h4>
+            <h5>Selecciona una categoría: </h5>
         </ng-container>
         <ng-template #elseTemplate>
-            <h4>Selecciona una subcategoría: </h4>
+            <h5>Selecciona una subcategoría: </h5>
         </ng-template>
         <app-categories-list [categoryList]="categoryList" [flagCategory]="backCategories" (filterStatus)="backCategories=$event" (statusCategory)="statusCategory.emit($event)">
         </app-categories-list>
