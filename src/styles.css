@@ -14,6 +14,11 @@ html {
 	--widthAmout: 50%;
 }
 
+.showPassword {
+  margin-top: 3%;
+  color: black;
+}
+
 .spinnerPosition {
 	position: relative;
 	top: 15rem;

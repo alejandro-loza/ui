@@ -7,6 +7,7 @@ import { RegisterLoginButtonModule } from            '@components/register-login
 import { LoginRoutes } from                          './login.route';
 
 import { LoginComponent } from                       './components/login.component';
+import {PasswordDirective} from                      '@directives/password/password.directive';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { LoginComponent } from                       './components/login.compone
     LoginRoutes
   ],
   declarations: [
-    LoginComponent
+    LoginComponent,
+    PasswordDirective
   ],
   providers: []
 })

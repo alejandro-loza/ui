@@ -19,7 +19,6 @@ import { AppRoutes } from                   '@app/app.route';
 
 import { AppComponent } from                '@app/app.component';
 import { ConfigParamsService } from         '@params/config/config-params.service';
-import { PasswordDirective } from './directives/password/password.directive';
 
 
 @NgModule({
