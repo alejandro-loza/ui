@@ -1,12 +1,11 @@
+nav ul a:hover {
+	background-color: rgba(0, 0, 0, 0);
+}
 .sidenav {
 	padding-top: 15px;
 }
 .nav-wrapper {
 	margin: 0px 1%;
-}
-
-nav ul a:hover {
-	background-color: rgba(0, 0, 0, 0);
 }
 
 .pages-list {
@@ -15,8 +14,8 @@ nav ul a:hover {
 	font-size: 16px;
 }
 
-#iconLi {
-	height: 64px;
+.icon-link{
+  padding-left: 0 ;
 }
 
 .icon-list {
@@ -45,6 +44,10 @@ nav ul a:hover {
 #finerio-logo {
 	height: 55px;
 	margin-top: 5px;
+}
+
+#iconLi {
+	height: 64px;
 }
 
 @media only screen and (max-width: 600px) {
