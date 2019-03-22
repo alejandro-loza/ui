@@ -19,6 +19,11 @@ html {
   color: black;
 }
 
+[type="checkbox"].filled-in:checked+span.showPassword:not(.lever):after{
+  background-color: var(--orange-color);
+  border-color: var(--orange-color);
+}
+
 .spinnerPosition {
 	position: relative;
 	top: 15rem;
