@@ -1,20 +1,24 @@
 .col.l2 {
-  padding: 0;
-  margin: 1px;
-  width: 16.466666667%;
-  height: auto;
+	padding: 0;
+	margin: 1px;
+	width: 16.466666667%;
+	height: auto;
+}
+
+.pt-10 {
+	padding-top: 10px;
 }
 
 .categorySize {
-  padding: 1px;
-  height: 11rem;
+	padding: 1px;
+	height: 11rem;
 }
 
 img.imageCategory {
-  width: 50%;
-  margin: 10px 0px -10px;
+	width: 50%;
+	margin: 10px 0px -10px;
 }
 
 p.category-name {
-  margin: 12px;
+	margin: 12px;
 }

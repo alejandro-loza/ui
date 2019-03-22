@@ -1,84 +1,87 @@
 .sidenav {
-  padding-top: 15px;
+	padding-top: 15px;
 }
 .nav-wrapper {
-  margin: 0px 1%;
+	margin: 0px 1%;
+}
+
+nav ul a:hover {
+	background-color: rgba(0, 0, 0, 0);
 }
 
 .pages-list {
-  height: 64px;
-  line-height: 64px;
-  font-size: 16px;
+	height: 64px;
+	line-height: 64px;
+	font-size: 16px;
 }
 
-#iconLi{
-  height: 64px;
+#iconLi {
+	height: 64px;
 }
 
 .icon-list {
-  line-height: 64px !important;
-  margin-right: 40px;
-  margin-left: 16px;
+	line-height: 64px !important;
+	margin-right: 40px;
+	margin-left: 16px;
 }
 
 .user-list {
-  background-color: rgb(29, 56, 86);
+	background-color: rgb(29, 56, 86);
 }
 
 .user-list:hover {
-  background-color: rgb(26, 49, 77)
+	background-color: rgb(26, 49, 77);
 }
 
 .collapsible-accordion .mdi-chevron-up {
-  margin-left: 87px;
-  transition: .3s transform ease-in-out;
+	margin-left: 87px;
+	transition: .3s transform ease-in-out;
 }
 
 .collapsible-accordion .active .mdi-chevron-up {
-  transform: rotate(180deg);
+	transform: rotate(180deg);
 }
 
 #finerio-logo {
-  height: 55px;
-  margin-top: 5px;
+	height: 55px;
+	margin-top: 5px;
 }
 
 @media only screen and (max-width: 600px) {
-  #finerio-logo {
-    height: 51px;
-    margin-top: 7px;
-  }
+	#finerio-logo {
+		height: 51px;
+		margin-top: 7px;
+	}
 }
 
 @media only screen and (max-width: 992px) {
-  .nav-wrapper {
-    padding-left: 0;
-  }
-  .pages-list {
-    line-height: 56px;
-  }
-  .icon-list {
-    line-height: 56px;
-  }
-  .brand-logo.center {
-    left: 0%;
-    margin: 0px var(--paddingPages);
-  }
+	.nav-wrapper {
+		padding-left: 0;
+	}
+	.pages-list {
+		line-height: 56px;
+	}
+	.icon-list {
+		line-height: 56px;
+	}
+	.brand-logo.center {
+		left: 0%;
+		margin: 0px var(--paddingPages);
+	}
 }
 
 @media only screen and (min-width: 993px) {
-  #slide-out {
-    width: 128px;
-  }
-  .sidenav {
-    margin-top: 63px;
-  }
+	#slide-out {
+		width: 128px;
+	}
+	.sidenav {
+		margin-top: 63px;
+	}
 }
 
 @media only screen and (min-width: 993px) {
-  #finerio-logo {
-    height: 51px;
-    margin-top: 7px;
-  }
+	#finerio-logo {
+		height: 51px;
+		margin-top: 7px;
+	}
 }
-

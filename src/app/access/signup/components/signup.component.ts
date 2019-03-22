@@ -21,6 +21,7 @@ export class SignupComponent {
 		blog: new FormControl(true),
 		termsAndConditions: new FormControl({ value: true }, Validators.required)
 	});
+	showSpinner: boolean = false;
 
 	constructor(private signupService: SignupService, private router: Router, private toastService: ToastService) {}
 
@@ -28,6 +29,7 @@ export class SignupComponent {
 		this.passwordMatch();
 		this.termsValidate();
 		if (this.passwordValidate && this.termsAccepted) {
+			this.showSpinner = true;
 			this.signupService.signup(this.signupData.value).subscribe(
 				(res) => {
 					this.toastService.setCode = res.status;

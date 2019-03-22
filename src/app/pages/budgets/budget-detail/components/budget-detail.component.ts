@@ -122,6 +122,11 @@ export class BudgetDetailComponent implements OnInit {
 		return `${percentage}%`;
 	}
 
+	openDeleteModal() {
+		const INSTANCEMODAL = M.Modal.getInstance(this.elModal.nativeElement);
+		INSTANCEMODAL.open();
+	}
+
 	deleteButton() {
 		this.showSpinner = true;
 		setTimeout(() => {

@@ -104,7 +104,6 @@ export class CredentialComponent implements OnInit {
 	// Main methods for getting data
 
 	getAllCredentials() {
-		console.log('AllCredentials');
 		this.clearMemory();
 		this.credentialService.getAllCredentials().subscribe(
 			(res) => {
@@ -129,7 +128,6 @@ export class CredentialComponent implements OnInit {
 	// Checking status of credencials methods
 
 	checkStatusOfCredential(credential: CredentialInterface) {
-		console.log('check', credential.status);
 		if (credential.status === 'ACTIVE') {
 			this.validateStatusFinished = true;
 		} else if (credential.status === 'INVALID') {
@@ -147,7 +145,6 @@ export class CredentialComponent implements OnInit {
 	getNewInfoCredential(credentialId: string) {
 		this.credentialService.getCredential(credentialId).subscribe((res) => {
 			this.credentialInProcess = res.body;
-			console.log('newInfo', res.body.status);
 			if (this.credentialInProcess.status === 'VALIDATE') {
 				this.validateStatusFinished = false;
 				setTimeout(() => {
@@ -179,7 +176,6 @@ export class CredentialComponent implements OnInit {
 				this.errorWithCredentials = true;
 			},
 			() => {
-				console.log('newCredentialslength', this.credentials.length);
 				this.credentialBean.setCredentials(this.credentials);
 				this.getAccounts();
 			}
@@ -207,9 +203,7 @@ export class CredentialComponent implements OnInit {
 		this.accounts = [];
 		this.credentialBean.setAccounts([]);
 		this.accountService.getAccounts().subscribe((res) => {
-			res.body.data.forEach((element: AccountInterface) => {
-				this.accounts.push(element);
-			});
+			this.accounts = res.body.data;
 			this.credentialBean.setAccounts(this.accounts);
 			this.getBalance(this.accounts);
 			this.accountsTable(this.accounts);
@@ -308,7 +302,7 @@ export class CredentialComponent implements OnInit {
 			setTimeout(() => {
 				const initModal = new M.Modal(this.interactiveModal.nativeElement);
 				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
-			}, 150);
+			}, 300);
 		}
 	}
 
