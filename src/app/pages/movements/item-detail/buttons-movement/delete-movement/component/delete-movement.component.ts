@@ -52,7 +52,7 @@ export class DeleteMovementComponent implements OnInit, AfterViewInit {
       () => {
         this.cleanerService.cleanDashboardVariables();
         this.cleanerService.cleanBudgetsVariables();
-        this.toastService.setMessage =  'Se borró su movimiento exitosamente';
+        this.toastService.setMessage =  'Se borró tu movimiento exitosamente';
         this.toastService.toastGeneral();
       }
     );

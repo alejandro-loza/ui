@@ -73,7 +73,7 @@ export class SaveMovementComponent implements OnInit, OnChanges {
       () => {
         this.cleanerService.cleanBudgetsVariables();
         this.cleanerService.cleanDashboardVariables();
-        this.toastService.setMessage = 'Se actualizó su movimiento exitosamente';
+        this.toastService.setMessage = 'Se actualizó tu movimiento exitosamente';
         this.toastService.toastGeneral();
         this.status.emit(true);
         this.keyEnterPressed.emit(false);
