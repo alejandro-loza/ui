@@ -111,9 +111,9 @@ export class BudgetDetailComponent implements OnInit {
 	}
 
 	getIconImage(): String {
-		let url: String = '/assets/media/img/categories/color/';
+		let url: String = 'https://cdn.finerio.mx/categories/web/color';
 		let catId: string = this.budget.category.id;
-		return `${url}color_${catId}.png`;
+		return `${url}/${catId}.svg`;
 	}
 
 	getWidthPercentage(subBudget: Budget): string {
