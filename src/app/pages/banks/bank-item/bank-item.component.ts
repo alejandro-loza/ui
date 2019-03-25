@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 import * as M from 'materialize-css/dist/js/materialize';
@@ -10,6 +10,8 @@ import * as M from 'materialize-css/dist/js/materialize';
 })
 export class BankItemComponent implements OnInit {
 	@Input() institution: InstitutionInterface;
+	@Output() bankOutOfService: EventEmitter<boolean> = new EventEmitter();
+
 	@ViewChild('tooltip') elementTooltip: ElementRef;
 
 	constructor(private route: Router) {}
@@ -31,6 +33,8 @@ export class BankItemComponent implements OnInit {
 
 		if (institution.status === 'ACTIVE') {
 			this.route.navigateByUrl('/app/banks/' + institution.code);
+		} else {
+			this.bankOutOfService.emit(true);
 		}
 	}
 }

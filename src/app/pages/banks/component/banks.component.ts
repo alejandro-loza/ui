@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InstitutionInterface } from '@interfaces/institution.interface';
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
 	selector: 'app-banks',
@@ -10,6 +11,7 @@ import { InstitutionInterface } from '@interfaces/institution.interface';
 })
 export class BanksComponent implements OnInit {
 	institutions: InstitutionInterface[];
+	@ViewChild('modal') elModal: ElementRef;
 
 	constructor(private intitutionService: InstitutionService, private credentialBeanService: CredentialBeanService) {
 		this.institutions = [];
@@ -17,6 +19,15 @@ export class BanksComponent implements OnInit {
 
 	ngOnInit() {
 		this.getInstitutions();
+	}
+
+	ngAfterViewInit() {
+		const modal = new M.Modal(this.elModal.nativeElement);
+	}
+
+	openModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
+		instanceModal.open();
 	}
 
 	getInstitutions() {

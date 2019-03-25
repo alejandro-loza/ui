@@ -15,7 +15,7 @@
     <div class="col s12">
       <ul>
         <li *ngFor="let institution of institutions">
-          <app-bank-item [institution]="institution"></app-bank-item>
+          <app-bank-item (bankOutOfService)="openModal()" [institution]="institution"></app-bank-item>
         </li>
       </ul>
     </div>
@@ -39,6 +39,17 @@
     <div class="col s12 m4 center">
       <img width="50%" class="pt-30" src="assets/media/img/colaborators/google2.png" alt="GOOGLE">
     </div>
+  </div>
+</div>
+
+<!-- DELETE ACCOUNT MODAL -->
+<div id="modal" class="modal" #modal>
+  <div class="modal-content center">
+    <h5>Aviso</h5>
+    <p>Banco fuera de funcionamiento por mantenimiento.</p>
+  </div>
+  <div class="modal-footer">
+    <a class="modal-close btn-flat">Aceptar</a>
   </div>
 </div>
 
