@@ -5,7 +5,7 @@
   <div class="left-align">
     <button type="button" class="btn category-container truncate" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}">
       <i class="mdi mdi-24px left">
-        <ng-container *ngIf="category.user; else noCategoryUser">
+        <ng-container *ngIf="category.user || category.userId ; else noCategoryUser">
             <img
             (click)="setCategory(category)"
             src="https://cdn.finerio.mx/categories/web/finerio-icon.svg"
