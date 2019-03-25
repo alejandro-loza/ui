@@ -7,35 +7,49 @@ import { ConfigService } from '@services/config/config.service';
 import { Observable } from 'rxjs';
 
 interface ValidateToken {
-	email: string;
+  email: string;
 }
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class PasswordService {
-	private url: string = `${environment.newBackendUrl}/password`;
+  private url = `${environment.newBackendUrl}/password`;
 
-	constructor(private http: HttpClient, private configService: ConfigService) {}
+  constructor(private http: HttpClient, private configService: ConfigService) {}
 
-	createForgotPasswordToken(email: string): Observable<HttpResponse<PasswordResponse>> {
-		return this.http.get<PasswordResponse>(`${this.url}/createForgotPasswordToken?email=${email}`, {
-			observe: 'response',
-			headers: this.configService.getJsonHeaders()
-		});
-	}
+  createForgotPasswordToken(
+    email: string
+  ): Observable<HttpResponse<PasswordResponse>> {
+    return this.http.get<PasswordResponse>(
+      `${this.url}/createForgotPasswordToken?email=${email}`,
+      {
+        observe: 'response',
+        headers: this.configService.getHeaders
+      }
+    );
+  }
 
-	validateToken(token: string): Observable<HttpResponse<ValidateToken>> {
-		return this.http.get<ValidateToken>(`${this.url}/getEmailAndValidateToken?token=${token}`, {
-			observe: 'response',
-			headers: this.configService.getJsonHeaders()
-		});
-	}
+  validateToken(token: string): Observable<HttpResponse<ValidateToken>> {
+    return this.http.get<ValidateToken>(
+      `${this.url}/getEmailAndValidateToken?token=${token}`,
+      {
+        observe: 'response',
+        headers: this.configService.getHeaders
+      }
+    );
+  }
 
-	resetPassword(passwordReset: PasswordResetRequest): Observable<HttpResponse<PasswordResetRequest>> {
-		return this.http.post<PasswordResetRequest>(`${this.url}/setNewPassword`, passwordReset, {
-			observe: 'response',
-			headers: this.configService.getJsonHeaders()
-		});
-	}
+  resetPassword(
+    passwordReset: PasswordResetRequest
+  ): Observable<HttpResponse<PasswordResetRequest>> {
+    return this.http.post<PasswordResetRequest>(
+      `${this.url}/setNewPassword`,
+      passwordReset,
+      {
+        observe: 'response',
+        headers: this.configService.getHeaders
+      }
+    );
+  }
 }

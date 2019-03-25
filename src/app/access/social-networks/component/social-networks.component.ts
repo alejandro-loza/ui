@@ -1,12 +1,10 @@
-import { Component, OnInit } from                   '@angular/core';
-import { ActivatedRoute, Params, Router } from      '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
-import { ConfigService  } from                      '@services/config/config.service';
-import { ToastService  } from                       '@services/toast/toast.service';
-import { AuthService } from                         '@services/auth/auth.service';
+import {ConfigService} from '@services/config/config.service';
+import {ToastService} from '@services/toast/toast.service';
+import {AuthService} from '@services/auth/auth.service';
 
-import { ToastInterface } from                      '@interfaces/toast.interface';
-2
 @Component({
   selector: 'app-social-networks',
   templateUrl: './social-networks.component.html',
@@ -16,7 +14,6 @@ export class SocialNetworksComponent implements OnInit {
   private token: string;
   private type: string;
   private code: string;
-  private toast: ToastInterface;
 
   from: string;
 
@@ -26,9 +23,7 @@ export class SocialNetworksComponent implements OnInit {
     private configService: ConfigService,
     private authService: AuthService,
     private toastService: ToastService
-  ) {
-    this.toast = {};
-  }
+  ) { }
 
   ngOnInit() {
     this.getParamsFromSocialNetwork();
@@ -47,11 +42,9 @@ export class SocialNetworksComponent implements OnInit {
         }
       },
       err => {
-        this.toast = {
-          code: 500,
-          message: 'Hubo un error al obtener tus datos'
-        };
-        this.toastService.toastGeneral(this.toast);
+        this.toastService.setCode = 500;
+        this.toastService.setMessage = 'Hubo un error al obtener tus datos';
+        this.toastService.toastGeneral();
         this.router.navigate(['/access/login']);
       }
     );
@@ -59,7 +52,6 @@ export class SocialNetworksComponent implements OnInit {
 
   loadUser() {
     this.configService.setAccessToken = this.token;
-    sessionStorage.setItem('access-token', this.token);
     this.router.navigate(['/access/welcome']);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { AccountService } from '@services/account/account.service';
@@ -6,13 +6,11 @@ import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
-import { ToastService } from '@services/toast/toast.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
-import * as M from 'materialize-css/dist/js/materialize';
-import { ToastInterface } from '@interfaces/toast.interface';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
 	selector: 'app-credential',
@@ -20,27 +18,30 @@ import { InstitutionInterface } from '@app/interfaces/institution.interface';
 	styleUrls: [ './credential.component.css' ],
 	providers: [ InstitutionService, InteractiveFieldService ]
 })
-export class CredentialComponent implements OnInit, AfterViewInit {
+export class CredentialComponent implements OnInit {
 	accounts: AccountInterface[];
 	credentials: CredentialInterface[];
 	institutions: InstitutionInterface[] = [];
-	toast: ToastInterface;
 
 	creditBalance: number;
 	debitBalance: number;
 	interactiveFields = [];
 	totalBalance: number;
-	userId: string;
 
 	debitAccounts: AccountInterface[] = [];
 	creditAccounts: AccountInterface[] = [];
 
 	// Aux properties
-	processCompleteForSpinner: boolean;
-	validateStatusFinished: boolean;
-	loaderMessagge: string;
+	showSpinner: boolean;
 	credentialInProcess: CredentialInterface;
 	errorWithCredentials: boolean = false;
+	showGoMovementsButton = false;
+
+	// USER MESSAGES
+	loaderMessagge: string;
+	successMessage: string;
+	failMessage: string;
+	validateStatusFinished: boolean;
 
 	// EMPTY STATE
 	imgName: string;
@@ -59,18 +60,17 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		private institutionService: InstitutionService,
 		private interactiveService: InteractiveFieldService,
 		private cleanerService: CleanerService,
-		private toastService: ToastService,
 		private credentialBean: CredentialBeanService
 	) {
 		this.credentials = [];
 		this.debitBalance = 0;
 		this.creditBalance = 0;
 		this.totalBalance = 0;
-		this.userId = sessionStorage.getItem('id-user');
-		this.processCompleteForSpinner = false;
+		this.showSpinner = true;
 		this.validateStatusFinished = true;
-		this.loaderMessagge = '';
-		this.toast = { classes: null, code: null, message: null };
+		this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede durar unos minutos.';
+		this.successMessage = '';
+		this.failMessage = '';
 		this.fillInformationForEmptyState();
 	}
 
@@ -78,17 +78,9 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		if (this.credentialBean.getLoadInformation()) {
 			this.getAllCredentials();
 			this.loadInstitutions();
+			this.getAccounts();
 		} else {
 			this.loadInformationFromRam();
-		}
-	}
-
-	ngAfterViewInit() {
-		if (!this.showEmptyState) {
-			setTimeout(() => {
-				const initModal = new M.Modal(this.interactiveModal.nativeElement);
-				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
-			}, 100);
 		}
 	}
 
@@ -96,69 +88,131 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.credentials = this.credentialBean.getCredentials();
 		this.accounts = this.credentialBean.getAccounts();
 		this.institutions = this.credentialBean.getInstitutions();
+		// =====================
 		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
+			this.automaticSync(credential);
 		});
+		// ============================
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
-		this.automaticSync(this.credentials);
 		this.emptyStateProcess();
-		this.processCompleteForSpinner = true;
+		this.showSpinner = false;
+		this.initMaterialize();
 	}
 
 	// Main methods for getting data
 
 	getAllCredentials() {
-		this.credentials = [];
-		this.debitAccounts = [];
-		this.creditAccounts = [];
-		this.credentialBean.setCredentials([]);
-
+		this.clearMemory();
 		this.credentialService.getAllCredentials().subscribe(
 			(res) => {
-				res.body.data.forEach((element: CredentialInterface) => {
-					this.credentials.push(element);
-					this.checkStatusOfCredential(element);
-				});
-				this.emptyStateProcess();
-				this.processCompleteForSpinner = true;
-				this.automaticSync(this.credentials);
+				this.credentials = res.body.data;
 			},
 			(error) => {
 				this.errorWithCredentials = true;
+				this.showSpinner = false;
+			},
+			() => {
+				this.emptyStateProcess();
+				this.credentials.forEach((element: CredentialInterface) => {
+					this.checkStatusOfCredential(element);
+					this.automaticSync(element);
+				});
+				this.credentialBean.setCredentials(this.credentials);
+				this.showSpinner = false;
 			}
 		);
-		this.credentialBean.setCredentials(this.credentials);
-		this.getAccounts();
+	}
+
+	// Checking status of credencials methods
+
+	checkStatusOfCredential(credential: CredentialInterface) {
+		if (credential.status === 'ACTIVE') {
+			this.validateStatusFinished = true;
+		} else if (credential.status === 'INVALID') {
+			this.failMessage = '¡Hubo un problema con alguna(s) de tus cuentas bancarias!';
+		} else if (credential.status === 'VALIDATE') {
+			this.cleanerService.cleanDashboardVariables();
+			this.cleanerService.cleanBudgetsVariables();
+			this.getNewInfoCredential(credential.id);
+		} else if (credential.status === 'TOKEN') {
+			this.loaderMessagge = 'Solicitando información adicional...';
+			this.getNewInfoCredential(credential.id);
+		}
+	}
+
+	getNewInfoCredential(credentialId: string) {
+		this.credentialService.getCredential(credentialId).subscribe((res) => {
+			this.credentialInProcess = res.body;
+			if (this.credentialInProcess.status === 'VALIDATE') {
+				this.validateStatusFinished = false;
+				setTimeout(() => {
+					this.checkStatusOfCredential(res.body);
+				}, 1500);
+			} else if (this.credentialInProcess.status === 'ACTIVE') {
+				this.successMessage = '¡Tus datos han sido sincronizados';
+				this.validateStatusFinished = true;
+				this.showGoMovementsButton = true;
+				this.loadNewCredentials();
+			} else if (this.credentialInProcess.status === 'TOKEN') {
+				this.validateStatusFinished = false;
+				this.modalProcessForInteractive(res.body);
+			} else if (this.credentialInProcess.status === 'INVALID') {
+				this.validateStatusFinished = true;
+				this.loadNewCredentials();
+			}
+		});
+	}
+
+	// Method for each conclusion of sync
+	loadNewCredentials() {
+		this.clearMemory();
+		this.credentialService.getAllCredentials().subscribe(
+			(res) => {
+				this.credentials = res.body.data;
+			},
+			(error) => {
+				this.errorWithCredentials = true;
+			},
+			() => {
+				this.credentialBean.setCredentials(this.credentials);
+				this.getAccounts();
+			}
+		);
+	}
+
+	// AUTOMATIC SYNC PROCESS FOR EACH CREDENTIAL
+	automaticSync(credential: CredentialInterface) {
+		let currentMoment = new Date();
+		if (credential.institution.code != 'BBVA') {
+			if (credential.status == 'ACTIVE') {
+				let dateObj = new Date(credential.lastUpdated);
+				let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+				if (diff >= 8) {
+					this.validateStatusFinished = false;
+					this.credentialService.updateCredential(credential).subscribe((res) => {
+						this.checkStatusOfCredential(res.body);
+					});
+				}
+			}
+		}
 	}
 
 	getAccounts() {
 		this.accounts = [];
-		this.accountService.getAccounts(this.userId).subscribe((res) => {
-			res.body.data.forEach((element: AccountInterface) => {
-				this.accounts.push(element);
-			});
+		this.credentialBean.setAccounts([]);
+		this.accountService.getAccounts().subscribe((res) => {
+			this.accounts = res.body.data;
 			this.credentialBean.setAccounts(this.accounts);
 			this.getBalance(this.accounts);
 			this.accountsTable(this.accounts);
 			this.credentialBean.setLoadInformation(false);
+			this.initMaterialize();
 		});
 	}
 
-	automaticSync(credentials: CredentialInterface[]) {
-		let currentMoment = new Date();
-		credentials.forEach((credential) => {
-			let dateObj = new Date(credential.lastUpdated);
-			let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
-			if (diff >= 8) {
-				this.validateStatusFinished = false;
-				this.credentialService.updateCredential(credential).subscribe((res) => {
-					this.checkStatusOfCredential(res.body);
-				});
-			}
-		});
-	}
-
+	// Information for the accounts collapsible
 	accountsTable(accounts: AccountInterface[]) {
 		accounts.forEach((account) => {
 			if (account.type == 'Crédito') {
@@ -177,6 +231,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		});
 	}
 
+	// Amount for each type of credential
 	getBalance(accountsArray: AccountInterface[]) {
 		this.debitBalance = 0;
 		this.creditBalance = 0;
@@ -191,50 +246,15 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		this.totalBalance = this.debitBalance + this.creditBalance;
 	}
 
-	// Checking status of credencials methods
-
-	checkStatusOfCredential(credential: CredentialInterface) {
-		if (credential.status === 'ACTIVE') {
-			this.validateStatusFinished = true;
-		} else if (credential.status === 'INVALID') {
-			this.loaderMessagge = '¡Ha ocurrido algo con tu credencial ' + credential.institution.name + '!';
-		} else if (credential.status === 'VALIDATE') {
-			this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede durar unos minutos.';
-			this.cleanerService.cleanDashboardVariables();
-			this.cleanerService.cleanBudgetsVariables();
-			this.getNewInfoCredential(credential.id);
-		} else if (credential.status === 'TOKEN') {
-			this.loaderMessagge = 'Solicitando información adicional para ' + credential.institution.name + '...';
-			this.getNewInfoCredential(credential.id);
-		}
-		this.toast.message = this.loaderMessagge;
-	}
-
-	getNewInfoCredential(credentialId: string) {
-		this.credentialService.getCredential(credentialId).subscribe((res) => {
-			this.credentialInProcess = res.body;
-			this.toast.code = res.status;
-			if (this.credentialInProcess.status === 'VALIDATE') {
-				this.validateStatusFinished = false;
-				setTimeout(() => {
-					this.checkStatusOfCredential(res.body);
-				}, 1000);
-			} else if (this.credentialInProcess.status === 'ACTIVE') {
-				this.loaderMessagge =
-					'¡Tus datos han sido sincronizados en ' + this.credentialInProcess.institution.name + '!';
-				this.toast.message = this.loaderMessagge;
-				this.getAllCredentials();
-			} else if (this.credentialInProcess.status === 'TOKEN') {
-				this.validateStatusFinished = false;
-				//  Modal process
-				this.modalProcessForInteractive(res.body);
-			} else if (this.credentialInProcess.status === 'INVALID') {
-				this.loaderMessagge =
-					'¡Ha ocurrido algo con tu credencial ' + this.credentialInProcess.institution.name + '!';
-				this.validateStatusFinished = false;
-				this.getAllCredentials();
-			}
-		});
+	clearMemory() {
+		this.credentials = [];
+		this.accounts = [];
+		this.debitAccounts = [];
+		this.creditAccounts = [];
+		this.debitBalance = 0;
+		this.creditBalance = 0;
+		this.totalBalance = 0;
+		this.credentialBean.setCredentials([]);
 	}
 
 	emptyStateProcess() {
@@ -275,6 +295,15 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 		const instanceModal = M.Modal.getInstance(this.interactiveModal.nativeElement);
 		instanceModal.open();
 		this.getInteractiveFields(credential);
+	}
+
+	initMaterialize() {
+		if (!this.showEmptyState) {
+			setTimeout(() => {
+				const initModal = new M.Modal(this.interactiveModal.nativeElement);
+				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
+			}, 300);
+		}
 	}
 
 	// Loading Institutions in Session Storage

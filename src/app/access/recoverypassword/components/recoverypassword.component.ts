@@ -5,7 +5,6 @@ import { PasswordResetRequest } from '@interfaces/passwordResetRequest.interface
 import { PasswordService } from '@services/password/password.service';
 import * as M from 'materialize-css/dist/js/materialize';
 import { ToastService } from '@services/toast/toast.service';
-import { ToastInterface } from '@interfaces/toast.interface';
 
 @Component({
   selector: 'app-recoverypassword',
@@ -22,8 +21,6 @@ export class RecoverypasswordComponent implements OnInit {
   invalidToken: boolean = false;
   failedProcess: boolean = false;
 
-  toastInterface: ToastInterface;
-
   constructor(
     private router: Router,
     private activated: ActivatedRoute,
@@ -36,7 +33,6 @@ export class RecoverypasswordComponent implements OnInit {
       passwordConfirmation: null,
       token: null
     };
-    this.toastInterface = { classes: null, code: null, message: null };
   }
 
   ngOnInit() {
@@ -64,29 +60,26 @@ export class RecoverypasswordComponent implements OnInit {
     ) {
       this.passwordService.resetPassword(this.passwordReset).subscribe(
         res => {
-          M.toast({
-            html: '<span>Contraseña reestablecida</span>',
-            displayLength: 2500,
-            classes: 'green'
-          });
-          this.router.navigate(['/access']);
+          this.toastService.setCode = res.status;
         },
         err => {
-          console.error(err);
-          this.toastInterface.code = err.status;
+          this.toastService.setCode = err.status;
           if (err.status === 0) {
-            this.toastService.toastGeneral(this.toastInterface);
+            this.toastService.toastGeneral();
           }
           if (err.status === 400) {
-            this.toastInterface.message = 'Por favor llena los campos';
-            this.toastService.toastGeneral(this.toastInterface);
+            this.toastService.setMessage = 'Por favor llena los campos';
+            this.toastService.toastGeneral();
           }
           if (err.status === 500) {
-            this.toastInterface.message =
-              'Ocurrió un error al querer cambiar tu contraseña';
-            this.toastService.toastGeneral(this.toastInterface);
+            this.toastService.setMessage = 'Ocurrió un error al querer cambiar tu contraseña';
+            this.toastService.toastGeneral();
           }
           this.failedProcess = true;
+        }, () => {
+          this.toastService.setMessage = 'Contraseña reestablecida';
+          this.toastService.toastGeneral();
+          return this.router.navigate(['/access']);
         }
       );
     } else {

@@ -32,9 +32,12 @@ export class CategoriesComponent implements OnInit {
 	getCategoriesFromAPI() {
 		this.categoriesService.getCategoriesInfo().subscribe((res) => {
 			this.categoriesList = res.body;
+			this.categoriesBeanService.setCategories(this.categoriesList);
 			this.filterCategories();
 		});
 	}
+
+	selectCategory(category: Category) {}
 
 	filterCategories() {
 		this.categoriesList.forEach((category) => {

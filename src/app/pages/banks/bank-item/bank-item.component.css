@@ -1,0 +1,41 @@
+.intitutionCol {
+	padding-top: 10px;
+}
+
+.imgBanks {
+	padding: 10px;
+	border: 1px solid #aaa;
+	border-radius: 5px;
+	max-height: 140px;
+	max-width: 140px;
+	cursor: pointer;
+	background-color: white;
+}
+
+.imgBanks:hover {
+	border: 0px;
+}
+
+@media only screen and (max-width: 1400px) {
+	.imgBanks {
+		padding: 10px;
+		border: 1px solid #aaa;
+		border-radius: 5px;
+		max-height: 100px;
+		max-width: 100px;
+		cursor: pointer;
+		background-color: white;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.imgBanks {
+		padding: 10px;
+		border: 1px solid #aaa;
+		border-radius: 5px;
+		max-height: 125px;
+		max-width: 125px;
+		cursor: pointer;
+		background-color: white;
+	}
+}

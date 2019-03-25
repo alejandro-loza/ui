@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CategoriesService } from '@services/categories/categories.service';
+import { ToastService } from '@services/toast/toast.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { WorkshopCategory } from '@app/interfaces/categories/workshopCategory.interface';
 
@@ -29,12 +30,13 @@ export class CategoryWorkshopComponent implements OnInit {
 		private activatedRoute: ActivatedRoute,
 		private categoriesService: CategoriesService,
 		private router: Router,
+		private toastService: ToastService,
 		private categoriesBeanService: CategoriesBeanService
 	) {}
 
 	ngOnInit() {
 		this.getComponentMode();
-		this.generateColors();
+		this.generateRandomColors();
 		this.generateTextColors();
 	}
 
@@ -44,19 +46,20 @@ export class CategoryWorkshopComponent implements OnInit {
 		this.categoryStruct.textColor = this.colorTextDemoChip;
 
 		this.categoriesService.createCategoryOrSubcategory(this.categoryStruct).subscribe((res) => {
-			if (res.status == 200) {
+			this.toastService.setCode = res.status;
+		}),
+			(error) => {
+				this.toastService.setCode = error.status;
+				this.toastService.setMessage = 'Algo salió mal, inténtalo más tarde';
+				this.toastService.toastGeneral();
+				return this.router.navigateByUrl('/app/categories');
+			},
+			() => {
+				this.toastService.setMessage = '¡Categoría creada con éxito!';
+				this.toastService.toastGeneral();
 				this.categoriesBeanService.setCategories([]);
-				this.router.navigateByUrl('/app/categories');
-			}
-		});
-	}
-
-	selectedBackground(color: string) {
-		this.colorForDemoChip = color;
-	}
-
-	selectedTextColor(color: string) {
-		this.colorTextDemoChip = color;
+				return this.router.navigateByUrl('/app/categories');
+			};
 	}
 
 	getComponentMode() {
@@ -65,7 +68,7 @@ export class CategoryWorkshopComponent implements OnInit {
 		});
 	}
 
-	generateColors() {
+	generateRandomColors() {
 		for (let i = 0; i <= 10; i++) {
 			let color = '#000000'.replace(/0/g, function() {
 				return (~~(Math.random() * 16)).toString(16);
@@ -87,11 +90,19 @@ export class CategoryWorkshopComponent implements OnInit {
 
 	reloadColors() {
 		this.colorForCategory = [];
-		this.generateColors();
+		this.generateRandomColors();
 	}
 
 	reloadTextColors() {
 		this.colorText = [];
 		this.generateTextColors();
+	}
+
+	selectedBackground(color: string) {
+		this.colorForDemoChip = color;
+	}
+
+	selectedTextColor(color: string) {
+		this.colorTextDemoChip = color;
 	}
 }

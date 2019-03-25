@@ -31,13 +31,13 @@
             <div class="col s6 center-align">
               Del:
               <div class="input-field inline">
-                <app-date [type]="'text'" [name]="startDate" [date]="startDate" (valueDate)="startDate=$event"></app-date>
+                <app-date [type]="'text'" [name]="startDate" [date]="startDate" (valueDate)="changedStartDate($event)"></app-date>
               </div>
             </div>
             <div class="col s6">
               Al:
               <div class="input-field inline">
-                  <app-date [type]="'text'" [name]="startDate" [date]="endDate" (valueDate)="endDate=$event"></app-date>
+                  <app-date [type]="'text'" [name]="startDate" [date]="endDate" (valueDate)="changedEndDate($event)"></app-date>
               </div>
             </div>
           </div>

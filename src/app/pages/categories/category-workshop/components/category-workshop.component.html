@@ -21,7 +21,7 @@
                         class="btn-floating btn-small"></button>
                 </li>
               </ul>
-              <button (click)="generateColors()"  *ngIf="colorForCategory.length < 40"
+              <button (click)="generateRandomColors()"  *ngIf="colorForCategory.length < 40"
                     class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">add</i></button>
 
               <button (click)="reloadColors()"  *ngIf="colorForCategory.length > 40"

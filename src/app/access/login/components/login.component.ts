@@ -1,12 +1,15 @@
-import { Component,
-         OnInit, } from                     '@angular/core';
+import {
+  Component,
+  OnInit, Renderer2,
+} from '@angular/core';
 import { NgForm } from                      '@angular/forms';
 import { Router } from                      '@angular/router';
 
-import { AuthService } from                 '@services/auth/auth.service';
+import { LoginService } from                '@services/login/login.service';
 import { ToastService } from                '@services/toast/toast.service';
+import { ConfigService } from               '@services/config/config.service';
 
-import { LoginInterface } from                        '@interfaces/authLogin.interface';
+import { User } from                        '@interfaces/user.interface';
 import { ToastInterface } from              '@interfaces/toast.interface';
 
 @Component({
@@ -16,47 +19,53 @@ import { ToastInterface } from              '@interfaces/toast.interface';
 })
 
 export class LoginComponent implements OnInit {
-  errorMsg: string;
-  user: LoginInterface;
-  toastInterface: ToastInterface;
+  private user: User;
   constructor(
     private router: Router,
-    private authService: AuthService,
+    private renderer: Renderer2,
+    private loginService: LoginService,
+    private configService: ConfigService,
     private toastService: ToastService
-    ) {
-      this.errorMsg =  '';
-      this.user = { email: '', password: '' };
-      this.toastInterface = { code: 0, message: null, classes: null };
+  ) {
+    this.user = { };
   }
 
   ngOnInit() { }
 
-  ingresar(loginForm: NgForm) {
-    this.user.email = loginForm.value.email,
+  login(loginForm: NgForm) {
+    this.user.email = loginForm.value.email;
     this.user.password = loginForm.value.password;
+    this.renderer.addClass(document.getElementById('buttonElement'), 'disabled');
+    this.renderer.setAttribute(document.getElementById('buttonElement'), 'disabled', 'disabled');
 
-    this.authService.login( this.user ).subscribe(
-      res => {
-        this.router.navigate(['/access/welcome']);
-      }, err => {
-        this.toastInterface.code = err.status;
+    this.loginService.login( this.user ).subscribe(
+      res => res,
+      err => {
+        this.toastService.setCode = err.status;
         if ( err.status === 0 ) {
-          this.toastService.toastGeneral(this.toastInterface);
+          this.toastService.toastGeneral();
+        } else if ( err.status === 400 ) {
+          this.toastService.setMessage = 'Te falto llenar un campo del formulario';
+          this.toastService.toastGeneral();
+        } else if ( err.status === 401 ) {
+          this.toastService.setCode = 4011;
+          this.toastService.toastGeneral();
+        } else if ( err.status === 500) {
+          this.toastService.setMessage = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
+          this.toastService.toastGeneral();
         }
-        if ( err.status === 400 ) {
-          this.toastInterface.message = 'Te falto llenar un campo del formulario';
-          this.toastService.toastGeneral(this.toastInterface);
-        }
-        if ( err.status === 401 ) {
-          this.toastInterface.code = 4011;
-          this.toastService.toastGeneral(this.toastInterface);
-        }
-        if ( err.status === 500) {
-          this.toastInterface.message = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
-          this.toastService.toastGeneral(this.toastInterface);
-        }
+        this.renderer.removeClass(document.getElementById('buttonElement'), 'disabled');
+        this.renderer.removeAttribute(document.getElementById('buttonElement'), 'disabled');
+
+      },
+      () => {
+        loginForm.reset();
+        return this.router.navigate(['/access/welcome']);
       }
     );
-    loginForm.reset();
+    this.renderer.removeClass(document.getElementById('Inputemail'), 'valid');
+    this.renderer.removeClass(document.getElementById('Inputemail'), 'invalid');
+    this.renderer.removeClass(document.getElementById('Inputpassword'), 'invalid');
+    this.renderer.removeClass(document.getElementById('Inputpassword'), 'invalid');
   }
 }

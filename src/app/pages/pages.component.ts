@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
-import { AuthService } from '@services/auth/auth.service';
-import { ToastService } from '@services/toast/toast.service';
-import { ConfigService } from '@services/config/config.service';
-
-import { ToastInterface } from '@interfaces/toast.interface';
+import {DEFAULT_INTERRUPTSOURCES, Idle} from "@ng-idle/core";
+import {CleanerService} from "@services/cleaner/cleaner.service";
+import {ConfigService} from "@services/config/config.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-pages',
@@ -12,43 +10,29 @@ import { ToastInterface } from '@interfaces/toast.interface';
   styleUrls: ['./pages.component.css']
 })
 export class PagesComponent implements OnInit {
-  toastInterface: ToastInterface;
   constructor(
-    private authService: AuthService,
+    private cleanerService: CleanerService,
     private configService: ConfigService,
-    private toastService: ToastService
+    private router: Router,
+    private idle: Idle,
   ) {
-    this.toastInterface = {
-      code: null,
-      message: null,
-      classes: null
-    };
-  }
+    // sets an idle timeout of 5 seconds, for testing purposes.
+    idle.setIdle(1);
+    // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
+    idle.setTimeout(899);
+    // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-  ngOnInit() {
-    this.personalInfo();
+    idle.onTimeout.subscribe(() => {
+      this.cleanerService.cleanAllVariables();
+      this.configService.resetVariable();
+      return this.router.navigate(['/access/login']);
+    });
+    this.reset();
   }
+  ngOnInit() { }
 
-  personalInfo() {
-    this.authService.personalInfo().subscribe(
-      res => {
-        this.toastInterface.code = res.status;
-      },
-      err => {
-        this.toastInterface.code = err.status;
-        if (err.status === 0) {
-          this.toastService.toastGeneral(this.toastInterface);
-        }
-        if (err.status === 401) {
-          this.toastService.toastGeneral(this.toastInterface);
-          this.personalInfo();
-        }
-        if (err.status === 500) {
-          this.toastInterface.message =
-            'Ocurrió un error al obtener tu información';
-          this.toastService.toastGeneral(this.toastInterface);
-        }
-      }
-    );
+  reset() {
+    this.idle.watch();
   }
 }

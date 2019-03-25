@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class EmptyStateService {
-	private showEmptyState: boolean = false;
+  private showEmptyState: boolean = false;
 
-	constructor() {}
+  constructor() {}
 
-	public setShowEmptyState(data: boolean) {
-		this.showEmptyState = data;
-	}
+  public setShowEmptyState(data: boolean) {
+    this.showEmptyState = data;
+  }
 
-	public getShowEmptyState(): boolean {
-		return this.showEmptyState;
-	}
+  public getShowEmptyState(): boolean {
+    return this.showEmptyState;
+  }
 }

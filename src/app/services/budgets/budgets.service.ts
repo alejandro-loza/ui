@@ -3,56 +3,67 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { ConfigService } from '@services/config/config.service';
 import { Observable } from 'rxjs';
-import { Budget } from '@app/interfaces/budgets/budget.interface';
+import { Budget } from '@interfaces/budgets/budget.interface';
 import { NewBudget } from '@interfaces/budgets/new-budget.interface';
 import { Response } from '@interfaces/response.interface';
+import { ConfigParamsService } from '@params/config/config-params.service';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class BudgetsService {
 	private url: string;
-
-	constructor(private http: HttpClient, private configService: ConfigService) {}
+	constructor(
+		private http: HttpClient,
+		private configService: ConfigService,
+		private configParams: ConfigParamsService
+	) {}
 
 	getAllBudgets(): Observable<HttpResponse<Response<Budget>>> {
-		this.url = `${environment.backendUrl}/users/${sessionStorage.getItem('id-user')}/budgets/current?deep=true`;
+		const id = this.configService.getUser.id;
+		this.url = `${environment.backendUrl}/users/${id}/budgets/current`;
 		return this.http.get<Response<Budget>>(this.url, {
 			observe: 'response',
-			headers: this.configService.getJsonHeaders()
+			headers: this.configService.getHeaders,
+			params: this.configParams.getConfigParams
 		});
 	}
 
 	createBudget(budget: NewBudget): Observable<HttpResponse<Response<Budget>>> {
-		this.url = `${environment.backendUrl}/budgets/undefined/replace?deep=true`;
+		budget.user = this.configService.getUser;
+		this.url = `${environment.backendUrl}/budgets/undefined/replace`;
 		return this.http.put<Response<Budget>>(this.url, budget, {
 			observe: 'response',
-			headers: this.configService.getJsonHeaders()
+			headers: this.configService.getHeaders,
+			params: this.configParams.getConfigParams
 		});
 	}
 
 	updateBudget(budget: Budget): Observable<HttpResponse<Response<Budget>>> {
-		this.url = `${environment.backendUrl}/budgets/${budget.id}/replace?deep=true`;
+		this.url = `${environment.backendUrl}/budgets/${budget.id}/replace`;
 		return this.http.put<Response<Budget>>(this.url, budget, {
 			observe: 'response',
-			headers: this.configService.getJsonHeaders()
+			headers: this.configService.getHeaders,
+			params: this.configParams.getConfigParams
 		});
 	}
 
 	/* METHOD FOR FINERIO 3.0
 	createBudget(budget: NewBudget): Observable<HttpResponse<Response<Budget>>> {
-		this.url = `${environment.backendUrl}/users/${sessionStorage.getItem('id-user')}/budgets?deep=true`;
+		this.url = `${environment.backendUrl}/users/${ this.id }/budgets`;
 		return this.http.post<Response<Budget>>(this.url, budget, {
 			observe: 'response',
-			headers: this.configService.getJsonHeaders()
+      headers: this.configService.getHeaders,
+      params: this.configParams.getParams
 		});
 	}*/
 
 	deleteBudget(budget: Budget): Observable<HttpResponse<Response<any>>> {
-		this.url = `${environment.backendUrl}/budgets/${budget.id}?deep=true`;
+		this.url = `${environment.backendUrl}/budgets/${budget.id}`;
 		return this.http.delete<Response<any>>(this.url, {
 			observe: 'response',
-			headers: this.configService.getJsonHeaders()
+			headers: this.configService.getHeaders,
+			params: this.configParams.getConfigParams
 		});
 	}
 }

@@ -1,69 +1,64 @@
-import {
-  AfterContentInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-  Renderer2
-} from '@angular/core';
-import { CleanerService } from '@services/cleaner/cleaner.service';
+import { AfterContentInit, Component, ElementRef, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
+import { CleanerService } from '@services/cleaner/cleaner.service';
+import { ConfigService } from '@services/config/config.service';
+
 import { filter, map } from 'rxjs/operators';
-import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
 
+import * as M from 'materialize-css/dist/js/materialize';
+
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+	selector: 'app-navbar',
+	templateUrl: './navbar.component.html',
+	styleUrls: [ './navbar.component.css' ]
 })
 export class NavbarComponent implements OnInit, AfterContentInit {
-  @ViewChild('sidenav') elemSidenav: ElementRef;
-  @ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
-  @ViewChild('collapsible') elemCollapsible: ElementRef;
-  @ViewChild('chevronRight') elemIcon: ElementRef;
-  value: boolean;
-  titlePage: string;
+	@ViewChild('sidenav') elemSidenav: ElementRef;
+	@ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
+	@ViewChild('chevronRight') elemIcon: ElementRef;
+	private sideNavInit: M.Sidenav;
+	private sideNavInstance: M.Sidenav;
+	value: boolean;
+	titlePage: string;
 
-  constructor(
-    private renderer: Renderer2,
-    private router: Router,
-    private cleanerService: CleanerService
-  ) {
-    this.getDataRoute().subscribe(res => {
-      const textDOM = document.querySelector('.brand-logo');
-      this.titlePage = res.title;
-      if (!isNullOrUndefined(this.titlePage)) {
-        textDOM.innerHTML = this.titlePage;
-      }
-    });
-  }
+	constructor(
+		private renderer: Renderer2,
+		private router: Router,
+		private cleanerService: CleanerService,
+		private configService: ConfigService
+	) {
+		this.getDataRoute().subscribe((res) => {
+			let largeTitle = document.querySelector('#largeTitle');
+			let medTitle = document.querySelector('#medTitle');
 
-  ngOnInit() {}
+			this.titlePage = res.title;
+			if (!isNullOrUndefined(this.titlePage)) {
+				largeTitle.innerHTML = this.titlePage;
+				medTitle.innerHTML = this.titlePage;
+			}
+		});
+	}
 
-  ngAfterContentInit() {
-    const initSidenav = new M.Sidenav(this.elemSidenav.nativeElement, {});
-    const instanceSidenav = M.Sidenav.getInstance(
-      this.elemSidenav.nativeElement
-    );
-    const initCollapsible = new M.Collapsible(
-      this.elemCollapsible.nativeElement,
-      {}
-    );
-  }
+	ngOnInit() {}
 
-  logout() {
-    this.router.navigate(['/access/login']);
-    sessionStorage.clear();
-    this.cleanerService.cleanAllVariables();
-    this.router.navigate(['/access/login']);
-  }
+	ngAfterContentInit() {
+		this.sideNavInit = new M.Sidenav(this.elemSidenav.nativeElement, {});
+		this.sideNavInstance = M.Sidenav.getInstance(this.elemSidenav.nativeElement);
+	}
 
-  getDataRoute() {
-    return this.router.events.pipe(
-      filter(event => event instanceof ActivationEnd),
-      filter((event: ActivationEnd) => event.snapshot.firstChild === null),
-      map((event: ActivationEnd) => event.snapshot.data)
-    );
-  }
+	logout() {
+		this.cleanerService.cleanAllVariables();
+		this.configService.resetVariable();
+		this.sideNavInstance.close();
+		return this.router.navigate([ '/access/login' ]);
+	}
+
+	getDataRoute() {
+		return this.router.events.pipe(
+			filter((event) => event instanceof ActivationEnd),
+			filter((event: ActivationEnd) => event.snapshot.firstChild === null),
+			map((event: ActivationEnd) => event.snapshot.data)
+		);
+	}
 }

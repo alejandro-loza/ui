@@ -1,8 +1,7 @@
-<div class="col s12 m4 l4">
+<div class="col s12 m5 l5">
     <div class="category-info text-center fast fadeIn" [ngStyle]="{
       'background-color': category.color,
-      'color': category.textColor
-    }">
+      'color': category.textColor}">
         <ng-container *ngIf="category.user; else elseCategorySystem">
             <img class="category" src="https://cdn.finerio.mx/categories/web/finerio-icon.svg" srcset="assets/media/img/categories/finerio-icon.svg" alt="{{ category.name }}">
         </ng-container>
@@ -12,11 +11,11 @@
         <h4>{{ category.name }}</h4>
     </div>
 </div>
-<div class="col s12 m8">
+<div class="col s12 m7">
     <div class="row">
         <!-- Se recorren las subcategorías de la cateogria actual -->
         <ng-template ngFor let-subcategory [ngForOf]="category.subCategories" let-i="index" [ngForTrackBy]="trackByFn">
-            <div class="col m6 center subcategory fast fadeIn">
+            <div class="col m10 offset-m1 center subcategory fast fadeIn">
                 <button class="btn btn-subcategory truncate modal-close"
                   [attr.id]="subcategory.id"
                   [ngStyle]="{'border-color': subcategory.color}"

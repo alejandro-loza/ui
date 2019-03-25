@@ -1,12 +1,12 @@
 <div *ngIf="showSpinner" id="spinner" class="container">
   <div class="row center">
     <div class="col s12">
-      <app-spinner></app-spinner>
+      <app-spinner class="spinnerPosition"></app-spinner>
     </div>
   </div>
 </div>
-<div *ngIf="!showEmptyState" class="main">
-  <div *ngIf="!showSpinner" class="container-fluid animated fadeIn">
+<div *ngIf="!showEmptyState && !showSpinner" class="main">
+  <div class="container-fluid animated fadeIn">
     <div class="row marginB-0">
       <div class="col s12 center">
         <div class="card white" id="totalBudget">
@@ -44,7 +44,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!showSpinner "class="container animated fadeIn">
+  <div class="container animated fadeIn">
     <div class="row marginB-0">
       <div class="col s12">
         <ul class="collection z-depth-2">
@@ -53,7 +53,6 @@
             <div class="row marginB-0">
               <div class="col s12">
                   <div class="col s6 valign-wrapper">
-                    <i class="material-icons grey-text">more_vert</i>
                     <img [src]="getIconImage( budget )"><p id="categoryName" class="details">{{ budget.name }}</p>
                   </div>
                   <div class="col s6 right-align" id="amounts">
@@ -75,7 +74,7 @@
     </div>
   </div>
 </div>
-<div *ngIf="showEmptyState" class="emptyState">
+<div *ngIf="showEmptyState" class="emptyState animated fadeIn">
   <app-empty-states
       [imgName]="imgName"
       [title]="title"

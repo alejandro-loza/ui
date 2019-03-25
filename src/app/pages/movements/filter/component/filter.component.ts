@@ -9,6 +9,7 @@ import {
 import { NgForm } from '@angular/forms';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
+import { ParamsMovements } from '@app/interfaces/paramsMovements.interface';
 
 
 @Component({
@@ -23,9 +24,10 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
   @Output() filterMovementStatus: EventEmitter<boolean>;
 
-
+  params: ParamsMovements;
   endDate: Date;
   startDate: Date;
+  private changeDate: boolean;
 
   constructor(
     private paramsMovementsService: ParamsMovementsService,
@@ -36,9 +38,12 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.endDate = new Date();
     const year = new Date().getFullYear() - 1;
     this.startDate.setFullYear(year);
+    this.changeDate = false;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.params = this.paramsMovementsService.getParamsMovements;
+  }
 
   ngAfterViewInit() { }
 
@@ -46,8 +51,20 @@ export class FilterComponent implements OnInit, AfterViewInit {
     this.paramsMovementsService.setCharges = ngform.value.charges;
     this.paramsMovementsService.setDeposits = ngform.value.deposits;
     this.paramsMovementsService.setDuplicates = ngform.value.duplicates;
-    this.paramsMovementsService.setStartDate = this.startDate.toString();
-    this.paramsMovementsService.setEndDate = this.endDate.toString();
     this.filterMovementStatus.emit(true);
+  }
+
+  changedStartDate(date: string) {
+    const auxStart = this.dateApiService.dateApi(this.startDate);
+    if (  auxStart !== date ) {
+      this.paramsMovementsService.setStartDate = date;
+    }
+  }
+
+  changedEndDate(date: string) {
+    const auxEnd = this.dateApiService.dateApi(this.endDate);
+    if (  auxEnd !== date ) {
+      this.paramsMovementsService.setEndDate = date;
+    }
   }
 }

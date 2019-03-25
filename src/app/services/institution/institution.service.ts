@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 
-import { environment } from '@env/environment';
+import {environment} from '@env/environment';
 
-import { ConfigService } from '@services/config/config.service';
+import {ConfigService} from '@services/config/config.service';
 
-import { InstitutionInterface } from '@interfaces/institution.interface';
-import { Response } from '@interfaces/response.interface';
+import {InstitutionInterface} from '@interfaces/institution.interface';
+import {Response} from '@interfaces/response.interface';
 
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class InstitutionService {
@@ -19,7 +19,7 @@ export class InstitutionService {
       `${environment.backendUrl}/institutions`,
       {
         observe: 'response',
-        headers: this.finerio.getJsonHeaders()
+        headers: this.finerio.getHeaders
       }
     );
   }

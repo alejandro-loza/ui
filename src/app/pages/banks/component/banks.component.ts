@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InstitutionInterface } from '@interfaces/institution.interface';
-import { isNullOrUndefined } from 'util';
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
 	selector: 'app-banks',
@@ -12,12 +11,9 @@ import { isNullOrUndefined } from 'util';
 })
 export class BanksComponent implements OnInit {
 	institutions: InstitutionInterface[];
+	@ViewChild('modal') elModal: ElementRef;
 
-	constructor(
-		private intitutionService: InstitutionService,
-		private route: Router,
-		private credentialBeanService: CredentialBeanService
-	) {
+	constructor(private intitutionService: InstitutionService, private credentialBeanService: CredentialBeanService) {
 		this.institutions = [];
 	}
 
@@ -25,10 +21,13 @@ export class BanksComponent implements OnInit {
 		this.getInstitutions();
 	}
 
-	institutionClick(institution: InstitutionInterface) {
-		if (institution.status === 'ACTIVE') {
-			this.route.navigateByUrl('/app/banks/' + institution.code);
-		}
+	ngAfterViewInit() {
+		const modal = new M.Modal(this.elModal.nativeElement);
+	}
+
+	openModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
+		instanceModal.open();
 	}
 
 	getInstitutions() {

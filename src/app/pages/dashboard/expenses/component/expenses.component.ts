@@ -60,6 +60,15 @@ export class ExpensesComponent implements OnInit {
 				},
 				options: {
 					responsive: true,
+					tooltips: {
+						mode: 'label',
+						callbacks: {
+							label: function(tooltipItem, data) {
+								var indice = tooltipItem.index;
+								return data.labels[indice] + ': $' + Math.round(data.datasets[0].data[indice]) + '';
+							}
+						}
+					},
 					animation: {
 						animateScale: false
 					},
@@ -216,8 +225,11 @@ export class ExpensesComponent implements OnInit {
 		this.titleMonth = this.stackedBarData[0].labels[index];
 		this.titleYear = this.stackedBarData[0].year[index].toString();
 
-		let titleOfThePage = document.querySelector('.brand-logo');
-		titleOfThePage.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
+		let largeTitle = document.querySelector('#largeTitle');
+		let medTitle = document.querySelector('#medTitle');
+
+		largeTitle.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
+		medTitle.innerHTML = 'Resumen ' + this.titleMonth + ' ' + this.titleYear;
 	}
 
 	setMainMessage(index: number, amount?: number) {
