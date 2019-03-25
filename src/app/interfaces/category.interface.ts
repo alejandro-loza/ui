@@ -5,7 +5,8 @@ export interface Category {
   textColor: string;
   subCategories?: Category[];
   parent?: { id: string; };
+  userId?: string;
   user?: {
-    id: string;
+    id: string
   };
 }

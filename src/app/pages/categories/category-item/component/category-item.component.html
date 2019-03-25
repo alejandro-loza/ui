@@ -1,6 +1,6 @@
 <div class="col s6 m3 l3 white-text pt-10">
   <div class="categorySize" [ngStyle]="{'background-color': category.color }">
-    <ng-container *ngIf="category.user; else elseCategorySystem">
+    <ng-container *ngIf="category.userId; else elseCategorySystem">
       <img [src]="'https://cdn.finerio.mx/categories/web/finerio-icon.svg'" [srcset]="'assets/media/img/categories/finerio-icon.svg'" alt="{{ category.name }}" class="imageCategory">
     </ng-container>
     <ng-template #elseCategorySystem>

@@ -12,7 +12,7 @@ import {
 import {Movement} from '@interfaces/movement.interface';
 import {Category} from '@interfaces/category.interface';
 
-import {isNull, isNullOrUndefined, isUndefined} from 'util';
+import {isNull, qisUndefined} from 'util';
 
 import {CategoriesService} from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';

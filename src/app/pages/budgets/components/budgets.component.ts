@@ -103,7 +103,7 @@ export class BudgetsComponent implements OnInit {
 			let id = budget.category.id;
 			url = url + '/color_' + id + '.png';
 		} else {
-			url = url + '/color_000000.svg';
+			url = url + '/000000.svg';
 		}
 		return url;
 	}
