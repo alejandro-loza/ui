@@ -41,22 +41,9 @@ export class LoginComponent implements OnInit {
     this.loginService.login( this.user ).subscribe(
       res => res,
       err => {
-        this.toastService.setCode = err.status;
-        if ( err.status === 0 ) {
-          this.toastService.toastGeneral();
-        } else if ( err.status === 400 ) {
-          this.toastService.setMessage = 'Te falto llenar un campo del formulario';
-          this.toastService.toastGeneral();
-        } else if ( err.status === 401 ) {
-          this.toastService.setCode = 4011;
-          this.toastService.toastGeneral();
-        } else if ( err.status === 500) {
-          this.toastService.setMessage = 'Ocurrió un error al querer ingresar.<br>Intentalo más tarde';
-          this.toastService.toastGeneral();
-        }
         this.renderer.removeClass(document.getElementById('buttonElement'), 'disabled');
         this.renderer.removeAttribute(document.getElementById('buttonElement'), 'disabled');
-
+        return err;
       },
       () => {
         loginForm.reset();
