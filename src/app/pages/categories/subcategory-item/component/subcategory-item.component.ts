@@ -45,6 +45,7 @@ export class SubcategoryItemComponent implements OnInit {
 
   selectCategory(i: number) {
     const auxcategory = this.category.subCategories[i];
+    console.log(auxcategory);
     this.categoriesBeanService.setCategory = auxcategory;
     this.statusCategoryValue = true;
     this.statusCategory.emit(this.statusCategoryValue);
