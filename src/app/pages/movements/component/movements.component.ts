@@ -74,7 +74,10 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.getMovements();
     this.scrollResult = fromEvent(document, 'scroll')
       .pipe(debounce(() => interval(100)))
-      .subscribe(() => this.offsetMovement());
+      .subscribe(() => {
+
+        this.offsetMovement();
+      });
   }
 
   ngOnDestroy() {
@@ -106,7 +109,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
     const scrollVertical = window.scrollY;
     let scrollLimit: number;
     scrollLimit = $(document).height() - $(window).height();
-    if (scrollVertical >= scrollLimit) {
+    console.log(scrollVertical, scrollLimit);
+    if (scrollVertical >= ( scrollLimit - 54 )) {
       this.spinnerBoolean = false;
       this.getMovements();
     }
