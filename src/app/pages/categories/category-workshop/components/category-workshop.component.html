@@ -21,13 +21,13 @@
                         class="btn-floating btn-small"></button>
                 </li>
               </ul>
-              <button (click)="generateRandomColors()"  *ngIf="colorForCategory.length < 40"
-                    class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">add</i></button>
+              <!--button (click)="generateRandomColors()"  *ngIf="colorForCategory.length < 40"
+                    class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">add</i></button-->
 
-              <button (click)="reloadColors()"  *ngIf="colorForCategory.length > 40"
+              <button (click)="reloadColors()"
                     class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">loop</i></button>
             </div>
-            <div class="col s12 pt-20">
+            <!--div class="col s12 pt-20">
               <span><b>Texto:</b></span>
               <ul>
                 <li class="colorPickerUl" *ngFor="let color of colorText">
@@ -37,9 +37,9 @@
               </ul>
               <button (click)="reloadTextColors()"
                   class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">loop</i></button>
-            </div>
+            </div-->
             <div class="col s8 offset-s2">
-              <div class="demoChip" [ngStyle]="{'background-color': colorForDemoChip ,'color': colorTextDemoChip}" >
+              <div class="demoChip" [ngStyle]="{'background-color': colorForDemoChip ,'color': '#ffffff'}" >
                 <p class="center pt-5 categoryNameChip"><b>{{ categoryName }}</b></p>
               </div>
             </div>
@@ -47,9 +47,14 @@
         </div>
         <div class="card-action right-align">
           <!--button [routerLink]="['/app/categories']" class="btn action-btn">Cancelar</button-->
-          <button (click)="submitCategory()" [disabled]="categoryName.length === 0" class="btn action-btn green">Guardar</button>
+          <button (click)="submitCategory()" id="submitButton" [disabled]="categoryName.length === 0" class="btn action-btn green">Guardar</button>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="showSpinner">
+    <div class="col s12 center">
+      <app-spinner></app-spinner>
     </div>
   </div>
 </div>

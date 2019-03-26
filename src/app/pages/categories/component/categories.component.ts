@@ -41,7 +41,7 @@ export class CategoriesComponent implements OnInit {
 
 	filterCategories() {
 		this.categoriesList.forEach((category) => {
-			if (isNullOrUndefined(category.user)) {
+			if (isNullOrUndefined(category.userId)) {
 				this.systemCategories.push(category);
 			} else {
 				this.userCategories.push(category);
