@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { Category } from '@app/interfaces/category.interface';
@@ -14,7 +15,11 @@ export class CategoriesComponent implements OnInit {
 	systemCategories: Category[] = [];
 	userCategories: Category[] = [];
 
-	constructor(private categoriesBeanService: CategoriesBeanService, private categoriesService: CategoriesService) {}
+	constructor(
+		private categoriesBeanService: CategoriesBeanService,
+		private categoriesService: CategoriesService,
+		private router: Router
+	) {}
 
 	ngOnInit() {
 		this.fillCategories();
@@ -37,7 +42,10 @@ export class CategoriesComponent implements OnInit {
 		});
 	}
 
-	selectCategory(category: Category) {}
+	selectCategory(category: Category) {
+		this.categoriesBeanService.setCategoryToViewDetails(category);
+		this.router.navigateByUrl('/app/categories/details');
+	}
 
 	filterCategories() {
 		this.categoriesList.forEach((category) => {

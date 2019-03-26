@@ -14,6 +14,13 @@ const CategoriesRouting: Routes = [
 		}
 	},
 	{
+		path: 'details',
+		loadChildren: './category-details/category-details.module#CategoryDetailsModule',
+		data: {
+			title: 'Detalles de la categoría'
+		}
+	},
+	{
 		path: '**',
 		redirectTo: '/access/login'
 	}

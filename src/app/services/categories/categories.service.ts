@@ -41,4 +41,6 @@ export class CategoriesService {
 			headers: this.configService.getHeaders
 		});
 	}
+
+	deleteCategory() {}
 }
