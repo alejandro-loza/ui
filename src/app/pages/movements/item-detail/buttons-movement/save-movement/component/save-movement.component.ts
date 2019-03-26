@@ -49,7 +49,7 @@ export class SaveMovementComponent implements OnInit, OnChanges {
       this.movement.customDate = this.auxMovement.customDate;
     }
     if (isNull(this.movement.amount)) {
-      this.movement.amount = this.auxMovement.amount;
+      this.movement.amount = this.auxMovement.customAmount;
     }
     this.movementService.updateMovement(this.movement).subscribe(
       res => {

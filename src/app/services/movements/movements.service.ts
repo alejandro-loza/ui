@@ -100,7 +100,7 @@ export class MovementsService {
 
   updateMovement(movement: Movement) {
     const body = {
-      amount: movement.customAmount,
+      amount: movement.amount,
       balance: movement.balance,
       customDate: movement.customDate,
       customDescription: movement.customDescription,
