@@ -98,10 +98,10 @@ export class BudgetsComponent implements OnInit {
 	}
 
 	getIconImage(budget: Budget): string {
-		let url: string = '../../../assets/media/img/categories/color';
+		let url: string = 'https://cdn.finerio.mx/categories/web/color/';
 		if (isNullOrUndefined(budget.category.user)) {
 			let id = budget.category.id;
-			url = url + '/color_' + id + '.png';
+			url = url + id + '.svg';
 		} else {
 			url = url + '/000000.svg';
 		}

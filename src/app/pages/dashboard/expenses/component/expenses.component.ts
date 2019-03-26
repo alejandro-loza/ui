@@ -19,7 +19,7 @@ export class ExpensesComponent implements OnInit {
 	doughnutChart: Chart;
 	expensesData: ResumeMainData[] = [];
 	dataForTable: TableData[] = [];
-	assetsUrl: string = '../../../assets/media/img/categories/color';
+	cdnUrl: string = 'https://cdn.finerio.mx/categories/web/color';
 	totalAmount: number = 0;
 	titleMonth: string = '';
 	titleYear: string = '';
@@ -243,9 +243,9 @@ export class ExpensesComponent implements OnInit {
 	getImageForElement(element: TableData): String {
 		let url: string;
 		if (element.catId.indexOf('000000') > -1) {
-			url = `${this.assetsUrl}/color_${element.catId}.${element.catId != '000000' ? 'png' : 'svg'}`;
+			url = `${this.cdnUrl}/${element.catId}.svg`;
 		} else {
-			url = `${this.assetsUrl}/color_000000.svg`;
+			url = '/assets/media/img/categories/color/000000.svg';
 		}
 		return url;
 	}

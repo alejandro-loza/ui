@@ -51,8 +51,10 @@ export class SharedBudgetComponentComponent implements OnInit {
 
 	ngOnInit() {
 		this.settingDimensionOfCatContainer();
-		this.sortingColors();
-		this.settingFunctionalityOfTheComponent();
+		if (!isNullOrUndefined(this.categorySelected.subCategories)) {
+			this.sortingColors();
+			this.settingFunctionalityOfTheComponent();
+		}
 	}
 
 	sortingColors() {
