@@ -1,0 +1,36 @@
+<div class="row z-depth-1" id="barChartRow">
+    <div class="col s12 center">
+        <app-bar-charts *ngIf="true"
+                        (clickEventData)="selectedMonthChart( $event )" 
+                        [dataForChart]="dataForExpensesBarChart()"
+                        [labels]="labelsForExpensesChart()">
+        </app-bar-charts>
+    </div>
+</div>
+<div class="row mainRow animated fadeIn">
+    <div class="col s12 m5 l6">
+        <div id="pieContainer">
+            <h5>Total <b>${{ totalAmount | number:'1.0-0' }}</b></h5>
+            <canvas id="expensesPieChart" height="100"></canvas>
+        </div>
+    </div>
+    <div *ngIf="dataForTable.length > 0" class="col s12 m6 l5">
+        <ul class="collection z-depth-1">
+            <div (click)="clickOnCategory( element )" 
+                *ngFor="let element of dataForTable" class="hoverable collection-item">
+                <div class="row">
+                    <div class="col s2 pt center">
+                        <img width="25px" height="25px" [src]="getImageForElement( element )">
+                    </div>
+                    <div class="col s6 pt">
+                        <b>{{ element.label }}</b>
+                    </div>
+                    <div class="col s4 pt">
+                        <b>${{ element.amount| number:'1.2-2' }}</b>
+                    </div>
+                </div>        
+            </div>
+        </ul>
+        <button *ngIf="showBackButton" (click)="returnButton( monthOnScreen )" class="btn finerio-blue">Regresar</button>
+    </div>
+</div>

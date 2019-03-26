@@ -1,17 +1,30 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-// Components
-import { MovementsComponent } from './components/movements.component';
+import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
 
-// Routes
-import { MOVEMENTS_ROUTES } from './movements.route';
+import { SharedModule } from '@shared/shared.module';
+import { ItemListModule } from './item-list/item-list.module';
+import { FilterModule } from './filter/filter.module';
+import { MovementsRoutes } from './movements.route';
+import { EmptyStateModule } from '@components/empty-states/empty-states.module';
+
+import { MovementsComponent } from './component/movements.component';
+import { NewMovementModule } from './new-movement/new-movement.module';
 
 @NgModule({
   imports: [
-    CommonModule,
-    MOVEMENTS_ROUTES
+    SharedModule,
+    ItemListModule,
+    NewMovementModule,
+    FilterModule,
+    EmptyStateModule,
+    MovementsRoutes
   ],
-  declarations: [ MovementsComponent ]
+  declarations: [
+    MovementsComponent
+  ],
+  providers: [
+    ParamsMovementsService,
+  ]
 })
-export class MovementsModule { }
+export class MovementsModule {}

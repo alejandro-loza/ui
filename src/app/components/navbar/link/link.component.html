@@ -1,0 +1,12 @@
+<li routerLinkActive="finerio-orange">
+    <a
+    data-position="right"
+    [attr.data-tooltip]="nombre"
+    class="white-text pages-list sidenav-close"
+    routerLink="{{ route.toLowerCase() }}"
+    (click)="cleanMemory()"
+    #tooltip>
+        <i class="mdi mdi-{{ icon }} mdi-48px left-align icon-list white-text"></i>
+        <span class="show-on-medium-and-down hide-on-large-only">{{ nombre }}</span>
+    </a>
+</li>

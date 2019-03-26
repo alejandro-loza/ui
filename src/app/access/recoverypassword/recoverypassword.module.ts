@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { SharedModule } from '@shared/shared.module';
 
 // ROUTE
 import { RECOVERY_ROUTES } from './recoverypassword.route';
@@ -9,11 +11,13 @@ import { RecoverypasswordComponent } from './components/recoverypassword.compone
 
 @NgModule({
   imports: [
-    CommonModule,
-    RECOVERY_ROUTES
+    SharedModule,
+    ReactiveFormsModule,
+    RECOVERY_ROUTES,
   ],
   declarations: [
     RecoverypasswordComponent
-  ]
+  ],
+  providers: [ ]
 })
 export class RecoverypasswordModule { }

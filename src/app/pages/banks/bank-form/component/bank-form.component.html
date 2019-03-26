@@ -1,0 +1,61 @@
+<app-back-button [ruta]="'/app/banks'"></app-back-button>
+<div class="container">
+    <div class="row">
+        <div class="col s8 offset-s2 center">
+            <h5>Nueva cuenta bancaria</h5>
+            <img max-width="100px" max-height="100px"
+              [src]="'assets/media/img/banks/'+ institutionCode +'.png'"
+              [alt]="institutionCode"/>
+            <p>{{ helpText }}</p>
+        </div>
+    </div>
+    <div *ngIf="showSpinner" class="container">
+        <div class="row">
+            <div class="col s12 center">
+                <app-spinner class="spinnerPosition"></app-spinner>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div *ngIf="!showSpinner" class="col s10 offset-s1 m6 offset-m3 center">
+            <form #bank="ngForm" (ngSubmit)="submit(bank)">
+                <div class="input-field s10 m6" *ngFor="let field of institutionField; let i = index">
+                        <input
+                        ngModel
+                        type="{{ field.type }}"
+                        class="{{ field.institutionId }} validate"
+                        placeholder="{{ field.friendlyName }}"
+                        name="{{ field.name }}"
+                        [pattern]="getPattern( field )"
+                        [required]="field.name != 'sec_code'">
+                        <span class="helper-text" [attr.data-error]="field.name == 'username' ? usernameErrorMessage : passwordErrorMessage"></span>
+                </div>
+                <button class="mt-10 btn background" [disabled]="!bank.valid" type="submit">
+                    Agregar
+                </button>
+            </form>
+        </div>
+    </div>
+    <div *ngIf="showVideos" class="row" id="videosRow">
+        <div class="col s12 m6 center">
+            <p>¿Cómo sincronizar mi cuenta BBVA Bancomer?</p>
+            <iframe src="https://www.youtube.com/embed/BSS4rOR1hEs" width="100%" height="300"></iframe>
+        </div>
+        <div class="col s12 m6 center">
+            <p>¿Qué contraseña necesito?</p>
+            <iframe src="https://www.youtube.com/embed/ZTVnworDgQs" width="100%" height="300"></iframe>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE ACCOUNT MODAL -->
+<div id="modal" class="modal" #modal>
+<div class="modal-content">
+    <h5 class="center">Aviso Importante</h5>
+    <p>Ten tu token a la mano, ya sea virtual o físico. Te lo pedimos por seguridad de Bancomer. Nuestro acceso a tu banca en línea es sólo en modo lectura.</p>
+    <p>Por ser el token un número dinámico, no podemos actualizar tu cuenta automáticamente. Para hacerlo de forma manual, ve a la sección de "Cuentas Bancarias" y pulsa el botón de "Sincronizar" de tu cuenta Bancomer.</p>
+</div>
+<div class="modal-footer">
+    <a class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+</div>
+</div>

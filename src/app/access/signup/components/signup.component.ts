@@ -1,60 +1,60 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { ToastService } from '@services/toast/toast.service';
+import { SignupService } from '@services/signup/signup.service';
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+	selector: 'app-signup',
+	templateUrl: './signup.component.html',
+	styleUrls: [ './signup.component.css' ]
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent {
+	passwordValidate: boolean = true;
+	termsAccepted: boolean = true;
+	signupData: FormGroup = new FormGroup({
+		email: new FormControl(),
+		password: new FormControl(),
+		passwordConfirm: new FormControl(),
+		blog: new FormControl(true),
+		termsAndConditions: new FormControl({ value: true }, Validators.required)
+	});
+	showSpinner: boolean = false;
 
-  constructor() { }
+	constructor(private signupService: SignupService, private router: Router, private toastService: ToastService) {}
 
-  ngOnInit() {
-  	this.hoverSocialMedia();
-  }
+	signup() {
+		this.passwordMatch();
+		this.termsValidate();
+		if (this.passwordValidate && this.termsAccepted) {
+			this.showSpinner = true;
+			this.signupService.signup(this.signupData.value).subscribe(
+				(res) => {
+					this.toastService.setCode = res.status;
+				},
+				(error) => {
+					this.toastService.setCode = error.status;
+					this.toastService.setMessage = error.error.message;
+					this.toastService.toastGeneral();
+				},
+				() => {
+					this.toastService.setMessage = '¡Se creó tu cuenta!';
+					this.toastService.toastGeneral();
+					return this.router.navigate([ '/access/login' ]);
+				}
+			);
+		}
+	}
 
-  hoverSocialMedia(){
-    
-    var btn_facebook = document.querySelector('.btn-facebook');
-    var btn_google = document.querySelector('.btn-google-plus');
+	passwordMatch() {
+		this.signupData.value.password === this.signupData.value.passwordConfirm
+			? (this.passwordValidate = true)
+			: (this.passwordValidate = false);
+	}
 
-    btn_facebook.addEventListener("mouseover", this.overFacebook);
-    btn_facebook.addEventListener("mouseout", this.outFacebook);
-
-    btn_google.addEventListener("mouseover", this.overGoogle);
-    btn_google.addEventListener("mouseout", this.outGoogle);
-  }
-
-  overFacebook(){
-    var btn_facebook_blue = document.querySelector('.icon-facebook-blue');
-    var btn_facebook_white = document.querySelector('.icon-facebook-white');
-
-    btn_facebook_white.classList.add("d-none");
-    btn_facebook_blue.classList.remove("d-none");
-  }
-
-  outFacebook(){
-    let btn_facebook_blue = document.querySelector('.icon-facebook-blue');
-    let btn_facebook_white = document.querySelector('.icon-facebook-white');
-
-    btn_facebook_blue.classList.add('d-none');
-    btn_facebook_white.classList.remove('d-none');
-  }
-
-  overGoogle(){
-    let btn_google_red = document.querySelector('.icon-google-plus-red');
-    let btn_google_white = document.querySelector('.icon-google-plus-white');
-
-    btn_google_white.classList.add('d-none');
-    btn_google_red.classList.remove('d-none'); 
-  }
-
-  outGoogle(){
-    let btn_google_red = document.querySelector('.icon-google-plus-red');
-    let btn_google_white = document.querySelector('.icon-google-plus-white');
-
-    btn_google_white.classList.remove('d-none');
-    btn_google_red.classList.add('d-none');
-  }
-
+	termsValidate() {
+		this.signupData.value.termsAndConditions ? (this.termsAccepted = true) : (this.termsAccepted = false);
+	}
 }

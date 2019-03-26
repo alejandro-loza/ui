@@ -1,28 +1,45 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { ServicesModule } from './services/services.module';
+import { NgModule } from                    '@angular/core';
+import { BrowserModule } from               '@angular/platform-browser';
+import { BrowserAnimationsModule } from     '@angular/platform-browser/animations';
+import {HttpClientModule} from              '@angular/common/http';
 
-import { APP_ROUTES } from './app.route';
+import { NgIdleKeepaliveModule } from "@ng-idle/keepalive";
 
-import { AppComponent } from './app.component';
-import { ComponentsComponent } from './components/components.component';
-import { AccessComponent } from './access/access.component';
-import { PagesComponent } from './pages/pages.component';
+import { AuthGuard } from                   '@guards/auth/auth.guard';
+
+import { InterceptorProvider } from         '@security/interceptors.index';
+
+import { ConfigService } from               '@services/config/config.service';
+import { AuthService } from                 '@services/auth/auth.service';
+import { ToastService } from                  '@services/toast/toast.service';
+import { AccountService } from              '@services/account/account.service';
+
+import { SharedModule } from                '@shared/shared.module';
+import { AppRoutes } from                   '@app/app.route';
+
+import { AppComponent } from                '@app/app.component';
+import { ConfigParamsService } from         '@params/config/config-params.service';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ComponentsComponent,
-    AccessComponent,
-    PagesComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    APP_ROUTES,
-    ServicesModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    SharedModule,
+    NgIdleKeepaliveModule.forRoot(),
+    AppRoutes
   ],
-  providers: [],
+  providers: [
+    ConfigService,
+    AuthGuard,
+    AuthService,
+    ToastService,
+    ConfigParamsService,
+    AccountService,
+    InterceptorProvider
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

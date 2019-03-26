@@ -1,57 +1,47 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Router} from '@angular/router';
 
-import { environment } from './../../../environments/environment';
-import { FinerioService } from '../shared/config.service';
+import {environment} from '@env/environment';
 
-import { User } from './../../shared/dto/authLoginDot';
+import {ConfigService} from '@services/config/config.service';
 
-import { map } from 'rxjs/operators';
+import {User} from '@interfaces/user.interface';
+
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class AuthService {
 
-  private api = `${environment.backendUrl}/api`;
-
-  user: User;
-  token: string;
-  url = `${this.api}/login`;
-
   constructor(
     private httpClient: HttpClient,
-    private finerioService: FinerioService) {
-      this.getData();
-    }
+    private configService: ConfigService,
+    private router: Router
+  ) {}
 
   isAuth() {
-    return (  this.token.length  > 0 ) ? true : false;
-  }
-
-  getData() {
-    if ( localStorage.getItem('access token') ) {
-      this.token = localStorage.getItem('access token');
+    if (this.configService.getJWT) {
+      const accessToken = this.configService.getJWT.access_token;
+      if (accessToken.length > 0) {
+        return true;
+      }
     } else {
-      this.token = '';
+      return this.router.navigate(['/access/login']);
     }
   }
 
-  saveData( access_token: string, refresh_token: string, username: string ) {
-    localStorage.setItem( 'access token', access_token );
-    localStorage.setItem( 'refresh token', refresh_token );
-    localStorage.setItem( 'username', username );
-
-    this.finerioService.setToken( refresh_token );
-  }
-
-  login(user: User) {
-    return this.httpClient.post(
-      this.url, JSON.stringify({ username: user.email, password: user.password }), {headers : this.finerioService.getJsonHeaders()}
-    ).pipe(
-      map( (res: any ) => {
-        this.saveData( res.access_token, res.refresh_token, res.username );
-        this.getData();
-        return true;
+  personalInfo(): Observable<HttpResponse<User>> {
+    return this.httpClient
+      .get<User>(`${environment.backendUrl}/me`, {
+        observe: 'response',
+        headers: this.configService.getHeaders
       })
-    );
+      .pipe(
+        map(res => {
+          this.configService.setUser = res.body;
+          return res;
+        })
+      );
   }
 }

@@ -1,0 +1,13 @@
+<div class="col s6 m3 l2 center intitutionCol"
+  [attr.data-tooltip]="institution.status === 'ACTIVE' ? institution.name : 'Banco en mantenimiento'" 
+  data-position="bottom" 
+  #tooltip>
+    <a (click)="institutionClick( institution )">
+      <img *ngIf="institution.status === 'ACTIVE'" class="imgBanks hoverable"
+            [alt]="institution.code"
+            [src]="'assets/media/img/banks/'+institution.code+'.png'" />
+      <img *ngIf="institution.status !== 'ACTIVE'" class="imgBanks hoverable"
+            [alt]="institution.code"
+            [src]="'assets/media/img/banks/'+institution.code+'_gray.png'"/>
+    </a>
+  </div>

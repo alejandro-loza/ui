@@ -1,0 +1,84 @@
+<!-- Modal Structure -->
+<div id="newMovement" class="modal bottom-sheet" #modal>
+  <div class="container containerNewMovement">
+    <div class="row left-align">
+      <form #forma="ngForm" (ngSubmit)="createMovement(forma)">
+        <div class="valign-wrapper">
+          <div class="col s12 m5">
+            <h6>Descripción del Movimiento:</h6>
+          </div>
+          <div class="col s12 m7">
+            <div class="input-field">
+              <input class="validate input-new-movement" id="description" name="description" [(ngModel)]="newMovement.description" placeholder="Nombre del Movimiento" required type="text" #description="ngModel" />
+              <label for="description"></label>
+              <span class="helper-text" data-error="Ingresa una descripción para tu movimiento, Ej: Startbucks">Ej: Startbucks</span>
+            </div>
+          </div>
+        </div>
+        <div class="valign-wrapper">
+          <div class="col s12 m5">
+            <h6>Monto del Movimiento:</h6>
+          </div>
+          <div class="col s11 m7">
+            <div class="input-field">
+              <input class="validate input-new-movement" id="monto" name="amount" [(ngModel)]="newMovement.amount" min="0" placeholder="Monto del Movimiento" required type="number" value="0" #amount="ngModel" />
+              <label for="monto"></label>
+              <span class="helper-text" data-error="Ingresa un valo numérico y mínimo de 1">Debes ingresar un valor numérico</span>
+            </div>
+          </div>
+        </div>
+        <div class="valign-wrapper">
+          <div class="col s12 m5">
+            <h6>Fecha del movimiento:</h6>
+          </div>
+          <div class="col s12 m7">
+            <div class="row rowFecha">
+              <div class="col m1" id="date-left-section">
+                <input type="button" ngModel="Hoy" class="btn btn-date active" id="todayDate" (click)="changeClassDate('todayDate')" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="col m1" id="date-mid-section">
+                <input type="button" ngModel="Ayer" class="btn btn-date" id="yesterdayDate" (click)="changeClassDate('yesterdayDate')" [ngModelOptions]="{standalone: true}">
+              </div>
+              <div class="col m1" id="date-right-section">
+                <app-date [formatDate]="formatDate" [type]="'button'" [classes]="'btn btn-date'" [reset]="reset" [id]="'otherDate'" [date]="date" (valueDate)="newMovement.date=$event" (click)="changeClassDate('otherDate')">
+                </app-date>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="valign-wrapper">
+          <div class="col s12 m5">
+            <h6>Tipo de movimiento:</h6>
+          </div>
+          <div class="col s12 m7" id="type-section">
+            <input class="btn btn-type btn-charge active" type="button" ngModel="Gasto" (click)="valueType('charge')" [ngModelOptions]="{standalone: true}" id="charge" />
+            <input class="btn btn-type btn-deposit" type="button" ngModel="Ingreso" (click)="valueType('deposit')" [ngModelOptions]="{standalone: true}" id="deposit" />
+          </div>
+        </div>
+        <div class="valign-wrapper">
+          <div class="col push-m5 center-align">
+            <p>
+              <label>
+                <input
+                  type="checkbox"
+                  class="filled-in"
+                  name="duplicated"
+                  [ngModel]="checkboxDuplicate.nativeElement.checked"
+                  (ngModelChange)="newMovement.duplicated"
+                  #duplicated/>
+                <span>No tomar en cuenta en gráficas y presupuestos</span>
+              </label>
+            </p>
+          </div>
+        </div>
+        <div class="valign-wrapper" id="newMovementBtn">
+          <div class="col s12 center-align">
+            <button class="btn btn-large btn-submit" [disabled]="forma.invalid" type="submit" #btnSubmit>Crear Movimiento
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,21 +1,25 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-// ROUTE
-import { LOGIN_ROUTES } from './login.route';
-// COMPONENT
-import { LoginComponent } from './components/login.component';
+import { NgModule } from                             '@angular/core';
+
+import { SharedModule } from                         '@shared/shared.module';
+import { SocialMediaModule } from                    '@components/social-media-button/social-media.module';
+import { RegisterLoginButtonModule } from            '@components/register-login-button/register-login-button.module';
+
+import { LoginRoutes } from                          './login.route';
+
+import { LoginComponent } from                       './components/login.component';
+import {PasswordDirective} from                      '@directives/password/password.directive';
 
 @NgModule({
   imports: [
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    LOGIN_ROUTES
+    SharedModule,
+    SocialMediaModule,
+    RegisterLoginButtonModule,
+    LoginRoutes
   ],
   declarations: [
-    LoginComponent
-  ]
+    LoginComponent,
+    PasswordDirective
+  ],
+  providers: []
 })
 export class LoginModule { }

@@ -1,6 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from    '@angular/core/testing';
+import { RecoverypasswordComponent } from           './recoverypassword.component';
+import { HttpClientTestingModule } from             '@angular/common/http/testing';
+import { FormsModule, ReactiveFormsModule } from    '@angular/forms';
+import { RouterTestingModule } from                 '@angular/router/testing';
 
-import { RecoverypasswordComponent } from './recoverypassword.component';
 
 describe('RecoverypasswordComponent', () => {
   let component: RecoverypasswordComponent;
@@ -8,6 +11,12 @@ describe('RecoverypasswordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        HttpClientTestingModule
+      ],
       declarations: [ RecoverypasswordComponent ]
     })
     .compileComponents();

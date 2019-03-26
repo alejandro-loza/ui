@@ -1,0 +1,36 @@
+.datepicker {
+  z-index: 2;
+}
+
+.datepicker-controls .select-month input{
+  width: 100px;
+}
+
+.btn {
+  margin-right: 1%;
+  color: black;
+}
+
+.btn:hover {
+  transition: 0.3s;
+  color: #f5f5f5;
+}
+
+.btn-date {
+  background-color: whitesmoke;
+  border: thin solid rgba(119, 136, 153, 1);
+}
+
+.btn-date:hover {
+  border-color: rgb(29, 91, 135);
+  background-color: rgb(29, 91, 135);
+}
+
+.btn-date.active {
+  border-color: #18537b;
+  background-color: #18537b;
+}
+
+.active {
+  color: #f5f5f5;
+}

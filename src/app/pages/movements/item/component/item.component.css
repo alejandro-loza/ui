@@ -1,0 +1,42 @@
+.category-margin {
+  margin-bottom: -1%;
+}
+.row {
+  margin-bottom: 0px;
+}
+
+.description {
+  margin-left: 10%;
+}
+
+.imgMovement {
+  width: 42px;
+  height: auto;
+}
+
+.charge {
+  color: rgb(198, 40, 40);
+}
+
+.deposit {
+  color: #2e7d32;
+}
+
+.customComponent:hover {
+  transition: all .2s ease-in-out;
+  background-color: rgba(189, 189, 189, .2);
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+  background-color: var(--orange-color);
+}
+
+.switch label input[type=checkbox]:checked+.lever {
+  background-color: #ffcc80;
+}
+
+.inputPadding {
+  padding-left: 10% !important;
+  width: 90% !important;
+}
+

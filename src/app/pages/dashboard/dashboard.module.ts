@@ -1,19 +1,35 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { SharedModule } from '@shared/shared.module';
+import { SharedDashboardModule } from './sharedDashboard/sharedDashboard.module';
+import { EmptyStateModule } from '@components/empty-states/empty-states.module';
 
 // Component
-import { DashboardComponent } from './components/dashboard.component';
+import { DashboardComponent } from './component/dashboard.component';
+import { TabsComponent } from './component/tabs/tabs.component';
 
 // Routes
-import { DASHBOARD_ROUTES } from './dashboard.route';
+import { DashboardRoutes } from './dashboard.route';
+
+import { BalanceModule } from './balance/balance.module';
+import { ExpensesModule } from './expenses/expenses.module';
+import { DiagnosticModule } from './diagnostic/diagnostic.module';
+import { IncomesModule } from './incomes/incomes.module';
 
 @NgModule({
   imports: [
-    CommonModule,
-    DASHBOARD_ROUTES
+    SharedModule,
+    BalanceModule,
+    ExpensesModule,
+    DiagnosticModule,
+    IncomesModule,
+    DashboardRoutes,
+    SharedDashboardModule,
+    EmptyStateModule
   ],
   declarations: [
-    DashboardComponent
-  ]
+    DashboardComponent,
+    TabsComponent
+  ],
+  providers: []
 })
-export class DashboardModule { }
+export class DashboardModule {}
