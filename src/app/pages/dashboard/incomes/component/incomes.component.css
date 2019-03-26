@@ -1,43 +1,43 @@
-#pieContainer{
-    display: grid;
-    text-align: -webkit-center;
-    text-align: center;
-    position: relative;
+#pieContainer {
+	display: grid;
+	text-align: -webkit-center;
+	text-align: center;
+	position: relative;
 }
 
 #pieContainer h5 {
-    margin-top: 0px;
+	margin-top: 0px;
 }
 
-.row{
-    margin-bottom: 0px;
+.row {
+	margin-bottom: 0px;
 }
 
-.mainRow{
-    padding-top: 40px;
+.mainRow {
+	padding-top: 40px;
 }
 
-.collection{
-    overflow: inherit;
-    margin-top: 0px;
-    background-color: white;
+.collection {
+	overflow: inherit;
+	margin-top: 0px;
+	background-color: white;
 }
 
-.collection-item{
-    background-color: inherit;
-    cursor: pointer;
-    max-height: 50px;
-    padding: 5px 20px;
+.collection-item {
+	background-color: inherit;
+	cursor: pointer;
+	max-height: 40px;
+	padding: 5px 20px;
 }
 
-.btn{
-    margin-top: 15px;
+.btn {
+	margin-top: 15px;
 }
 
-.pt{
-    padding-top: 5px;
+.pt {
+	padding-top: 5px;
 }
 
-.svgFinerioIcon{
-    fill: "#AAAAAA";
+.svgFinerioIcon {
+	fill: "#AAAAAA";
 }
