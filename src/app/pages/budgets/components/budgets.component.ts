@@ -45,6 +45,7 @@ export class BudgetsComponent implements OnInit {
 			this.emptyStateProcess();
 			this.showSpinner = false;
 		}
+		this.windowPosition();
 	}
 
 	getAllBudgets() {
@@ -155,5 +156,11 @@ export class BudgetsComponent implements OnInit {
 		this.description = "Pulsa el botón de 'Nuevo Presupuesto' para crear tus presupuestos de este mes.";
 		this.buttonText = 'Nuevo Presupuesto';
 		this.buttonUrl = '/app/budgets/new-budget';
+	}
+
+	windowPosition() {
+		window.scrollTo(0, 0);
+		let html = document.querySelector('html');
+		html.style.overflowX = 'hidden';
 	}
 }

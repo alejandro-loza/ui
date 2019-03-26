@@ -82,6 +82,7 @@ export class CredentialComponent implements OnInit {
 		} else {
 			this.loadInformationFromRam();
 		}
+		this.windowPosition();
 	}
 
 	loadInformationFromRam() {
@@ -255,6 +256,12 @@ export class CredentialComponent implements OnInit {
 		this.creditBalance = 0;
 		this.totalBalance = 0;
 		this.credentialBean.setCredentials([]);
+	}
+
+	windowPosition() {
+		window.scrollTo(0, 0);
+		let html = document.querySelector('html');
+		html.style.overflowX = 'hidden';
 	}
 
 	emptyStateProcess() {
