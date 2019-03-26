@@ -35,7 +35,7 @@ export class CredentialComponent implements OnInit {
 	showSpinner: boolean;
 	credentialInProcess: CredentialInterface;
 	errorWithCredentials: boolean = false;
-	showGoMovementsButton = false;
+	showGoMovementsButton: boolean = false;
 
 	// USER MESSAGES
 	loaderMessagge: string;
@@ -185,12 +185,9 @@ export class CredentialComponent implements OnInit {
 
 	// AUTOMATIC SYNC PROCESS FOR EACH CREDENTIAL
 	automaticSync(credential: CredentialInterface) {
-		let currentMoment = new Date();
 		if (credential.institution.code != 'BBVA') {
 			if (credential.status == 'ACTIVE') {
-				let dateObj = new Date(credential.lastUpdated);
-				let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
-				if (diff >= 8) {
+				if (this.moreThanEightHours(credential)) {
 					this.validateStatusFinished = false;
 					this.credentialService.updateCredential(credential).subscribe((res) => {
 						this.checkStatusOfCredential(res.body);
@@ -279,6 +276,25 @@ export class CredentialComponent implements OnInit {
 		this.description = "Pulsa el botón de 'Agregar Credencial' para dar de alta tus cuentas bancarias.";
 		this.buttonText = 'Agregar Credencial';
 		this.buttonUrl = '/app/banks';
+	}
+
+	moreThanEightHours(credential: CredentialInterface): boolean {
+		let currentMoment = new Date();
+		let dateObj = new Date(credential.lastUpdated);
+		let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+		if (diff >= 8) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// SyncButton process
+	syncButton(credential: CredentialInterface) {
+		this.validateStatusFinished = false;
+		this.credentialService.updateCredential(credential).subscribe((res) => {
+			this.checkStatusOfCredential(res.body);
+		});
 	}
 
 	// InteractiveFields Process
