@@ -109,4 +109,10 @@
   #newMovement {
      max-height: 61%;
   }
+  #date-left-section {
+    margin-right: 3%;
+  }
+  #date-mid-section {
+    margin-right: 4%;
+  }
 }
