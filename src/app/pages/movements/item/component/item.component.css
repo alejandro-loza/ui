@@ -5,10 +5,6 @@
   margin-bottom: 0px;
 }
 
-.inputPadding {
-  padding-left: 10% !important;
-}
-
 .description {
   margin-left: 10%;
 }
@@ -38,3 +34,9 @@
 .switch label input[type=checkbox]:checked+.lever {
   background-color: #ffcc80;
 }
+
+.inputPadding {
+  padding-left: 10% !important;
+  width: 90% !important;
+}
+
