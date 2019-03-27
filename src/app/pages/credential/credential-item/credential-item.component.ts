@@ -44,13 +44,10 @@ export class CredentialItemComponent implements OnInit {
 	selectIconToShow() {
 		if (this.credential.status == 'ACTIVE') {
 			this.iconText = 'verified_user';
-			document.querySelector('#statusIcon').classList.remove('rotate');
 		} else if (this.credential.status == 'INVALID') {
 			this.iconText = 'report_problem';
-			document.querySelector('#statusIcon').classList.remove('rotate');
 		} else {
 			this.iconText = 'sync';
-			document.querySelector('#statusIcon').classList.add('rotate');
 		}
 	}
 }
