@@ -17,74 +17,71 @@ import { debounce } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
-  selector: 'app-movements',
-  templateUrl: './movements.component.html',
-  styleUrls: ['./movements.component.css']
+	selector: 'app-movements',
+	templateUrl: './movements.component.html',
+	styleUrls: [ './movements.component.css' ]
 })
 export class MovementsComponent implements OnInit, OnDestroy {
-  paramsMovements: ParamsMovements;
-  movementList: Movement[];
-  categoryList: Category[];
-  scrollResult: Subscription;
+	paramsMovements: ParamsMovements;
+	movementList: Movement[];
+	categoryList: Category[];
+	scrollResult: Subscription;
 
-  status: boolean;
-  filterflag: boolean;
-  spinnerBoolean: boolean;
-  isLoading: boolean;
-  auxSize: number;
-  statusMovements: boolean;
+	status: boolean;
+	filterflag: boolean;
+	spinnerBoolean: boolean;
+	isLoading: boolean;
+	auxSize: number;
+	statusMovements: boolean;
 
-  // EMPTY STATE
-  showEmptyState: boolean;
-  imgName: string;
-  title: string;
-  description: string;
-  buttonText: string;
-  buttonUrl: string;
+	// EMPTY STATE
+	showEmptyState: boolean;
+	imgName: string;
+	title: string;
+	description: string;
+	buttonText: string;
+	buttonUrl: string;
 
-  constructor(
-    private categoryService: CategoriesService,
-    private movementService: MovementsService,
-    private dateApiService: DateApiService,
-    private emptyStateService: EmptyStateService,
-    private toastService: ToastService,
-    private paramsMovementsService: ParamsMovementsService,
-  ) {
-    this.showEmptyState = true;
-    this.isLoading = true;
-    this.status = false;
-    this.spinnerBoolean = false;
-    this.filterflag = false;
-    this.statusMovements = false;
-    this.auxSize = 0;
-    this.movementList = [];
-    this.paramsMovements = {
-      charges: true,
-      deep: true,
-      deposits: true,
-      duplicates: true,
-      maxMovements: 35,
-      offset: 0
-    };
-  }
+	constructor(
+		private categoryService: CategoriesService,
+		private movementService: MovementsService,
+		private dateApiService: DateApiService,
+		private emptyStateService: EmptyStateService,
+		private toastService: ToastService,
+		private paramsMovementsService: ParamsMovementsService
+	) {
+		this.showEmptyState = true;
+		this.isLoading = true;
+		this.status = false;
+		this.spinnerBoolean = false;
+		this.filterflag = false;
+		this.statusMovements = false;
+		this.auxSize = 0;
+		this.movementList = [];
+		this.paramsMovements = {
+			charges: true,
+			deep: true,
+			deposits: true,
+			duplicates: true,
+			maxMovements: 35,
+			offset: 0
+		};
+	}
 
-  ngOnInit() {
-    this.fillInformationForEmptyState();
-    this.getCategories();
-    this.getMovements();
-    this.scrollResult = fromEvent(document, 'scroll')
-      .pipe(debounce(() => interval(100)))
-      .subscribe(() => {
+	ngOnInit() {
+		this.fillInformationForEmptyState();
+		this.getCategories();
+		this.getMovements();
+		this.scrollResult = fromEvent(document, 'scroll').pipe(debounce(() => interval(100))).subscribe(() => {
+			this.offsetMovement();
+		});
+	}
 
-        this.offsetMovement();
-      });
-  }
+	ngOnDestroy() {
+		this.scrollResult.unsubscribe();
+	}
 
-  ngOnDestroy() {
-    this.scrollResult.unsubscribe();
-  }
-
-  /**
+	/**
    * @function statusMovement() - Esto es la función del output en los componentes. Esto es para notificar a los demás componentes
    * @param {boolean} status - La bandera que actualiza la variable status
    *
@@ -92,107 +89,110 @@ export class MovementsComponent implements OnInit, OnDestroy {
    * se han cambiado antes de ser enviados, y la única forma es enviar un estado genérico en la app ( Redux/RXJS (reduce) ) o enviando un
    * setTimeout
    */
-  statusMovement(status: boolean) {
-    setTimeout(() => {
-      this.status = status;
-      this.filterflag = false;
-    }, 0);
-    this.showEmptyState = false;
-    this.refreshMovement();
-  }
+	statusMovement(status: boolean) {
+		setTimeout(() => {
+			this.status = status;
+			this.filterflag = false;
+		}, 0);
+		this.showEmptyState = false;
+		this.refreshMovement();
+	}
 
-  /**
+	/**
    * @function offsetMovement() - It's anonymous functions, its used for eventListener Scroll
    */
 
-  offsetMovement() {
-    const scrollVertical = window.scrollY;
-    let scrollLimit: number;
-    scrollLimit = $(document).height() - $(window).height();
-    if (scrollVertical >= ( scrollLimit - 54 )) {
-      this.spinnerBoolean = false;
-      this.getMovements();
-    }
-  }
+	offsetMovement() {
+		const scrollVertical = window.scrollY;
+		let scrollLimit: number;
+		scrollLimit = $(document).height() - $(window).height();
+		if (scrollVertical >= scrollLimit - 54) {
+			this.spinnerBoolean = false;
+			this.getMovements();
+		}
+	}
 
-  getMovements() {
-    this.movementService.getMovements(this.paramsMovements).subscribe(
-      res => {
-        // Se le asigna el tamaño de la lista a la variable _auxSize_
-        this.auxSize = res.body.data.length;
+	getMovements() {
+		this.movementService.getMovements(this.paramsMovements).subscribe(
+			(res) => {
+				// Se le asigna el tamaño de la lista a la variable _auxSize_
+				this.auxSize = res.body.data.length;
 
-        // Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
-        res.body.data.forEach(movement => {
-          movement['formatDate'] = this.dateApiService.dateFormatMovement(
-            movement.customDate
-          );
-          movement['editAvailable'] = false;
-          movement['customAmount'] = movement.amount;
-          this.movementList.push(movement);
-        });
-      },
-      err => {
-        this.toastService.setCode = err.status;
-        if (err.status === 500) {
-          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
-          this.toastService.toastGeneral();
-        }
-      },
-      () => {
-        if (this.movementService.getMovementList.length !== 0) {
-          this.showEmptyState = false;
-        }
-        this.validateAllMovements();
-        this.paramsMovements.offset += this.paramsMovements.maxMovements;
-      }
-    );
-  }
+				// Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
+				res.body.data.forEach((movement) => {
+					movement['formatDate'] = this.dateApiService.dateFormatMovement(
+						this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
+					);
+					movement['editAvailable'] = false;
+					movement['customAmount'] = movement.amount;
+					this.movementList.push(movement);
+				});
+			},
+			(err) => {
+				this.toastService.setCode = err.status;
+				if (err.status === 500) {
+					this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+					this.toastService.toastGeneral();
+				}
+			},
+			() => {
+				if (this.movementService.getMovementList.length !== 0) {
+					this.showEmptyState = false;
+				}
+				this.validateAllMovements();
+				this.paramsMovements.offset += this.paramsMovements.maxMovements;
+			}
+		);
+	}
 
-  getCategories() {
-    this.categoryService.getCategoriesInfo().subscribe(
-      res => {
-        this.categoryList = res.body;
-      },
-      err => {
-        this.toastService.setCode = err.status;
-        if (err.status === 401) {
-          this.toastService.toastGeneral();
-          this.getCategories();
-        }
-        if (err.status === 500) {
-          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
-          this.toastService.toastGeneral();
-        }
-      }
-    );
-  }
+	getCategories() {
+		this.categoryService.getCategoriesInfo().subscribe(
+			(res) => {
+				this.categoryList = res.body;
+			},
+			(err) => {
+				this.toastService.setCode = err.status;
+				if (err.status === 401) {
+					this.toastService.toastGeneral();
+					this.getCategories();
+				}
+				if (err.status === 500) {
+					this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+					this.toastService.toastGeneral();
+				}
+			}
+		);
+	}
 
-  refreshMovement() {
-    this.paramsMovements = this.paramsMovementsService.getParamsMovements;
-    this.paramsMovements.offset = 0;
-    this.movementList = [];
-    this.getMovements();
-  }
+	refreshMovement() {
+		this.paramsMovements = this.paramsMovementsService.getParamsMovements;
+		this.paramsMovements.offset = 0;
+		this.movementList = [];
+		this.getMovements();
+	}
 
-  validateAllMovements() {
-    // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
-    // Se manda un toast y se remueve la función del scroll.
-    if ( (this.auxSize < this.paramsMovements.maxMovements || this.movementService.getMovementList.length === 0) && this.showEmptyState === false ) {
-      this.scrollResult.unsubscribe();
-      this.toastService.setCode = 200;
-      this.toastService.setMessage = 'Hemos cargamos todos tus movimientos';
-      this.toastService.toastGeneral();
-      this.spinnerBoolean = true;
-    }
-    this.isLoading = false;
-  }
+	validateAllMovements() {
+		// Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
+		// Se manda un toast y se remueve la función del scroll.
+		if (
+			(this.auxSize < this.paramsMovements.maxMovements || this.movementService.getMovementList.length === 0) &&
+			this.showEmptyState === false
+		) {
+			this.scrollResult.unsubscribe();
+			this.toastService.setCode = 200;
+			this.toastService.setMessage = 'Hemos cargamos todos tus movimientos';
+			this.toastService.toastGeneral();
+			this.spinnerBoolean = true;
+		}
+		this.isLoading = false;
+	}
 
-  fillInformationForEmptyState() {
-    this.imgName = 'transactions';
-    this.title = 'No tienes Movimientos';
-    this.description =
-      'Al dar de alta tus cuentas, verás una lista con todos tus movimientos. Olvídate de registrar cada uno.';
-    this.buttonText = 'Dar de alta una cuenta bancaria';
-    this.buttonUrl = '/app/banks';
-  }
+	fillInformationForEmptyState() {
+		this.imgName = 'transactions';
+		this.title = 'No tienes Movimientos';
+		this.description =
+			'Al dar de alta tus cuentas, verás una lista con todos tus movimientos. Olvídate de registrar cada uno.';
+		this.buttonText = 'Dar de alta una cuenta bancaria';
+		this.buttonUrl = '/app/banks';
+	}
 }
