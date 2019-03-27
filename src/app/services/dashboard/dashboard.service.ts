@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { DateApiService } from '@services/date-api/date-api.service';
 import { isNullOrUndefined } from 'util';
 
 // JUST INTERFACES
@@ -43,7 +44,7 @@ export class DashboardService {
 	movementsPerMonth: monthMovement[] = [];
 	monthMovementArray: MonthMovementArray[] = [];
 
-	constructor(private dashboardBean: DashboardBeanService) {}
+	constructor(private dashboardBean: DashboardBeanService, private dateApiService: DateApiService) {}
 
 	mainMethod(movements: Movement[], categories: Category[]) {
 		this.cleanValues();
@@ -381,12 +382,14 @@ export class DashboardService {
 	}
 
 	dataForExpenses() {
-		let auxDate: Date = this.getDateWithTimeZone(this.movementsList[0].customDate.toString());
+		let auxDate: Date = this.dateApiService.formatDateForAllBrowsers(this.movementsList[0].customDate.toString());
 		let monthsArray: number[] = [];
 		monthsArray.push(auxDate.getMonth());
 
 		for (let i = 0; i < this.movementsList.length; i++) {
-			let movementDate = this.getDateWithTimeZone(this.movementsList[i].customDate.toString());
+			let movementDate = this.dateApiService.formatDateForAllBrowsers(
+				this.movementsList[i].customDate.toString()
+			);
 			if (movementDate.getMonth() == auxDate.getMonth()) {
 				this.monthMovementProcess(this.movementsList[i], monthsArray);
 			} else {
@@ -736,7 +739,7 @@ export class DashboardService {
 
 	// Arreglo de mes-movimiento, mes-movimiento
 	monthMovementProcess(movement: Movement, monthsArray: number[]) {
-		let date = this.getDateWithTimeZone(movement.customDate.toString());
+		let date = this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString());
 
 		if (!monthsArray.includes(date.getMonth())) {
 			monthsArray.push(date.getMonth());
@@ -756,11 +759,11 @@ export class DashboardService {
 	}
 
 	dataForBalanceChart() {
-		let firstdate: Date = this.getDateWithTimeZone(this.movementsList[0].customDate.toString());
+		let firstdate: Date = this.dateApiService.formatDateForAllBrowsers(this.movementsList[0].customDate.toString());
 		this.fillingYearsArray(firstdate.getFullYear());
 		let auxMonth: number = firstdate.getMonth();
 		this.movementsList.forEach((movement) => {
-			let date: Date = this.getDateWithTimeZone(movement.customDate.toString());
+			let date: Date = this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString());
 			let dateMovementMonth = date.getMonth();
 			if (auxMonth == dateMovementMonth) {
 				this.chargeDepositOperation(movement);
@@ -837,21 +840,6 @@ export class DashboardService {
 		if (movement.type === 'DEPOSIT') {
 			this.depositBalanceAux += movement.amount;
 		}
-	}
-
-	getDateWithTimeZone(date: string): Date {
-		let splitDate: any = date.split(/[^0-9]/);
-		let validDate: Date = new Date(
-			splitDate[0],
-			splitDate[1] - 1,
-			splitDate[2],
-			splitDate[3],
-			splitDate[4],
-			splitDate[5]
-		);
-		let offset: number = validDate.getTimezoneOffset() * -1;
-		validDate.setTime(validDate.getTime() + offset * 60 * 1000);
-		return validDate;
 	}
 
 	cleanValues() {
