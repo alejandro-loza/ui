@@ -5,6 +5,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { ToastService } from '@services/toast/toast.service';
 import { SignupService } from '@services/signup/signup.service';
+import { LoginService } from '@services/login/login.service';
+import { User } from '@app/interfaces/user.interface';
 
 @Component({
 	selector: 'app-signup',
@@ -22,8 +24,14 @@ export class SignupComponent {
 		termsAndConditions: new FormControl({ value: true }, Validators.required)
 	});
 	showSpinner: boolean = false;
+	private user: User = {};
 
-	constructor(private signupService: SignupService, private router: Router, private toastService: ToastService) {}
+	constructor(
+		private signupService: SignupService,
+		private router: Router,
+		private toastService: ToastService,
+		private loginService: LoginService
+	) {}
 
 	signup() {
 		this.passwordMatch();
@@ -42,10 +50,24 @@ export class SignupComponent {
 				() => {
 					this.toastService.setMessage = '¡Se creó tu cuenta!';
 					this.toastService.toastGeneral();
-					return this.router.navigate([ '/access/login' ]);
+					this.login();
 				}
 			);
 		}
+	}
+
+	login() {
+		this.user.email = this.signupData.value.email;
+		this.user.password = this.signupData.value.password;
+		this.loginService.login(this.user).subscribe(
+			(res) => res,
+			(err) => {
+				return err;
+			},
+			() => {
+				return this.router.navigate([ '/access/welcome' ]);
+			}
+		);
 	}
 
 	passwordMatch() {
