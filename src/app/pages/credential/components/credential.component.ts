@@ -235,9 +235,9 @@ export class CredentialComponent implements OnInit {
 		this.creditBalance = 0;
 		this.totalBalance = 0;
 		accountsArray.forEach((element) => {
-			if (element.nature !== 'Crédito') {
+			if (element.nature !== 'Crédito' && element.institution.code != 'DINERIO') {
 				this.debitBalance += element.balance;
-			} else {
+			} else if (element.nature == 'Crédito') {
 				this.creditBalance += element.balance;
 			}
 		});
