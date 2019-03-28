@@ -105,7 +105,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
     const scrollVertical = window.scrollY;
     let scrollLimit: number;
     scrollLimit = $(document).height() - $(window).height();
-    if ( scrollVertical >= ( scrollLimit - 54 ) ) {
+    scrollLimit = Math.round(scrollLimit *= .7);
+    if ( ( scrollVertical >= scrollLimit ) &&  this.statusMovementsList === false ) {
       this.spinnerBoolean = false;
       this.getMovements();
     }
