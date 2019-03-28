@@ -6,6 +6,7 @@ import { CategoriesService } from '@services/categories/categories.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
+import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
@@ -48,7 +49,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
 		private dateApiService: DateApiService,
 		private emptyStateService: EmptyStateService,
 		private toastService: ToastService,
-		private paramsMovementsService: ParamsMovementsService
+		private paramsMovementsService: ParamsMovementsService,
+		private dashboardBeanService: DashboardBeanService
 	) {
 		this.showEmptyState = true;
 		this.isLoading = true;
@@ -71,14 +73,22 @@ export class MovementsComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.fillInformationForEmptyState();
 		this.getCategories();
-		this.getMovements();
-		this.scrollResult = fromEvent(document, 'scroll').pipe(debounce(() => interval(100))).subscribe(() => {
-			this.offsetMovement();
-		});
+		if (this.dashboardBeanService.getLoadListFromDashboard()) {
+			this.getMovementsFromDashboard();
+		} else {
+			this.getMovements();
+			this.scrollResult = fromEvent(document, 'scroll').pipe(debounce(() => interval(100))).subscribe(() => {
+				this.offsetMovement();
+			});
+		}
 	}
 
 	ngOnDestroy() {
-		this.scrollResult.unsubscribe();
+		if (this.scrollResult) {
+			this.scrollResult.unsubscribe();
+		}
+		this.dashboardBeanService.setLoadListFromDashboard(false);
+		this.dashboardBeanService.setListOfMovementsFromDashboard([]);
 	}
 
 	/**
@@ -143,6 +153,20 @@ export class MovementsComponent implements OnInit, OnDestroy {
 				this.paramsMovements.offset += this.paramsMovements.maxMovements;
 			}
 		);
+	}
+
+	getMovementsFromDashboard() {
+		this.dashboardBeanService.getListOfMovementsFromDashboard().forEach((movement) => {
+			movement['formatDate'] = this.dateApiService.dateFormatMovement(
+				this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
+			);
+			movement['editAvailable'] = false;
+			movement['customAmount'] = movement.amount;
+			this.movementList.push(movement);
+		});
+		this.showEmptyState = false;
+		this.isLoading = false;
+		this.spinnerBoolean = true;
 	}
 
 	getCategories() {
