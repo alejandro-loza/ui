@@ -1,12 +1,16 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
+// SERVICES
 import { AccountService } from '@services/account/account.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
+import { DateApiService } from '@services/date-api/date-api.service';
+
+// Interfaces
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
@@ -60,7 +64,8 @@ export class CredentialComponent implements OnInit {
 		private institutionService: InstitutionService,
 		private interactiveService: InteractiveFieldService,
 		private cleanerService: CleanerService,
-		private credentialBean: CredentialBeanService
+		private credentialBean: CredentialBeanService,
+		private dateApiService: DateApiService
 	) {
 		this.credentials = [];
 		this.debitBalance = 0;
@@ -279,9 +284,9 @@ export class CredentialComponent implements OnInit {
 	}
 
 	moreThanEightHours(credential: CredentialInterface): boolean {
-		let currentMoment = new Date();
-		let dateObj = new Date(credential.lastUpdated);
-		let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+		let currentMoment: Date = new Date();
+		let dateObj: Date = this.dateApiService.formatDateForAllBrowsers(credential.lastUpdated);
+		let diff: number = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
 		if (diff >= 8) {
 			return true;
 		} else {
