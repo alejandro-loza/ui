@@ -52,9 +52,8 @@ export class BudgetsComponent implements OnInit {
 		this.budgetsService.getAllBudgets().subscribe(
 			(res) => {
 				this.budgetsBeanService.setLoadInformation(false);
-				res.body.data.forEach((budget) => {
-					this.budgets.push(budget);
-				});
+				this.budgets = res.body.data;
+				console.log(this.budgets);
 				this.sortingBudgets();
 				this.doTotalBudget();
 				this.budgetsBeanService.setBudgets(this.budgets);
@@ -116,7 +115,7 @@ export class BudgetsComponent implements OnInit {
 
 		if (percentage < 70) {
 			return budget_green;
-		} else if (percentage >= 70 && percentage < 100) {
+		} else if (percentage >= 70 && percentage <= 100) {
 			return budget_yellow;
 		} else {
 			return budget_red;

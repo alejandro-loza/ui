@@ -5,18 +5,14 @@ import { EmptyStateModule } from '@components/empty-states/empty-states.module';
 
 // Component
 import { CredentialComponent } from './components/credential.component';
+import { CredentialItemComponent } from './credential-item/credential-item.component';
 
 // Route
 import { CREDENTIAL_ROUTES } from './credential.route';
 import { BackButtonModule } from '@components/back-button/back-button.module';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    BackButtonModule,
-    EmptyStateModule,
-    CREDENTIAL_ROUTES
-  ],
-	declarations: [ CredentialComponent ]
+	imports: [ SharedModule, BackButtonModule, EmptyStateModule, CREDENTIAL_ROUTES ],
+	declarations: [ CredentialComponent, CredentialItemComponent ]
 })
 export class CredentialModule {}

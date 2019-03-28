@@ -138,6 +138,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	}
 
 	invalidCredential(credential: CredentialInterface, data: NgForm) {
+		this.openLoaderModal();
 		credential.password = data.value.password;
 		this.credentialService.updateCredential(credential).subscribe(
 			(res) => {
@@ -160,6 +161,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	}
 
 	activeCredential(credential: CredentialInterface) {
+		this.openLoaderModal();
 		this.credentialService.updateCredential(credential).subscribe(
 			(res) => {
 				this.toastService.setCode = res.status;
