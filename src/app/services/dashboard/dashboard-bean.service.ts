@@ -3,6 +3,7 @@ import { StackedBar } from '@app/interfaces/dashboard/dashboardStackedBar.interf
 import { BalancePieChart } from '@app/interfaces/dashboard/BalancePieChart.interface';
 import { ResumeMainData } from '@app/interfaces/dashboard/resumeMainData.interface';
 import { BarChart } from '@app/interfaces/dashboard/BarChart.interface';
+import { Movement } from '@app/interfaces/movement.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,6 +17,10 @@ export class DashboardBeanService {
 	private dataIncomesBarChart: BarChart[] = [];
 	private dataIncomesTab: ResumeMainData[] = [];
 	private showEmptyState: boolean = false;
+	// For Movements implementation
+	private loadListFromDashboard: boolean = false;
+	private listOfMovementsFromDashboard: Movement[] = [];
+
 	constructor() {}
 
 	public setShowEmptyState(data: boolean) {
@@ -80,5 +85,21 @@ export class DashboardBeanService {
 
 	public getLoadInformation(): Boolean {
 		return this.loadInformation;
+	}
+
+	public setLoadListFromDashboard(data: boolean) {
+		this.loadListFromDashboard = data;
+	}
+
+	public getLoadListFromDashboard(): boolean {
+		return this.loadListFromDashboard;
+	}
+
+	public setListOfMovementsFromDashboard(data: Movement[]) {
+		this.listOfMovementsFromDashboard = data;
+	}
+
+	public getListOfMovementsFromDashboard(): Movement[] {
+		return this.listOfMovementsFromDashboard;
 	}
 }
