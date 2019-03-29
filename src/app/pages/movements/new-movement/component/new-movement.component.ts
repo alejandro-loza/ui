@@ -47,7 +47,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   ) {
     this.formatDate = 'Otro...';
     this.newMovement = {
-      date: this.dateApiService.dateApi(new Date()),
+      date: new Date(),
       type: 'charge'
     };
     this.date = new Date();
@@ -131,7 +131,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     } else if (id === 'otherDate') {
       return;
     }
-    this.newMovement.date = this.dateApiService.dateApi(auxDate);
+    this.newMovement.date = auxDate;
   }
 
   resetInputs() {

@@ -84,19 +84,18 @@ export class MovementsService {
 
   createMovement(movement: NewMovement): Observable<HttpResponse<Movement>> {
     const id = this.configService.getUser.id;
+    const body = JSON.stringify({
+      amount: movement.amount,
+      balance: 0,
+      customDate: this.dateService.dateApi(movement.date),
+      customDescription: movement.description,
+      date: this.dateService.dateApi(movement.date),
+      description: movement.description,
+      duplicated: movement.duplicated,
+      type: movement.type.toUpperCase()
+    });
     return this.httpClient.post<Movement>(
-      `${this.url}/${id}/movements`,
-      JSON.stringify({
-        amount: movement.amount,
-        balance: 0,
-        customDate: movement.date,
-        customDescription: movement.description,
-        date: movement.date,
-        description: movement.description,
-        duplicated: movement.duplicated,
-        type: movement.type.toUpperCase()
-      }),
-      { observe: 'response', headers: this.configService.getHeaders }
+      `${this.url}/${id}/movements`, body, { observe: 'response', headers: this.configService.getHeaders }
     );
   }
 
