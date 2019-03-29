@@ -27,6 +27,8 @@ export class CleanerService {
 		this.dashboardBean.setDataIncomesBarChart([]);
 		this.dashboardBean.setDataIncomesTab([]);
 		this.dashboardBean.setShowEmptyState(false);
+		this.dashboardBean.setListOfMovementsFromDashboard([]);
+		this.dashboardBean.setLoadListFromDashboard(false);
 		// Credentials Memory
 		this.credentialBeanService.setCredentials([]);
 		this.credentialBeanService.setAccounts([]);
@@ -55,6 +57,8 @@ export class CleanerService {
 		this.dashboardBean.setDataIncomesBarChart([]);
 		this.dashboardBean.setDataIncomesTab([]);
 		this.dashboardBean.setShowEmptyState(false);
+		this.dashboardBean.setListOfMovementsFromDashboard([]);
+		this.dashboardBean.setLoadListFromDashboard(false);
 	}
 
 	cleanBudgetsVariables() {

@@ -1,3 +1,7 @@
+#incomesPieChart {
+	margin-bottom: 30px;
+}
+
 #pieContainer {
 	display: grid;
 	text-align: -webkit-center;

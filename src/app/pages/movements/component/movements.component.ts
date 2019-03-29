@@ -6,6 +6,7 @@ import { CategoriesService } from '@services/categories/categories.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
+import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
@@ -17,9 +18,9 @@ import { debounce } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
-	selector: 'app-movements',
-	templateUrl: './movements.component.html',
-	styleUrls: [ './movements.component.css' ]
+  selector: 'app-movements',
+  templateUrl: './movements.component.html',
+  styleUrls: ['./movements.component.css']
 })
 export class MovementsComponent implements OnInit, OnDestroy {
 	paramsMovements: ParamsMovements;
@@ -32,7 +33,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 	spinnerBoolean: boolean;
 	isLoading: boolean;
 	auxSize: number;
-	statusMovements: boolean;
+	statusMovementsList: boolean;
 
 	// EMPTY STATE
 	showEmptyState: boolean;
@@ -48,14 +49,15 @@ export class MovementsComponent implements OnInit, OnDestroy {
 		private dateApiService: DateApiService,
 		private emptyStateService: EmptyStateService,
 		private toastService: ToastService,
-		private paramsMovementsService: ParamsMovementsService
+		private paramsMovementsService: ParamsMovementsService,
+		private dashboardBeanService: DashboardBeanService
 	) {
 		this.showEmptyState = true;
 		this.isLoading = true;
 		this.status = false;
 		this.spinnerBoolean = false;
 		this.filterflag = false;
-		this.statusMovements = false;
+		this.statusMovementsList = false;
 		this.auxSize = 0;
 		this.movementList = [];
 		this.paramsMovements = {
@@ -71,14 +73,22 @@ export class MovementsComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.fillInformationForEmptyState();
 		this.getCategories();
-		this.getMovements();
-		this.scrollResult = fromEvent(document, 'scroll').pipe(debounce(() => interval(100))).subscribe(() => {
-			this.offsetMovement();
-		});
+		if (this.dashboardBeanService.getLoadListFromDashboard()) {
+			this.getMovementsFromDashboard();
+		} else {
+			this.getMovements();
+			this.scrollResult = fromEvent(document, 'scroll').pipe(debounce(() => interval(100))).subscribe(() => {
+				this.offsetMovement();
+			});
+		}
 	}
 
 	ngOnDestroy() {
-		this.scrollResult.unsubscribe();
+		if (this.scrollResult) {
+			this.scrollResult.unsubscribe();
+		}
+		this.dashboardBeanService.setLoadListFromDashboard(false);
+		this.dashboardBeanService.setListOfMovementsFromDashboard([]);
 	}
 
 	/**
@@ -89,30 +99,31 @@ export class MovementsComponent implements OnInit, OnDestroy {
    * se han cambiado antes de ser enviados, y la única forma es enviar un estado genérico en la app ( Redux/RXJS (reduce) ) o enviando un
    * setTimeout
    */
-	statusMovement(status: boolean) {
-		setTimeout(() => {
-			this.status = status;
-			this.filterflag = false;
-		}, 0);
-		this.showEmptyState = false;
-		this.refreshMovement();
-	}
+  statusMovement(status: boolean) {
+    setTimeout(() => {
+      this.status = status;
+    }, 0);
+    this.showEmptyState = false;
+    this.refreshMovement();
+  }
 
-	/**
+  /**
    * @function offsetMovement() - It's anonymous functions, its used for eventListener Scroll
    */
 
 	offsetMovement() {
-		const scrollVertical = window.scrollY;
-		let scrollLimit: number;
-		scrollLimit = $(document).height() - $(window).height();
-		if (scrollVertical >= scrollLimit - 54) {
-			this.spinnerBoolean = false;
-			this.getMovements();
-		}
-	}
+    const scrollVertical = window.scrollY;
+    let scrollLimit: number;
+    scrollLimit = $(document).height() - $(window).height();
+    scrollLimit = Math.round(scrollLimit *= .7);
+    if ( ( scrollVertical >= scrollLimit ) &&  this.statusMovementsList === false ) {
+      this.spinnerBoolean = false;
+      this.getMovements();
+    }
+  }
 
 	getMovements() {
+		this.statusMovementsList = true;
 		this.movementService.getMovements(this.paramsMovements).subscribe(
 			(res) => {
 				// Se le asigna el tamaño de la lista a la variable _auxSize_
@@ -141,8 +152,23 @@ export class MovementsComponent implements OnInit, OnDestroy {
 				}
 				this.validateAllMovements();
 				this.paramsMovements.offset += this.paramsMovements.maxMovements;
+				this.statusMovementsList = false;
 			}
 		);
+	}
+
+	getMovementsFromDashboard() {
+		this.dashboardBeanService.getListOfMovementsFromDashboard().forEach((movement) => {
+			movement['formatDate'] = this.dateApiService.dateFormatMovement(
+				this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
+			);
+			movement['editAvailable'] = false;
+			movement['customAmount'] = movement.amount;
+			this.movementList.push(movement);
+		});
+		this.showEmptyState = false;
+		this.isLoading = false;
+		this.spinnerBoolean = true;
 	}
 
 	getCategories() {

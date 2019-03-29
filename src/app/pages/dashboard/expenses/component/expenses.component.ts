@@ -26,6 +26,10 @@ export class ExpensesComponent implements OnInit {
 	showBackButton: boolean = false;
 	monthOnScreen: number = 0;
 
+	// V ariables to use movements implementation
+	indexOfData: number = 0;
+	categoryId: string = '';
+
 	constructor(private dashboardBean: DashboardBeanService) {}
 
 	ngOnInit() {
@@ -174,10 +178,14 @@ export class ExpensesComponent implements OnInit {
 		if (!element.isSubCat) {
 			this.doughnutChart.destroy();
 			this.showBackButton = true;
+			this.indexOfData = element.index;
+			this.categoryId = element.catId;
 			this.dataForTableOfSubcats(element.index, element.catId);
 			this.pieChartOfSubcats();
 			this.setMainMessage(element.index, element.amount);
 			this.monthOnScreen = element.index;
+		} else {
+			// Click en una subcategoría
 		}
 	}
 
