@@ -3,6 +3,7 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import {environment} from '@env/environment';
 
 import {ConfigService} from '@services/config/config.service';
+import {DateApiService} from '@services/date-api/date-api.service';
 
 import {ParamsMovements} from '@interfaces/paramsMovements.interface';
 import {NewMovement} from '@interfaces/newMovement.interface';
@@ -21,7 +22,8 @@ export class MovementsService {
 
   constructor(
     private httpClient: HttpClient,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private dateService: DateApiService
   ) { }
 
   get getMovementList(): Movement[] {
@@ -102,7 +104,7 @@ export class MovementsService {
     const body = {
       amount: movement.amount,
       balance: movement.balance,
-      customDate: movement.customDate,
+      customDate: this.dateService.dateApi(movement.customDate),
       customDescription: movement.customDescription,
       date: movement.date,
       description: movement.description,
@@ -112,6 +114,7 @@ export class MovementsService {
     if (movement.concepts[0].category) {
       body['category'] = { id: movement.concepts[0].category.id };
     }
+    console.log(body);
     return this.httpClient.put<Movement>(
       `${environment.backendUrl}/movements/${movement.id}`,
       body,
