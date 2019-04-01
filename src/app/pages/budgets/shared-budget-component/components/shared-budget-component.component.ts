@@ -83,6 +83,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 
 	submit(form: NgForm) {
 		this.showSpinner = true;
+		(<HTMLButtonElement>document.querySelector('#submitBtn')).disabled = true;
 		setTimeout(() => {
 			this.editModeOfTheComponent ? this.doDataProcessForPUT(form) : this.doDataProcessForPost(form);
 		}, 100);

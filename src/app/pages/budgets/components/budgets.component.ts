@@ -53,7 +53,6 @@ export class BudgetsComponent implements OnInit {
 			(res) => {
 				this.budgetsBeanService.setLoadInformation(false);
 				this.budgets = res.body.data;
-				console.log(this.budgets);
 				this.sortingBudgets();
 				this.doTotalBudget();
 				this.budgetsBeanService.setBudgets(this.budgets);
