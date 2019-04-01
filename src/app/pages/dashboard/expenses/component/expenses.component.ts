@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Chart } from 'chart.js';
+import { DashboardStatesService } from '@services/dashboard/dashboard-states.service.ts';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
 import { ResumeMainData } from '@app/interfaces/dashboard/resumeMainData.interface';
 import { MonthChartEvent } from '@app/interfaces/dashboard/monthChartEvent.interface';
@@ -32,20 +33,25 @@ export class ExpensesComponent implements OnInit {
 	indexOfData: number = 0;
 	categoryId: string = '';
 
-	constructor(private dashboardBean: DashboardBeanService, private router: Router) {}
+	constructor(
+		private dashboardBean: DashboardBeanService,
+		private dashboardStatesService: DashboardStatesService,
+		private router: Router
+	) {}
 
 	ngOnInit() {
 		this.getStackedBarData();
 		this.getMainData();
-		this.firstData();
+		this.loadScreen();
 	}
 
-	firstData() {
-		this.PieChartOfCats(0);
-		this.dataForTableOfCats(0);
-		this.setMainMessage(this.expensesData.length - 1);
-		this.setTitles(this.expensesData.length - 1);
-		this.monthOnScreen = this.expensesData.length - 1;
+	loadScreen() {
+		let indexToShow = this.dashboardStatesService.getIndexOfMonthToShow();
+		this.PieChartOfCats(indexToShow);
+		this.dataForTableOfCats(indexToShow);
+		this.setMainMessage(this.expensesData.length - indexToShow - 1);
+		this.setTitles(this.expensesData.length - indexToShow - 1);
+		this.monthOnScreen = this.expensesData.length - indexToShow - 1;
 		this.showBackButton = false;
 	}
 
@@ -166,16 +172,18 @@ export class ExpensesComponent implements OnInit {
 		});
 	}
 
-	// EVENTO DE CLICK
+	// EVENTO DE CLICK EN ALGUN MES
 	selectedMonthChart(event: MonthChartEvent) {
+		this.dashboardStatesService.setIndexOfMonthToShow(this.expensesData.length - event.index - 1);
 		this.setMainMessage(event.index);
 		this.setTitles(event.index);
 		this.doughnutChart.destroy();
 		this.showBackButton = false;
-		this.PieChartOfCats(this.correctIndex(event));
-		this.dataForTableOfCats(this.correctIndex(event));
+		this.PieChartOfCats(this.expensesData.length - event.index - 1);
+		this.dataForTableOfCats(this.expensesData.length - event.index - 1);
 	}
 
+	// EVENTO DE CLICK EN UNA CATEGORIA
 	clickOnCategory(element: TableData) {
 		if (!element.isSubCat) {
 			this.doughnutChart.destroy();
@@ -189,7 +197,12 @@ export class ExpensesComponent implements OnInit {
 		} else {
 			// Click en una subcategoría
 			this.clickOnSubcategory(element);
+			this.settingIndexForSaveState();
 		}
+	}
+
+	settingIndexForSaveState() {
+		this.dashboardStatesService.setIndexOfMonthToShow(this.indexOfData);
 	}
 
 	clickOnSubcategory(element: TableData) {
@@ -207,37 +220,9 @@ export class ExpensesComponent implements OnInit {
 	}
 
 	storageMovements(movements: Movement[]) {
-		this.dashboardBean.setListOfMovementsFromDashboard(movements);
-		this.dashboardBean.setLoadListFromDashboard(true);
+		this.dashboardStatesService.setListOfMovementsFromDashboard(movements);
+		this.dashboardStatesService.setLoadListFromDashboard(true);
 		this.router.navigateByUrl('/app/movements');
-	}
-
-	correctIndex(event: MonthChartEvent): number {
-		let index: number = null;
-		let months: string[] = [
-			'Enero',
-			'Febrero',
-			'Marzo',
-			'Abril',
-			'Mayo',
-			'Junio',
-			'Julio',
-			'Agosto',
-			'Septiembre',
-			'Octubre',
-			'Noviembre',
-			'Diciembre'
-		];
-		for (let i = 0; i < months.length; i++) {
-			if (months[i] == event.label) {
-				for (let j = 0; j < this.expensesData.length; j++) {
-					if (this.expensesData[j].month == i) {
-						index = j;
-					}
-				}
-			}
-		}
-		return index;
 	}
 
 	returnButton(event: number) {

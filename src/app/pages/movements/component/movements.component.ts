@@ -6,7 +6,7 @@ import { CategoriesService } from '@services/categories/categories.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
-import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { DashboardStatesService } from '@services/dashboard/dashboard-states.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
@@ -50,7 +50,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 		private emptyStateService: EmptyStateService,
 		private toastService: ToastService,
 		private paramsMovementsService: ParamsMovementsService,
-		private dashboardBeanService: DashboardBeanService
+		private dashboardStatesService: DashboardStatesService
 	) {
 		this.showEmptyState = true;
 		this.isLoading = true;
@@ -73,7 +73,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.fillInformationForEmptyState();
 		this.getCategories();
-		if (this.dashboardBeanService.getLoadListFromDashboard()) {
+		if (this.dashboardStatesService.getLoadListFromDashboard()) {
 			this.getMovementsFromDashboard();
 		} else {
 			this.getMovements();
@@ -87,8 +87,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
 		if (this.scrollResult) {
 			this.scrollResult.unsubscribe();
 		}
-		this.dashboardBeanService.setLoadListFromDashboard(false);
-		this.dashboardBeanService.setListOfMovementsFromDashboard([]);
+		this.dashboardStatesService.setLoadListFromDashboard(false);
+		this.dashboardStatesService.setListOfMovementsFromDashboard([]);
 	}
 
 	/**
@@ -156,7 +156,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 	}
 
 	getMovementsFromDashboard() {
-		this.dashboardBeanService.getListOfMovementsFromDashboard().forEach((movement) => {
+		this.dashboardStatesService.getListOfMovementsFromDashboard().forEach((movement) => {
 			movement['formatDate'] = this.dateApiService.dateFormatMovement(
 				this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
 			);
