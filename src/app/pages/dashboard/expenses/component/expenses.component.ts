@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
 import { ResumeMainData } from '@app/interfaces/dashboard/resumeMainData.interface';
@@ -7,6 +8,7 @@ import { StackedBar } from '@app/interfaces/dashboard/dashboardStackedBar.interf
 import { TableData } from '@app/interfaces/dashboard/dataForTables.interface';
 import { isNullOrUndefined } from 'util';
 import { PieChart } from '@app/interfaces/dashboard/pieChart.interface';
+import { Movement } from '@app/interfaces/movement.interface';
 
 @Component({
 	selector: 'app-expenses',
@@ -30,7 +32,7 @@ export class ExpensesComponent implements OnInit {
 	indexOfData: number = 0;
 	categoryId: string = '';
 
-	constructor(private dashboardBean: DashboardBeanService) {}
+	constructor(private dashboardBean: DashboardBeanService, private router: Router) {}
 
 	ngOnInit() {
 		this.getStackedBarData();
@@ -186,7 +188,28 @@ export class ExpensesComponent implements OnInit {
 			this.monthOnScreen = element.index;
 		} else {
 			// Click en una subcategoría
+			this.clickOnSubcategory(element);
 		}
+	}
+
+	clickOnSubcategory(element: TableData) {
+		let movements: Movement[] = [];
+		this.expensesData[element.index].data.forEach((res) => {
+			if (res.categoryId == element.catId) {
+				res.details.forEach((detail) => {
+					if (detail.subCategory.name == element.label) {
+						movements = detail.movements;
+					}
+				});
+			}
+		});
+		this.storageMovements(movements);
+	}
+
+	storageMovements(movements: Movement[]) {
+		this.dashboardBean.setListOfMovementsFromDashboard(movements);
+		this.dashboardBean.setLoadListFromDashboard(true);
+		this.router.navigateByUrl('/app/movements');
 	}
 
 	correctIndex(event: MonthChartEvent): number {

@@ -34,6 +34,10 @@ export class IncomesComponent implements OnInit {
 	assetsUrl: string = '../../../assets/media/img/categories/color';
 	monthOnScreen: number = 0;
 
+	// V ariables to use movements implementation
+	indexOfData: number = 0;
+	categoryId: string = '';
+
 	constructor(private dashboardBeanService: DashboardBeanService) {}
 
 	ngOnInit() {
@@ -114,10 +118,14 @@ export class IncomesComponent implements OnInit {
 		if (!element.isSubCat) {
 			this.dataForTableOfSubcats(element.index, element.catId);
 			this.setMainMessage(element.index, element.amount);
+			this.indexOfData = element.index;
+			this.categoryId = element.catId;
 			this.monthOnScreen = element.index;
 			this.showBackButton = true;
 			this.doughnutChart.destroy();
 			this.pieChartOfSubcats();
+		} else {
+			// Click en una subcategoría
 		}
 	}
 

@@ -12,6 +12,7 @@ import { Movement } from '@app/interfaces/movement.interface';
 export class SeeMovementsButtonComponent implements OnInit {
 	@Input() indexOfData: number;
 	@Input() categoryId: string;
+	@Input() linkFromExpenses: boolean;
 
 	allData: ResumeMainData[] = [];
 	detailsOfData: Details[] = [];
@@ -39,6 +40,21 @@ export class SeeMovementsButtonComponent implements OnInit {
 	}
 
 	getDetailsOfAllData() {
+		this.linkFromExpenses ? this.processForExpenses() : this.processForIncomes();
+	}
+
+	processForIncomes() {
+		let preliminarData: ResumeMainData;
+		this.allData = this.dashboardBeanService.getDataIncomesTab();
+		preliminarData = this.allData[this.indexOfData];
+		preliminarData.data.forEach((element) => {
+			if (element.categoryId == this.categoryId) {
+				this.detailsOfData = element.details;
+			}
+		});
+	}
+
+	processForExpenses() {
 		let preliminarData: ResumeMainData;
 		this.allData = this.dashboardBeanService.getDataExpensesTab();
 		preliminarData = this.allData[this.indexOfData];
