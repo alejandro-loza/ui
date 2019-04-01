@@ -1,13 +1,9 @@
 import {
-  AfterViewInit,
   Component,
-  ElementRef,
   Input,
-  OnChanges,
   OnInit,
   Renderer2,
-  SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {Movement} from '@interfaces/movement.interface';
 import {Category} from '@interfaces/category.interface';
@@ -16,25 +12,26 @@ import {isNull, isUndefined} from 'util';
 
 import {CategoriesService} from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
-
-import * as M from 'materialize-css/dist/js/materialize';
+import {MatExpansionPanel} from '@angular/material';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.css']
 })
-export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
+export class ItemListComponent implements OnInit {
   @Input() movementList: Movement[];
   @Input() categoryList: Category[];
-  @ViewChild('collapsible') collapsibleElement: ElementRef;
+  @ViewChild('expansion') expansionElement: MatExpansionPanel;
+
   private auxMovement: Movement;
-  private instanceCollapsible: M.Collapsible;
-  private collapsibleinit: M.Collapsible;
   private firstStateMovement: Movement;
   private statusModal: boolean;
-  indexMovement: number;
+  expandedState: boolean;
+
+  index: number;
   keyEnter: boolean;
+
   constructor(
     private renderer: Renderer2,
     private categoriesService: CategoriesService,
@@ -42,22 +39,11 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   ) {
     this.keyEnter = false;
     this.statusModal = false;
-    this.indexMovement = undefined;
+    this.index = undefined;
+    this.expandedState = false;
   }
 
-  ngOnInit(): void {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.renderer.listen('document','click', () => {
-    });
-  }
-
-  ngAfterViewInit(): void {
-    this.collapsibleinit = new M.Collapsible( this.collapsibleElement.nativeElement, {
-      onOpenStart: () => this.firstStateMovement= JSON.parse(JSON.stringify(this.auxMovement))
-    });
-    this.instanceCollapsible = M.Collapsible.getInstance( this.collapsibleElement.nativeElement );
-  }
+  ngOnInit(): void { }
 
   /**
    * @function trackByFn() - La función regresa el _id_ del movimiento, debido a que es un valor único que nos está dando el API, y para el compilador
@@ -86,15 +72,13 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
      * Caso contrario solo se hace un return
      */
     if (isUndefined(this.auxMovement) || this.statusModal === false) {
-      this.indexMovement = index;
+      this.index = index;
       this.auxMovement = this.movementList[index];
       this.auxMovement.customAmount = this.auxMovement.amount;
     } else {
       return;
     }
     this.auxMovement.editAvailable = true;
-    this.instanceCollapsible.open(this.indexMovement);
-    this.instanceCollapsible.destroy();
   }
 
   statusCategory(status: boolean): void {
@@ -108,8 +92,6 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   collapsibleCancel(index: number): void {
     this.movementList[index] = this.firstStateMovement;
     this.movementList[index].editAvailable = false;
-    this.instanceCollapsible.close(index);
-    this.instanceCollapsible.destroy();
     this.keyEnter = false;
   }
 
@@ -124,13 +106,21 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
       this.auxMovement.amount = this.firstStateMovement.amount;
     }
     this.auxMovement.editAvailable = false;
-    this.instanceCollapsible.close(index);
-    this.instanceCollapsible.destroy();
     this.keyEnter = false;
   }
 
   deleteMovement(index: number): void {
     this.collapsibleClose(index);
     this.movementList.splice(index, 1);
+  }
+
+  editMovement(i) {
+    const movement = this.movementList[i];
+    if ( movement.editAvailable === true ) {
+      movement.editAvailable = false;
+      return;
+    } else {
+      movement.editAvailable = true;
+    }
   }
 }

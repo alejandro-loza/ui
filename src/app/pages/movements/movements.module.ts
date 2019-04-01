@@ -18,8 +18,9 @@ import { NewMovementModule } from './new-movement/new-movement.module';
     NewMovementModule,
     FilterModule,
     EmptyStateModule,
-    MovementsRoutes
-  ],
+    MovementsRoutes,
+
+],
   declarations: [
     MovementsComponent
   ],

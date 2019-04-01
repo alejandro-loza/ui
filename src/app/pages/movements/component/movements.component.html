@@ -48,13 +48,7 @@
     </div>
     <!-- Lista de Movimientos -->
     <div class="containerMovement">
-      <app-item-list [categoryList]="categoryList" [movementList]="movementList"></app-item-list>
-    </div>
-
-    <div class="containerMovement">
-      <div class="center-align" *ngIf="spinnerBoolean !== true">
-        <app-spinner></app-spinner>
-      </div>
+        <app-item-list [categoryList]="categoryList" [movementList]="movementList"></app-item-list>
     </div>
   </ng-template>
 </ng-template>
