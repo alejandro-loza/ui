@@ -18,9 +18,9 @@ import { debounce } from 'rxjs/operators';
 declare var $: any;
 
 @Component({
-	selector: 'app-movements',
-	templateUrl: './movements.component.html',
-	styleUrls: [ './movements.component.css' ]
+  selector: 'app-movements',
+  templateUrl: './movements.component.html',
+  styleUrls: ['./movements.component.css']
 })
 export class MovementsComponent implements OnInit, OnDestroy {
 	paramsMovements: ParamsMovements;
@@ -33,7 +33,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 	spinnerBoolean: boolean;
 	isLoading: boolean;
 	auxSize: number;
-	statusMovements: boolean;
+	statusMovementsList: boolean;
 
 	// EMPTY STATE
 	showEmptyState: boolean;
@@ -57,7 +57,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 		this.status = false;
 		this.spinnerBoolean = false;
 		this.filterflag = false;
-		this.statusMovements = false;
+		this.statusMovementsList = false;
 		this.auxSize = 0;
 		this.movementList = [];
 		this.paramsMovements = {
@@ -99,30 +99,31 @@ export class MovementsComponent implements OnInit, OnDestroy {
    * se han cambiado antes de ser enviados, y la única forma es enviar un estado genérico en la app ( Redux/RXJS (reduce) ) o enviando un
    * setTimeout
    */
-	statusMovement(status: boolean) {
-		setTimeout(() => {
-			this.status = status;
-			this.filterflag = false;
-		}, 0);
-		this.showEmptyState = false;
-		this.refreshMovement();
-	}
+  statusMovement(status: boolean) {
+    setTimeout(() => {
+      this.status = status;
+    }, 0);
+    this.showEmptyState = false;
+    this.refreshMovement();
+  }
 
-	/**
+  /**
    * @function offsetMovement() - It's anonymous functions, its used for eventListener Scroll
    */
 
 	offsetMovement() {
-		const scrollVertical = window.scrollY;
-		let scrollLimit: number;
-		scrollLimit = $(document).height() - $(window).height();
-		if (scrollVertical >= scrollLimit - 54) {
-			this.spinnerBoolean = false;
-			this.getMovements();
-		}
-	}
+    const scrollVertical = window.scrollY;
+    let scrollLimit: number;
+    scrollLimit = $(document).height() - $(window).height();
+    scrollLimit = Math.round(scrollLimit *= .7);
+    if ( ( scrollVertical >= scrollLimit ) &&  this.statusMovementsList === false ) {
+      this.spinnerBoolean = false;
+      this.getMovements();
+    }
+  }
 
 	getMovements() {
+		this.statusMovementsList = true;
 		this.movementService.getMovements(this.paramsMovements).subscribe(
 			(res) => {
 				// Se le asigna el tamaño de la lista a la variable _auxSize_
@@ -151,6 +152,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 				}
 				this.validateAllMovements();
 				this.paramsMovements.offset += this.paramsMovements.maxMovements;
+				this.statusMovementsList = false;
 			}
 		);
 	}

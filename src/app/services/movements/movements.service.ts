@@ -3,6 +3,7 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import {environment} from '@env/environment';
 
 import {ConfigService} from '@services/config/config.service';
+import {DateApiService} from '@services/date-api/date-api.service';
 
 import {ParamsMovements} from '@interfaces/paramsMovements.interface';
 import {NewMovement} from '@interfaces/newMovement.interface';
@@ -21,7 +22,8 @@ export class MovementsService {
 
   constructor(
     private httpClient: HttpClient,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private dateService: DateApiService
   ) { }
 
   get getMovementList(): Movement[] {
@@ -82,19 +84,18 @@ export class MovementsService {
 
   createMovement(movement: NewMovement): Observable<HttpResponse<Movement>> {
     const id = this.configService.getUser.id;
+    const body = JSON.stringify({
+      amount: movement.amount,
+      balance: 0,
+      customDate: this.dateService.dateApi(movement.date),
+      customDescription: movement.description,
+      date: this.dateService.dateApi(movement.date),
+      description: movement.description,
+      duplicated: movement.duplicated,
+      type: movement.type.toUpperCase()
+    });
     return this.httpClient.post<Movement>(
-      `${this.url}/${id}/movements`,
-      JSON.stringify({
-        amount: movement.amount,
-        balance: 0,
-        customDate: movement.date,
-        customDescription: movement.description,
-        date: movement.date,
-        description: movement.description,
-        duplicated: movement.duplicated,
-        type: movement.type.toUpperCase()
-      }),
-      { observe: 'response', headers: this.configService.getHeaders }
+      `${this.url}/${id}/movements`, body, { observe: 'response', headers: this.configService.getHeaders }
     );
   }
 
@@ -102,7 +103,7 @@ export class MovementsService {
     const body = {
       amount: movement.amount,
       balance: movement.balance,
-      customDate: movement.customDate,
+      customDate: this.dateService.dateApi(movement.customDate),
       customDescription: movement.customDescription,
       date: movement.date,
       description: movement.description,
@@ -112,6 +113,7 @@ export class MovementsService {
     if (movement.concepts[0].category) {
       body['category'] = { id: movement.concepts[0].category.id };
     }
+    console.log(body);
     return this.httpClient.put<Movement>(
       `${environment.backendUrl}/movements/${movement.id}`,
       body,

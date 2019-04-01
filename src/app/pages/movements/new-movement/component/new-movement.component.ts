@@ -37,6 +37,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   formatDate: string;
   reset: boolean;
   instaceModal;
+  showSpinner: boolean;
 
   constructor(
     private movementService: MovementsService,
@@ -47,12 +48,13 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   ) {
     this.formatDate = 'Otro...';
     this.newMovement = {
-      date: this.dateApiService.dateApi(new Date()),
+      date: new Date(),
       type: 'charge'
     };
     this.date = new Date();
     this.createMovementStatus = new EventEmitter();
     this.reset = false;
+    this.showSpinner = false;
   }
 
   ngOnInit() {}
@@ -76,9 +78,9 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   }
 
   createMovement(form: NgForm) {
+    this.showSpinner = true;
     form.value.date = this.newMovement.date;
     form.value.type = this.newMovement.type;
-    this.renderer.addClass(this.buttonSubmit.nativeElement, 'disabled');
     this.movementService.createMovement(form.value).subscribe(
       res => {
         this.createMovementStatus.emit(true);
@@ -96,13 +98,13 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
         }
       },
       () => {
-        this.cleanerService.cleanBudgetsVariables();
-        this.cleanerService.cleanDashboardVariables();
         this.instaceModal.close();
-        this.renderer.removeClass(this.buttonSubmit.nativeElement, 'disabled');
+        this.showSpinner = false;
         this.reset = true;
         this.resetInputs();
         form.resetForm();
+        this.cleanerService.cleanBudgetsVariables();
+        this.cleanerService.cleanDashboardVariables();
         this.toastService.setMessage = 'Se creó su movimiento exitosamente';
         this.toastService.toastGeneral();
       }
@@ -131,15 +133,12 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     } else if (id === 'otherDate') {
       return;
     }
-    this.newMovement.date = this.dateApiService.dateApi(auxDate);
+    this.newMovement.date = auxDate;
   }
 
   resetInputs() {
     this.renderer.removeClass(document.getElementById('description'), 'valid');
-    this.renderer.removeClass(
-      document.getElementById('description'),
-      'invalid'
-    );
+    this.renderer.removeClass( document.getElementById('description'), 'invalid' );
     this.renderer.removeClass(document.getElementById('monto'), 'valid');
     this.renderer.removeClass(document.getElementById('monto'), 'invalid');
   }
