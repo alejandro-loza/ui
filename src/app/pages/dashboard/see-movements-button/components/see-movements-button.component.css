@@ -1,0 +1,10 @@
+#seeMovementsBtn {
+	color: #18537b;
+	background-color: transparent;
+	border: 1px solid #18537b;
+}
+
+#seeMovementsBtn:hover {
+	color: white;
+	background-color: #18537b;
+}

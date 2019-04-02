@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { SharedDashboardModule } from './sharedDashboard/sharedDashboard.module';
 import { EmptyStateModule } from '@components/empty-states/empty-states.module';
+import { SeeMovementsButtonModule } from './see-movements-button/see-movements-button.module';
 
 // Component
 import { DashboardComponent } from './component/dashboard.component';
@@ -24,9 +25,11 @@ import { IncomesModule } from './incomes/incomes.module';
 		IncomesModule,
 		DashboardRoutes,
 		SharedDashboardModule,
-		EmptyStateModule
+		EmptyStateModule,
+		SeeMovementsButtonModule
 	],
 	declarations: [ DashboardComponent, TabsComponent ],
-	providers: []
+	providers: [],
+	exports: []
 })
 export class DashboardModule {}

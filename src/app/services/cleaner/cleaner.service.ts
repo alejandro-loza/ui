@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { DashboardStatesService } from '@services/dashboard/dashboard-states.service.ts';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
@@ -11,6 +12,7 @@ import { EmptyStateService } from '@services/movements/empty-state/empty-state.s
 export class CleanerService {
 	constructor(
 		private dashboardBean: DashboardBeanService,
+		private dashboardStatesService: DashboardStatesService,
 		private credentialBeanService: CredentialBeanService,
 		private budgetsBeanService: BudgetsBeanService,
 		private categoriesBeanService: CategoriesBeanService,
@@ -27,8 +29,9 @@ export class CleanerService {
 		this.dashboardBean.setDataIncomesBarChart([]);
 		this.dashboardBean.setDataIncomesTab([]);
 		this.dashboardBean.setShowEmptyState(false);
-		this.dashboardBean.setListOfMovementsFromDashboard([]);
-		this.dashboardBean.setLoadListFromDashboard(false);
+		this.dashboardStatesService.setListOfMovementsFromDashboard([]);
+		this.dashboardStatesService.setLoadListFromDashboard(false);
+		this.dashboardStatesService.setIndexOfMonthToShow(0);
 		// Credentials Memory
 		this.credentialBeanService.setCredentials([]);
 		this.credentialBeanService.setAccounts([]);
@@ -57,8 +60,8 @@ export class CleanerService {
 		this.dashboardBean.setDataIncomesBarChart([]);
 		this.dashboardBean.setDataIncomesTab([]);
 		this.dashboardBean.setShowEmptyState(false);
-		this.dashboardBean.setListOfMovementsFromDashboard([]);
-		this.dashboardBean.setLoadListFromDashboard(false);
+		this.dashboardStatesService.setListOfMovementsFromDashboard([]);
+		this.dashboardStatesService.setLoadListFromDashboard(false);
 	}
 
 	cleanBudgetsVariables() {
