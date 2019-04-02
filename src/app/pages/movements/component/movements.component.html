@@ -5,6 +5,7 @@
   </div>
 </ng-template>
 <ng-template #hideSpinner>
+  <app-back-button *ngIf="this.dashboardStatesService.getLoadListFromDashboard()" [ruta]="'/app/dashboard'"></app-back-button>
   <div *ngIf="showEmptyState === true; then emptyState else showMovements"></div>
   <ng-template #emptyState>
     <app-empty-states [imgName]="imgName" [title]="title" [description]="description" [buttonText]="buttonText" [buttonUrl]="buttonUrl">
