@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Movement } from '@app/interfaces/movement.interface';
+import { TableData } from '@app/interfaces/dashboard/dataForTables.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,6 +11,8 @@ export class DashboardStatesService {
 	private listOfMovementsFromDashboard: Movement[] = [];
 	// To save return data from movements
 	private indexOfMonthToShow: number = 0;
+	private loadClickedScreen: boolean = false;
+	private elementToShowOnClickedScreen: TableData = {};
 
 	constructor() {}
 
@@ -35,5 +38,21 @@ export class DashboardStatesService {
 
 	public getIndexOfMonthToShow(): number {
 		return this.indexOfMonthToShow;
+	}
+
+	public setLoadClickedScreen(data: boolean) {
+		this.loadClickedScreen = data;
+	}
+
+	public getLoadClickedScreen(): boolean {
+		return this.loadClickedScreen;
+	}
+
+	public setElementToShowOnClickedScreen(data: TableData) {
+		this.elementToShowOnClickedScreen = data;
+	}
+
+	public getElementToShowOnClickedScreen(): TableData {
+		return this.elementToShowOnClickedScreen;
 	}
 }

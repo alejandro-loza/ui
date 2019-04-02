@@ -29,9 +29,12 @@ export class CleanerService {
 		this.dashboardBean.setDataIncomesBarChart([]);
 		this.dashboardBean.setDataIncomesTab([]);
 		this.dashboardBean.setShowEmptyState(false);
+		// Dashboard States
 		this.dashboardStatesService.setListOfMovementsFromDashboard([]);
 		this.dashboardStatesService.setLoadListFromDashboard(false);
 		this.dashboardStatesService.setIndexOfMonthToShow(0);
+		this.dashboardStatesService.setLoadClickedScreen(false);
+		this.dashboardStatesService.setElementToShowOnClickedScreen({});
 		// Credentials Memory
 		this.credentialBeanService.setCredentials([]);
 		this.credentialBeanService.setAccounts([]);
