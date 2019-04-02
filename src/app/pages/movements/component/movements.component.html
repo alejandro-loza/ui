@@ -48,7 +48,9 @@
     </div>
     <!-- Lista de Movimientos -->
     <div class="containerMovement">
-        <app-item-list [categoryList]="categoryList" [movementList]="movementList"></app-item-list>
+        <app-item-list [categoryList]="categoryList" [movementList]="movementList"
+                       [spinnerBoolean]="spinnerBoolean" [getMoreMovements]="getMoreMovements" (getMoreMovementsChange)="offsetMovement($event)">
+        </app-item-list>
     </div>
   </ng-template>
 </ng-template>

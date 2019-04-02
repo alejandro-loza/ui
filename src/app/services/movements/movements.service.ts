@@ -29,12 +29,6 @@ export class MovementsService {
   get getMovementList(): Movement[] {
     return this.movementsList;
   }
-  set setMovement(movement: Movement) {
-    this.movement = movement;
-  }
-  get getMovement(): Movement {
-    return this.movement;
-  }
   /**
    * @function allMovements Esta funcion lo que hace traer todos lo movimiento con los siguientes parametros
    *

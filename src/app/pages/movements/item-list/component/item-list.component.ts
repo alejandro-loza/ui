@@ -1,10 +1,12 @@
 import {
-  Component,
+  Component, EventEmitter,
   Input,
-  OnInit,
+  OnInit, Output,
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import {MatExpansionPanel} from '@angular/material';
+
 import {Movement} from '@interfaces/movement.interface';
 import {Category} from '@interfaces/category.interface';
 
@@ -12,7 +14,7 @@ import {isNull, isUndefined} from 'util';
 
 import {CategoriesService} from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
-import {MatExpansionPanel} from '@angular/material';
+import {CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-item-list',
@@ -22,6 +24,10 @@ import {MatExpansionPanel} from '@angular/material';
 export class ItemListComponent implements OnInit {
   @Input() movementList: Movement[];
   @Input() categoryList: Category[];
+  @Input() spinnerBoolean: boolean;
+  @Output() @Input() getMoreMovements: EventEmitter<boolean>;
+
+  @ViewChild('cdkVirtualScrollViewport') scrollVirtual: CdkVirtualScrollViewport;
   @ViewChild('expansion') expansionElement: MatExpansionPanel;
 
   private auxMovement: Movement;
@@ -41,6 +47,7 @@ export class ItemListComponent implements OnInit {
     this.statusModal = false;
     this.index = undefined;
     this.expandedState = false;
+    this.getMoreMovements = new EventEmitter();
   }
 
   ngOnInit(): void { }
@@ -121,6 +128,14 @@ export class ItemListComponent implements OnInit {
       return;
     } else {
       movement.editAvailable = true;
+    }
+  }
+
+  isScrolling(scroll: CdkVirtualScrollViewport) {
+    const heightDiv = Math.round(scroll.getElementRef().nativeElement.getBoundingClientRect().height * .7);
+    const percent = scroll.measureScrollOffset('top');
+    if ( percent >= heightDiv) {
+      this.getMoreMovements.emit(true);
     }
   }
 }

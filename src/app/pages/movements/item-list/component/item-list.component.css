@@ -1,7 +1,3 @@
-.scroll-viewport {
-  height: 50rem;
-}
-
 .item,
 .item-detail {
     width: 100%;
@@ -41,4 +37,22 @@ mat-expansion-panel.mat-expanded {
 
 mat-expansion-panel.mat-expanded>.collapsible-header:hover {
     color: #212121;
+}
+
+@media only screen and (min-width: 1024px) {
+  .scroll-viewport {
+    height: 68vh;
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  .scroll-viewport {
+    height: 74vh;
+  }
+}
+
+@media only screen and (min-width: 1920px) {
+  .scroll-viewport {
+    height: 77vh;
+  }
 }
