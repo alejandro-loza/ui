@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import { MonthChartEvent } from '@app/interfaces/dashboard/monthChartEvent.interface';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { DashboardStatesService } from '@services/dashboard/dashboard-states.service.ts';
 import { BarChart } from '@app/interfaces/dashboard/BarChart.interface';
 import { isNullOrUndefined } from 'util';
 import { ResumeMainData } from '@app/interfaces/dashboard/resumeMainData.interface';
 import { PieChart } from '@app/interfaces/dashboard/pieChart.interface';
 import { TableData } from '@app/interfaces/dashboard/dataForTables.interface';
+import { Movement } from '@app/interfaces/movement.interface';
 
 @Component({
 	selector: 'app-incomes',
@@ -38,21 +41,26 @@ export class IncomesComponent implements OnInit {
 	indexOfData: number = 0;
 	categoryId: string = '';
 
-	constructor(private dashboardBeanService: DashboardBeanService) {}
+	constructor(
+		private dashboardBeanService: DashboardBeanService,
+		private dashboardStatesService: DashboardStatesService,
+		private router: Router
+	) {}
 
 	ngOnInit() {
 		this.getDataForIncomes();
 		this.getDataForBarChart();
 		this.dataForIncomesBarChart();
-		this.firstData();
+		this.loadScreen();
 	}
 
-	firstData() {
-		this.PieChartOfCats(0);
-		this.dataForTableOfCats(0);
-		this.setMainMessage(this.dataFromServiceForBarChart.length - 1);
-		this.setTitles(this.dataFromServiceForBarChart.length - 1);
-		this.monthOnScreen = this.incomesData.length - 1;
+	loadScreen() {
+		let indexToShow = this.dashboardStatesService.getIndexOfMonthToShow();
+		this.PieChartOfCats(indexToShow);
+		this.dataForTableOfCats(indexToShow);
+		this.setMainMessage(this.dataFromServiceForBarChart.length - indexToShow - 1);
+		this.setTitles(this.dataFromServiceForBarChart.length - indexToShow - 1);
+		this.monthOnScreen = this.incomesData.length - indexToShow - 1;
 		this.showBackButton = false;
 	}
 
@@ -126,33 +134,63 @@ export class IncomesComponent implements OnInit {
 			this.pieChartOfSubcats();
 		} else {
 			// Click en una subcategoría
+			this.clickOnSubcategory(element);
+			this.settingIndexForSaveState();
 		}
+	}
+
+	settingIndexForSaveState() {
+		this.dashboardStatesService.setIndexOfMonthToShow(this.indexOfData);
+	}
+
+	clickOnSubcategory(element: TableData) {
+		let movements: Movement[] = [];
+		this.incomesData[element.index].data.forEach((res) => {
+			if (res.categoryId == element.catId) {
+				res.details.forEach((detail) => {
+					if (detail.subCategory.name == element.label) {
+						movements = detail.movements;
+					}
+				});
+			}
+		});
+		this.storageMovements(movements);
 	}
 
 	transformIncomesData(data: ResumeMainData) {
 		this.dataForPieChart.amount = [];
 		this.dataForPieChart.labels = [];
 		this.dataForPieChart.backgroundColor = [];
-		data.data.forEach((element) => {
-			this.dataForPieChart.labels.push(element.label);
-			this.dataForPieChart.amount.push(element.totalAmount);
-			this.dataForPieChart.backgroundColor.push(element.backgroundColor);
-		});
+		if (!isNullOrUndefined(data)) {
+			data.data.forEach((element) => {
+				this.dataForPieChart.labels.push(element.label);
+				this.dataForPieChart.amount.push(element.totalAmount);
+				this.dataForPieChart.backgroundColor.push(element.backgroundColor);
+			});
+		}
+	}
+
+	storageMovements(movements: Movement[]) {
+		this.dashboardStatesService.setListOfMovementsFromDashboard(movements);
+		this.dashboardStatesService.setLoadListFromDashboard(true);
+		this.router.navigateByUrl('/app/movements');
 	}
 
 	dataForTableOfCats(index: number) {
 		this.dataForTable = [];
 		this.dataForPieChart.amount = [];
 		this.dataForPieChart.labels = [];
-		this.incomesData[index].data.forEach((data) => {
-			this.dataForTable.push({
-				catId: data.categoryId,
-				label: data.label,
-				amount: data.totalAmount,
-				isSubCat: false,
-				index: index
+		if (!isNullOrUndefined(this.incomesData[index])) {
+			this.incomesData[index].data.forEach((data) => {
+				this.dataForTable.push({
+					catId: data.categoryId,
+					label: data.label,
+					amount: data.totalAmount,
+					isSubCat: false,
+					index: index
+				});
 			});
-		});
+		}
 	}
 
 	dataForTableOfSubcats(index: number, catId: string) {
