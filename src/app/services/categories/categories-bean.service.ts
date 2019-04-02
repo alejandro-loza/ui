@@ -8,6 +8,7 @@ export class CategoriesBeanService {
 	private category: Category;
 	private categories: Category[] = [];
 	private categoryToViewDetails: Category;
+	private subcategoryToViewDetails: Category;
 
 	constructor() {}
 
@@ -25,6 +26,14 @@ export class CategoriesBeanService {
 
 	public getCategories(): Category[] {
 		return this.categories;
+	}
+
+	public setSubcategoryToViewDetails(data: Category) {
+		this.subcategoryToViewDetails = data;
+	}
+
+	public getSubcategoryToViewDetails(): Category {
+		return this.subcategoryToViewDetails;
 	}
 
 	set setCategory(category: Category) {

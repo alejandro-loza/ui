@@ -1,4 +1,4 @@
-<app-back-button [ruta]="'/app/categories'"></app-back-button>
+<app-back-button *ngIf="!editMode" [ruta]="'/app/categories'"></app-back-button>
 <div class="container">
   <div class="row">
     <div class="col s12 center">
@@ -25,7 +25,7 @@
                     class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">add</i></button-->
 
               <button (click)="reloadColors()"
-                    class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">loop</i></button>
+                    class="colorPickerUl btn-floating btn-small transparent"><i class="material-icons black-text">loop</i></button>
             </div>
             <!--div class="col s12 pt-20">
               <span><b>Texto:</b></span>
@@ -46,7 +46,7 @@
           </div>
         </div>
         <div class="card-action right-align">
-          <!--button [routerLink]="['/app/categories']" class="btn action-btn">Cancelar</button-->
+          <button *ngIf="editMode" [routerLink]="['/app/categories/details']" class="btn finerio-orange white-text" id="cancelButton">Cancelar</button>
           <button (click)="submitCategory()" id="submitButton" [disabled]="categoryName.length === 0" class="btn action-btn green">Guardar</button>
         </div>
       </div>

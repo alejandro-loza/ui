@@ -28,6 +28,7 @@ export class CategoryDetailsComponent implements OnInit {
 	ngOnInit() {
 		this.getCategoryToShow();
 		this.settingDimensionOfCatContainer();
+		this.setStylesOfUnderButtons();
 	}
 
 	ngAfterViewInit() {
@@ -37,7 +38,7 @@ export class CategoryDetailsComponent implements OnInit {
 	deleteUserCategory() {
 		this.showSpinner = true;
 		this.disableButtons();
-		this.categoriesService.deleteCategory(this.categoryToShow).subscribe(
+		this.categoriesService.deleteCategoryOrSubcategory(this.categoryToShow).subscribe(
 			(res) => {
 				this.toastService.setCode = res.status;
 				this.toastService.setMessage = '¡Categoría elminada con éxito!';
@@ -84,6 +85,15 @@ export class CategoryDetailsComponent implements OnInit {
 		let height = 0;
 		height = document.getElementById('divToGetHeight').clientHeight;
 		return height;
+	}
+
+	// FUNCTION TO DISPLAY CORRECTLY UNDER CONTAINER BUTTONS
+	setStylesOfUnderButtons() {
+		if (this.categoryToShow.userId) {
+			document.querySelector('#buttonsCol').classList.add('lessMargin-top');
+		} else {
+			document.querySelector('#buttonsCol').classList.add('padding-top');
+		}
 	}
 
 	disableButtons() {

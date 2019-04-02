@@ -21,6 +21,13 @@ const CategoriesRouting: Routes = [
 		}
 	},
 	{
+		path: 'subcategory-workshop/:mode',
+		loadChildren: './subcategory-workshop/subcategory-workshop.module#SubcategoryWorkshopModule',
+		data: {
+			title: 'Personaliza tu subcategoría'
+		}
+	},
+	{
 		path: '**',
 		redirectTo: '/access/login'
 	}

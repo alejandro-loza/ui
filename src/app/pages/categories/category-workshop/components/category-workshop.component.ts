@@ -21,11 +21,7 @@ export class CategoryWorkshopComponent implements OnInit {
 	// AUX
 	showSpinner: boolean = false;
 
-	categoryStruct: WorkshopCategory = {
-		color: '',
-		name: '',
-		textColor: ''
-	};
+	categoryStruct: WorkshopCategory = {};
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
@@ -40,7 +36,39 @@ export class CategoryWorkshopComponent implements OnInit {
 		this.generateRandomColors();
 	}
 
+	setupForEditMode() {
+		let category = this.categoriesBeanService.getCategoryToViewDetails();
+		this.categoryName = category.name;
+		this.colorForDemoChip = category.color;
+		this.colorForCategory.push(this.colorForDemoChip);
+	}
+
 	submitCategory() {
+		this.editMode ? this.updateCategory() : this.createCategory();
+	}
+
+	updateCategory() {
+		this.prepareSubmitForUpdate();
+		this.categoriesService.updateCategoryOrSubcategory(this.categoryStruct).subscribe(
+			(res) => {
+				this.toastService.setCode = res.status;
+				this.toastService.setMessage = '¡Categoría modificada con éxito!';
+				this.toastService.toastGeneral();
+				this.categoriesBeanService.setCategories([]);
+			},
+			(error) => {
+				this.toastService.setCode = error.status;
+				this.toastService.setMessage = 'Algo salió mal, inténtalo más tarde';
+				this.toastService.toastGeneral();
+				return this.router.navigateByUrl('/app/categories');
+			},
+			() => {
+				return this.router.navigateByUrl('/app/categories');
+			}
+		);
+	}
+
+	createCategory() {
 		this.prepareSubmit();
 		this.categoriesService.createCategoryOrSubcategory(this.categoryStruct).subscribe((res) => {
 			this.toastService.setCode = res.status;
@@ -80,6 +108,16 @@ export class CategoryWorkshopComponent implements OnInit {
 		}
 	}
 
+	prepareSubmitForUpdate() {
+		let category = this.categoriesBeanService.getCategoryToViewDetails();
+		this.categoryStruct.name = this.categoryName;
+		this.categoryStruct.color = this.colorForDemoChip;
+		this.categoryStruct.id = category.id;
+		this.categoryStruct.textColor = category.textColor;
+		this.categoryName = ''; // For disable submit button
+		this.showSpinner = true;
+	}
+
 	prepareSubmit() {
 		this.categoryStruct.name = this.categoryName;
 		this.categoryStruct.color = this.colorForDemoChip;
@@ -101,6 +139,9 @@ export class CategoryWorkshopComponent implements OnInit {
 		this.activatedRoute.params.subscribe((params) => {
 			this.editMode = params['mode'] === 'new' ? false : true;
 		});
+		if (this.editMode) {
+			this.setupForEditMode();
+		}
 	}
 
 	/*selectedTextColor(color: string) {

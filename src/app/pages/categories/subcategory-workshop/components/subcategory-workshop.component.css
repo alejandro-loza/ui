@@ -1,0 +1,55 @@
+.pt-5 {
+	padding-top: 5px;
+}
+
+ul {
+	margin: 0px;
+}
+
+.colorPickerUl {
+	float: left;
+	padding-right: 9px;
+	margin-top: 5px;
+}
+
+.demoChip {
+	margin-top: 30px;
+	min-height: 40px;
+	border-radius: 20px;
+}
+
+.categoryNameChip {
+	font-size: 20px;
+	letter-spacing: 2px;
+}
+
+.action-btn {
+	margin-left: 15px;
+}
+
+#backgroundContainer {
+	position: relative;
+	text-align: center;
+	border-radius: 5px;
+	min-height: 250px;
+}
+
+#backgroundContainer img {
+	max-width: 150px;
+	max-height: 150px;
+	min-height: 100px;
+}
+
+#backgroundContainer h5 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.content {
+	position: relative;
+	top: 20%;
+}
+
+.card {
+	margin: 0px;
+}

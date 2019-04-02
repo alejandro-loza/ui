@@ -42,7 +42,15 @@ export class CategoriesService {
 		});
 	}
 
-	deleteCategory(category: Category): Observable<HttpResponse<Category>> {
+	updateCategoryOrSubcategory(category: WorkshopCategory): Observable<HttpResponse<Category>> {
+		const URL = `${environment.backendUrl}/categories/${category.id}`;
+		return this.http.put<Category>(URL, category, {
+			observe: 'response',
+			headers: this.configService.getHeaders
+		});
+	}
+
+	deleteCategoryOrSubcategory(category: Category): Observable<HttpResponse<Category>> {
 		const URL = `${environment.backendUrl}/categories/${category.id}`;
 		return this.http.delete<Category>(URL, {
 			observe: 'response',

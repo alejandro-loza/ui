@@ -16,6 +16,11 @@
 	margin-bottom: 0px;
 }
 
+#editCategoryButton {
+	position: relative;
+	top: -50px;
+}
+
 #divToGetHeight {
 	min-height: 310px;
 }
@@ -60,7 +65,14 @@
 	padding-right: 0px;
 }
 
+.padding-top {
+	padding-top: 15px;
+}
+
+.lessMargin-top {
+	margin-top: -20px;
+}
+
 .underBtns {
-	margin-top: 15px;
 	margin-right: 15px;
 }
