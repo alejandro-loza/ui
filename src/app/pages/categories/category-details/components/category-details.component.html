@@ -32,16 +32,32 @@
     <div class="row">
       <div class="col s12 right-align" id="buttonsCol">
         <button *ngIf="categoryToShow.userId"
-          (click)="deleteUserCategory()"
+          id="deleteCategoryButton"
+          (click)="openDeleteModal()"
           class="btn red underBtns">
           Eliminar Categoría
         </button>
         <button type="submit" 
+          id="createSubCategoryButton"
           [ngStyle]="{'background-color':categoryToShow.color}"
           class="btn white-text right-align underBtns">
           Crear Subcategoría
         </button>
       </div>
+    </div>
+    <div *ngIf="showSpinner" class="col s12 center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+  <!-- DELETE BUDGET MODAL -->
+  <div id="deleteModal" class="modal" #deleteModal>
+    <div class="modal-content">
+      <h5>Eliminar Categoría</h5>
+      <p>¿Estás seguro que quieres eliminar tu categoría?</p>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-close btn-flat">Cancelar</a>
+      <a (click)="deleteUserCategory()" class="modal-close waves-effect waves-red btn-flat">Aceptar</a>
     </div>
   </div>
 </div>

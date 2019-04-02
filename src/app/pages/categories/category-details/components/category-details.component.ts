@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
+import { CategoriesService } from '@services/categories/categories.service';
+import { ToastService } from '@services/toast/toast.service';
 import { Category } from '@app/interfaces/category.interface';
 import { isNullOrUndefined } from 'util';
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
 	selector: 'app-category-details',
@@ -12,15 +15,46 @@ import { isNullOrUndefined } from 'util';
 export class CategoryDetailsComponent implements OnInit {
 	categoryToShow: Category;
 	setHeightToCol: string = '';
+	showSpinner: boolean = false;
+	@ViewChild('deleteModal') elModal: ElementRef;
 
-	constructor(private categoriesBeanService: CategoriesBeanService, private router: Router) {}
+	constructor(
+		private categoriesBeanService: CategoriesBeanService,
+		private router: Router,
+		private categoriesService: CategoriesService,
+		private toastService: ToastService
+	) {}
 
 	ngOnInit() {
 		this.getCategoryToShow();
 		this.settingDimensionOfCatContainer();
 	}
 
-	deleteUserCategory() {}
+	ngAfterViewInit() {
+		const ELMODAL = new M.Modal(this.elModal.nativeElement);
+	}
+
+	deleteUserCategory() {
+		this.showSpinner = true;
+		this.disableButtons();
+		this.categoriesService.deleteCategory(this.categoryToShow).subscribe(
+			(res) => {
+				this.toastService.setCode = res.status;
+				this.toastService.setMessage = '¡Categoría elminada con éxito!';
+				this.toastService.toastGeneral();
+				this.categoriesBeanService.setCategories([]);
+			},
+			(error) => {
+				this.toastService.setCode = error.status;
+				this.toastService.setMessage = 'Algo salió mal, inténtalo más tarde';
+				this.toastService.toastGeneral();
+				return this.router.navigateByUrl('/app/categories');
+			},
+			() => {
+				return this.router.navigateByUrl('/app/categories');
+			}
+		);
+	}
 
 	getCategoryToShow() {
 		this.categoryToShow = this.categoriesBeanService.getCategoryToViewDetails();
@@ -50,5 +84,15 @@ export class CategoryDetailsComponent implements OnInit {
 		let height = 0;
 		height = document.getElementById('divToGetHeight').clientHeight;
 		return height;
+	}
+
+	disableButtons() {
+		(<HTMLButtonElement>document.querySelector('#deleteCategoryButton')).disabled = true;
+		(<HTMLButtonElement>document.querySelector('#createSubCategoryButton')).disabled = true;
+	}
+
+	openDeleteModal() {
+		const INSTANCEMODAL = M.Modal.getInstance(this.elModal.nativeElement);
+		INSTANCEMODAL.open();
 	}
 }
