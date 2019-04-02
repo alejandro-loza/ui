@@ -14,7 +14,7 @@
 export interface NewMovement {
   amount?: number;
   balance?: number;
-  date?: string;
+  date?: Date;
   description?: string;
   duplicated?: boolean;
   type?: string;
