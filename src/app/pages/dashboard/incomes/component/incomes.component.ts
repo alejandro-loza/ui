@@ -227,12 +227,13 @@ export class IncomesComponent implements OnInit {
 	}
 
 	selectedMonthChart(event: MonthChartEvent) {
+		this.dashboardStatesService.setIndexOfMonthToShow(this.dataFromServiceForBarChart.length - event.index - 1);
 		this.setMainMessage(event.index);
 		this.setTitles(event.index);
 		this.doughnutChart.destroy();
 		this.showBackButton = false;
-		this.PieChartOfCats(this.correctIndex(event));
-		this.dataForTableOfCats(this.correctIndex(event));
+		this.PieChartOfCats(this.dataFromServiceForBarChart.length - event.index - 1);
+		this.dataForTableOfCats(this.dataFromServiceForBarChart.length - event.index - 1);
 	}
 
 	returnButton(event: number) {
@@ -245,34 +246,6 @@ export class IncomesComponent implements OnInit {
 			auxAmount += data.totalAmount;
 		});
 		this.setMainMessage(event, auxAmount);
-	}
-
-	correctIndex(event: MonthChartEvent): number {
-		let index: number = null;
-		let months: string[] = [
-			'Enero',
-			'Febrero',
-			'Marzo',
-			'Abril',
-			'Mayo',
-			'Junio',
-			'Julio',
-			'Agosto',
-			'Septiembre',
-			'Octubre',
-			'Noviembre',
-			'Diciembre'
-		];
-		for (let i = 0; i < months.length; i++) {
-			if (months[i] == event.label) {
-				for (let j = 0; j < this.incomesData.length; j++) {
-					if (this.incomesData[j].month == i) {
-						index = j;
-					}
-				}
-			}
-		}
-		return index;
 	}
 
 	setTitles(index: number) {
