@@ -25,10 +25,11 @@ export class ItemListComponent implements OnInit {
   @Input() movementList: Movement[];
   @Input() categoryList: Category[];
   @Input() spinnerBoolean: boolean;
-  @Output() @Input() getMoreMovements: EventEmitter<boolean>;
 
   @ViewChild('cdkVirtualScrollViewport') scrollVirtual: CdkVirtualScrollViewport;
   @ViewChild('expansion') expansionElement: MatExpansionPanel;
+
+  @Output() movementListChange: EventEmitter<Movement[]>;
 
   private auxMovement: Movement;
   private firstStateMovement: Movement;
@@ -47,46 +48,10 @@ export class ItemListComponent implements OnInit {
     this.statusModal = false;
     this.index = undefined;
     this.expandedState = false;
-    this.getMoreMovements = new EventEmitter();
+    this.movementListChange = new EventEmitter();
   }
 
   ngOnInit(): void { }
-
-  /**
-   * @function trackByFn() - La función regresa el _id_ del movimiento, debido a que es un valor único que nos está dando el API, y para el compilador
-   * en JIT y/ o AOT mode, es mucho más rápido y eficiente. Si no hubiera el _id_, se recomienda usar el _index_..
-   *
-   * @param {number} index - Número en el arreglo del movimiento
-   * @param {Movement} movement - El movimiento en el indice;
-   *
-   */
-  trackByFn(index: number, movement: Movement): string {
-    return movement.id;
-  }
-
-  collapsibleFunction(index: number): void {
-    /**
-     * Se valida si no es undefined _auxMovement_, si no lo es.
-     * Entonces su propiedad editAvailable se vuelve falso
-     */
-    if (!isUndefined(this.auxMovement) && this.statusModal === false) {
-      this.auxMovement.editAvailable = false;
-    }
-    /**
-     * Si es undefined _auxMovement_, o el modal está activo
-     * se toma el indice actual y se le asigna a la variable auxMovemente.
-     *
-     * Caso contrario solo se hace un return
-     */
-    if (isUndefined(this.auxMovement) || this.statusModal === false) {
-      this.index = index;
-      this.auxMovement = this.movementList[index];
-      this.auxMovement.customAmount = this.auxMovement.amount;
-    } else {
-      return;
-    }
-    this.auxMovement.editAvailable = true;
-  }
 
   statusCategory(status: boolean): void {
     if (status === true) {
@@ -121,21 +86,11 @@ export class ItemListComponent implements OnInit {
     this.movementList.splice(index, 1);
   }
 
-  editMovement(i) {
-    const movement = this.movementList[i];
-    if ( movement.editAvailable === true ) {
-      movement.editAvailable = false;
-      return;
-    } else {
-      movement.editAvailable = true;
-    }
-  }
-
   isScrolling(scroll: CdkVirtualScrollViewport) {
     const heightDiv = Math.round(scroll.getElementRef().nativeElement.getBoundingClientRect().height * .7);
     const percent = scroll.measureScrollOffset('top');
     if ( percent >= heightDiv) {
-      this.getMoreMovements.emit(true);
+      this.movementListChange.emit(this.movementList);
     }
   }
 }

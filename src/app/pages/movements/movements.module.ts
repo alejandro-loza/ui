@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
+import {MovementsService} from '@services/movements/movements.service';
 
 import { SharedModule } from '@shared/shared.module';
 import { ItemListModule } from './item-list/item-list.module';
@@ -25,7 +26,7 @@ import { NewMovementModule } from './new-movement/new-movement.module';
     MovementsComponent
   ],
   providers: [
-    ParamsMovementsService,
+    ParamsMovementsService
   ]
 })
 export class MovementsModule {}

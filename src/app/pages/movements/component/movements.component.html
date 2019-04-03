@@ -1,11 +1,11 @@
-<div *ngIf="isLoading === true; then showSpinner else hideSpinner"></div>
+<div *ngIf="isLoading === false; then showSpinner else hideSpinner"></div>
 <ng-template #showSpinner>
   <div class="spinnerLoading">
-  <app-spinner></app-spinner>
+    <app-spinner></app-spinner>
   </div>
 </ng-template>
 <ng-template #hideSpinner>
-  <div *ngIf="showEmptyState === true; then emptyState else showMovements"></div>
+  <div *ngIf="showEmptyState === false; then emptyState else showMovements"></div>
   <ng-template #emptyState>
     <app-empty-states [imgName]="imgName" [title]="title" [description]="description" [buttonText]="buttonText" [buttonUrl]="buttonUrl">
     </app-empty-states>
@@ -21,36 +21,32 @@
     <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
   </ng-template>
   <ng-template #showMovements>
-    <div class="stickyOptions">
-      <!-- Busqueda y filtrado -->
-      <div class="containerMovement">
-        <div class="row valign-wrapper">
-          <div class="col s12 right-align">
-            <!-- Modal Trigger -->
-            <a class="btn modal-trigger finerio-orange" href="#newMovement">
-              <i class="material-icons right">add</i>Nuevo Movimiento
-            </a>
-            <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
-          </div>
+    <!-- Busqueda y filtrado -->
+    <div class="containerMovement firstContainer">
+      <div class="row valign-wrapper">
+        <div class="col s12 right-align">
+          <!-- Modal Trigger -->
+          <a class="btn modal-trigger finerio-orange" href="#newMovement">
+            <i class="material-icons right">add</i>Nuevo Movimiento
+          </a>
+          <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
         </div>
       </div>
-      <!-- Encabezado de movimientos -->
-      <div class="containerMovement">
-        <div class="row center-align z-depth-1 white" id="header">
-          <div class="col m1 movementheader">Cuenta</div>
-          <div class="col m1 movementheader">Fecha</div>
-          <div class="col m3 movementheader">Descripción</div>
-          <div class="col m3 movementheader">Categoria</div>
-          <div class="col m2 movementheader">Monto</div>
-          <div class="col m2 movementheader">Considerar</div>
-        </div>
+    </div>
+    <!-- Encabezado de movimientos -->
+    <div class="containerMovement">
+      <div class="row center-align z-depth-1 white" id="header">
+        <div class="col m1 movementheader">Cuenta</div>
+        <div class="col m1 movementheader">Fecha</div>
+        <div class="col m3 movementheader">Descripción</div>
+        <div class="col m3 movementheader">Categoria</div>
+        <div class="col m2 movementheader">Monto</div>
+        <div class="col m2 movementheader">Considerar</div>
       </div>
     </div>
     <!-- Lista de Movimientos -->
     <div class="containerMovement">
-        <app-item-list [categoryList]="categoryList" [movementList]="movementList"
-                       [spinnerBoolean]="spinnerBoolean" [getMoreMovements]="getMoreMovements" (getMoreMovementsChange)="offsetMovement($event)">
-        </app-item-list>
+      <app-item-list [categoryList]="categoryList" [movementList]="movementList" [spinnerBoolean]="spinnerBoolean"> </app-item-list>
     </div>
   </ng-template>
 </ng-template>
