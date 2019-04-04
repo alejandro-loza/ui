@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MovementsService } from '@services/movements/movements.service';
 import { DashboardService } from '@services/dashboard/dashboard.service';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { DashboardStatesService } from '@services/dashboard/dashboard-states.service';
 import { Movement } from '@interfaces/movement.interface';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { CategoriesService } from '@services/categories/categories.service';
@@ -28,10 +29,10 @@ export class DashboardComponent implements OnInit {
 	movementsServiceResponse: Movement[];
 	categoriesList: Category[] = [];
 	dataReady: boolean = false;
-	showEmptyState: boolean = this.dashboardBean.getShowEmptyState();
+	showEmptyState: boolean;
 
 	/*0 INCOMES 1 EXPENSES 2 BALANCE */
-	tabSelected: number = 1;
+	tabSelected: number;
 
 	// EMPTY STATES
 	imgName: string;
@@ -45,8 +46,11 @@ export class DashboardComponent implements OnInit {
 		private dateApi: DateApiService,
 		private dashboardService: DashboardService,
 		private categoriesService: CategoriesService,
-		private dashboardBean: DashboardBeanService
+		private dashboardBean: DashboardBeanService,
+		private dashboardStatesService: DashboardStatesService
 	) {
+		this.showEmptyState = this.dashboardBean.getShowEmptyState();
+		this.tabSelected = this.dashboardStatesService.getNumberOfTabToReturn();
 		this.fillInformationForEmptyState();
 	}
 
@@ -103,6 +107,7 @@ export class DashboardComponent implements OnInit {
 
 	tabClicked(event) {
 		this.tabSelected = event;
+		this.dashboardStatesService.setNumberOfTabToReturn(event);
 	}
 
 	dataReadyValidator() {

@@ -373,10 +373,11 @@ export class DashboardService {
 		});
 	}
 
-	incomesBarChartMethod(month: string, depositValue: number) {
+	incomesBarChartMethod(month: string, depositValue: number, monthNumber: number) {
 		this.incomeBarChart.push({
 			label: month,
 			amount: depositValue,
+			monthNumber: monthNumber,
 			year: this.auxDataStackedBarYear[this.auxDataStackedBarYear.length - 1]
 		});
 	}
@@ -801,7 +802,7 @@ export class DashboardService {
 		}
 		this.savingBalanceAux = this.depositBalanceAux - this.chargeBalanceAux;
 		this.savingBalanceAux < 0 ? (this.savingBalanceAux = 0) : (this.savingBalanceAux = this.savingBalanceAux);
-		this.incomesBarChartMethod(name, depositValue);
+		this.incomesBarChartMethod(name, depositValue, monthNumber);
 		this.auxDataStackedBarExpenses.push(Math.round(gastosValue));
 		this.auxDataStackedBarSaving.push(Math.round(this.savingBalanceAux));
 		this.auxDataStackedBarLabels.push(name);

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'chart.js';
 import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { DashboardStatesService } from '@services/dashboard/dashboard-states.service.ts';
 import { MonthChartEvent } from '@interfaces/dashboard/monthChartEvent.interface';
 import { StackedBar } from '@app/interfaces/dashboard/dashboardStackedBar.interface';
 import { BalancePieChart } from '@app/interfaces/dashboard/BalancePieChart.interface';
@@ -25,19 +26,23 @@ export class BalanceComponent implements OnInit {
 	savingAmount: number = 0;
 	assetsUrl: string = '../../../assets/media/img/dashboard/';
 
-	constructor(private dashboardBeanService: DashboardBeanService) {}
+	constructor(
+		private dashboardBeanService: DashboardBeanService,
+		private dashboardStatesService: DashboardStatesService
+	) {}
 
 	ngOnInit() {
 		this.getDataStackedBar();
 		this.getDataPieChart();
-		this.firstData();
+		this.loadScreen();
 	}
 
-	firstData() {
+	loadScreen() {
+		let lastIndex = this.dashboardStatesService.getIndexOfMonthToShow();
 		if (!isNullOrUndefined(this.dataForBarChart[0])) {
-			this.setTitles(this.dataForBarChart[0].labels.length - 1);
-			this.setMainMessage(this.dataForBarChart[0].labels.length - 1);
-			this.pieChartOptions(this.dataPieChart.length - 1);
+			this.setTitles(this.dataForBarChart[0].expenses.length - lastIndex - 1);
+			this.setMainMessage(this.dataForBarChart[0].expenses.length - lastIndex - 1);
+			this.pieChartOptions(this.dataPieChart.length - lastIndex - 1);
 		}
 	}
 
@@ -109,5 +114,6 @@ export class BalanceComponent implements OnInit {
 		this.setTitles(event.index);
 		this.setMainMessage(event.index);
 		this.pieChartOptions(event.index);
+		this.dashboardStatesService.setIndexOfMonthToShow(this.dataForBarChart[0].expenses.length - event.index - 1);
 	}
 }

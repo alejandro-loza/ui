@@ -13,6 +13,8 @@ export class DashboardStatesService {
 	private indexOfMonthToShow: number = 0;
 	private loadClickedScreen: boolean = false;
 	private elementToShowOnClickedScreen: TableData = {};
+	// To Know wich tab to return
+	private numberOfTabToReturn: number = 1;
 
 	constructor() {}
 
@@ -54,5 +56,13 @@ export class DashboardStatesService {
 
 	public getElementToShowOnClickedScreen(): TableData {
 		return this.elementToShowOnClickedScreen;
+	}
+
+	public setNumberOfTabToReturn(data: number) {
+		this.numberOfTabToReturn = data;
+	}
+
+	public getNumberOfTabToReturn(): number {
+		return this.numberOfTabToReturn;
 	}
 }
