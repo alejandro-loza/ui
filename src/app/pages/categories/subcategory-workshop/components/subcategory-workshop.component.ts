@@ -135,7 +135,7 @@ export class SubcategoryWorkshopComponent implements OnInit {
 		let availableColor: boolean = true;
 
 		for (let i = 500; !endFor; i += 500) {
-			let decimalAux = decimalColor + i;
+			let decimalAux = decimalColor - i;
 			let hexAux = decimalAux.toString(16);
 			if (this.parentCategory.subCategories) {
 				this.parentCategory.subCategories.forEach((subCategory) => {
