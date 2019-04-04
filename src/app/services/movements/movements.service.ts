@@ -113,7 +113,6 @@ export class MovementsService {
     if (movement.concepts[0].category) {
       body['category'] = { id: movement.concepts[0].category.id };
     }
-    console.log(body);
     return this.httpClient.put<Movement>(
       `${environment.backendUrl}/movements/${movement.id}`,
       body,
