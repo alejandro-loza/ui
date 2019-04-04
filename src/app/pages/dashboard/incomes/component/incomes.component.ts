@@ -55,74 +55,59 @@ export class IncomesComponent implements OnInit {
 	}
 
 	loadScreen() {
+		this.dashboardStatesService.getLoadClickedScreen()
+			? this.clickedScreen(this.dashboardStatesService.getElementToShowOnClickedScreen())
+			: this.normalScreen();
+	}
+
+	clickedScreen(element: TableData) {
 		let indexToShow = this.dashboardStatesService.getIndexOfMonthToShow();
-		this.PieChartOfCats(indexToShow);
-		this.dataForTableOfCats(indexToShow);
+		this.dataForTableOfSubcats(element.index, element.catId);
+		if (this.dataForTable.length > 0) {
+			this.pieChartOfSubcats();
+			this.setMainMessage(element.index, element.amount);
+			this.setTitles(this.dataFromServiceForBarChart.length - indexToShow - 1);
+			this.indexOfData = element.index;
+			this.categoryId = element.catId;
+			this.monthOnScreen = element.index;
+			this.showBackButton = true;
+		} else {
+			this.normalScreen();
+		}
+	}
+
+	monitorOfData(index: number) {
+		let showPieBarAndTable: Boolean = false;
+		let monthElement = this.dataFromServiceForBarChart[this.dataFromServiceForBarChart.length - index - 1];
+		let correctIndex: number = 0;
+		for (let i = 0; i < this.incomesData.length; i++) {
+			if (this.incomesData[i].month == monthElement.monthNumber) {
+				showPieBarAndTable = true;
+				correctIndex = i;
+			}
+		}
+
+		if (showPieBarAndTable) {
+			this.PieChartOfCats(correctIndex);
+			this.dataForTableOfCats(correctIndex);
+		} else {
+			this.PieChartOfCats(null);
+			this.dataForTableOfCats(null);
+		}
+	}
+
+	normalScreen() {
+		let indexToShow = this.dashboardStatesService.getIndexOfMonthToShow();
+		this.monitorOfData(indexToShow);
 		this.setMainMessage(this.dataFromServiceForBarChart.length - indexToShow - 1);
 		this.setTitles(this.dataFromServiceForBarChart.length - indexToShow - 1);
 		this.monthOnScreen = this.incomesData.length - indexToShow - 1;
 		this.showBackButton = false;
 	}
 
-	PieChartOfCats(index: number) {
-		if (!isNullOrUndefined(index)) {
-			this.transformIncomesData(this.incomesData[index]);
-			let pieChart = document.querySelector('#incomesPieChart');
-			this.doughnutChart = new Chart(pieChart, {
-				type: 'doughnut',
-				data: {
-					labels: this.dataForPieChart.labels,
-					datasets: [
-						{
-							data: this.dataForPieChart.amount,
-							backgroundColor: this.dataForPieChart.backgroundColor
-						}
-					]
-				},
-				options: {
-					responsive: true,
-					animation: {
-						animateScale: false
-					},
-					/*onClick: (evt, item) => {
-						this.dataForTable.forEach((data) => {
-							if (data.label == item[0]._model.label) {
-								this.clickOnCategory(data);
-							}
-						});
-					},*/
-					legend: { display: false }
-				}
-			});
-		} else {
-			this.doughnutChart.destroy();
-		}
-	}
-
-	pieChartOfSubcats() {
-		let pieChart = document.querySelector('#incomesPieChart');
-		this.doughnutChart = new Chart(pieChart, {
-			type: 'doughnut',
-			data: {
-				labels: this.dataForPieChart.labels,
-				datasets: [
-					{
-						data: this.dataForPieChart.amount,
-						backgroundColor: this.dataForPieChart.backgroundColor
-					}
-				]
-			},
-			options: {
-				responsive: true,
-				animation: {
-					animateScale: false
-				},
-				legend: { display: false }
-			}
-		});
-	}
-
 	clickOnCategory(element: TableData) {
+		this.dashboardStatesService.setLoadClickedScreen(true);
+		this.dashboardStatesService.setElementToShowOnClickedScreen(element);
 		if (!element.isSubCat) {
 			this.dataForTableOfSubcats(element.index, element.catId);
 			this.setMainMessage(element.index, element.amount);
@@ -193,6 +178,30 @@ export class IncomesComponent implements OnInit {
 		}
 	}
 
+	selectedMonthChart(event: MonthChartEvent) {
+		this.setMainMessage(event.index);
+		this.setTitles(event.index);
+		this.monitorOfData(this.dataFromServiceForBarChart.length - event.index - 1);
+		this.showBackButton = false;
+		if (this.doughnutChart.length > 0) this.doughnutChart.destroy();
+
+		this.dashboardStatesService.setLoadClickedScreen(false);
+		this.dashboardStatesService.setIndexOfMonthToShow(this.dataFromServiceForBarChart.length - event.index - 1);
+	}
+
+	returnButton(event: number) {
+		let auxAmount: number = 0;
+		this.doughnutChart.destroy();
+		this.PieChartOfCats(event);
+		this.dataForTableOfCats(event);
+		this.showBackButton = false;
+		this.incomesData[event].data.forEach((data) => {
+			auxAmount += data.totalAmount;
+		});
+		this.setMainMessage(event, auxAmount);
+		this.dashboardStatesService.setLoadClickedScreen(false);
+	}
+
 	dataForTableOfSubcats(index: number, catId: string) {
 		this.dataForTable = [];
 		this.dataForPieChart.amount = [];
@@ -226,26 +235,62 @@ export class IncomesComponent implements OnInit {
 		});
 	}
 
-	selectedMonthChart(event: MonthChartEvent) {
-		this.dashboardStatesService.setIndexOfMonthToShow(this.dataFromServiceForBarChart.length - event.index - 1);
-		this.setMainMessage(event.index);
-		this.setTitles(event.index);
-		this.doughnutChart.destroy();
-		this.showBackButton = false;
-		this.PieChartOfCats(this.dataFromServiceForBarChart.length - event.index - 1);
-		this.dataForTableOfCats(this.dataFromServiceForBarChart.length - event.index - 1);
+	PieChartOfCats(index: number) {
+		if (!isNullOrUndefined(index)) {
+			this.transformIncomesData(this.incomesData[index]);
+			let pieChart = document.querySelector('#incomesPieChart');
+			this.doughnutChart = new Chart(pieChart, {
+				type: 'doughnut',
+				data: {
+					labels: this.dataForPieChart.labels,
+					datasets: [
+						{
+							data: this.dataForPieChart.amount,
+							backgroundColor: this.dataForPieChart.backgroundColor
+						}
+					]
+				},
+				options: {
+					responsive: true,
+					animation: {
+						animateScale: false
+					},
+					/*onClick: (evt, item) => {
+						this.dataForTable.forEach((data) => {
+							if (data.label == item[0]._model.label) {
+								this.clickOnCategory(data);
+							}
+						});
+					},*/
+					legend: { display: false }
+				}
+			});
+		} else {
+			if (this.doughnutChart.id) this.doughnutChart.destroy();
+		}
 	}
 
-	returnButton(event: number) {
-		let auxAmount: number = 0;
-		this.doughnutChart.destroy();
-		this.PieChartOfCats(event);
-		this.dataForTableOfCats(event);
-		this.showBackButton = false;
-		this.incomesData[event].data.forEach((data) => {
-			auxAmount += data.totalAmount;
+	pieChartOfSubcats() {
+		let pieChart = document.querySelector('#incomesPieChart');
+		this.doughnutChart = new Chart(pieChart, {
+			type: 'doughnut',
+			data: {
+				labels: this.dataForPieChart.labels,
+				datasets: [
+					{
+						data: this.dataForPieChart.amount,
+						backgroundColor: this.dataForPieChart.backgroundColor
+					}
+				]
+			},
+			options: {
+				responsive: true,
+				animation: {
+					animateScale: false
+				},
+				legend: { display: false }
+			}
 		});
-		this.setMainMessage(event, auxAmount);
 	}
 
 	setTitles(index: number) {
