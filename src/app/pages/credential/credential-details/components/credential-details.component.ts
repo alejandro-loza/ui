@@ -89,7 +89,6 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		this.credentialService.getCredential(this.credentialId).subscribe((res) => {
 			this.institutionDetails = res.body;
 			this.getFields(res.body.institution.code);
-			this.getAccounts();
 		});
 	}
 
@@ -111,9 +110,12 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		this.fieldService.findAllFieldsByInstitution(code).subscribe(
 			(res) => {
 				res.body.forEach((fieldBank) => {
-					this.fields.push(fieldBank);
+					if (fieldBank.name !== 'sec_code') {
+						this.fields.push(fieldBank);
+					}
 				});
 				this.fields.shift();
+				this.getAccounts();
 			},
 			(err) => {
 				this.toastService.setCode = err.status;

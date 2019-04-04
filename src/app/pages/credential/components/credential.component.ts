@@ -94,12 +94,10 @@ export class CredentialComponent implements OnInit {
 		this.credentials = this.credentialBean.getCredentials();
 		this.accounts = this.credentialBean.getAccounts();
 		this.institutions = this.credentialBean.getInstitutions();
-		// =====================
 		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
 			this.automaticSync(credential);
 		});
-		// ============================
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
 		this.emptyStateProcess();
@@ -120,12 +118,12 @@ export class CredentialComponent implements OnInit {
 				this.showSpinner = false;
 			},
 			() => {
-				this.emptyStateProcess();
 				this.credentials.forEach((element: CredentialInterface) => {
 					this.checkStatusOfCredential(element);
 					this.automaticSync(element);
 				});
 				this.credentialBean.setCredentials(this.credentials);
+				this.emptyStateProcess();
 				this.showSpinner = false;
 			}
 		);
@@ -155,7 +153,7 @@ export class CredentialComponent implements OnInit {
 				this.validateStatusFinished = false;
 				setTimeout(() => {
 					this.checkStatusOfCredential(res.body);
-				}, 1500);
+				}, 2000);
 			} else if (this.credentialInProcess.status === 'ACTIVE') {
 				this.successMessage = '¡Tus datos han sido sincronizados';
 				this.validateStatusFinished = true;
@@ -257,7 +255,6 @@ export class CredentialComponent implements OnInit {
 		this.debitBalance = 0;
 		this.creditBalance = 0;
 		this.totalBalance = 0;
-		this.credentialBean.setCredentials([]);
 	}
 
 	windowPosition() {
@@ -267,7 +264,7 @@ export class CredentialComponent implements OnInit {
 	}
 
 	emptyStateProcess() {
-		if (this.credentials.length == 0) {
+		if (this.credentialBean.getCredentials().length == 0) {
 			this.credentialBean.setShowEmptyState(true);
 		} else {
 			this.credentialBean.setShowEmptyState(false);
