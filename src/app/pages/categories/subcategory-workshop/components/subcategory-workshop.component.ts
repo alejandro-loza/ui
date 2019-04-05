@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ɵConsole } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { CategoriesService } from '@services/categories/categories.service';
@@ -132,19 +132,24 @@ export class SubcategoryWorkshopComponent implements OnInit {
 		parentColor = parentColor.slice(1);
 		let decimalColor = parseInt(parentColor, 16);
 		let endFor: boolean = false;
-		let availableColor: boolean = true;
 
-		for (let i = 500; !endFor; i += 500) {
-			let decimalAux = decimalColor - i;
-			let hexAux = decimalAux.toString(16);
-			if (this.parentCategory.subCategories) {
-				this.parentCategory.subCategories.forEach((subCategory) => {
-					if (subCategory.color == hexAux) {
-						availableColor = false;
-					}
-				});
+		for (let i = 4367; !endFor; i += 4368) {
+			let availableColor: boolean = true;
+			let decimalAux = decimalColor + i;
+			let hexAux = '#' + decimalAux.toString(16);
+			var validHex = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(hexAux);
+
+			if (validHex) {
+				if (this.parentCategory.subCategories) {
+					this.parentCategory.subCategories.forEach((subCategory) => {
+						if (subCategory.color == hexAux) {
+							availableColor = false;
+						}
+					});
+				}
 			}
-			if (availableColor) this.colorForSubcategory.push('#' + hexAux);
+			if (availableColor && validHex) this.colorForSubcategory.push(hexAux);
+
 			if (this.colorForSubcategory.length == 10) endFor = true;
 		}
 		this.colorForDemoChip = this.colorForSubcategory[0];
