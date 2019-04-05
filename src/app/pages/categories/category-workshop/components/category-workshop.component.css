@@ -1,0 +1,32 @@
+.pt-5 {
+	padding-top: 5px;
+}
+
+.pt-20 {
+	padding-top: 20px;
+}
+
+ul {
+	margin: 0px;
+}
+
+.colorPickerUl {
+	float: left;
+	padding-right: 9px;
+	margin-top: 5px;
+}
+
+.demoChip {
+	margin-top: 30px;
+	min-height: 40px;
+	border-radius: 20px;
+}
+
+.categoryNameChip {
+	font-size: 20px;
+	letter-spacing: 2px;
+}
+
+.action-btn {
+	margin-left: 15px;
+}

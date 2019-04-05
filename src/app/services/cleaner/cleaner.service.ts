@@ -49,6 +49,8 @@ export class CleanerService {
 		this.budgetsBeanService.setCategoryToSharedComponent(null);
 		// Categories memory
 		this.categoriesBeanService.setCategories([]);
+		this.categoriesBeanService.setCategoryToViewDetails(null);
+		this.categoriesBeanService.setSubcategoryToViewDetails(null);
 		// Movements memeory
 		this.emptyStateService.setShowEmptyState(false);
 	}
