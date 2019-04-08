@@ -26,7 +26,7 @@ export class PagesComponent implements OnInit {
     idle.onTimeout.subscribe(() => {
       this.cleanerService.cleanAllVariables();
       this.configService.resetVariable();
-      return this.router.navigate(['/access/login']);
+      return this.router.navigate(['/']);
     });
     this.reset();
   }
