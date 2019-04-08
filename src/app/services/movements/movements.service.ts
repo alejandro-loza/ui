@@ -10,7 +10,7 @@ import {NewMovement} from '@interfaces/newMovement.interface';
 import {Movement} from '@interfaces/movement.interface';
 import {Response} from '@interfaces/response.interface';
 
-import {catchError, map} from 'rxjs/operators';
+import {catchError, distinctUntilChanged, map, mergeMap} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {isNullOrUndefined} from 'util';
 import {ToastService} from '@services/toast/toast.service';
@@ -27,7 +27,9 @@ export class MovementsService {
     private dateService: DateApiService,
     private toastService: ToastService,
     private dateApiService: DateApiService
-  ) { }
+  ) {
+    this.movementsList = [];
+  }
 
   get getMovementList(): Movement[] {
     return this.movementsList;
@@ -46,12 +48,7 @@ export class MovementsService {
    */
 
   getMovements( paramsMovements: ParamsMovements ): Observable<HttpResponse<Response<Movement>>> {
-    if (this.id !== this.configService.getUser.id) {
-      this.setMovementList = [];
-      this.id = this.configService.getUser.id;
-    } else {
-      this.id = this.configService.getUser.id;
-    }
+    this.id = this.configService.getUser.id;
     if (paramsMovements.offset === 0) {
       this.movementsList = [];
     }
@@ -80,16 +77,20 @@ export class MovementsService {
       })
       .pipe(
         map(res => {
+          if ( res.body.data.length === 0) {
+            return;
+          }
           res.body.data.forEach(movement => {
             movement['formatDate'] = this.dateApiService.dateFormatMovement(
               this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
             );
             movement['editAvailable'] = false;
             movement['customAmount'] = movement.amount;
-            this.movementsList.push(movement);
           });
+          this.movementsList = [...this.movementsList, ...res.body.data];
           return res;
         }),
+        distinctUntilChanged(),
         catchError( (error: HttpErrorResponse) => {
           this.toastService.setCode = error.status;
           if ( error.status === 0 ) {

@@ -1,7 +1,12 @@
 import {
-  Component, EventEmitter,
-  Input,
-  OnInit, Output,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input, OnChanges,
+  OnInit,
+  Output,
   Renderer2,
   ViewChild,
 } from '@angular/core';
@@ -10,31 +15,35 @@ import {MatExpansionPanel} from '@angular/material';
 import {Movement} from '@interfaces/movement.interface';
 import {Category} from '@interfaces/category.interface';
 
-import {isNull, isUndefined} from 'util';
+import {isNull} from 'util';
 
 import {CategoriesService} from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
-import {CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
+import {CdkVirtualScrollViewport, ScrollDispatcher} from '@angular/cdk/scrolling';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
-  styleUrls: ['./item-list.component.css']
+  styleUrls: ['./item-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItemListComponent implements OnInit {
+
+export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() movementList: Movement[];
   @Input() categoryList: Category[];
   @Input() spinnerBoolean: boolean;
+  @Input() getMoreMovements: boolean;
 
-  @ViewChild('cdkVirtualScrollViewport') scrollVirtual: CdkVirtualScrollViewport;
-  @ViewChild('expansion') expansionElement: MatExpansionPanel;
-
+  @Output() getMoreMovementsChange: EventEmitter<boolean>;
   @Output() movementListChange: EventEmitter<Movement[]>;
+
+  @ViewChild(CdkVirtualScrollViewport) scrollVirtual: CdkVirtualScrollViewport;
+  @ViewChild('expansion') expansionElement: MatExpansionPanel;
 
   private auxMovement: Movement;
   private firstStateMovement: Movement;
   private statusModal: boolean;
-  expandedState: boolean;
 
   index: number;
   keyEnter: boolean;
@@ -42,16 +51,43 @@ export class ItemListComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private categoriesService: CategoriesService,
-    private categoriesBeanService: CategoriesBeanService
+    private categoriesBeanService: CategoriesBeanService,
+    private scrollDispatcher: ScrollDispatcher,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
+    this.index = undefined;
+
     this.keyEnter = false;
     this.statusModal = false;
-    this.index = undefined;
-    this.expandedState = false;
+    this.getMoreMovements = false;
+
+    this.getMoreMovementsChange = new EventEmitter();
     this.movementListChange = new EventEmitter();
   }
 
   ngOnInit(): void { }
+
+  ngOnChanges(): void { }
+
+  ngAfterViewInit(): void {
+    if ( this.scrollVirtual ) {
+      this.scrollDispatcher.scrolled() .pipe(
+        filter(event => {
+          if (this.scrollVirtual.getRenderedRange().end === this.scrollVirtual.getDataLength()) {
+            return true;
+          }
+        })
+      ).subscribe((res: CdkVirtualScrollViewport) => {
+        this.getMoreMovementsChange.emit(true);
+        this.changeDetectorRef.detectChanges();
+      });
+    }
+  }
+
+
+  trackByFn(index: number, movement: Movement) {
+    return movement.id;
+  }
 
   statusCategory(status: boolean): void {
     if (status === true) {
@@ -85,12 +121,10 @@ export class ItemListComponent implements OnInit {
     this.collapsibleClose(index);
     this.movementList.splice(index, 1);
   }
-
-  isScrolling(scroll: CdkVirtualScrollViewport) {
-    const heightDiv = Math.round(scroll.getElementRef().nativeElement.getBoundingClientRect().height * .7);
-    const percent = scroll.measureScrollOffset('top');
-    if ( percent >= heightDiv) {
-      this.movementListChange.emit(this.movementList);
+  editMovement(i: number) {
+    this.auxMovement = JSON.parse(JSON.stringify(this.movementList[i]));
+    if ( this.auxMovement ) {
+      this.auxMovement.editAvailable = this.auxMovement.editAvailable === false;
     }
   }
 }

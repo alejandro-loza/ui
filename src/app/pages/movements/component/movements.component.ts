@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectorRef} from '@angular/core';
 
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
@@ -10,9 +10,9 @@ import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Category } from '@interfaces/category.interface';
 import {Movement} from '@interfaces/movement.interface';
-import {Observable, Subscription} from 'rxjs';
-import {HttpResponse} from '@angular/common/http';
+import {Subscription} from 'rxjs';
 import {DateApiService} from '@services/date-api/date-api.service';
+import {forEach} from '@angular/router/src/utils/collection';
 
 declare var $: any;
 
@@ -48,7 +48,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
     private dateApiService: DateApiService,
     private toastService: ToastService,
     private paramsMovementsService: ParamsMovementsService,
-    private dashboardBeanService: DashboardBeanService
+    private dashboardBeanService: DashboardBeanService,
   ) {
     this.showEmptyState = false;
     this.isLoading = false;
@@ -65,11 +65,9 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.getCategories();
     if (this.dashboardBeanService.getLoadListFromDashboard()) {
       this.getMovementsFromDashboard();
-    } else if ( this.movementService.getMovementList ) {
-      this.movementList = this.movementService.getMovementList;
-      this.paramsMovements.offset = this.movementList.length;
+    } else{
+      this.getMovements();
     }
-    this.getMovements();
     this.firstChange = true;
   }
 
@@ -80,7 +78,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 
   getMovements() {
     if ( this.movementsListReady === true ) {
-      this.getMovementFromService();
+        this.getMovementFromService();
     }
   }
 
@@ -88,15 +86,24 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.movementsListReady = false;
     this.movementServiceSubscription = this.movementService.getMovements(this.paramsMovements)
       .subscribe(
-        res => res,
+        res => {
+          if ( res ) {
+            if ( res.body.data.length === 0) {
+              this.movementServiceSubscription.unsubscribe();
+              this.spinnerBoolean = true;
+            } else {
+            this.movementList = [...this.movementList, ...res.body.data];
+            }
+          }
+        },
         err => err,
         () => {
-          this.movementList = this.movementService.getMovementList;
           this.paramsMovements.offset += this.paramsMovements.maxMovements;
           if (this.movementList.length !== 0) {
             this.showEmptyState = true;
           } else if ( this.movementList.length === this.movementService.getMovementList.length ) {
             this.movementServiceSubscription.unsubscribe();
+            this.spinnerBoolean = true;
           }
           this.isLoading = true;
           this.movementsListReady = true;
