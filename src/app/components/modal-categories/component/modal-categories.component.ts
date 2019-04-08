@@ -28,7 +28,7 @@ export class ModalCategoriesComponent implements OnInit, DoCheck, AfterViewInit 
 
   backCategories: boolean;
   private instanceModal;
-  private initModal;
+  private initModal: M.Modal;
   constructor() {
     this.backCategories = false;
     this.statusModal = new EventEmitter();
@@ -43,8 +43,8 @@ export class ModalCategoriesComponent implements OnInit, DoCheck, AfterViewInit 
      * otra validación si la propiedad _isOpen_ es verdadera, si lo es,
      * se emite la varible statusModal con la propierda _isOpen_
      */
-    if(this.initModal) {
-      if( this.initModal.isOpen === true ) {
+    if (this.initModal) {
+      if ( this.initModal.isOpen === true ) {
         this.statusModal.emit(this.initModal.isOpen);
       }
     }
@@ -58,5 +58,12 @@ export class ModalCategoriesComponent implements OnInit, DoCheck, AfterViewInit 
       }
     });
     this.instanceModal = M.Modal.getInstance(this.modalCategory.nativeElement);
+  }
+
+  statusCategoryChange(flag: boolean) {
+    this.statusCategory.emit(flag);
+    if ( flag === true ) {
+      this.initModal.close();
+    }
   }
 }
