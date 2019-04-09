@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Renderer2, Output, EventEmitter } from '@angular/core';
 import { Category } from '@interfaces/category.interface';
 import { CategoriesService } from '@services/categories/categories.service';
-import {CategoriesBeanService} from '@services/categories/categories-bean.service';
+import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 
 @Component({
   selector: 'app-subcategory-item',
@@ -9,7 +9,6 @@ import {CategoriesBeanService} from '@services/categories/categories-bean.servic
   styleUrls: [ './subcategory-item.component.css' ]
 })
 export class SubcategoryItemComponent implements OnInit {
-
   @Input() category: Category;
   @Input() statusCategoryValue: boolean;
   @Output() statusCategory: EventEmitter<boolean>;
@@ -45,7 +44,6 @@ export class SubcategoryItemComponent implements OnInit {
 
   selectCategory(i: number) {
     const auxcategory = this.category.subCategories[i];
-    console.log(auxcategory);
     this.categoriesBeanService.setCategory = auxcategory;
     this.statusCategoryValue = true;
     this.statusCategory.emit(this.statusCategoryValue);

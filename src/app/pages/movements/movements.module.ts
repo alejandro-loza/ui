@@ -4,6 +4,7 @@ import { ParamsMovementsService } from '@services/movements/params-movements/par
 import {MovementsService} from '@services/movements/movements.service';
 
 import { SharedModule } from '@shared/shared.module';
+import { BackButtonModule } from '@components/back-button/back-button.module';
 import { ItemListModule } from './item-list/item-list.module';
 import { FilterModule } from './filter/filter.module';
 import { MovementsRoutes } from './movements.route';
@@ -13,20 +14,16 @@ import { MovementsComponent } from './component/movements.component';
 import { NewMovementModule } from './new-movement/new-movement.module';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    ItemListModule,
-    NewMovementModule,
-    FilterModule,
-    EmptyStateModule,
-    MovementsRoutes,
-
-],
-  declarations: [
-    MovementsComponent
-  ],
-  providers: [
-    ParamsMovementsService
-  ]
+	imports: [
+		SharedModule,
+		ItemListModule,
+		BackButtonModule,
+		NewMovementModule,
+		FilterModule,
+		EmptyStateModule,
+		MovementsRoutes
+	],
+	declarations: [ MovementsComponent ],
+	providers: [ ParamsMovementsService ]
 })
 export class MovementsModule {}

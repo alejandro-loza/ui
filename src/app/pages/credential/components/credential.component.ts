@@ -1,12 +1,16 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
+// SERVICES
 import { AccountService } from '@services/account/account.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
+import { DateApiService } from '@services/date-api/date-api.service';
+
+// Interfaces
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
@@ -60,7 +64,8 @@ export class CredentialComponent implements OnInit {
 		private institutionService: InstitutionService,
 		private interactiveService: InteractiveFieldService,
 		private cleanerService: CleanerService,
-		private credentialBean: CredentialBeanService
+		private credentialBean: CredentialBeanService,
+		private dateApiService: DateApiService
 	) {
 		this.credentials = [];
 		this.debitBalance = 0;
@@ -89,12 +94,10 @@ export class CredentialComponent implements OnInit {
 		this.credentials = this.credentialBean.getCredentials();
 		this.accounts = this.credentialBean.getAccounts();
 		this.institutions = this.credentialBean.getInstitutions();
-		// =====================
 		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
 			this.automaticSync(credential);
 		});
-		// ============================
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
 		this.emptyStateProcess();
@@ -115,12 +118,12 @@ export class CredentialComponent implements OnInit {
 				this.showSpinner = false;
 			},
 			() => {
-				this.emptyStateProcess();
 				this.credentials.forEach((element: CredentialInterface) => {
 					this.checkStatusOfCredential(element);
 					this.automaticSync(element);
 				});
 				this.credentialBean.setCredentials(this.credentials);
+				this.emptyStateProcess();
 				this.showSpinner = false;
 			}
 		);
@@ -150,7 +153,7 @@ export class CredentialComponent implements OnInit {
 				this.validateStatusFinished = false;
 				setTimeout(() => {
 					this.checkStatusOfCredential(res.body);
-				}, 1500);
+				}, 2000);
 			} else if (this.credentialInProcess.status === 'ACTIVE') {
 				this.successMessage = '¡Tus datos han sido sincronizados';
 				this.validateStatusFinished = true;
@@ -252,7 +255,6 @@ export class CredentialComponent implements OnInit {
 		this.debitBalance = 0;
 		this.creditBalance = 0;
 		this.totalBalance = 0;
-		this.credentialBean.setCredentials([]);
 	}
 
 	windowPosition() {
@@ -262,7 +264,7 @@ export class CredentialComponent implements OnInit {
 	}
 
 	emptyStateProcess() {
-		if (this.credentials.length == 0) {
+		if (this.credentialBean.getCredentials().length == 0) {
 			this.credentialBean.setShowEmptyState(true);
 		} else {
 			this.credentialBean.setShowEmptyState(false);
@@ -279,9 +281,9 @@ export class CredentialComponent implements OnInit {
 	}
 
 	moreThanEightHours(credential: CredentialInterface): boolean {
-		let currentMoment = new Date();
-		let dateObj = new Date(credential.lastUpdated);
-		let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+		let currentMoment: Date = new Date();
+		let dateObj: Date = this.dateApiService.formatDateForAllBrowsers(credential.lastUpdated);
+		let diff: number = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
 		if (diff >= 8) {
 			return true;
 		} else {

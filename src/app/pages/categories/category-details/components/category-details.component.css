@@ -1,0 +1,78 @@
+#backgroundContainer {
+	position: relative;
+	text-align: center;
+	border-radius: 5px;
+	min-height: 310px;
+}
+
+#backgroundContainer img {
+	max-width: 150px;
+	max-height: 150px;
+	min-height: 100px;
+}
+
+#backgroundContainer h5 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+#editCategoryButton {
+	position: relative;
+	top: -50px;
+}
+
+#divToGetHeight {
+	min-height: 310px;
+}
+
+.content {
+	position: relative;
+	top: 20%;
+}
+
+#subcatDividerRow {
+	background-color: #e5f3fd;
+	margin-bottom: 10px;
+}
+
+#subcatsTextDivisor {
+	margin: 0px;
+	color: #0084dd;
+	font-size: 16px;
+}
+
+.marginBottom-0 {
+	margin-bottom: 0px;
+}
+
+#subcatsRow {
+	height: 50px;
+}
+
+.subCategoryElement {
+	height: 35px;
+	border-radius: 19px;
+	font-weight: bolder;
+	font-size: 18px;
+}
+
+.subCategoryElement span {
+	position: relative;
+	vertical-align: sub;
+}
+
+#buttonsCol {
+	padding-right: 0px;
+}
+
+.padding-top {
+	padding-top: 15px;
+}
+
+.lessMargin-top {
+	margin-top: -20px;
+}
+
+.underBtns {
+	margin-right: 15px;
+}

@@ -1,0 +1,67 @@
+<app-back-button [ruta]="'/app/categories/details'"></app-back-button>
+<div class="container animated fadeIn">
+  <div class="row">
+    <div class="col s12 center">
+      <h5>Subcategoría para {{ parentCategory.name }}</h5>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col m6 l4 hide-on-small-only center">
+      <div id="backgroundContainer" class="center" [ngStyle]="{'background-color': parentCategory.color, 'height':setHeightToCol }">
+        <div class="content">
+          <img src="https://cdn.finerio.mx/categories/web/{{ parentCategory.id }}.svg"
+          onerror="this.src='/assets/media/img/categories/finerio-icon.svg'" alt="Category Name"><br>
+          <h5 [ngStyle]="{'color':parentCategory.textColor}">{{parentCategory.name}}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 m6 l8">
+      <div class="card" id="divToGetHeight">
+        <div class="card-content">
+          <div class="row">
+            <div class="input-field">
+              <input id="subcategoryName" maxlength="25" [(ngModel)]="subcategoryName" type="text" name="subcategoryName" placeholder="Nombre de la subcategoria">
+            </div> 
+            <div class="col s12">
+              <span><b>Fondo:</b></span>
+              <ul>
+                <li class="colorPickerUl" *ngFor="let color of colorForSubcategory">
+                  <button [ngStyle]="{'background-color': color}" (click)="selectedBackground( color )"
+                        class="btn-floating btn-small"></button>
+                </li>
+              </ul>
+            </div>
+            <div class="col s8 offset-s2">
+              <div class="demoChip" [ngStyle]="{'background-color': colorForDemoChip ,'color': '#ffffff'}" >
+                <p class="center pt-5 categoryNameChip"><b>{{ subcategoryName }}</b></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-action right-align">
+            <button *ngIf="editMode" id="deleteCategoryButton"
+                    (click)="openDeleteModal()" class="btn action-btn red">
+              Eliminar</button>
+          <button (click)="submitFunction()" id="submitButton" [disabled]="subcategoryName.length === 0" class="btn action-btn green createSubCategoryButton">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="showSpinner">
+    <div class="col s12 center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+  <!-- DELETE MODAL -->
+  <div id="deleteModal" class="modal" #deleteModal>
+    <div class="modal-content">
+      <h5>Eliminar Subcategoría</h5>
+      <p>¿Estás seguro que quieres eliminar tu subcategoría?</p>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-close btn-flat">Cancelar</a>
+      <a (click)="deleteUserSubcategory()" class="modal-close waves-effect waves-red btn-flat">Aceptar</a>
+    </div>
+  </div>
+</div>
+

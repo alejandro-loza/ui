@@ -14,7 +14,8 @@
             <canvas id="expensesPieChart" height="100"></canvas>
             <app-see-movements-button *ngIf="showBackButton" 
                 [indexOfData]="indexOfData" 
-                [categoryId]="categoryId">
+                [categoryId]="categoryId"
+                [linkFromExpenses]="true">
             </app-see-movements-button>
         </div>
     </div>
@@ -28,7 +29,7 @@
                     </div>
                     <div class="col s6 pt">
                         <b>{{ element.label }}</b>
-                    </div>
+                    </div> 
                     <div class="col s4 pt">
                         <b>${{ element.amount| number:'1.2-2' }}</b>
                     </div>

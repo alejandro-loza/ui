@@ -11,6 +11,11 @@
         <div id="pieContainer">
             <h5>Total <b>${{ totalAmount | number:'1.0-0' }}</b></h5>
             <canvas id="incomesPieChart" height="100"></canvas>
+            <app-see-movements-button *ngIf="showBackButton" 
+                [indexOfData]="indexOfData" 
+                [categoryId]="categoryId"
+                [linkFromExpenses]="false">
+            </app-see-movements-button>
         </div>
     </div>
     <div *ngIf="dataForTable.length > 0" class="col s12 m6 l5">

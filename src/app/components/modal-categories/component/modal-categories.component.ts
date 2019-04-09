@@ -26,7 +26,6 @@ export class ModalCategoriesComponent implements OnInit, DoCheck, AfterViewInit 
 
   @ViewChild('modalCateogry') modalCategory: ElementRef;
 
-  auxCategoryList: Category[];
   backCategories: boolean;
   private instanceModal;
   private initModal;

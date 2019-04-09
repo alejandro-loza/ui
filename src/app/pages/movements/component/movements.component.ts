@@ -1,62 +1,57 @@
-import {Component, OnInit, OnDestroy, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
-import { DashboardBeanService } from '@services/dashboard/dashboard-bean.service';
+import { DashboardStatesService } from '@services/dashboard/dashboard-states.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Category } from '@interfaces/category.interface';
 import {Movement} from '@interfaces/movement.interface';
 import {Subscription} from 'rxjs';
 import {DateApiService} from '@services/date-api/date-api.service';
-import {forEach} from '@angular/router/src/utils/collection';
-import {isUndefined} from 'util';
 
 declare var $: any;
 
 @Component({
   selector: 'app-movements',
   templateUrl: './movements.component.html',
-  styleUrls: ['./movements.component.css']
+  styleUrls: [ './movements.component.css' ]
 })
 export class MovementsComponent implements OnInit, OnDestroy {
-  categoryList: Category[];
   movementList: Movement[];
+  categoryList: Category[];
 
-  isLoading: boolean;
   spinnerBoolean: boolean;
+  isLoading: boolean;
   firstChange: boolean;
   movementsListReady: boolean;
   movementServiceSubscription: Subscription;
 
   // EMPTY STATE
+  showEmptyState: boolean;
   imgName: string;
   title: string;
   description: string;
   buttonText: string;
   buttonUrl: string;
-  showEmptyState: boolean;
 
   paramsMovements: ParamsMovements;
 
   constructor(
     private categoryService: CategoriesService,
     private movementService: MovementsService,
-    private emptyStateService: EmptyStateService,
     private dateApiService: DateApiService,
+    private emptyStateService: EmptyStateService,
     private toastService: ToastService,
     private paramsMovementsService: ParamsMovementsService,
-    private dashboardBeanService: DashboardBeanService,
+    private dashboardStatesService: DashboardStatesService
   ) {
-    this.showEmptyState = false;
-    this.isLoading = false;
+    this.showEmptyState = true;
+    this.isLoading = true;
     this.spinnerBoolean = false;
-    this.firstChange = false;
-    this.movementsListReady = true;
-    this.categoryList = [];
     this.movementList = [];
     this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0 };
   }
@@ -64,7 +59,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.fillInformationForEmptyState();
     this.getCategories();
-    if (this.dashboardBeanService.getLoadListFromDashboard()) {
+    if (this.dashboardStatesService.getLoadListFromDashboard()) {
       this.getMovementsFromDashboard();
     } else {
       this.getMovements();
@@ -73,8 +68,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.dashboardBeanService.setLoadListFromDashboard(false);
-    this.dashboardBeanService.setListOfMovementsFromDashboard([]);
+    this.dashboardStatesService.setLoadListFromDashboard(false);
+    this.dashboardStatesService.setListOfMovementsFromDashboard([]);
   }
 
   getMovements() {
@@ -130,7 +125,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   }
 
   getMovementsFromDashboard() {
-    this.movementList = this.dashboardBeanService.getListOfMovementsFromDashboard();
+    this.movementList = this.dashboardStatesService.getListOfMovementsFromDashboard();
     this.showEmptyState = false;
     this.isLoading = false;
     this.spinnerBoolean = true;
@@ -150,5 +145,20 @@ export class MovementsComponent implements OnInit, OnDestroy {
       'Al dar de alta tus cuentas, verás una lista con todos tus movimientos. Olvídate de registrar cada uno.';
     this.buttonText = 'Dar de alta una cuenta bancaria';
     this.buttonUrl = '/app/banks';
+  }
+
+  validateAllMovements() {
+    // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
+    // Se manda un toast y se remueve la función del scroll.
+    if (
+      (this.movementService.getMovementList.length === 0) &&
+      this.showEmptyState === false
+    ) {
+      this.toastService.setCode = 200;
+      this.toastService.setMessage = 'Hemos cargamos todos tus movimientos';
+      this.toastService.toastGeneral();
+      this.spinnerBoolean = true;
+    }
+    this.isLoading = false;
   }
 }

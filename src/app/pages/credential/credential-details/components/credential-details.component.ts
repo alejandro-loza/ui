@@ -25,15 +25,12 @@ import * as M from 'materialize-css/dist/js/materialize';
 })
 export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	showSpinner: boolean = false;
-	showForm: boolean = false;
 	fields: InstitutionFieldInterface[];
 	accounts: AccountInterface[];
 	institutionDetails: CredentialInterface;
 	accountAuxForDelete: AccountInterface;
 	institutions: InstitutionInterface[] = [];
 	credentialId: string;
-	userId = sessionStorage.getItem('id-user');
-	accountId: string;
 
 	@ViewChild('modal') elModal: ElementRef;
 	@ViewChild('modal2') elModal2: ElementRef;
@@ -89,7 +86,6 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		this.credentialService.getCredential(this.credentialId).subscribe((res) => {
 			this.institutionDetails = res.body;
 			this.getFields(res.body.institution.code);
-			this.getAccounts();
 		});
 	}
 
@@ -111,9 +107,12 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		this.fieldService.findAllFieldsByInstitution(code).subscribe(
 			(res) => {
 				res.body.forEach((fieldBank) => {
-					this.fields.push(fieldBank);
+					if (fieldBank.name !== 'sec_code') {
+						this.fields.push(fieldBank);
+					}
 				});
 				this.fields.shift();
+				this.getAccounts();
 			},
 			(err) => {
 				this.toastService.setCode = err.status;
@@ -127,7 +126,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
 	updateCredential(credential: CredentialInterface, data: NgForm) {
 		if (this.syncPossible(credential)) {
-			credential.status == 'Active'
+			credential.status == 'ACTIVE'
 				? this.activeCredential(credential)
 				: this.invalidCredential(credential, data);
 		} else {

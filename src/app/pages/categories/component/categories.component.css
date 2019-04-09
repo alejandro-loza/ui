@@ -1,0 +1,39 @@
+.pt-10 {
+	padding-top: 10px;
+}
+
+.categoryButton {
+	height: auto;
+	font-size: 0.8vw;
+	position: relative;
+	width: 100%;
+	min-height: 100px;
+	line-height: 15px !important;
+}
+
+.newCategoryButton {
+	height: auto;
+	font-size: 0.8vw;
+	position: relative;
+	width: 100%;
+	min-height: 100px;
+	line-height: 15px !important;
+	background-color: #6c7a89;
+}
+
+.newCategoryButton img {
+	width: 45px;
+	height: 45px;
+	padding-bottom: 5px;
+	position: relative;
+}
+
+.divContainer {
+	padding: 5px 5px;
+}
+
+.categoryButton img {
+	width: 45px;
+	height: 45px;
+	padding-bottom: 5px;
+}

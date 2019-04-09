@@ -12,6 +12,7 @@
 }
 
 .card-panel {
+  width: 82%;
   border: 1px solid #4dd0e1;
   padding: 12px;
   background-color: rgba(225, 245, 254, 0.4);

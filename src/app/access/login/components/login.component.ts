@@ -10,7 +10,6 @@ import { ToastService } from                '@services/toast/toast.service';
 import { ConfigService } from               '@services/config/config.service';
 
 import { User } from                        '@interfaces/user.interface';
-import { ToastInterface } from              '@interfaces/toast.interface';
 
 @Component({
   selector: 'app-login',
@@ -24,8 +23,6 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private renderer: Renderer2,
     private loginService: LoginService,
-    private configService: ConfigService,
-    private toastService: ToastService
   ) {
     this.user = { };
   }
@@ -50,6 +47,8 @@ export class LoginComponent implements OnInit {
         return this.router.navigate(['/access/welcome']);
       }
     );
+    this.renderer.removeClass(document.getElementById('buttonElement'), 'disabled');
+    this.renderer.removeAttribute(document.getElementById('buttonElement'), 'disabled');
     this.renderer.removeClass(document.getElementById('Inputemail'), 'valid');
     this.renderer.removeClass(document.getElementById('Inputemail'), 'invalid');
     this.renderer.removeClass(document.getElementById('Inputpassword'), 'invalid');
