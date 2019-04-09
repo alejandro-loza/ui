@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CredentialInterface } from '@app/interfaces/credential.interface';
+import { DateApiService } from '@services/date-api/date-api.service';
 
 @Component({
 	selector: 'app-credential-item',
@@ -12,7 +13,7 @@ export class CredentialItemComponent implements OnInit {
 
 	iconText: string = '';
 	showButton: boolean = false;
-	constructor() {}
+	constructor(private dateApiService: DateApiService) {}
 
 	ngOnInit() {
 		this.selectIconToShow();
@@ -32,7 +33,7 @@ export class CredentialItemComponent implements OnInit {
 
 	moreThanEightHours(credential: CredentialInterface): boolean {
 		let currentMoment = new Date();
-		let dateObj = new Date(credential.lastUpdated);
+		let dateObj = this.dateApiService.formatDateForAllBrowsers(this.credential.lastUpdated);
 		let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
 		if (diff >= 8) {
 			return true;
