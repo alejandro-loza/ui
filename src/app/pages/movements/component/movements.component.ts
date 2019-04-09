@@ -49,9 +49,12 @@ export class MovementsComponent implements OnInit, OnDestroy {
     private paramsMovementsService: ParamsMovementsService,
     private dashboardStatesService: DashboardStatesService
   ) {
-    this.showEmptyState = true;
-    this.isLoading = true;
+    this.showEmptyState = false;
+    this.isLoading = false;
     this.spinnerBoolean = false;
+    this.firstChange = false;
+    this.movementsListReady = true;
+    this.categoryList = [];
     this.movementList = [];
     this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0 };
   }
