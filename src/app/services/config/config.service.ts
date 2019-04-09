@@ -13,7 +13,7 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class ConfigService {
-  private headers: HttpHeaders;
+  private readonly headers: HttpHeaders;
   private jwt: JWT;
   private user: User;
 
@@ -21,6 +21,32 @@ export class ConfigService {
     this.headers = new HttpHeaders();
     this.headers = this.headers.append('Content-Type', 'application/json');
     this.headers = this.headers.append('Accept', 'application/json');
+  }
+
+  refreshToken(): Observable<HttpResponse<JWT>> {
+    const url = `${environment.apiUrl}/oauth/access_token`;
+    const body = `grant_type=refresh_token&refresh_token=${this.getJWT.refresh_token}`;
+    return this.httpClient
+      .post<JWT>(
+        url, body,
+        {
+          observe: 'response',
+          headers: new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded'
+          })
+        }
+      )
+      .pipe(
+        map(res => {
+          this.setJWT = res.body;
+          return res;
+        })
+      );
+  }
+
+  resetVariable() {
+    this.setJWT = {access_token: undefined};
+    this.setUser = {};
   }
 
   get getHeaders(): HttpHeaders {
@@ -47,31 +73,5 @@ export class ConfigService {
 
   get getUser(): User {
     return this.user;
-  }
-
-  refreshToken(): Observable<HttpResponse<JWT>> {
-    const url = `${environment.apiUrl}/oauth/access_token`;
-    const body = `grant_type=refresh_token&refresh_token=${this.getJWT.refresh_token}`;
-    return this.httpClient
-      .post<JWT>(
-        url, body,
-        {
-          observe: 'response',
-          headers: new HttpHeaders({
-            'Content-Type': 'application/x-www-form-urlencoded'
-          })
-        }
-      )
-      .pipe(
-        map(res => {
-          this.setJWT = res.body;
-          return res;
-        })
-      );
-  }
-
-  resetVariable() {
-    this.setJWT = undefined;
-    this.setUser = undefined;
   }
 }

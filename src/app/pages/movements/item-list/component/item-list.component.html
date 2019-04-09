@@ -1,20 +1,23 @@
-<cdk-virtual-scroll-viewport itemSize="25" class="scroll-viewport" id="virtualScroll" >
+<cdk-virtual-scroll-viewport itemSize="25" class="scroll-viewport" id="virtualScroll">
   <mat-accordion class="collapsible">
-    <div *cdkVirtualFor="let movement of movementList; let i = index; trackBy: trackByFn;  templateCacheSize: 0;">
-      <mat-expansion-panel [id]="movement.id" [disabled]="movement.editAvailable" (opened)="editMovement(i, expansion)" (closed)="editMovement(i, expansion)"
-                           #expansion="matExpansionPanel">
-        <mat-expansion-panel-header class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}">
-          <mat-panel-title>
-            <app-item class="item" [categoryList]="categoryList" [movement]="movement" (statusModal)="statusModal=$event" (statusCategory)="statusCategory($event)">
-            </app-item>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <ng-template matExpansionPanelContent>
-          <app-item-detail class="item-detail" [movement]="movement" [auxMovement]="firstStateMovement" [keyEnter]="keyEnter"
-                           (statusCancel)="collapsibleCancel(i)" (status)="collapsibleClose(i)" (statusDelete)="deleteMovement(i)">
-          </app-item-detail>
-        </ng-template>
-      </mat-expansion-panel>
+    <div *cdkVirtualFor="let movement of movementList; let i = index; trackBy: trackByFn">
+      <div (keydown)="handleSpacebar($event)">
+        <mat-expansion-panel [id]="movement.id" class="fadeIn fast" #matExpansionPanel (afterCollapse)="movement.editAvailable = false;">
+          <mat-expansion-panel-header class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}"
+                                      (click)="expandPanel(matExpansionPanel, $event, i)">
+            <mat-panel-title>
+              <app-item class="item" [categoryList]="categoryList" [movement]="movement"
+                        (statusModal)="statusModal=$event" (statusCategory)="statusCategory($event)">
+              </app-item>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-item-detail class="item-detail" [movement]="movement" [auxMovement]="auxMovement" [keyEnter]="keyEnter"
+                             (statusCancel)="collapsibleCancel(i)" (status)="collapsibleClose(i)" (statusDelete)="deleteMovement(i)">
+            </app-item-detail>
+          </ng-template>
+        </mat-expansion-panel>
+      </div>
     </div>
   </mat-accordion>
   <div class="containerMovement">

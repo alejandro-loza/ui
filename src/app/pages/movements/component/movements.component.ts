@@ -13,6 +13,7 @@ import {Movement} from '@interfaces/movement.interface';
 import {Subscription} from 'rxjs';
 import {DateApiService} from '@services/date-api/date-api.service';
 import {forEach} from '@angular/router/src/utils/collection';
+import {isUndefined} from 'util';
 
 declare var $: any;
 
@@ -65,7 +66,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.getCategories();
     if (this.dashboardBeanService.getLoadListFromDashboard()) {
       this.getMovementsFromDashboard();
-    } else{
+    } else {
       this.getMovements();
     }
     this.firstChange = true;
@@ -78,7 +79,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
 
   getMovements() {
     if ( this.movementsListReady === true ) {
-        this.getMovementFromService();
+      this.getMovementFromService();
     }
   }
 
@@ -88,22 +89,20 @@ export class MovementsComponent implements OnInit, OnDestroy {
       .subscribe(
         res => {
           if ( res ) {
-            if ( res.body.data.length === 0) {
-              this.movementServiceSubscription.unsubscribe();
-              this.spinnerBoolean = true;
-            } else {
-            this.movementList = [...this.movementList, ...res.body.data];
+            if ( res.body.data.length > 0 ) {
+              this.movementList = this.movementService.getMovementList;
             }
+          } else {
+            this.movementServiceSubscription.unsubscribe();
+            this.spinnerBoolean = true;
           }
+          return res;
         },
         err => err,
         () => {
           this.paramsMovements.offset += this.paramsMovements.maxMovements;
           if (this.movementList.length !== 0) {
             this.showEmptyState = true;
-          } else if ( this.movementList.length === this.movementService.getMovementList.length ) {
-            this.movementServiceSubscription.unsubscribe();
-            this.spinnerBoolean = true;
           }
           this.isLoading = true;
           this.movementsListReady = true;

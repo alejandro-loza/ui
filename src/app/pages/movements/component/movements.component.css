@@ -22,3 +22,11 @@
   transform: translate(-50%, -50%);
   position: absolute;
 }
+
+.mat-expansion-indicator {
+  transform: rotate(0deg);
+}
+
+.mat-expansion-indicator.active {
+  transform: rotate(180deg);
+}

@@ -41,12 +41,13 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild(CdkVirtualScrollViewport) scrollVirtual: CdkVirtualScrollViewport;
   @ViewChild('expansion') expansionElement: MatExpansionPanel;
 
-  private auxMovement: Movement;
   private firstStateMovement: Movement;
   private statusModal: boolean;
 
+  auxMovement: Movement;
   index: number;
   keyEnter: boolean;
+  panelOpenState: boolean;
 
   constructor(
     private renderer: Renderer2,
@@ -60,6 +61,7 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     this.keyEnter = false;
     this.statusModal = false;
     this.getMoreMovements = false;
+    this.panelOpenState = false;
 
     this.getMoreMovementsChange = new EventEmitter();
     this.movementListChange = new EventEmitter();
@@ -71,8 +73,8 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     if ( this.scrollVirtual ) {
-      this.scrollDispatcher.scrolled() .pipe(
-        filter(event => {
+      this.scrollDispatcher.scrolled().pipe(
+        filter(() => {
           if (this.scrollVirtual.getRenderedRange().end === this.scrollVirtual.getDataLength()) {
             return true;
           }
@@ -83,7 +85,6 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
       });
     }
   }
-
 
   trackByFn(index: number, movement: Movement) {
     return movement.id;
@@ -121,10 +122,26 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     this.collapsibleClose(index);
     this.movementList.splice(index, 1);
   }
-  editMovement(i: number) {
-    this.auxMovement = JSON.parse(JSON.stringify(this.movementList[i]));
-    if ( this.auxMovement ) {
-      this.auxMovement.editAvailable = this.auxMovement.editAvailable === false;
+
+  handleSpacebar(ev) {
+    if (ev.keyCode === 32) {
+      ev.stopPropagation();
     }
+  }
+
+  expandPanel(matExpansionPanel: MatExpansionPanel, event: Event, index: number): void {
+    event.stopPropagation(); // Preventing event bubbling
+    if (!this._isExpansionIndicator(event.target as HTMLElement, index)) {
+      matExpansionPanel.toggle(); // Here's the magic
+    }
+  }
+
+  private _isExpansionIndicator(target: HTMLElement, index: number): boolean {
+    const expansionIndicatorClass = 'mat-expansion-indicator';
+    if ( (target.classList && target.classList.contains(expansionIndicatorClass) ) ) {
+      this.auxMovement = JSON.parse(JSON.stringify(this.movementList[index]));
+      this.movementList[index].editAvailable = true;
+    }
+    return (target.classList && target.classList.contains(expansionIndicatorClass) );
   }
 }
