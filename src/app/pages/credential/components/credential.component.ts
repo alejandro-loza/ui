@@ -195,6 +195,8 @@ export class CredentialComponent implements OnInit {
 				this.getAccounts();
 			}
 		);
+		this.cleanerService.cleanDashboardVariables();
+		this.cleanerService.cleanBudgetsVariables();
 	}
 
 	// AUTOMATIC SYNC PROCESS FOR EACH CREDENTIAL

@@ -35,6 +35,7 @@ export class CleanerService {
 		this.dashboardStatesService.setIndexOfMonthToShow(0);
 		this.dashboardStatesService.setLoadClickedScreen(false);
 		this.dashboardStatesService.setElementToShowOnClickedScreen({});
+		this.dashboardStatesService.setNumberOfTabToReturn(1);
 		// Credentials Memory
 		this.credentialBeanService.setCredentials([]);
 		this.credentialBeanService.setAccounts([]);
@@ -67,6 +68,10 @@ export class CleanerService {
 		this.dashboardBean.setShowEmptyState(false);
 		this.dashboardStatesService.setListOfMovementsFromDashboard([]);
 		this.dashboardStatesService.setLoadListFromDashboard(false);
+		this.dashboardStatesService.setIndexOfMonthToShow(0);
+		this.dashboardStatesService.setLoadClickedScreen(false);
+		this.dashboardStatesService.setElementToShowOnClickedScreen({});
+		this.dashboardStatesService.setNumberOfTabToReturn(1);
 	}
 
 	cleanBudgetsVariables() {
