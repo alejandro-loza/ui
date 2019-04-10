@@ -174,12 +174,6 @@ export class CredentialComponent implements OnInit {
 	}
 
 	messageForNewActiveStatus() {
-		this.toastService.setMessage =
-			'¡Tu credencial de ' + this.credentialInProcess.institution.name + ' ha sido sincronizada exitosamente!';
-		this.toastService.setCode = 200;
-		this.toastService.setDisplayLength = 3000;
-		this.toastService.toastGeneral();
-
 		this.successMessage = '¡Tus datos han sido sincronizados';
 		this.validateStatusFinished = true;
 		this.showGoMovementsButton = true;
