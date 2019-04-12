@@ -20,6 +20,15 @@ mat-expansion-panel.mat-expanded {
    margin: 0;
 }
 
+.mat-expansion-panel-header {
+  padding: 0 8px;
+}
+
+.mat-expansion-indicator {
+  padding-right: 1%;
+  margin-left: -2%;
+}
+
 .collapsible {
   border:  none;
   margin: 0;
