@@ -21,7 +21,7 @@
     <div class="col s4 m3 l3 divContainer" *ngFor="let category of userCategories">
       <button (click)="selectCategory(category)"
             class="btn categoryButton" [ngStyle]="{'color':category.textColor, 'background-color':category.color}">
-        <img src="/assets/media/img/categories/finerio-icon.svg" alt="Category Name"><br>
+        <img src="/assets/media/img/categories/userCategory.svg" alt="Category Name"><br>
           <span>{{ category.name }}</span>
       </button>
     </div>

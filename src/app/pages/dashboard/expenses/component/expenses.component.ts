@@ -171,7 +171,11 @@ export class ExpensesComponent implements OnInit {
 		if (element.catId.indexOf('000000') > -1) {
 			url = `${this.cdnUrl}/${element.catId}.svg`;
 		} else {
-			url = '/assets/media/img/categories/color/000000.svg';
+			if (element.catId !== '000000') {
+				url = '/assets/media/img/categories/color/userCategory.svg';
+			} else {
+				url = '/assets/media/img/categories/color/000000.svg';
+			}
 		}
 		return url;
 	}

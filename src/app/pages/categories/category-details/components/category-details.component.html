@@ -4,8 +4,11 @@
     <div class="col m6 l4 hide-on-small-only center">
       <div id="backgroundContainer" class="center" [ngStyle]="{'background-color': categoryToShow.color, 'height':setHeightToCol }">
         <div class="content">
-          <img src="https://cdn.finerio.mx/categories/web/{{ categoryToShow.id }}.svg"
-          onerror="this.src='/assets/media/img/categories/finerio-icon.svg'" alt="Category Name"><br>
+          <img *ngIf="!categoryToShow.userId" src="https://cdn.finerio.mx/categories/web/{{ categoryToShow.id }}.svg" alt="{{ categoryToShow.name }}">
+
+          <img *ngIf="categoryToShow.userId" src="/assets/media/img/categories/userCategory.svg" alt="{{ categoryToShow.name }}">
+          
+          <br>
           <h5 [ngStyle]="{'color':categoryToShow.textColor}">{{categoryToShow.name}}</h5>
         </div>
       </div>

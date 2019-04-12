@@ -22,17 +22,8 @@ export class CategoriesComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.fillCategories();
+		this.getCategoriesFromAPI();
 		this.windowPosition();
-	}
-
-	fillCategories() {
-		if (this.categoriesBeanService.getCategories().length == 0) {
-			this.getCategoriesFromAPI();
-		} else {
-			this.categoriesList = this.categoriesBeanService.getCategories();
-			this.filterCategories();
-		}
 	}
 
 	getCategoriesFromAPI() {

@@ -34,7 +34,7 @@ export class IncomesComponent implements OnInit {
 
 	doughnutChart: Chart = [];
 	totalAmount: number = 0;
-	assetsUrl: string = '../../../assets/media/img/categories/color';
+	cdnUrl: string = 'https://cdn.finerio.mx/categories/web/color';
 	monthOnScreen: number = 0;
 
 	// V ariables to use movements implementation
@@ -309,6 +309,20 @@ export class IncomesComponent implements OnInit {
 		} else {
 			this.totalAmount = amount;
 		}
+	}
+
+	getImageForElement(element: TableData): String {
+		let url: string;
+		if (element.catId.indexOf('000000') > -1) {
+			url = `${this.cdnUrl}/${element.catId}.svg`;
+		} else {
+			if (element.catId !== '000000') {
+				url = '/assets/media/img/categories/color/userCategory.svg';
+			} else {
+				url = '/assets/media/img/categories/color/000000.svg';
+			}
+		}
+		return url;
 	}
 
 	getDataForBarChart() {

@@ -153,12 +153,12 @@ export class CredentialComponent implements OnInit {
 					this.checkStatusOfCredential(res.body);
 				}, 4000);
 			} else if (this.credentialInProcess.status === 'ACTIVE') {
-				this.messageForNewActiveStatus();
+				this.loadNewCredentials();
 			} else if (this.credentialInProcess.status === 'TOKEN') {
 				this.validateStatusFinished = false;
 				this.modalProcessForInteractive(res.body);
 			} else if (this.credentialInProcess.status === 'INVALID') {
-				this.messageForNewInvalidStatus();
+				this.loadNewCredentials();
 			}
 		});
 	}
@@ -167,22 +167,32 @@ export class CredentialComponent implements OnInit {
 		this.toastService.setMessage = '¡Revisa tu cuenta de  ' + this.credentialInProcess.institution.name + '!';
 		this.toastService.setCode = 200;
 		this.toastService.setDisplayLength = 3000;
-		this.toastService.toastGeneral();
-
 		this.validateStatusFinished = true;
-		this.loadNewCredentials();
+		this.toastService.toastGeneral();
 	}
 
 	messageForNewActiveStatus() {
+		this.toastService.setMessage =
+			'Tu cuenta de ' + this.credentialInProcess.institution.name + ' ha sido sincronizada';
+		this.toastService.setCode = 200;
+		this.toastService.setDisplayLength = 3000;
+		this.toastService.toastGeneral();
+
 		this.successMessage = '¡Tus datos han sido sincronizados';
 		this.validateStatusFinished = true;
 		this.showGoMovementsButton = true;
-		this.loadNewCredentials();
+	}
+
+	toastController() {
+		this.credentialInProcess.status === 'ACTIVE'
+			? this.messageForNewActiveStatus()
+			: this.messageForNewInvalidStatus();
 	}
 
 	// Method for each conclusion of sync
 	loadNewCredentials() {
 		this.clearMemory();
+		this.toastController();
 		this.credentialService.getAllCredentials().subscribe(
 			(res) => {
 				this.credentials = res.body.data;
