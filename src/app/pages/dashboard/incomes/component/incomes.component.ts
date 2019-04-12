@@ -63,9 +63,10 @@ export class IncomesComponent implements OnInit {
 	clickedScreen(element: TableData) {
 		let indexToShow = this.dashboardStatesService.getIndexOfMonthToShow();
 		this.dataForTableOfSubcats(element.index, element.catId);
+		let amount = this.getTotalAmountForClickedScreen();
 		if (this.dataForTable.length > 0) {
 			this.pieChartOfSubcats();
-			this.setMainMessage(element.index, element.amount);
+			this.setMainMessage(element.index, amount);
 			this.setTitles(this.dataFromServiceForBarChart.length - indexToShow - 1);
 			this.indexOfData = element.index;
 			this.categoryId = element.catId;
@@ -74,6 +75,14 @@ export class IncomesComponent implements OnInit {
 		} else {
 			this.normalScreen();
 		}
+	}
+
+	getTotalAmountForClickedScreen(): number {
+		let aux: number = 0;
+		this.dataForTable.forEach((data) => {
+			aux += data.amount;
+		});
+		return aux;
 	}
 
 	monitorOfData(index: number) {
