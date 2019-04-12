@@ -22,16 +22,8 @@ export class CategoriesComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.fillCategories();
-	}
-
-	fillCategories() {
-		if (this.categoriesBeanService.getCategories().length == 0) {
-			this.getCategoriesFromAPI();
-		} else {
-			this.categoriesList = this.categoriesBeanService.getCategories();
-			this.filterCategories();
-		}
+		this.getCategoriesFromAPI();
+		this.windowPosition();
 	}
 
 	getCategoriesFromAPI() {
@@ -55,5 +47,11 @@ export class CategoriesComponent implements OnInit {
 				this.userCategories.push(category);
 			}
 		});
+	}
+
+	windowPosition() {
+		window.scrollTo(0, 0);
+		let html = document.querySelector('html');
+		html.style.overflowX = 'hidden';
 	}
 }

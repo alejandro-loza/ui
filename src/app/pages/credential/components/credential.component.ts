@@ -9,6 +9,7 @@ import { InstitutionService } from '@services/institution/institution.service';
 import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { DateApiService } from '@services/date-api/date-api.service';
+import { ToastService } from '@services/toast/toast.service';
 
 // Interfaces
 import { AccountInterface } from '@interfaces/account.interfaces';
@@ -65,7 +66,8 @@ export class CredentialComponent implements OnInit {
 		private interactiveService: InteractiveFieldService,
 		private cleanerService: CleanerService,
 		private credentialBean: CredentialBeanService,
-		private dateApiService: DateApiService
+		private dateApiService: DateApiService,
+		private toastService: ToastService
 	) {
 		this.credentials = [];
 		this.debitBalance = 0;
@@ -73,7 +75,7 @@ export class CredentialComponent implements OnInit {
 		this.totalBalance = 0;
 		this.showSpinner = true;
 		this.validateStatusFinished = true;
-		this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede durar unos minutos.';
+		this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede tardar unos minutos.';
 		this.successMessage = '';
 		this.failMessage = '';
 		this.fillInformationForEmptyState();
@@ -101,12 +103,10 @@ export class CredentialComponent implements OnInit {
 		this.getBalance(this.accounts);
 		this.accountsTable(this.accounts);
 		this.emptyStateProcess();
-		this.showSpinner = false;
 		this.initMaterialize();
 	}
 
-	// Main methods for getting data
-
+	// Main method for getting data
 	getAllCredentials() {
 		this.clearMemory();
 		this.credentialService.getAllCredentials().subscribe(
@@ -124,7 +124,6 @@ export class CredentialComponent implements OnInit {
 				});
 				this.credentialBean.setCredentials(this.credentials);
 				this.emptyStateProcess();
-				this.showSpinner = false;
 			}
 		);
 	}
@@ -141,7 +140,6 @@ export class CredentialComponent implements OnInit {
 			this.cleanerService.cleanBudgetsVariables();
 			this.getNewInfoCredential(credential.id);
 		} else if (credential.status === 'TOKEN') {
-			this.loaderMessagge = 'Solicitando información adicional...';
 			this.getNewInfoCredential(credential.id);
 		}
 	}
@@ -153,25 +151,48 @@ export class CredentialComponent implements OnInit {
 				this.validateStatusFinished = false;
 				setTimeout(() => {
 					this.checkStatusOfCredential(res.body);
-				}, 2000);
+				}, 4000);
 			} else if (this.credentialInProcess.status === 'ACTIVE') {
-				this.successMessage = '¡Tus datos han sido sincronizados';
-				this.validateStatusFinished = true;
-				this.showGoMovementsButton = true;
 				this.loadNewCredentials();
 			} else if (this.credentialInProcess.status === 'TOKEN') {
 				this.validateStatusFinished = false;
 				this.modalProcessForInteractive(res.body);
 			} else if (this.credentialInProcess.status === 'INVALID') {
-				this.validateStatusFinished = true;
 				this.loadNewCredentials();
 			}
 		});
 	}
 
+	messageForNewInvalidStatus() {
+		this.toastService.setMessage = '¡Revisa tu cuenta de  ' + this.credentialInProcess.institution.name + '!';
+		this.toastService.setCode = 200;
+		this.toastService.setDisplayLength = 3000;
+		this.validateStatusFinished = true;
+		this.toastService.toastGeneral();
+	}
+
+	messageForNewActiveStatus() {
+		this.toastService.setMessage =
+			'Tu cuenta de ' + this.credentialInProcess.institution.name + ' ha sido sincronizada';
+		this.toastService.setCode = 200;
+		this.toastService.setDisplayLength = 3000;
+		this.toastService.toastGeneral();
+
+		this.successMessage = '¡Tus datos han sido sincronizados';
+		this.validateStatusFinished = true;
+		this.showGoMovementsButton = true;
+	}
+
+	toastController() {
+		this.credentialInProcess.status === 'ACTIVE'
+			? this.messageForNewActiveStatus()
+			: this.messageForNewInvalidStatus();
+	}
+
 	// Method for each conclusion of sync
 	loadNewCredentials() {
 		this.clearMemory();
+		this.toastController();
 		this.credentialService.getAllCredentials().subscribe(
 			(res) => {
 				this.credentials = res.body.data;
@@ -184,6 +205,8 @@ export class CredentialComponent implements OnInit {
 				this.getAccounts();
 			}
 		);
+		this.cleanerService.cleanDashboardVariables();
+		this.cleanerService.cleanBudgetsVariables();
 	}
 
 	// AUTOMATIC SYNC PROCESS FOR EACH CREDENTIAL
@@ -206,9 +229,9 @@ export class CredentialComponent implements OnInit {
 		this.accountService.getAccounts().subscribe((res) => {
 			this.accounts = res.body.data;
 			this.credentialBean.setAccounts(this.accounts);
+			this.credentialBean.setLoadInformation(false);
 			this.getBalance(this.accounts);
 			this.accountsTable(this.accounts);
-			this.credentialBean.setLoadInformation(false);
 			this.initMaterialize();
 		});
 	}
@@ -247,22 +270,6 @@ export class CredentialComponent implements OnInit {
 		this.totalBalance = this.debitBalance + this.creditBalance;
 	}
 
-	clearMemory() {
-		this.credentials = [];
-		this.accounts = [];
-		this.debitAccounts = [];
-		this.creditAccounts = [];
-		this.debitBalance = 0;
-		this.creditBalance = 0;
-		this.totalBalance = 0;
-	}
-
-	windowPosition() {
-		window.scrollTo(0, 0);
-		let html = document.querySelector('html');
-		html.style.overflowX = 'hidden';
-	}
-
 	emptyStateProcess() {
 		if (this.credentialBean.getCredentials().length == 0) {
 			this.credentialBean.setShowEmptyState(true);
@@ -270,6 +277,7 @@ export class CredentialComponent implements OnInit {
 			this.credentialBean.setShowEmptyState(false);
 		}
 		this.showEmptyState = this.credentialBean.getShowEmptyState();
+		this.showSpinner = false;
 	}
 
 	fillInformationForEmptyState() {
@@ -329,6 +337,22 @@ export class CredentialComponent implements OnInit {
 				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
 			}, 300);
 		}
+	}
+
+	clearMemory() {
+		this.credentials = [];
+		this.accounts = [];
+		this.debitAccounts = [];
+		this.creditAccounts = [];
+		this.debitBalance = 0;
+		this.creditBalance = 0;
+		this.totalBalance = 0;
+	}
+
+	windowPosition() {
+		window.scrollTo(0, 0);
+		let html = document.querySelector('html');
+		html.style.overflowX = 'hidden';
 	}
 
 	// Loading Institutions in Session Storage

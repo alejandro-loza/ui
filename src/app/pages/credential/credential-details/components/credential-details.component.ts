@@ -251,6 +251,8 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 				this.toastService.setMessage = 'Cuenta elminada correctamente';
 				this.toastService.toastGeneral();
 				this.credentialBeanService.setLoadInformation(true);
+				this.cleanerService.cleanDashboardVariables();
+				this.cleanerService.cleanBudgetsVariables();
 				this.closeLoaderModal();
 				return this.router.navigateByUrl('/app/credentials');
 			}

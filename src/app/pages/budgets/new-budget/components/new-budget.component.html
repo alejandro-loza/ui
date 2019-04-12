@@ -14,8 +14,13 @@
     <div class="col s4 m3 l3 divContainer" *ngFor="let category of categoriesList">
       <button (click)="selectCategory(category)" [routerLink]="['/app/budgets/shared-budget', 'new']"
             class="btn categoryButton" [ngStyle]="{'color':category.textColor, 'background-color':category.color}">
-        <img src="https://cdn.finerio.mx/categories/web/{{ category.id }}.svg"
-            onerror="this.src='/assets/media/img/categories/finerio-icon.svg'" alt="Category Name"><br>
+        <img *ngIf="!category.userId" 
+            src="https://cdn.finerio.mx/categories/web/{{ category.id }}.svg"
+            onerror="this.src='/assets/media/img/categories/finerio-icon.svg'" alt="Category Name">
+        <img *ngIf="category.userId" 
+            src="/assets/media/img/categories/userCategory.svg" alt="Category Name">
+
+           <br>
           {{ category.name }}
       </button>
     </div>

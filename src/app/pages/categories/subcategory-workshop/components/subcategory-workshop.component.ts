@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, ɵConsole } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { CategoriesService } from '@services/categories/categories.service';
+import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ToastService } from '@services/toast/toast.service';
 import { Category } from '@app/interfaces/category.interface';
 import { WorkshopCategory } from '@app/interfaces/categories/workshopCategory.interface';
@@ -31,7 +32,8 @@ export class SubcategoryWorkshopComponent implements OnInit {
 		private router: Router,
 		private activatedRoute: ActivatedRoute,
 		private categoriesService: CategoriesService,
-		private toastService: ToastService
+		private toastService: ToastService,
+		private cleanerService: CleanerService
 	) {}
 
 	ngOnInit() {
@@ -47,6 +49,8 @@ export class SubcategoryWorkshopComponent implements OnInit {
 
 	submitFunction() {
 		this.showSpinner = true;
+		this.cleanerService.cleanBudgetsVariables();
+		this.cleanerService.cleanDashboardVariables();
 		this.editMode ? this.updateSubcategory() : this.createSubcategory();
 	}
 
@@ -150,7 +154,7 @@ export class SubcategoryWorkshopComponent implements OnInit {
 			}
 			if (availableColor && validHex) this.colorForSubcategory.push(hexAux);
 
-			if (this.colorForSubcategory.length == 10) endFor = true;
+			if (this.colorForSubcategory.length == 10 || i > 11184810) endFor = true;
 		}
 		this.colorForDemoChip = this.colorForSubcategory[0];
 	}

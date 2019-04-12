@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CategoriesService } from '@services/categories/categories.service';
+import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ToastService } from '@services/toast/toast.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { WorkshopCategory } from '@app/interfaces/categories/workshopCategory.interface';
@@ -28,7 +29,8 @@ export class CategoryWorkshopComponent implements OnInit {
 		private categoriesService: CategoriesService,
 		private router: Router,
 		private toastService: ToastService,
-		private categoriesBeanService: CategoriesBeanService
+		private categoriesBeanService: CategoriesBeanService,
+		private cleanerService: CleanerService
 	) {}
 
 	ngOnInit() {
@@ -44,6 +46,8 @@ export class CategoryWorkshopComponent implements OnInit {
 	}
 
 	submitCategory() {
+		this.cleanerService.cleanBudgetsVariables();
+		this.cleanerService.cleanDashboardVariables();
 		this.editMode ? this.updateCategory() : this.createCategory();
 	}
 

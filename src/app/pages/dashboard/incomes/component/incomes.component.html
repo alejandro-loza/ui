@@ -24,10 +24,7 @@
                 *ngFor="let element of dataForTable" class="hoverable collection-item">
                 <div class="row">
                     <div class="col s2 pt center">
-                        <img width="25px" height="25px" 
-                        src="https://cdn.finerio.mx/categories/web/color/{{ element.catId }}.svg"
-                        onerror="this.src='/assets/media/img/categories/color/color_000000.svg'"
-                        >
+                        <img width="25px" height="25px" [src]="getImageForElement( element )">
                     </div>
                     <div class="col s6 pt">
                         <b>{{ element.label }}</b>

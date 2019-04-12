@@ -9,8 +9,10 @@
     <div class="col m6 l4 hide-on-small-only center">
       <div id="backgroundContainer" class="center" [ngStyle]="{'background-color': parentCategory.color, 'height':setHeightToCol }">
         <div class="content">
-          <img src="https://cdn.finerio.mx/categories/web/{{ parentCategory.id }}.svg"
-          onerror="this.src='/assets/media/img/categories/finerio-icon.svg'" alt="Category Name"><br>
+          <img *ngIf="!parentCategory.userId" src="https://cdn.finerio.mx/categories/web/{{ parentCategory.id }}.svg" alt="{{ parentCategory.name }}">
+
+          <img *ngIf="parentCategory.userId" src="/assets/media/img/categories/userCategory.svg" alt="{{ parentCategory.name }}">
+          <br>
           <h5 [ngStyle]="{'color':parentCategory.textColor}">{{parentCategory.name}}</h5>
         </div>
       </div>

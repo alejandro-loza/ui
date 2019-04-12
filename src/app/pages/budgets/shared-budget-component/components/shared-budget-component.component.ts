@@ -19,6 +19,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 	routeForBackButton: string;
 	editModeOfTheComponent: boolean;
 	ngModelAux: editBudgetAux[] = [];
+	categoryWithUserIdProperty: boolean = false;
 	setHeightToCol: string = '';
 	budgetToEdit: Budget = null;
 	categorySelected: Category = null;
@@ -51,9 +52,32 @@ export class SharedBudgetComponentComponent implements OnInit {
 
 	ngOnInit() {
 		this.settingDimensionOfCatContainer();
+		this.selectIconToShow();
+		this.setAmountOfParentCategory();
 		if (!isNullOrUndefined(this.categorySelected.subCategories)) {
 			this.sortingColors();
 			this.settingFunctionalityOfTheComponent();
+		}
+		this.backButtonRoute();
+	}
+
+	setAmountOfParentCategory() {
+		if (this.editModeOfTheComponent) {
+			this.categoryInputModel = this.budgetToEdit.amount;
+		} else {
+			this.categoryInputModel = 0;
+		}
+	}
+
+	selectIconToShow() {
+		if (this.editModeOfTheComponent) {
+			if (this.categorySelected.user) {
+				this.categoryWithUserIdProperty = true;
+			}
+		} else {
+			if (this.categorySelected.userId) {
+				this.categoryWithUserIdProperty = true;
+			}
 		}
 	}
 
@@ -166,16 +190,16 @@ export class SharedBudgetComponentComponent implements OnInit {
 	}
 
 	settingFunctionalityOfTheComponent() {
-		if (this.editModeOfTheComponent) {
-			this.categorySelected.subCategories.forEach((subcat) => {
-				this.ngModelAux.push({ name: subcat.name });
-			});
-			this.categoryInputModel = this.budgetToEdit.amount;
-			this.fillInputs();
-			this.routeForBackButton = `/app/budgets/${this.categorySelected.name}`;
-		} else {
-			this.routeForBackButton = '/app/budgets/new-budget';
-		}
+		this.categorySelected.subCategories.forEach((subcat) => {
+			this.ngModelAux.push({ name: subcat.name });
+		});
+		this.fillInputs();
+	}
+
+	backButtonRoute() {
+		this.routeForBackButton = this.editModeOfTheComponent
+			? `/app/budgets/${this.categorySelected.name}`
+			: '/app/budgets/new-budget';
 	}
 
 	settingDimensionOfCatContainer() {
