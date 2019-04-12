@@ -118,6 +118,12 @@ input::-webkit-inner-spin-button {
 	/* <-- Apparently some margin are still there even though it's hidden */
 }
 
+.datepicker-modal {
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
 .animated {
 	-webkit-animation-duration: 1s;
 	animation-duration: 1s;
@@ -128,6 +134,11 @@ input::-webkit-inner-spin-button {
 	animation-duration: 0.4s;
 }
 
+.fadeIn {
+  animation-name: fadeIn;
+}
+
+
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -137,6 +148,6 @@ input::-webkit-inner-spin-button {
 	}
 }
 
-.fadeIn {
-	animation-name: fadeIn;
+@media only screen and (min-width: 1600px) {
+  .datepicker-modal { left: 40% !important; }
 }
