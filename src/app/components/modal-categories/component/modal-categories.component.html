@@ -1,16 +1,15 @@
-<!-- Modal Structure -->
-<div id="{{ modalTrigger }}" class="modal" #modalCateogry>
-    <div class="modal-content center-align black-text">
-        <ng-container *ngIf="backCategories !== true; else elseTemplate">
-            <h5>Selecciona una categoría: </h5>
-        </ng-container>
-        <ng-template #elseTemplate>
-            <h5>Selecciona una subcategoría: </h5>
-        </ng-template>
-        <app-categories-list [categoryList]="categoryList" [flagCategory]="backCategories" (filterStatus)="backCategories=$event" (statusCategory)="statusCategory.emit($event)">
-        </app-categories-list>
-    </div>
-    <div class="container-fluid modal-footer">
-        <button class="modal-back btn-flat btn-back" (click)="backCategories = false" [disabled]="backCategories === false">Regresar</button>
-    </div>
+<h1 mat-dialog-title>Favorite Animal</h1>
+<div mat-dialog-content>
+  My favorite animal is:
+  <ul>
+    <li>
+      <span>&#10003;</span> Panda
+    </li>
+    <li>
+      <span>&#10003;</span> Unicorn
+    </li>
+    <li>
+      <span>&#10003;</span> Lion
+    </li>
+  </ul>
 </div>

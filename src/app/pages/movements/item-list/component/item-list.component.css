@@ -24,11 +24,6 @@ mat-expansion-panel.mat-expanded {
   padding: 0 8px;
 }
 
-.mat-expansion-indicator {
-  padding-right: 1%;
-  margin-left: -2%;
-}
-
 .collapsible {
   border:  none;
   margin: 0;
