@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 body,
 html {
 	margin: 0;
@@ -124,6 +124,17 @@ input::-webkit-inner-spin-button {
   transform: translate(-50%, -50%) !important;
 }
 
+.mat-expansion-indicator {
+  margin-right: 1%;
+  margin-left: -3%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.mat-expansion-indicator::after{
+  padding: 6px;
+}
+
 .animated {
 	-webkit-animation-duration: 1s;
 	animation-duration: 1s;
@@ -137,7 +148,6 @@ input::-webkit-inner-spin-button {
 .fadeIn {
   animation-name: fadeIn;
 }
-
 
 @keyframes fadeIn {
 	from {
