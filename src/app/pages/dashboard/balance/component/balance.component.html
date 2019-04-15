@@ -1,0 +1,46 @@
+<div class="row z-depth-1">
+    <div class="col s12 center">
+        <app-month-chart (onClickMonth)="onClickMonth( $event )">
+        </app-month-chart>
+    </div>
+</div>
+<div class="row mainRow animated fadeIn">
+    <div class="col s12 m5 l6">
+        <div id="pieContainer">
+            <h5>{{ typeOfAmount }}<b> ${{ totalAmount | number:'1.0-0' }}</b></h5>
+            <canvas id="balancePieChart" height="100"></canvas>
+        </div>
+    </div>
+    <div class="col s12 m5 offset-m1 l4">
+        <ul class="collection z-depth-1">
+            <li class="hoverable collection-item">
+                <div class="row">
+                    <div class="col s2 center">
+                        <img width="30px" src="{{ assetsUrl }}Gastos.png">
+                    </div>
+                    <div class="col s5 pt">
+                        Gastos
+                    </div>
+                    <div class="col s5 center pt">
+                        ${{ expensesAmount | number:'1.2-2' }}
+                    </div>
+                </div>        
+            </li>
+            <li class="hoverable collection-item">
+                <div class="row">
+                    <div class="col s2 center">
+                        <img width="30px" src="{{ assetsUrl }}Ahorro.png">
+                    </div>
+                    <div class="col s5 pt">
+                        Ahorro
+                    </div>
+                    <div class="col s5 center pt">
+                        $  {{ savingAmount | number:'1.2-2' }}
+                    </div>
+                </div>        
+            </li>
+        </ul>
+    </div>
+</div>
+    
+    

@@ -1,0 +1,48 @@
+.row {
+  margin-bottom: 0px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.btn-charge {
+  border: 1px solid #b71c1c;
+  background-color: transparent;
+}
+
+.btn-deposit {
+  border: 1px solid #2e7d32;
+  background-color: transparent;
+}
+
+.btn:hover {
+  color: #f5f5f5;
+  transition: 0.3s;
+}
+
+.btn-charge:hover {
+  border-color: #d50000;
+  background-color: #d50000;
+}
+
+.btn-deposit:hover {
+  background-color: #43a047;
+}
+
+.btn-charge.active {
+  background-color: rgb(198, 40, 40);
+}
+
+.btn-deposit.active {
+  background-color: rgb(67, 160, 71);
+}
+
+.active {
+  color: #f5f5f5;
+}
+
+@media only screen and (min-width: 1441px) and (max-width: 1500px) {
+  #container-charge {
+    margin-right: -30px;
+  }
+}

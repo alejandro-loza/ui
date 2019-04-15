@@ -1,15 +1,33 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http'
+import { NgModule } from                 '@angular/core';
 
-import { PAGES_ROUTES } from './pages.route';
+import { SharedModule } from             '@shared/shared.module';
+import { NavbarModule } from             '@components/navbar/navbar.module';
 
+import { CategoriesService } from        '@services/categories/categories.service';
+import { CredentialService } from        '@services/credentials/credential.service';
+import { FieldService } from             '@services/field/field.service';
+import { InstitutionService } from       '@services/institution/institution.service';
+import { MovementsService } from         '@services/movements/movements.service';
+
+import { PagesRoutes } from              './pages.route';
+
+import { PagesComponent } from           '@pages/pages.component';
+import {InterceptorProvider} from '@security/interceptors.index';
 @NgModule({
-  declarations: [],
+  declarations: [ PagesComponent ],
   imports: [
-    CommonModule,
-    PAGES_ROUTES,
-    HttpClientModule
-  ]
+    SharedModule,
+    NavbarModule,
+    PagesRoutes
+  ],
+  exports: [ ],
+  providers: [
+    CategoriesService,
+    CredentialService,
+    MovementsService,
+    InstitutionService,
+    FieldService
+  ],
 })
-export class PagesModule { }
+export class PagesModule {}
+

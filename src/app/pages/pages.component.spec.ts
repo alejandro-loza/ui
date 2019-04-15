@@ -1,15 +1,26 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { async, ComponentFixture, TestBed } from  '@angular/core/testing';
+import { RouterTestingModule } from               '@angular/router/testing';
+import { SharedModule } from                      '@shared/shared.module';
 
-import { PagesComponent } from './pages.component';
+import { PagesComponent } from                    './pages.component';
 
 describe('PagesComponent', () => {
   let component: PagesComponent;
   let fixture: ComponentFixture<PagesComponent>;
 
+
+  function createCollapseButton(id: string): void {
+    const collapseButton = document.createElement('button');
+    collapseButton.setAttribute('id', id);
+    document.body.appendChild(collapseButton);
+  }
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule ],
+      imports: [
+        RouterTestingModule,
+        SharedModule,
+      ],
       declarations: [ PagesComponent ]
     })
     .compileComponents();
@@ -18,7 +29,7 @@ describe('PagesComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PagesComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    createCollapseButton('testCollapsable');
   });
 
   it('should create', () => {

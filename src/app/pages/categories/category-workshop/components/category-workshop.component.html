@@ -1,0 +1,60 @@
+<app-back-button *ngIf="!editMode" [ruta]="'/app/categories'"></app-back-button>
+<div class="container">
+  <div class="row">
+    <div class="col s12 center">
+      <h5>Configura tu categoría</h5>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m10 offset-m1 l8 offset-l2">
+      <div class="card">
+        <div class="card-content">
+          <div class="row">
+            <div class="input-field">
+              <input id="categoryName" maxlength="25" [(ngModel)]="categoryName" type="text" name="categoryName" placeholder="Nombre de la categoria">
+            </div> 
+            <div class="col s12">
+              <span><b>Fondo:</b></span>
+              <ul>
+                <li class="colorPickerUl" *ngFor="let color of colorForCategory">
+                  <button [ngStyle]="{'background-color': color}" (click)="selectedBackground( color )"
+                        class="btn-floating btn-small"></button>
+                </li>
+              </ul>
+              <!--button (click)="generateRandomColors()"  *ngIf="colorForCategory.length < 40"
+                    class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">add</i></button-->
+
+              <button (click)="reloadColors()"
+                    class="colorPickerUl btn-floating btn-small transparent"><i class="material-icons black-text">loop</i></button>
+            </div>
+            <!--div class="col s12 pt-20">
+              <span><b>Texto:</b></span>
+              <ul>
+                <li class="colorPickerUl" *ngFor="let color of colorText">
+                  <button [ngStyle]="{'background-color': color}" (click)="selectedTextColor( color )"
+                    class="btn-floating btn-small"></button>
+                </li>
+              </ul>
+              <button (click)="reloadTextColors()"
+                  class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">loop</i></button>
+            </div-->
+            <div class="col s8 offset-s2">
+              <div class="demoChip" [ngStyle]="{'background-color': colorForDemoChip ,'color': '#ffffff'}" >
+                <p class="center pt-5 categoryNameChip"><b>{{ categoryName }}</b></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-action right-align">
+          <button *ngIf="editMode" [routerLink]="['/app/categories/details']" class="btn finerio-orange white-text" id="cancelButton">Cancelar</button>
+          <button (click)="submitCategory()" id="submitButton" [disabled]="categoryName.length === 0" class="btn action-btn green">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="showSpinner">
+    <div class="col s12 center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+</div>

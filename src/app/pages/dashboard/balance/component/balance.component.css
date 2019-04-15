@@ -1,0 +1,38 @@
+#balancePieChart {
+	margin-bottom: 30px;
+}
+
+.row {
+	margin-bottom: 0px;
+}
+
+#pieContainer {
+	text-align: center;
+	position: relative;
+}
+
+#pieContainer h5 {
+	margin-top: 0px;
+}
+
+.mainRow {
+	padding-top: 40px;
+	/*height: -webkit-fill-available;
+    background-color: white;*/
+}
+
+.collection {
+	overflow: inherit;
+	margin-top: 0px;
+}
+
+.collection-item {
+	background-color: white;
+	cursor: pointer;
+	max-height: 40px;
+	padding: 5px 20px;
+}
+
+.pt {
+	padding-top: 5px;
+}

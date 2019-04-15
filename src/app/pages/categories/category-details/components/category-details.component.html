@@ -1,0 +1,70 @@
+<app-back-button [ruta]="'/app/categories'"></app-back-button>
+<div class="container animated fadeIn">
+  <div class="row">
+    <div class="col m6 l4 hide-on-small-only center">
+      <div id="backgroundContainer" class="center" [ngStyle]="{'background-color': categoryToShow.color, 'height':setHeightToCol }">
+        <div class="content">
+          <img *ngIf="!categoryToShow.userId" src="https://cdn.finerio.mx/categories/web/{{ categoryToShow.id }}.svg" alt="{{ categoryToShow.name }}">
+
+          <img *ngIf="categoryToShow.userId" src="/assets/media/img/categories/userCategory.svg" alt="{{ categoryToShow.name }}">
+          
+          <br>
+          <h5 [ngStyle]="{'color':categoryToShow.textColor}">{{categoryToShow.name}}</h5>
+        </div>
+      </div>
+      <button *ngIf="categoryToShow.userId" [routerLink]="['/app/categories/workshop', 'edit']"
+        id="editCategoryButton" class="btn white black-text">
+        Editar Categoría
+      </button>
+    </div>
+    <div class="col s12 m6 l8 z-depth-1 py-10" id="divToGetHeight">
+      <div class="row marginBottom-0" id="subcatDividerRow">
+        <div class="col s12 center">
+          <p id="subcatsTextDivisor"><b>Subcategorías</b></p>
+        </div>
+      </div>
+      <div class="row marginBottom-0" id="subcatsRow" *ngFor="let subCategory of categoryToShow.subCategories; let i = index">
+        <div class="col s10 center">
+          <div class="subCategoryElement" [ngStyle]="{'color':subCategory.textColor, 'background-color':subCategory.color}">
+            <span>{{ subCategory.name }}</span>
+          </div>
+        </div>
+        <div *ngIf="subCategory.userId" class="col s2 center">
+          <a [routerLink]="['/app/categories/subcategory-workshop', 'edit']" (click)="categoriesBeanService.setSubcategoryToViewDetails(subCategory)" class="btn-floating" [ngStyle]="{'background-color':subCategory.color}">
+            <i [ngStyle]="{'color': subCategory.textColor}" class="material-icons">edit</i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 right-align" id="buttonsCol">
+        <button *ngIf="categoryToShow.userId"
+          id="deleteCategoryButton"
+          (click)="openDeleteModal()"
+          class="btn red underBtns">
+          Eliminar Categoría
+        </button>
+        <button [routerLink]="['/app/categories/subcategory-workshop', 'new']"
+          id="createSubCategoryButton"
+          [ngStyle]="{'background-color':categoryToShow.color}"
+          class="btn white-text right-align underBtns">
+          Crear Subcategoría
+        </button>
+      </div>
+    </div>
+    <div *ngIf="showSpinner" class="col s12 center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+  <!-- DELETE MODAL -->
+  <div id="deleteModal" class="modal" #deleteModal>
+    <div class="modal-content">
+      <h5>Eliminar Categoría</h5>
+      <p>¿Estás seguro que quieres eliminar tu categoría?</p>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-close btn-flat">Cancelar</a>
+      <a (click)="deleteUserCategory()" class="modal-close waves-effect waves-red btn-flat">Aceptar</a>
+    </div>
+  </div>
+</div>

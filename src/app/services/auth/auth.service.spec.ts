@@ -1,11 +1,12 @@
-import { TestBed, inject, async } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { HttpClientModule, HttpRequest, HttpParams, HttpResponse } from '@angular/common/http';
-import { AuthService, FinerioService } from '../services.index';
+import { HttpClientModule } from '@angular/common/http';
 
-import { environment } from './../../../environments/environment';
-import { User } from './../../shared/dto/authLoginDot';
+import { User } from '@app/shared/interfaces/authLogin.interface';
+import { environment } from '@env/environment';
+import { AuthService } from '@services/auth/auth.service';
+import { ConfigService } from '@services/config/config.service';
 
 interface UserMock {
   email: string;
@@ -26,7 +27,7 @@ describe('AuthService', () => {
       ],
       providers: [
         AuthService,
-        FinerioService
+        ConfigService
        ]
     });
     authService = TestBed.get( AuthService );
@@ -47,7 +48,8 @@ describe('AuthService', () => {
 
     beforeEach( () => {
       authService = TestBed.get( AuthService );
-      expectedUser = new User( 'mock@email.com', 'passMock1.' );
+      expectedUser.email = 'mock@email.com';
+      expectedUser.password = 'passMock1.';
     });
 
     it('should return 200, OK', () => {
@@ -55,10 +57,26 @@ describe('AuthService', () => {
         expectedData = data;
         expect(data).toEqual(expectedData);
       });
-      const req = http.expectOne('https://api.finerio.mx/api/login');
+      const req = http.expectOne(`${environment.backendUrl}/login`);
       expect(req.request.method).toEqual('POST');
-      console.log(req);
       expect(authService).toBeTruthy();
+    });
+  });
+
+  describe('#personalInfoFunction', () => {
+    it('should return an Observable', () => {
+      const dummyInfo = {
+        info: 'Dummy Info'
+      };
+
+      authService.personalInfo().subscribe( (userInfo: any) => {
+        userInfo = dummyInfo;
+        expect(userInfo).toEqual(dummyInfo);
+      });
+
+      const req = http.expectOne(`${environment.backendUrl}/me`);
+      expect(req.request.method).toBe('GET');
+      req.flush(dummyInfo);
     });
   });
 });

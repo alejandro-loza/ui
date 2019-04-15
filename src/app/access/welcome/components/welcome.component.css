@@ -1,0 +1,43 @@
+#icon-Finerio {
+    width: 20%;
+    transition: 2.0s;
+}
+
+#icon-Finerio path,
+#icon-Finerio polygon {
+    fill: #335479;
+    animation: fill 1s alternate infinite ease-in-out;
+}
+
+.logo {
+    margin: 8%;
+}
+
+@-webkit-keyframes fill {
+    0% {
+        fill: transparent;
+    }
+    100% {
+        fill: #335479;
+    }
+}
+
+@keyframes fill {
+    0% {
+        width: 0%;
+        fill: transparent;
+    }
+    100% {
+        width: 100%;
+        fill: #335479;
+    }
+}
+
+@media (max-width: 600px) {
+    #icon-Finerio {
+        width: 60%;
+    }
+    .logo {
+        margin: 20% auto;
+    }
+}

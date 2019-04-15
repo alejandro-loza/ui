@@ -1,0 +1,38 @@
+.row{
+  margin-bottom: 0px;
+}
+
+.colTabs {
+  margin: 0%;
+  padding: 0%;
+}
+
+.tab a {
+  color: rgba(1, 87, 155, 0.7);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.tab a:hover,
+.tab a.active {
+  color: rgba(1, 87, 155, 0.7);
+  background: rgba(1, 87, 155, 0.1)
+}
+
+.tab a:focus.active {
+  background-color: rgba(1, 87, 155, 0.1);
+}
+
+.tab a:focus {
+  background-color: transparent;
+}
+
+.tabs .tab.disabled a,
+.tabs .tab.disabled a:hover{
+  color: rgba(1, 87, 155, 0.4);
+}
+
+.tabs .indicator {
+  background-color: var(--orange-color)!important;
+  height: 5px;
+}

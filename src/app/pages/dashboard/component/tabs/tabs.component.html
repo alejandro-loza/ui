@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col colTabs s12">
+    <ul class="tabs" #tabs>
+      <li (click)="onClick(0)" routerLinkActive="active" class="tab col s4">
+        <a id="incomesTab" href="#incomes">Ingresos</a>
+      </li>
+      <li (click)="onClick(1)" routerLinkActive="active"  class="tab col s4">
+        <a id="expensesTab" href="#expenses">Gasto</a>
+      </li>
+      <li (click)="onClick(2)" routerLinkActive="active" class="tab col s4">
+        <a id="balanceTab" href="#balance">Balance</a>
+      </li>
+      <!--li routerLinkActive="active" class="tab col s3 disabled">
+        <a href="diagnostic">Diagnóstico</a>
+      </li-->
+    </ul>
+  </div>
+</div>

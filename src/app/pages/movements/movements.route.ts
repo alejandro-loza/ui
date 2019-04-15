@@ -1,8 +1,15 @@
 import { RouterModule, Routes } from '@angular/router';
-import { MovementsComponent } from './components/movements.component';
+import { MovementsComponent } from './component/movements.component';
 
-const MOVEMENTS_ROUTING: Routes = [
-    { path:'', component: MovementsComponent }
+const MovementsRouting: Routes = [
+    {
+        path: '',
+        component: MovementsComponent
+    },
+    {
+      path: '**',
+      redirectTo: '/access/login'
+    }
 ];
 
-export const MOVEMENTS_ROUTES = RouterModule.forChild( MOVEMENTS_ROUTING );
+export const MovementsRoutes = RouterModule.forChild( MovementsRouting );

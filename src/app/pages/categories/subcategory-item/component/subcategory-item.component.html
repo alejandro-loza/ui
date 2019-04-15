@@ -1,0 +1,28 @@
+<div class="col s12 m5 l5">
+    <div class="category-info text-center fast fadeIn" [ngStyle]="{
+      'background-color': category.color,
+      'color': category.textColor}">
+        <ng-container *ngIf="category.userId; else elseCategorySystem">
+            <img class="category" src="assets/media/img/categories/userCategory.svg" srcset="assets/media/img/categories/userCategory.svg" alt="{{ category.name }}">
+        </ng-container>
+        <ng-template #elseCategorySystem>
+            <img class="category" src="https://cdn.finerio.mx/categories/web/{{ category.id }}.svg" srcset="assets/media/img/categories/{{ category.id }}.svg" alt="{{ category.name }}">
+        </ng-template>
+        <h4>{{ category.name }}</h4>
+    </div>
+</div>
+<div class="col s12 m7">
+    <div class="row">
+        <!-- Se recorren las subcategorías de la cateogria actual -->
+        <ng-template ngFor let-subcategory [ngForOf]="category.subCategories" let-i="index" [ngForTrackBy]="trackByFn">
+            <div class="col m10 offset-m1 center subcategory fast fadeIn">
+                <button class="btn btn-subcategory truncate modal-close"
+                  [attr.id]="subcategory.id"
+                  [ngStyle]="{'border-color': subcategory.color}"
+                  (mouseover)="overSubcategory(i)"
+                  (mouseout)="outSubcategory(i)"
+                  (click)="selectCategory(i)"> {{ subcategory.name }} </button>
+            </div>
+        </ng-template>
+    </div>
+</div>

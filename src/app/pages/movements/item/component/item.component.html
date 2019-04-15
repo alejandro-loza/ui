@@ -1,0 +1,68 @@
+<div class="row valign-wrapper center-align">
+  <!-- Image Start -->
+  <div class="col m1">
+    <img src="https://cdn.finerio.mx/banks/{{movement.account.institution.code}}_shield.png" srcset="assets/media/img/movements/{{movement.account.institution.code}}.png" alt="{{movement.account.institution.code}}" class="imgMovement" />
+  </div>
+  <!-- Image End -->
+
+  <!-- Date Start -->
+  <div class="col m1 customComponent">
+    <ng-container *ngIf="movement.editAvailable === true; else elseDate">
+      <app-date [formatDate]="movement.formatDate" [date]="movement.customDate" [classes]="'inputMovement center'" [type]="'text'" name="customDate" (valueDate)="movement.customDate=$event" (valueFormatDate)="movement.formatDate=$event">
+      </app-date>
+    </ng-container>
+    <ng-template #elseDate>
+      <h6>{{ movement.formatDate }}</h6>
+    </ng-template>
+  </div>
+  <!-- Date End -->
+
+  <!-- Description Start-->
+  <div class="col m3 customComponent left-align">
+    <ng-container *ngIf="movement.editAvailable === true; else elseDescription">
+      <input [(ngModel)]="movement.customDescription" type="text" class="inputMovement inputPadding" name="description" />
+    </ng-container>
+    <ng-template #elseDescription>
+      <h6 class="truncate description">{{ movement.customDescription | uppercase }}</h6>
+    </ng-template>
+  </div>
+  <!-- Description End-->
+
+  <!-- Category Start -->
+  <div class="col m3 category-margin">
+    <app-concept-type-movement [editAvailable]="movement.editAvailable" [categoryList]="categoryList" [concepts]="movement.concepts" (statusCategory)="statusCategory.emit($event)" (statusModal)="statusModal.emit($event)">
+    </app-concept-type-movement>
+  </div>
+  <!-- Category End-->
+
+  <!-- Amount start -->
+  <div class="col m2 customComponent right-align">
+    <ng-container *ngIf="movement.account.name === 'Efectivo'; else elseAmount">
+      <ng-container *ngIf="movement.editAvailable === true; else elseAmount">
+        <input [(ngModel)]="movement.amount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" />
+      </ng-container>
+    </ng-container>
+    <ng-template #elseAmount>
+      <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">
+        {{ movement.amount | currency:'USD':'symbol-narrow':'0.2' }}
+      </h6>
+    </ng-template>
+  </div>
+  <!-- Amount End -->
+
+  <!-- Consider start -->
+  <div class="col m2">
+    <div class="switch">
+      <label>
+        Si
+        <input
+          [(ngModel)]="movement.duplicated"
+          name="duplicated"
+          type="checkbox"/>
+        <span class="lever"></span>
+        No
+      </label>
+    </div>
+  </div>
+  <!-- Consider end -->
+</div>
