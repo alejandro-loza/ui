@@ -1,0 +1,24 @@
+<div class="col s12">
+  <h4>Seleccione tipo de cuenta</h4>
+  <p class="titlesText center"><b>Corto Plazo</b></p>
+  <ul>
+    <li class="manualAccountLi" *ngFor="let img of iconsShortTerm; let i = index">
+      <button (click)="selectedAccount(i, 'short')" id="short{{i}}" class="btn transparent black-text">
+        <img [src]="'assets/media/img/manual_account/'+img+'.svg'" alt="{{ namesShortTerm[i] }}"><br>
+        {{ namesShortTerm[i] }}
+      </button>
+    </li>
+  </ul>
+</div>
+<div class="col s12">
+  <p class="titlesText center"><b>Largo Plazo</b></p>
+  <ul>
+    <li class="manualAccountLi" *ngFor="let img of iconsLargeTerms; let i = index">
+      <button (click)="selectedAccount(i, 'large')" id="large{{i}}" class="btn transparent black-text">
+        <img [src]="'assets/media/img/manual_account/'+img+'.svg'" alt="{{ namesLargeTerms[i] }}"><br>
+        {{ namesLargeTerms[i] }}
+      </button>
+    </li>
+  </ul>
+</div>
+

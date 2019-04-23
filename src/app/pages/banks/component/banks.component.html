@@ -27,7 +27,8 @@
       <h5><b>¿No está tu banco o quieres agregar otro tipo de cuenta?</b></h5>
     </div>
     <div class="col s12 center py-20">
-      <button class="btn finerio-blue">
+      <button [routerLink]="['/app/manual-account', 'new']"
+        class="btn finerio-blue">
         Agregar cuenta manual
       </button>
     </div>

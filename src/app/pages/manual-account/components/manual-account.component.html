@@ -1,0 +1,76 @@
+<app-back-button [ruta]="backButtonRoute"></app-back-button>
+<div class="container">
+  <div *ngIf="!editModeOfTheComponent" class="row">
+    <div class="col s12 center">
+      <h6><b>Con esta cuenta, podrás llevar control de tu dinero en efectivo o de cuentas e instrumentos no dados de alta en Finerio.</b></h6>
+    </div>
+  </div>
+  <div class="row">
+    <form #manualAccount="ngForm" (ngSubmit)="submitForm(manualAccount)" class="col s12">
+        <div class="col m12 center">
+          Tipo de cuenta:
+          <div class="input-field inline">
+            <button data-target="modal" class="modal-trigger btn maBtn transparent black-text">
+              <img [src]="'assets/media/img/manual_account/'+ manualAccountPick.iconName +'.svg'"><br>
+              <span>{{ manualAccountPick.accountName }}</span>
+            </button>
+          </div>
+        </div>
+        <div class="input-field col m6 offset-m3">
+          <input ngModel name="accountName" placeholder="Nombre de la cuenta" id="accountName" type="text" required>
+        </div>
+        <div class="input-field col m6 offset-m3">
+          <input [ngStyle]="{'color': manualAccountBalance == 'positive' ? 'green' : 'red' }"
+            ngModel name="accountAmount" placeholder="Saldo de la cuenta" id="accountAmount" type="number" required>
+        </div>
+        <div class="row">
+          <div class="col s12 center">
+            <a id="positive" (click)="balanceBtnClick('positive')" class="btn amountBtn transparent">
+              Positivo
+            </a>
+            <a id="negative" (click)="balanceBtnClick('negative')" class="btn amountBtn transparent">
+              Negativo
+            </a>
+          </div>
+        </div>
+        <div class="col m6 offset-m3">
+          <p>
+            <label>
+              <input type="checkbox" name="cashDefault" class="filled-in" ngModel/>
+              <span>Establecer como cuenta default para creación de movimientos</span>
+            </label>
+          </p>
+        </div>
+        <div class="col m6 offset-m3">
+          <p>
+            <label>
+              <input type="checkbox" name="atmDefault" class="filled-in" ngModel/>
+              <span>Establecer como cuenta default para registro de retiros de efectivo ATM</span>
+            </label>
+          </p>
+        </div>
+        <div class="col s12 center">
+          <button id="submitButton" class="btn finerio-blue" [disabled]="!manualAccount.valid" type="submit">
+            Guardar
+          </button>
+        </div>
+    </form>
+  </div>
+  <div *ngIf="showSpinner" class="row">
+    <div class="col s12 center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+</div>
+
+
+<!-- MANUAL ACCOUNTS MODAL -->
+<div id="modal" class="modal" #modal>
+  <div class="modal-content">
+    <div class="row">
+        <app-accounts-list class="modal-close" 
+        (manualAccountSelected)="manualAccountSelected($event)">
+      </app-accounts-list>
+    </div>
+  </div>
+</div>

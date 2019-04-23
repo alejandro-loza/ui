@@ -49,6 +49,13 @@ const PagesRouting: Routes = [
 				}
 			},
 			{
+				path: 'manual-account/:mode',
+				loadChildren: './manual-account/manual-account.module#ManualAccountModule',
+				data: {
+					title: 'Nueva cuenta manual'
+				}
+			},
+			{
 				path: '',
 				pathMatch: 'full',
 				redirectTo: 'dashboard'

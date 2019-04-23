@@ -1,0 +1,30 @@
+.titlesText {
+	margin-bottom: 0px;
+	color: #0084dd;
+	font-size: 16px;
+	background-color: #e5f3fd;
+}
+
+ul {
+	margin: 0px;
+}
+
+.manualAccountLi {
+	float: left;
+}
+
+.manualAccountLi button {
+	height: 110px;
+	margin: 5px;
+	min-width: 190px;
+	border-radius: 5px;
+}
+
+.manualAccountLi button img {
+	width: 50px;
+	padding-top: 10px;
+}
+
+.selectedAccount {
+	border: 2px solid #18537b;
+}
