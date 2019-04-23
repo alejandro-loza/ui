@@ -107,7 +107,7 @@ export class ManualAccountComponent implements OnInit {
 	}
 
 	setBalanceToManualAccount(value: number) {
-		this.manualAccount.balance = this.manualAccountBalance == 'positive' ? value : value * -1;
+		this.manualAccount.balance = this.manualAccountBalance == 'positive' ? value : value < 0 ? value : value * -1;
 	}
 
 	manualAccountSelected(event: ManualAccountList) {

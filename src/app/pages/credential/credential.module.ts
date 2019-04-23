@@ -10,9 +10,10 @@ import { CredentialItemComponent } from './credential-item/credential-item.compo
 // Route
 import { CREDENTIAL_ROUTES } from './credential.route';
 import { BackButtonModule } from '@components/back-button/back-button.module';
+import { AccountsTableComponent } from './accounts-table/accounts-table.component';
 
 @NgModule({
 	imports: [ SharedModule, BackButtonModule, EmptyStateModule, CREDENTIAL_ROUTES ],
-	declarations: [ CredentialComponent, CredentialItemComponent ]
+	declarations: [ CredentialComponent, CredentialItemComponent, AccountsTableComponent ]
 })
 export class CredentialModule {}

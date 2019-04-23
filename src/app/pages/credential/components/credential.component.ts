@@ -27,14 +27,7 @@ export class CredentialComponent implements OnInit {
 	accounts: AccountInterface[];
 	credentials: CredentialInterface[];
 	institutions: InstitutionInterface[] = [];
-
-	creditBalance: number;
-	debitBalance: number;
 	interactiveFields = [];
-	totalBalance: number;
-
-	debitAccounts: AccountInterface[] = [];
-	creditAccounts: AccountInterface[] = [];
 
 	// Aux properties
 	showSpinner: boolean;
@@ -57,8 +50,6 @@ export class CredentialComponent implements OnInit {
 	showEmptyState: boolean = false;
 
 	@ViewChild('modal') interactiveModal: ElementRef;
-	@ViewChild('collapsible') elementCollapsible: ElementRef;
-
 	constructor(
 		private accountService: AccountService,
 		private credentialService: CredentialService,
@@ -70,15 +61,11 @@ export class CredentialComponent implements OnInit {
 		private toastService: ToastService
 	) {
 		this.credentials = [];
-		this.debitBalance = 0;
-		this.creditBalance = 0;
-		this.totalBalance = 0;
 		this.showSpinner = true;
 		this.validateStatusFinished = true;
 		this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede tardar unos minutos.';
 		this.successMessage = '';
 		this.failMessage = '';
-		this.fillInformationForEmptyState();
 	}
 
 	ngOnInit() {
@@ -90,6 +77,7 @@ export class CredentialComponent implements OnInit {
 			this.loadInformationFromRam();
 		}
 		this.windowPosition();
+		this.fillInformationForEmptyState();
 	}
 
 	loadInformationFromRam() {
@@ -100,10 +88,8 @@ export class CredentialComponent implements OnInit {
 			this.checkStatusOfCredential(credential);
 			this.automaticSync(credential);
 		});
-		this.getBalance(this.accounts);
-		this.accountsTable(this.accounts);
 		this.emptyStateProcess();
-		this.initMaterialize();
+		this.showSpinner = false;
 	}
 
 	// Main method for getting data
@@ -224,50 +210,13 @@ export class CredentialComponent implements OnInit {
 	}
 
 	getAccounts() {
-		this.accounts = [];
 		this.credentialBean.setAccounts([]);
 		this.accountService.getAccounts().subscribe((res) => {
 			this.accounts = res.body.data;
 			this.credentialBean.setAccounts(this.accounts);
 			this.credentialBean.setLoadInformation(false);
-			this.getBalance(this.accounts);
-			this.accountsTable(this.accounts);
-			this.initMaterialize();
+			this.showSpinner = false;
 		});
-	}
-
-	// Information for the accounts collapsible
-	accountsTable(accounts: AccountInterface[]) {
-		accounts.forEach((account) => {
-			if (account.type == 'Crédito') {
-				this.creditAccounts.push(account);
-			} else {
-				if (account.institution.code != 'DINERIO') {
-					this.debitAccounts.push(account);
-				}
-			}
-		});
-		this.debitAccounts.sort((a, b) => {
-			return b.balance - a.balance;
-		});
-		this.creditAccounts.sort((a, b) => {
-			return a.balance - b.balance;
-		});
-	}
-
-	// Amount for each type of credential
-	getBalance(accountsArray: AccountInterface[]) {
-		this.debitBalance = 0;
-		this.creditBalance = 0;
-		this.totalBalance = 0;
-		accountsArray.forEach((element) => {
-			if (element.nature !== 'Crédito' && element.institution.code != 'DINERIO') {
-				this.debitBalance += element.balance;
-			} else if (element.nature == 'Crédito') {
-				this.creditBalance += element.balance;
-			}
-		});
-		this.totalBalance = this.debitBalance + this.creditBalance;
 	}
 
 	emptyStateProcess() {
@@ -277,7 +226,6 @@ export class CredentialComponent implements OnInit {
 			this.credentialBean.setShowEmptyState(false);
 		}
 		this.showEmptyState = this.credentialBean.getShowEmptyState();
-		this.showSpinner = false;
 	}
 
 	fillInformationForEmptyState() {
@@ -330,23 +278,13 @@ export class CredentialComponent implements OnInit {
 		this.getInteractiveFields(credential);
 	}
 
-	initMaterialize() {
-		if (!this.showEmptyState) {
-			setTimeout(() => {
-				const initModal = new M.Modal(this.interactiveModal.nativeElement);
-				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
-			}, 300);
-		}
+	ngAfterViewInit(): void {
+		const initModal = new M.Modal(this.interactiveModal.nativeElement);
 	}
 
 	clearMemory() {
 		this.credentials = [];
 		this.accounts = [];
-		this.debitAccounts = [];
-		this.creditAccounts = [];
-		this.debitBalance = 0;
-		this.creditBalance = 0;
-		this.totalBalance = 0;
 	}
 
 	windowPosition() {
