@@ -40,6 +40,9 @@ export class ToastService {
 			case 200:
 				this.toast.classes = 'grey darken-2 grey-text text-lighten-5';
 				break;
+			case 201:
+				this.toast.classes = 'grey darken-2 grey-text text-lighten-5';
+				break;
 			case 400:
 				this.toast.classes = 'red accent-3';
 				break;
