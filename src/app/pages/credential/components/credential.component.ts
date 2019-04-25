@@ -25,6 +25,7 @@ import * as M from 'materialize-css/dist/js/materialize';
 })
 export class CredentialComponent implements OnInit {
 	accounts: AccountInterface[];
+	manualAccounts: AccountInterface[];
 	credentials: CredentialInterface[];
 	institutions: InstitutionInterface[] = [];
 	interactiveFields = [];
@@ -84,6 +85,7 @@ export class CredentialComponent implements OnInit {
 		this.credentials = this.credentialBean.getCredentials();
 		this.accounts = this.credentialBean.getAccounts();
 		this.institutions = this.credentialBean.getInstitutions();
+		this.manualAccounts = this.accountService.getManualAccounts;
 		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
 			this.automaticSync(credential);
@@ -215,8 +217,19 @@ export class CredentialComponent implements OnInit {
 			this.accounts = res.body.data;
 			this.credentialBean.setAccounts(this.accounts);
 			this.credentialBean.setLoadInformation(false);
-			this.showSpinner = false;
+			this.manualAccountsFilter();
 		});
+	}
+
+	manualAccountsFilter() {
+		this.manualAccounts = [];
+		this.accounts.forEach((account) => {
+			if (account.nature.includes('ma_')) {
+				this.manualAccounts.push(account);
+			}
+		});
+		this.accountService.setManualAccounts = this.manualAccounts;
+		this.showSpinner = false;
 	}
 
 	emptyStateProcess() {

@@ -23,6 +23,7 @@ export class AccountService {
 	url: String = `${environment.backendUrl}/users`;
 
 	private accounts: AccountInterface[];
+	private manualAccounts: AccountInterface[];
 
 	constructor(
 		private httpClient: HttpClient,
@@ -54,15 +55,23 @@ export class AccountService {
 		});
 	}
 
-	get getAccountData() {
-		return this.accounts;
-	}
-
 	createManualAccount(body: ManualAccountHttp): Observable<HttpResponse<Response<MAResponse>>> {
 		const url = `${environment.apiUrl}/apiv2/manualAccount`;
 		return this.httpClient.post<Response<MAResponse>>(url, body, {
 			observe: 'response',
 			headers: this.configService.getHeaders
 		});
+	}
+
+	get getAccountData() {
+		return this.accounts;
+	}
+
+	set setManualAccounts(data: AccountInterface[]) {
+		this.manualAccounts = data;
+	}
+
+	get getManualAccounts(): AccountInterface[] {
+		return this.manualAccounts;
 	}
 }

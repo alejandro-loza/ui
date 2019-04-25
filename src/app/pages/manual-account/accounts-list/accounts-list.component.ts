@@ -7,11 +7,11 @@ import { ManualAccountList } from '@app/interfaces/manual-accounts/manual-accoun
 	styleUrls: [ './accounts-list.component.css' ]
 })
 export class AccountsListComponent implements OnInit {
-	iconsShortTerm: string[] = [ 'DINERIO', 'tdd', 'deuda', 'tdc' ];
+	iconsShortTerm: string[] = [ 'ma_cash', 'ma_debitCard', 'ma_debt', 'ma_creditCard' ];
 	namesShortTerm: string[] = [ 'Efectivo', 'Tarjeta de débito', 'Deuda', 'Tarjeta de crédito' ];
 	shortNatureKeys: string[] = [ 'cash', 'debitCard', 'debt', 'creditCard' ];
 
-	iconsLargeTerms: string[] = [ 'inversion', 'seguro_de_vida', 'bienes', 'hipoteca', 'credito_personal' ];
+	iconsLargeTerms: string[] = [ 'ma_investment', 'ma_lifeInsurance', 'ma_goods', 'ma_mortgage', 'ma_personalCredit' ];
 	namesLargeTerms: string[] = [ 'Inversión', 'Seguro de vida', 'Bienes', 'Hipoteca', 'Crédito personal' ];
 	largeNatureKeys: string[] = [ 'investment', 'lifeInsurance', 'goods', 'mortgage', 'personalCredit' ];
 
