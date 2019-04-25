@@ -15,6 +15,7 @@ import { map } from 'rxjs/operators';
 // MA
 import { ManualAccountHttp } from '@app/interfaces/manual-accounts/manual-account-http.interface';
 import { MAResponse } from '@app/interfaces/manual-accounts/manual-account-response.interface';
+import { isNullOrUndefined } from 'util';
 
 @Injectable({
 	providedIn: 'root'
@@ -23,7 +24,6 @@ export class AccountService {
 	url: String = `${environment.backendUrl}/users`;
 
 	private accounts: AccountInterface[];
-	private manualAccounts: AccountInterface[];
 
 	constructor(
 		private httpClient: HttpClient,
@@ -47,6 +47,14 @@ export class AccountService {
 			);
 	}
 
+	updateManualAccount(body: ManualAccountHttp, id: string): Observable<HttpResponse<Response<AccountInterface>>> {
+		const url = `${environment.backendUrl}/accounts/${id}`;
+		return this.httpClient.put<Response<AccountInterface>>(url, body, {
+			observe: 'response',
+			headers: this.configService.getHeaders
+		});
+	}
+
 	deleteAccount(accountId: string): Observable<HttpResponse<Response<AccountInterface>>> {
 		const url = `${environment.backendUrl}/accounts/` + accountId;
 		return this.httpClient.delete<Response<AccountInterface>>(url, {
@@ -63,15 +71,88 @@ export class AccountService {
 		});
 	}
 
+	getManualAccountNatureWithOutDefaults(nature: string): string {
+		let result: string = 'ma_cash';
+		let natureNames: string[] = [
+			'ma_cash',
+			'ma_creditCard',
+			'ma_debitCard',
+			'ma_debt',
+			'ma_goods',
+			'ma_investment',
+			'ma_lifeInsurance',
+			'ma_mortgage',
+			'ma_personalCredit'
+		];
+		if (!isNullOrUndefined(nature)) {
+			natureNames.forEach((natureName) => {
+				if (nature.includes(natureName)) {
+					result = natureName;
+				}
+			});
+		}
+		return result;
+	}
+
+	getManualAccountNameByNature(nature: string): string {
+		let name: string = 'Efectivo';
+		let natureNames: string[] = [
+			'ma_cash',
+			'ma_creditCard',
+			'ma_debitCard',
+			'ma_debt',
+			'ma_goods',
+			'ma_investment',
+			'ma_lifeInsurance',
+			'ma_mortgage',
+			'ma_personalCredit'
+		];
+		let maNames: string[] = [
+			'Efectivo',
+			'Tarjeta de crédito',
+			'Tarjeta de débito',
+			'Deuda',
+			'Bienes',
+			'Inversión',
+			'Seguro de vida',
+			'Hipoteca',
+			'Crédito Personal'
+		];
+
+		for (let i = 0; i < natureNames.length; i++) {
+			if (!isNullOrUndefined(nature)) {
+				if (nature.includes(natureNames[i])) {
+					name = maNames[i];
+				}
+			}
+		}
+		return name;
+	}
+
+	getIconSrcByNature(nature: string): string {
+		let name: string = 'ma_cash';
+		let iconsName: string[] = [
+			'ma_cash',
+			'ma_creditCard',
+			'ma_debitCard',
+			'ma_debt',
+			'ma_goods',
+			'ma_investment',
+			'ma_lifeInsurance',
+			'ma_mortgage',
+			'ma_personalCredit'
+		];
+		if (!isNullOrUndefined(nature)) {
+			iconsName.forEach((iconName) => {
+				if (nature.includes(iconName)) {
+					name = iconName;
+				}
+			});
+		}
+		return name;
+	}
+
 	get getAccountData() {
 		return this.accounts;
-	}
-
-	set setManualAccounts(data: AccountInterface[]) {
-		this.manualAccounts = data;
-	}
-
-	get getManualAccounts(): AccountInterface[] {
-		return this.manualAccounts;
 	}
 }

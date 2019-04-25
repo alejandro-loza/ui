@@ -5,8 +5,10 @@ import { NgForm } from '@angular/forms';
 import { ManualAccountList } from '@app/interfaces/manual-accounts/manual-account-list.interface';
 import { ManualAccountHttp } from '@interfaces/manual-accounts/manual-account-http.interface';
 import { AccountService } from '@services/account/account.service';
+import { AccountsBeanService } from '@services/account/accounts-bean.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ToastService } from '@services/toast/toast.service';
+import { AccountInterface } from '@app/interfaces/account.interfaces';
 
 @Component({
 	selector: 'app-manual-account',
@@ -18,35 +20,121 @@ export class ManualAccountComponent implements OnInit {
 	editModeOfTheComponent: boolean;
 	manualAccountPick: ManualAccountList = {};
 	manualAccount: ManualAccountHttp = {};
+	manualAccountToEdit: AccountInterface;
 	manualAccountBalance: string = 'positive';
 	showSpinner: boolean = false;
 
+	// NgModel Variables
+	accountName: string;
+	accountBalance: number;
+	cashDefault: boolean;
+	atmDefault: boolean;
+
 	@ViewChild('modal') elModal: ElementRef;
+	@ViewChild('deleteModal') elModal2: ElementRef;
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
 		private accountService: AccountService,
 		private router: Router,
 		private cleanerService: CleanerService,
-		private toastService: ToastService
+		private toastService: ToastService,
+		private accountsBeanService: AccountsBeanService
 	) {}
 
 	ngOnInit() {
 		this.setModeOfTheComponent();
 		this.setBackButtonRoute();
-		this.setManualAccountDefaultSettings();
+		this.editModeOfTheComponent ? this.setManualAccountForEdit() : this.setManualAccountDefaultSettings();
 	}
 
 	ngAfterViewInit() {
 		const modal = new M.Modal(this.elModal.nativeElement);
+		const modal2 = new M.Modal(this.elModal2.nativeElement);
 	}
 
-	setManualAccountDefaultSettings() {
-		this.manualAccountPick.accountKey = 'cash';
-		this.manualAccountPick.accountName = 'Efectivo';
-		this.manualAccountPick.iconName = 'DINERIO';
+	setManualAccountForEdit() {
+		let manualAccountToShow = this.accountsBeanService.getManualAccountToEdit;
+		this.manualAccountToEdit = manualAccountToShow;
 
-		document.querySelector('#positive').classList.add('active');
+		// For Interface prorpuse
+		this.manualAccountPick.iconName = this.accountService.getIconSrcByNature(manualAccountToShow.nature);
+		this.manualAccountPick.accountName = this.accountService.getManualAccountNameByNature(
+			manualAccountToShow.nature
+		);
+		this.manualAccountPick.accountKey = this.accountService.getManualAccountNatureWithOutDefaults(
+			manualAccountToShow.nature
+		);
+		document.querySelector('.maBtn').classList.remove('modal-trigger');
+		let largeTitle = document.querySelector('#largeTitle');
+		let medTitle = document.querySelector('#medTitle');
+		largeTitle.innerHTML = 'Cuenta Manual';
+		medTitle.innerHTML = 'Cuenta Manual';
+
+		// For fill inputs
+		this.accountName = manualAccountToShow.name;
+		this.manualAccountBalance = manualAccountToShow.balance > 0 ? 'positive' : 'negative';
+		this.accountBalance = Math.abs(manualAccountToShow.balance);
+		this.cashDefault = manualAccountToShow.nature.includes('_csh_d') ? true : false;
+		this.atmDefault = manualAccountToShow.nature.includes('_atm_d') ? true : false;
+
+		document.querySelector('#' + this.manualAccountBalance).classList.add('active');
+	}
+
+	updateManualAccount() {
+		(<HTMLButtonElement>document.querySelector('#deleteButton')).disabled = true;
+
+		this.accountService.updateManualAccount(this.manualAccount, this.manualAccountToEdit.id).subscribe(
+			(res) => {
+				this.toastService.setCode = res.status;
+			},
+			(error) => {
+				this.toastService.setCode = error.status;
+				this.toastService.setMessage = 'Ocurrió un error, vuelve a intentarlo';
+				this.toastService.toastGeneral();
+			},
+			() => {
+				this.toastService.setMessage = '¡Cuenta manual modificada con éxito!';
+				this.toastService.toastGeneral();
+				this.cleanerService.cleanAllVariables();
+				this.router.navigateByUrl('/app/credentials');
+			}
+		);
+	}
+
+	submitForm(form: NgForm) {
+		this.showSpinner = true;
+		(<HTMLButtonElement>document.querySelector('#submitButton')).disabled = true;
+
+		this.setBalanceToManualAccount(this.accountBalance);
+		this.setDefaultToManualAccount(this.cashDefault);
+		this.setNatureToManualAccount(this.atmDefault, this.cashDefault);
+		this.manualAccount.name = this.accountName;
+
+		this.editModeOfTheComponent ? this.updateManualAccount() : this.createManualAccount();
+	}
+
+	deleteManualAccount() {
+		this.showSpinner = true;
+		(<HTMLButtonElement>document.querySelector('#submitButton')).disabled = true;
+		(<HTMLButtonElement>document.querySelector('#deleteButton')).disabled = true;
+
+		this.accountService.deleteAccount(this.manualAccountToEdit.id).subscribe(
+			(res) => {
+				this.toastService.setCode = res.status;
+			},
+			(error) => {
+				this.toastService.setCode = error.status;
+				this.toastService.setMessage = 'Ocurrió un error, vuelve a intentarlo';
+				this.toastService.toastGeneral();
+			},
+			() => {
+				this.toastService.setMessage = '¡Cuenta eliminada con éxito!';
+				this.toastService.toastGeneral();
+				this.cleanerService.cleanAllVariables();
+				this.router.navigateByUrl('/app/credentials');
+			}
+		);
 	}
 
 	createManualAccount() {
@@ -68,6 +156,13 @@ export class ManualAccountComponent implements OnInit {
 		);
 	}
 
+	setManualAccountDefaultSettings() {
+		this.manualAccountPick.accountKey = 'cash';
+		this.manualAccountPick.accountName = 'Efectivo';
+		this.manualAccountPick.iconName = 'ma_cash';
+		document.querySelector('#positive').classList.add('active');
+	}
+
 	balanceBtnClick(balance: string) {
 		this.manualAccountBalance = balance;
 		if (balance == 'negative') {
@@ -77,18 +172,6 @@ export class ManualAccountComponent implements OnInit {
 			document.querySelector('#negative').classList.remove('active');
 			document.querySelector('#' + balance).classList.add('active');
 		}
-	}
-
-	submitForm(form: NgForm) {
-		this.showSpinner = true;
-		(<HTMLButtonElement>document.querySelector('#submitButton')).disabled = true;
-
-		this.setBalanceToManualAccount(form.value.accountAmount);
-		this.setDefaultToManualAccount(form.value.cashDefault);
-		this.setNatureToManualAccount(form.value.atmDefault, form.value.cashDefault);
-		this.manualAccount.name = form.value.accountName;
-
-		this.createManualAccount();
 	}
 
 	setNatureToManualAccount(atm: any, cash: any) {

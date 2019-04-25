@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import * as M from 'materialize-css/dist/js/materialize';
 import { AccountInterface } from '@app/interfaces/account.interfaces';
+import { isNullOrUndefined } from 'util';
 
 @Component({
 	selector: 'app-accounts-table',
@@ -26,30 +27,35 @@ export class AccountsTableComponent implements OnInit {
 
 	constructor() {}
 
-	ngOnInit() {
+	ngOnInit() {}
+
+	ngAfterViewInit(): void {
+		const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
+	}
+
+	ngOnChanges(): void {
+		//this.reloadDataOnChanges();
 		this.balanceForFirstSection();
 		this.balanceForSecondSection();
 		this.getTotalBalance();
 		this.sortAccounts();
 	}
 
-	ngAfterViewInit(): void {
-		const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
-	}
-
 	balanceForSecondSection() {
 		this.accounts.forEach((element) => {
-			if (
-				element.nature.includes('Inversión') ||
-				element.nature.includes('ma_investment') ||
-				element.nature.includes('ma_lifeInsurance') ||
-				element.nature.includes('ma_goods')
-			) {
-				this.investmentsBalance += element.balance;
-				this.fillAccountsArray(element, 'investment');
-			} else if (element.nature.includes('ma_mortgage') || element.nature.includes('ma_personalCredit')) {
-				this.creditBalance += element.balance;
-				this.fillAccountsArray(element, 'credit');
+			if (!isNullOrUndefined(element.nature)) {
+				if (
+					element.nature.includes('Inversión') ||
+					element.nature.includes('ma_investment') ||
+					element.nature.includes('ma_lifeInsurance') ||
+					element.nature.includes('ma_goods')
+				) {
+					this.investmentsBalance += element.balance;
+					this.fillAccountsArray(element, 'investment');
+				} else if (element.nature.includes('ma_mortgage') || element.nature.includes('ma_personalCredit')) {
+					this.creditBalance += element.balance;
+					this.fillAccountsArray(element, 'credit');
+				}
 			}
 		});
 		this.totalLargeTerms = this.investmentsBalance + this.creditBalance;
@@ -58,20 +64,22 @@ export class AccountsTableComponent implements OnInit {
 	// Amount for each type of credential
 	balanceForFirstSection() {
 		this.accounts.forEach((element) => {
-			if (
-				element.nature.includes('Cheques') ||
-				element.nature.includes('ma_cash') ||
-				element.nature.includes('ma_debitCard')
-			) {
-				this.debitAndCashBalance += element.balance;
-				this.fillAccountsArray(element, 'debitAndCash');
-			} else if (
-				element.nature.includes('Crédito') ||
-				element.nature.includes('ma_debt') ||
-				element.nature.includes('ma_creditCard')
-			) {
-				this.creditAndDebtBalance += element.balance;
-				this.fillAccountsArray(element, 'creditAndDebt');
+			if (!isNullOrUndefined(element.nature)) {
+				if (
+					element.nature.includes('Cheques') ||
+					element.nature.includes('ma_cash') ||
+					element.nature.includes('ma_debitCard')
+				) {
+					this.debitAndCashBalance += element.balance;
+					this.fillAccountsArray(element, 'debitAndCash');
+				} else if (
+					element.nature.includes('Crédito') ||
+					element.nature.includes('ma_debt') ||
+					element.nature.includes('ma_creditCard')
+				) {
+					this.creditAndDebtBalance += element.balance;
+					this.fillAccountsArray(element, 'creditAndDebt');
+				}
 			}
 		});
 		this.totalShortTerm = this.debitAndCashBalance + this.creditAndDebtBalance;
@@ -104,5 +112,19 @@ export class AccountsTableComponent implements OnInit {
 		this.investmentsAccounts.sort((a, b) => {
 			return b.balance - a.balance;
 		});
+	}
+
+	reloadDataOnChanges() {
+		this.debitAndCashBalance = 0;
+		this.creditAndDebtBalance = 0;
+		this.totalShortTerm = 0;
+		this.investmentsBalance = 0;
+		this.creditBalance = 0;
+		this.totalLargeTerms = 0;
+		this.totalBalance = 0;
+		this.debitAndCashAccounts = [];
+		this.creditAndDebtAccounts = [];
+		this.investmentsAccounts = [];
+		this.creditAccounts = [];
 	}
 }

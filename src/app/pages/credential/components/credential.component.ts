@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 
 // SERVICES
 import { AccountService } from '@services/account/account.service';
+import { AccountsBeanService } from '@services/account/accounts-bean.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
@@ -16,6 +17,7 @@ import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
 import * as M from 'materialize-css/dist/js/materialize';
+import { isNullOrUndefined } from 'util';
 
 @Component({
 	selector: 'app-credential',
@@ -59,7 +61,8 @@ export class CredentialComponent implements OnInit {
 		private cleanerService: CleanerService,
 		private credentialBean: CredentialBeanService,
 		private dateApiService: DateApiService,
-		private toastService: ToastService
+		private toastService: ToastService,
+		private accountsBeanService: AccountsBeanService
 	) {
 		this.credentials = [];
 		this.showSpinner = true;
@@ -85,7 +88,7 @@ export class CredentialComponent implements OnInit {
 		this.credentials = this.credentialBean.getCredentials();
 		this.accounts = this.credentialBean.getAccounts();
 		this.institutions = this.credentialBean.getInstitutions();
-		this.manualAccounts = this.accountService.getManualAccounts;
+		this.manualAccounts = this.accountsBeanService.getManualAccounts;
 		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
 			this.automaticSync(credential);
@@ -224,11 +227,13 @@ export class CredentialComponent implements OnInit {
 	manualAccountsFilter() {
 		this.manualAccounts = [];
 		this.accounts.forEach((account) => {
-			if (account.nature.includes('ma_')) {
-				this.manualAccounts.push(account);
+			if (!isNullOrUndefined(account.nature)) {
+				if (account.nature.includes('ma_')) {
+					this.manualAccounts.push(account);
+				}
 			}
 		});
-		this.accountService.setManualAccounts = this.manualAccounts;
+		this.accountsBeanService.setManualAccounts = this.manualAccounts;
 		this.showSpinner = false;
 	}
 
