@@ -3,7 +3,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { PasswordResetRequest } from '@interfaces/passwordResetRequest.interface';
 import { PasswordService } from '@services/password/password.service';
-import * as M from 'materialize-css/dist/js/materialize';
 import { ToastService } from '@services/toast/toast.service';
 
 @Component({
@@ -59,6 +58,7 @@ export class RecoverypasswordComponent implements OnInit {
 				(err) => {
 					this.toastService.setCode = err.status;
 					if (err.status === 0) {
+						this.toastService.setMessage = 'Ocurrió un error al querer cambiar tu contraseña';
 						this.toastService.toastGeneral();
 					}
 					if (err.status === 400) {
