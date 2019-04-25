@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, Renderer2, Output, EventEmitter } from '@angular/core';
-import { Category } from '@interfaces/category.interface';
-import { CategoriesService } from '@services/categories/categories.service';
-import { CategoriesBeanService } from '@services/categories/categories-bean.service';
+import {Component, EventEmitter, Input, OnInit, Output, Renderer2} from '@angular/core';
+import {Category} from '@interfaces/category.interface';
+import {CategoriesBeanService} from '@services/categories/categories-bean.service';
 
 @Component({
   selector: 'app-subcategory-item',
@@ -10,14 +9,13 @@ import { CategoriesBeanService } from '@services/categories/categories-bean.serv
 })
 export class SubcategoryItemComponent implements OnInit {
   @Input() category: Category;
-  @Input() statusCategoryValue: boolean;
-  @Output() statusCategory: EventEmitter<boolean>;
+  @Input() statusCategory: boolean;
+  @Output() statusCategoryChange: EventEmitter<boolean>;
   constructor(
     private renderer: Renderer2,
-    private categorieService: CategoriesService,
     private categoriesBeanService: CategoriesBeanService
   ) {
-    this.statusCategory = new EventEmitter();
+    this.statusCategoryChange = new EventEmitter();
   }
 
   ngOnInit() {
@@ -42,11 +40,11 @@ export class SubcategoryItemComponent implements OnInit {
     this.renderer.removeStyle(document.getElementById(this.category.subCategories[i].id), 'color');
   }
 
-  selectCategory(i: number) {
-    const auxcategory = this.category.subCategories[i];
-    this.categoriesBeanService.setCategory = auxcategory;
-    this.statusCategoryValue = true;
-    this.statusCategory.emit(this.statusCategoryValue);
+  selectCategory(i: number, event: Event) {
+    event.stopPropagation();
+    this.categoriesBeanService.setCategory = this.category.subCategories[i];
+    this.statusCategory = true;
+    this.statusCategoryChange.emit(this.statusCategory);
   }
 
   trackByFn(index: number, category: Category) {

@@ -1,11 +1,13 @@
-<div class="col s6 m3 l3 white-text pt-10">
-  <div class="categorySize" [ngStyle]="{'background-color': category.color }">
-    <ng-container *ngIf="category.userId; else elseCategorySystem">
-      <img [src]="'assets/media/img/categories/userCategory.svg'" [srcset]="'assets/media/img/categories/userCategory.svg'" alt="{{ category.name }}" class="imageCategory">
-    </ng-container>
-    <ng-template #elseCategorySystem>
-      <img [src]="'https://cdn.finerio.mx/categories/web/'+ category.id + '.svg'" [srcset]="'assets/media/img/categories/'+ category.id +'.svg'" alt="{{ category.name }}" class="imageCategory">
-    </ng-template>
-    <p class="category-name">{{ category.name }}</p>
+<ng-template ngFor let-category [ngForOf]="categories" let-i="index" [ngForTrackBy]="trackByFn">
+  <div class="col category-col s6 m3 l2 white-text">
+    <div class="category" [ngStyle]="{'background-color': category.color }" (click)="selectCategory(i)">
+      <ng-container *ngIf="category.userId; else elseCategorySystem">
+        <img [src]="'assets/media/img/categories/userCategory.svg'" [srcset]="'assets/media/img/categories/userCategory.svg'" alt="{{ category.name }}" class="imageCategory">
+      </ng-container>
+      <ng-template #elseCategorySystem>
+        <img [src]="'https://cdn.finerio.mx/categories/web/'+ category.id + '.svg'" [srcset]="'assets/media/img/categories/'+ category.id +'.svg'" alt="{{ category.name }}" class="imageCategory">
+      </ng-template>
+      <p class="category-name">{{ category.name }}</p>
+    </div>
   </div>
-</div>
+</ng-template>

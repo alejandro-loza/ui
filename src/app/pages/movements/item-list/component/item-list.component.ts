@@ -39,14 +39,13 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() movementListChange: EventEmitter<Movement[]>;
 
   @ViewChild(CdkVirtualScrollViewport) scrollVirtual: CdkVirtualScrollViewport;
-  @ViewChild('expansion') expansionElement: MatExpansionPanel;
+  private expansionElement: MatExpansionPanel;
+  private expansionEvent: Event;
 
-  private firstStateMovement: Movement;
   private statusModal: boolean;
+  private index: number;
 
   auxMovement: Movement;
-  index: number;
-  keyEnter: boolean;
   panelOpenState: boolean;
 
   constructor(
@@ -58,7 +57,6 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   ) {
     this.index = undefined;
 
-    this.keyEnter = false;
     this.statusModal = false;
     this.getMoreMovements = false;
     this.panelOpenState = false;
@@ -69,7 +67,16 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnInit(): void { }
 
-  ngOnChanges(): void { }
+  ngOnChanges(): void {
+    this.categoriesBeanService.changeCategory
+      .subscribe( res => {
+        if ( res ) {
+          this.movementList[this.index].concepts[0].category = this.categoriesBeanService.getCategory;
+          this.changeDetectorRef.detectChanges();
+          this.categoriesBeanService.changeCategory.emit(false);
+        }
+      });
+  }
 
   ngAfterViewInit(): void {
     if ( this.scrollVirtual ) {
@@ -90,32 +97,28 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     return movement.id;
   }
 
-  statusCategory(status: boolean): void {
-    if (status === true) {
-      this.auxMovement.concepts[0].category = this.categoriesBeanService.getCategory;
-      this.statusModal = false;
-    }
-    this.auxMovement.editAvailable = true;
-  }
-
   collapsibleCancel(index: number): void {
-    this.movementList[index] = this.firstStateMovement;
+    console.log(this.auxMovement.concepts[0].category);
+    console.log(this.movementList[index].concepts[0].category);
+    this.movementList[index] = this.auxMovement;
     this.movementList[index].editAvailable = false;
-    this.keyEnter = false;
+    this.expansionElement.toggle();
+    this.changeDetectorRef.detectChanges();
   }
 
   collapsibleClose(index: number): void {
-    if ( this.auxMovement.customDescription === '' || this.auxMovement.customDescription === null ) {
-      this.auxMovement.customDescription = this.firstStateMovement.customDescription;
+    if ( this.movementList[index].customDescription === '' || this.movementList[index].customDescription === null ) {
+      this.movementList[index].customDescription = this.auxMovement.customDescription;
     }
-    if (isNull(this.auxMovement.customDate)) {
-      this.auxMovement.customDate = this.firstStateMovement.date;
+    if (isNull(this.movementList[index].customDate)) {
+      this.movementList[index].customDate = this.auxMovement.date;
     }
-    if (isNull(this.auxMovement.amount)) {
-      this.auxMovement.amount = this.firstStateMovement.amount;
+    if (isNull(this.movementList[index].amount)) {
+      this.movementList[index].amount = this.auxMovement.amount;
     }
-    this.auxMovement.editAvailable = false;
-    this.keyEnter = false;
+    this.movementList[index].editAvailable = false;
+    this.expansionElement.toggle();
+    this.changeDetectorRef.detectChanges();
   }
 
   deleteMovement(index: number): void {
@@ -134,6 +137,8 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     if (!this._isExpansionIndicator(event.target as HTMLElement, index)) {
       matExpansionPanel.toggle(); // Here's the magic
     }
+    this.expansionElement = matExpansionPanel;
+    this.expansionEvent = event;
   }
 
   private _isExpansionIndicator(target: HTMLElement, index: number): boolean {
@@ -141,6 +146,8 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     if ( (target.classList && target.classList.contains(expansionIndicatorClass) ) ) {
       this.auxMovement = JSON.parse(JSON.stringify(this.movementList[index]));
       this.movementList[index].editAvailable = true;
+      this.auxMovement.editAvailable = true;
+      this.index = index;
     }
     return (target.classList && target.classList.contains(expansionIndicatorClass) );
   }

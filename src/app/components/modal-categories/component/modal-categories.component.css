@@ -1,22 +1,40 @@
-h5 {
-	margin-top: 0px;
-}
-
-.modal-footer {
-	text-align: left;
-	padding-left: 25px;
-}
-
-.btn-back {
+.btn-modal {
 	border: 1px solid rgba(66, 66, 66, .7);
 	background-color: transparent;
 	transition: background-color .3s ease-in-out;
+  margin-right: 1%;
 }
 
-.btn-back:hover {
+.btn-modal:hover {
 	background-color: #424242;
 	color: #fafafa;
 }
-.btn-back[disabled] {
+
+.btn-modal[disabled] {
 	border: 1px solid rgba(66, 66, 66, .3);
+}
+
+.mat-dialog-content {
+  max-height: none;
+}
+
+.cdk-overlay-pane {
+  height: 90%;
+}
+
+.btn-create-category {
+  border: none;
+  color: #f57c00;
+  background-color: transparent;
+  transition: all .2s ease-in-out;
+}
+
+.btn-create-category:hover {
+  color: whitesmoke;
+  background-color: #ff8f00;
+  box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+}
+
+.btn-actions-modal {
+  padding-bottom: 24px;
 }

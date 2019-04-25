@@ -1,15 +1,24 @@
-<h1 mat-dialog-title>Favorite Animal</h1>
-<div mat-dialog-content>
-  My favorite animal is:
-  <ul>
-    <li>
-      <span>&#10003;</span> Panda
-    </li>
-    <li>
-      <span>&#10003;</span> Unicorn
-    </li>
-    <li>
-      <span>&#10003;</span> Lion
-    </li>
-  </ul>
+<div class="center-align">
+  <div mat-dialog-title>
+    <ng-container *ngIf="stateCategories; else stateSubcategories">
+      <h5>Selecciona una categoría: </h5>
+    </ng-container>
+    <ng-template #stateSubcategories>
+      <h5>Selecciona una subcategoría: </h5>
+    </ng-template>
+    <hr>
+  </div>
+  <div mat-dialog-content>
+    <app-categories-list [categories]="categoryList" [(stateCategories)]="stateCategories" [statusCategory]="statusCategory"
+                         (statusCategoryChange)="save($event)"></app-categories-list>
+  </div>
+  <div mat-dialog-actions class="row btn-actions-modal">
+    <div class="col s6 left-align">
+      <button type="button" class="btn btn-flat btn-modal" (click)="close($event)" (keyup.escape)="close($event)">Cerrar</button>
+      <button type="button" class="btn btn-flat btn-modal" (click)="stateCategories = true" [disabled]="stateCategories === true">Regresar</button>
+    </div>
+    <div class="col s6 right-align">
+      <button type="button" class="btn btn-flat btn-modal btn-create-category" (click)="createCategory()">Crear Categoría</button>
+    </div>
+  </div>
 </div>

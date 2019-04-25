@@ -13,14 +13,10 @@ export class ItemComponent implements OnInit {
   @Input() categoryList: Category[];
 
   @Output() movementEdited: EventEmitter<Movement>;
-  @Output() statusModal: EventEmitter<boolean>;
-  @Output() statusCategory: EventEmitter<boolean>;
   @Output() valueCategoryColor: EventEmitter<string>;
 
   constructor(private dateApi: DateApiService) {
     this.movementEdited = new EventEmitter();
-    this.statusModal = new EventEmitter();
-    this.statusCategory = new EventEmitter();
     this.valueCategoryColor = new EventEmitter();
   }
 

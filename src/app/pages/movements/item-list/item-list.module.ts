@@ -22,8 +22,6 @@ import {SharedModule} from '@shared/shared.module';
   exports: [
     ItemListComponent
   ],
-  providers: [
-
-  ]
+  providers: [ ]
 })
 export class ItemListModule { }

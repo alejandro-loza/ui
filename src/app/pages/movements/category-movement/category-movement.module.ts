@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import {MatDialogModule} from '@angular/material/dialog';
 import { SharedModule } from '@shared/shared.module';
 import { CategoryMovementComponent } from './component/category-movement.component';
 import {ModalCategoriesComponent} from '@components/modal-categories/component/modal-categories.component';
@@ -10,7 +9,6 @@ import {ModalCategoriesModule} from '@components/modal-categories/modal-categori
     CategoryMovementComponent
   ],
   imports: [
-    MatDialogModule,
     ModalCategoriesModule,
     SharedModule
   ],

@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 import { Category } from '@interfaces/category.interface';
 import { CategoriesService } from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ModalCategoriesComponent} from '@components/modal-categories/component/modal-categories.component';
+import {ToastService} from '@services/toast/toast.service';
 
 @Component({
   selector: 'app-category-movement',
@@ -15,17 +16,15 @@ export class CategoryMovementComponent implements OnInit {
   @Input() categoryList: Category[];
   @Input() category: Category;
   @Input() editAvailable: boolean;
-
-  @Output() statusModal: EventEmitter<boolean>;
-  @Output() statusCategory: EventEmitter<boolean>;
+  private changeCategory: boolean;
 
   constructor(
     private categoriesService: CategoriesService,
     private categoriesBeanService: CategoriesBeanService,
+    private toastService: ToastService,
     private matDialog: MatDialog
   ) {
-    this.statusModal = new EventEmitter();
-    this.statusCategory = new EventEmitter();
+    this.changeCategory = false;
   }
 
   ngOnInit() { }
@@ -40,14 +39,36 @@ export class CategoryMovementComponent implements OnInit {
 
   openDialog(event: Event) {
     event.stopPropagation();
-    let matDialogConfig = new MatDialogConfig();
+    let matDialogConfig: MatDialogConfig<any>;
     matDialogConfig = {
       autoFocus: true,
+      disableClose: true,
       closeOnNavigation: true,
       restoreFocus: true,
-      width: '65%',
-      height: '65%'
+      width: '80%',
+      data: {
+        categoryList: this.categoryList
+      }
     };
-    this.matDialog.open(ModalCategoriesComponent, matDialogConfig);
+    const matDialogRef = this.matDialog.open(ModalCategoriesComponent, matDialogConfig);
+    let auxCategory: Category;
+    matDialogRef.afterClosed().subscribe(res => {
+      if ( res ) {
+        auxCategory = res;
+        this.changeCategory = true;
+      }
+    }, err => {
+      this.toastService.setCode = err.code;
+      if ( err.code === 500 ) {
+        const message = 'Ocurrío un error al cambiar la categoría';
+        this.toastService.setMessage = message;
+      }
+      this.toastService.toastGeneral();
+    }, () => {
+      if ( this.changeCategory ) {
+        this.categoriesBeanService.changeCategory.emit(true);
+        this.changeCategory = false;
+      }
+    });
   }
 }
