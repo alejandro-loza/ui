@@ -21,6 +21,7 @@ import {CategoriesService} from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
 import {CdkVirtualScrollViewport, ScrollDispatcher} from '@angular/cdk/scrolling';
 import {filter} from 'rxjs/operators';
+import {DashboardStatesService} from '@services/dashboard/dashboard-states.service';
 
 @Component({
   selector: 'app-item-list',

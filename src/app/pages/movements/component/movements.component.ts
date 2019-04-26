@@ -30,6 +30,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   movementsListReady: boolean;
   movementServiceSubscription: Subscription;
 
+  private movementsFromDashboard: boolean;
   // EMPTY STATE
   showEmptyState: boolean;
   imgName: string;
@@ -54,6 +55,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.spinnerBoolean = false;
     this.firstChange = false;
     this.movementsListReady = true;
+    this.movementsFromDashboard = false;
     this.categoryList = [];
     this.movementList = [];
     this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0 };
@@ -62,7 +64,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.fillInformationForEmptyState();
     this.getCategories();
-    if (this.dashboardStatesService.getLoadListFromDashboard()) {
+    if ( this.dashboardStatesService.getLoadListFromDashboard() ) {
       this.getMovementsFromDashboard();
     } else {
       this.getMovements();
@@ -129,9 +131,12 @@ export class MovementsComponent implements OnInit, OnDestroy {
 
   getMovementsFromDashboard() {
     this.movementList = this.dashboardStatesService.getListOfMovementsFromDashboard();
-    this.showEmptyState = false;
-    this.isLoading = false;
+    this.movementsListReady = false;
+    this.isLoading = true;
     this.spinnerBoolean = true;
+    if (this.movementList.length !== 0) {
+      this.showEmptyState = true;
+    }
   }
 
   refreshMovement() {
