@@ -4,20 +4,22 @@ body,
 html {
 	margin: 0;
 	padding: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 * {
-  --main-color: #16307a;
-  --accent-color: #44c6fc;
+  --navyblue-color: #18537b;
+  --orange-color: #ee883a;
+  --main-color: #18537b;
+  --accent-color: #ee883a;
   /*--white-color: */
   --paddingPages: 128px;
   --widthAmout: 50%;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 h1,h2,h3,h4,h5{
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .showPassword {
@@ -33,6 +35,24 @@ h1,h2,h3,h4,h5{
 .spinnerPosition {
 	position: relative;
 	top: 15rem;
+}
+
+.finerio-blue-text {
+  color: var(--navyblue-color);
+}
+
+.finerio-blue {
+  background-color: var(--navyblue-color) !important;
+  color: white !important;
+}
+
+.finerio-orange {
+  background-color: var(--orange-color) !important;
+  color: white !important;
+}
+
+.finerio-orange-text {
+  color: var(--orange-color);
 }
 
 .finerio-main-color-text {

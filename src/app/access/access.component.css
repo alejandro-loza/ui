@@ -30,7 +30,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(to bottom, #16307a, #0c549e, #0879c0, #219fdf, #44c6fc);
+  background-image:  url('../../assets/media/img/background/wallpaper.jpg');;
   background-size: cover;
 }
 

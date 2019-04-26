@@ -26,12 +26,11 @@ nav ul a:hover {
 }
 
 .user-list {
-	background-color: var(--main-color);
+  background-color: rgb(29, 56, 86);
 }
 
 .user-list:hover {
-  --main-color: #1f3060;
-	background-color: var(--main-color);
+  background-color: rgb(26, 49, 77);
 }
 
 .collapsible-accordion .mdi-chevron-up {
