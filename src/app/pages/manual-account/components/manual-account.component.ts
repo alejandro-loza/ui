@@ -5,10 +5,14 @@ import { NgForm } from '@angular/forms';
 import { ManualAccountList } from '@app/interfaces/manual-accounts/manual-account-list.interface';
 import { ManualAccountHttp } from '@interfaces/manual-accounts/manual-account-http.interface';
 import { AccountService } from '@services/account/account.service';
+import { MovementsService } from '@services/movements/movements.service';
+import { CategoriesHelperService } from '@services/categories/categories-helper.service';
+import { CategoriesService } from '@services/categories/categories.service';
 import { AccountsBeanService } from '@services/account/accounts-bean.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ToastService } from '@services/toast/toast.service';
 import { AccountInterface } from '@app/interfaces/account.interfaces';
+import { NewMovement } from '@app/interfaces/newMovement.interface';
 
 @Component({
 	selector: 'app-manual-account',
@@ -32,6 +36,7 @@ export class ManualAccountComponent implements OnInit {
 
 	@ViewChild('modal') elModal: ElementRef;
 	@ViewChild('deleteModal') elModal2: ElementRef;
+	@ViewChild('generateMovementModal') elModal3: ElementRef;
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
@@ -39,7 +44,10 @@ export class ManualAccountComponent implements OnInit {
 		private router: Router,
 		private cleanerService: CleanerService,
 		private toastService: ToastService,
-		private accountsBeanService: AccountsBeanService
+		private accountsBeanService: AccountsBeanService,
+		private movementsService: MovementsService,
+		private categoriesHelperService: CategoriesHelperService,
+		private categoriesService: CategoriesService
 	) {}
 
 	ngOnInit() {
@@ -51,6 +59,7 @@ export class ManualAccountComponent implements OnInit {
 	ngAfterViewInit() {
 		const modal = new M.Modal(this.elModal.nativeElement);
 		const modal2 = new M.Modal(this.elModal2.nativeElement);
+		const modal3 = new M.Modal(this.elModal3.nativeElement);
 	}
 
 	setManualAccountForEdit() {
@@ -81,9 +90,40 @@ export class ManualAccountComponent implements OnInit {
 		document.querySelector('#' + this.manualAccountBalance).classList.add('active');
 	}
 
-	updateManualAccount() {
-		(<HTMLButtonElement>document.querySelector('#deleteButton')).disabled = true;
+	generateAutomaticMovement() {
+		let movement: NewMovement = {};
+		this.categoriesService.getCategoriesInfo().subscribe((res) => {
+			movement.account = this.manualAccountToEdit;
+			movement.amount = Math.abs(this.accountBalance - this.manualAccountToEdit.balance);
+			movement.balance = 0;
+			movement.date = new Date();
+			movement.category = this.categoriesHelperService.categoryForManualAccountMovement(
+				this.accountService.getManualAccountNatureWithOutDefaults(this.manualAccountToEdit.nature),
+				this.manualAccountToEdit.balance > this.accountBalance,
+				res.body
+			);
+			movement.description = this.categoriesHelperService.getConceptAcordingOfCategory;
+			movement.duplicated = false;
+			movement.type = this.manualAccountToEdit.balance > this.accountBalance ? 'CHARGE' : 'DEPOSIT';
+			this.createMovement(movement);
+		});
+	}
 
+	createMovement(movement: NewMovement) {
+		this.movementsService.createMovement(movement).subscribe(
+			(res) => {},
+			(error) => {
+				this.toastService.setCode = error.error.status;
+				this.toastService.setMessage = 'No pudimos crear tu movimiento';
+				this.toastService.toastGeneral();
+			},
+			() => {
+				this.updateManualAccount();
+			}
+		);
+	}
+
+	updateManualAccount() {
 		this.accountService.updateManualAccount(this.manualAccount, this.manualAccountToEdit.id).subscribe(
 			(res) => {
 				this.toastService.setCode = res.status;
@@ -105,13 +145,14 @@ export class ManualAccountComponent implements OnInit {
 	submitForm(form: NgForm) {
 		this.showSpinner = true;
 		(<HTMLButtonElement>document.querySelector('#submitButton')).disabled = true;
+		(<HTMLButtonElement>document.querySelector('#deleteButton')).disabled = true;
 
 		this.setBalanceToManualAccount(this.accountBalance);
 		this.setDefaultToManualAccount(this.cashDefault);
 		this.setNatureToManualAccount(this.atmDefault, this.cashDefault);
 		this.manualAccount.name = this.accountName;
 
-		this.editModeOfTheComponent ? this.updateManualAccount() : this.createManualAccount();
+		this.editModeOfTheComponent ? this.openGenerateMovementModal() : this.createManualAccount();
 	}
 
 	deleteManualAccount() {
@@ -183,6 +224,11 @@ export class ManualAccountComponent implements OnInit {
 			nature += '_atm_d';
 		}
 		this.manualAccount.nature = nature;
+	}
+
+	openGenerateMovementModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal3.nativeElement);
+		instanceModal.open();
 	}
 
 	setDefaultToManualAccount(value: any) {

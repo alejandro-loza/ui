@@ -66,19 +66,33 @@
   </div>
 </div>
 
-<!-- DELETE ACCOUNT MODAL -->
-<div id="deleteModal" class="modal center" #deleteModal>
+<!-- GENERATE MOVEMENT MODAL -->
+<div id="generateMovementModal" class="modal center" #generateMovementModal>
     <div class="modal-content">
       <div class="row">
-          <h4>Eliminar cuenta manual</h4>
-          <p>¿Estás seguro que quieres eliminar tu cuenta manual?</p>
+          <h4>Crear movimiento</h4>
+          <p>¿Quieres crear un movimiento para reflejar este cambio de saldo?</p>
       </div>
     </div>
     <div class="modal-footer">
-      <a class="modal-close btn-flat">Cancelar</a>
-      <a (click)="deleteManualAccount()" class="modal-close btn-flat">Aceptar</a>
+      <a (click)="updateManualAccount()" class="modal-close btn-flat">No, gracias</a>
+      <a (click)="generateAutomaticMovement()" class="modal-close btn-flat">Aceptar</a>
     </div>
   </div>
+
+<!-- DELETE ACCOUNT MODAL -->
+<div id="deleteModal" class="modal center" #deleteModal>
+  <div class="modal-content">
+    <div class="row">
+        <h4>Eliminar cuenta manual</h4>
+        <p>¿Estás seguro que quieres eliminar tu cuenta manual?</p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="modal-close btn-flat">Cancelar</a>
+    <a (click)="deleteManualAccount()" class="modal-close btn-flat">Aceptar</a>
+  </div>
+</div>
 
 
 <!-- MANUAL ACCOUNTS MODAL -->

@@ -27,14 +27,20 @@ export class AccountsTableComponent implements OnInit {
 
 	constructor() {}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.reloadDataOnChanges();
+		this.balanceForFirstSection();
+		this.balanceForSecondSection();
+		this.getTotalBalance();
+		this.sortAccounts();
+	}
 
 	ngAfterViewInit(): void {
 		const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
 	}
 
 	ngOnChanges(): void {
-		//this.reloadDataOnChanges();
+		this.reloadDataOnChanges();
 		this.balanceForFirstSection();
 		this.balanceForSecondSection();
 		this.getTotalBalance();
