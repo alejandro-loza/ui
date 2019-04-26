@@ -1,16 +1,27 @@
-<ul class="collapsible" #collapsible>
-  <ng-template ngFor [ngForOf]="movementList" [ngForTrackBy]="trackByFn" let-movement let-i="index">
-    <li class="fast fadeIn list" id="{{movement.id}}" (keyup.esc)="collapsibleClose(i)" (keyup.enter)="keyEnter=true">
-      <!-- Collapsible Header -->
-      <div class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}" (click)="collapsibleFunction(i)">
-        <app-item class="item" [categoryList]="categoryList" [movement]="movement" (statusModal)="statusModal=$event" (statusCategory)="statusCategory($event)">
-        </app-item>
+<cdk-virtual-scroll-viewport itemSize="25" class="scroll-viewport" id="virtualScroll">
+  <mat-accordion class="collapsible">
+    <div *cdkVirtualFor="let movement of movementList; let i = index; trackBy: trackByFn">
+      <div (keydown)="handleSpacebar($event)">
+        <mat-expansion-panel [id]="movement.id" class="fadeIn fast" (afterExpand)="movement.editAvailable = true" (afterCollapse)="movement.editAvailable = false;"
+                             #matExpansionPanel >
+          <mat-expansion-panel-header class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}"
+                                      (click)="expandPanel(matExpansionPanel, $event, i)">
+            <mat-panel-title>
+              <app-item class="item" [categoryList]="categoryList" [movement]="movement"> </app-item>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-item-detail class="item-detail" [movement]="movement" [auxMovement]="auxMovement"
+                             (statusCancel)="collapsibleCancel(i)" (status)="collapsibleClose(i)" (statusDelete)="deleteMovement(i)">
+            </app-item-detail>
+          </ng-template>
+        </mat-expansion-panel>
       </div>
-      <!-- Collapsible Body -->
-      <div class="collapsible-body">
-        <app-item-detail class="item-detail" [movement]="movement" [auxMovement]="firstStateMovement" [keyEnter]="keyEnter" (statusCancel)="collapsibleCancel(i)" (status)="collapsibleClose(i)" (statusDelete)="deleteMovement(i)">
-        </app-item-detail>
-      </div>
-    </li>
-  </ng-template>
-</ul>
+    </div>
+  </mat-accordion>
+  <div class="containerMovement">
+    <div class="center-align" *ngIf="spinnerBoolean !== true">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+</cdk-virtual-scroll-viewport>

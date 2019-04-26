@@ -34,7 +34,7 @@ export class IncomesComponent implements OnInit {
 
 	doughnutChart: Chart = [];
 	totalAmount: number = 0;
-	assetsUrl: string = '../../../assets/media/img/categories/color';
+	cdnUrl: string = 'https://cdn.finerio.mx/categories/web/color';
 	monthOnScreen: number = 0;
 
 	// V ariables to use movements implementation
@@ -63,9 +63,10 @@ export class IncomesComponent implements OnInit {
 	clickedScreen(element: TableData) {
 		let indexToShow = this.dashboardStatesService.getIndexOfMonthToShow();
 		this.dataForTableOfSubcats(element.index, element.catId);
+		let amount = this.getTotalAmountForClickedScreen();
 		if (this.dataForTable.length > 0) {
 			this.pieChartOfSubcats();
-			this.setMainMessage(element.index, element.amount);
+			this.setMainMessage(element.index, amount);
 			this.setTitles(this.dataFromServiceForBarChart.length - indexToShow - 1);
 			this.indexOfData = element.index;
 			this.categoryId = element.catId;
@@ -74,6 +75,14 @@ export class IncomesComponent implements OnInit {
 		} else {
 			this.normalScreen();
 		}
+	}
+
+	getTotalAmountForClickedScreen(): number {
+		let aux: number = 0;
+		this.dataForTable.forEach((data) => {
+			aux += data.amount;
+		});
+		return aux;
 	}
 
 	monitorOfData(index: number) {
@@ -309,6 +318,20 @@ export class IncomesComponent implements OnInit {
 		} else {
 			this.totalAmount = amount;
 		}
+	}
+
+	getImageForElement(element: TableData): String {
+		let url: string;
+		if (element.catId.indexOf('000000') > -1) {
+			url = `${this.cdnUrl}/${element.catId}.svg`;
+		} else {
+			if (element.catId !== '000000') {
+				url = '/assets/media/img/categories/color/userCategory.svg';
+			} else {
+				url = '/assets/media/img/categories/color/000000.svg';
+			}
+		}
+		return url;
 	}
 
 	getDataForBarChart() {

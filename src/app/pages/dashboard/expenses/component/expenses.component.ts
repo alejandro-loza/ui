@@ -54,17 +54,26 @@ export class ExpensesComponent implements OnInit {
 	clickedScreen(element: TableData) {
 		let indexToShow = this.dashboardStatesService.getIndexOfMonthToShow();
 		this.dataForTableOfSubcats(element.index, element.catId);
+		let amount = this.getTotalAmountForClickedScreen();
 		if (this.dataForTable.length > 0) {
 			this.indexOfData = element.index;
 			this.categoryId = element.catId;
 			this.pieChartOfSubcats();
-			this.setMainMessage(element.index, element.amount);
+			this.setMainMessage(element.index, amount);
 			this.setTitles(this.expensesData.length - indexToShow - 1);
 			this.monthOnScreen = element.index;
 			this.showBackButton = true;
 		} else {
 			this.normalScreen();
 		}
+	}
+
+	getTotalAmountForClickedScreen(): number {
+		let aux: number = 0;
+		this.dataForTable.forEach((data) => {
+			aux += data.amount;
+		});
+		return aux;
 	}
 
 	normalScreen() {
@@ -171,7 +180,11 @@ export class ExpensesComponent implements OnInit {
 		if (element.catId.indexOf('000000') > -1) {
 			url = `${this.cdnUrl}/${element.catId}.svg`;
 		} else {
-			url = '/assets/media/img/categories/color/000000.svg';
+			if (element.catId !== '000000') {
+				url = '/assets/media/img/categories/color/userCategory.svg';
+			} else {
+				url = '/assets/media/img/categories/color/000000.svg';
+			}
 		}
 		return url;
 	}

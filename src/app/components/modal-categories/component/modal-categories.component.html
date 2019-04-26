@@ -1,16 +1,24 @@
-<!-- Modal Structure -->
-<div id="{{ modalTrigger }}" class="modal" #modalCateogry>
-    <div class="modal-content center-align black-text">
-        <ng-container *ngIf="backCategories !== true; else elseTemplate">
-            <h5>Selecciona una categoría: </h5>
-        </ng-container>
-        <ng-template #elseTemplate>
-            <h5>Selecciona una subcategoría: </h5>
-        </ng-template>
-        <app-categories-list [categoryList]="categoryList" [flagCategory]="backCategories" (filterStatus)="backCategories=$event" (statusCategory)="statusCategoryChange($event)">
-        </app-categories-list>
+<div class="center-align">
+  <div mat-dialog-title>
+    <ng-container *ngIf="stateCategories; else stateSubcategories">
+      <h5>Selecciona una categoría: </h5>
+    </ng-container>
+    <ng-template #stateSubcategories>
+      <h5>Selecciona una subcategoría: </h5>
+    </ng-template>
+    <hr>
+  </div>
+  <div mat-dialog-content>
+    <app-categories-list [categories]="categoryList" [(stateCategories)]="stateCategories" [statusCategory]="statusCategory"
+                         (statusCategoryChange)="save($event)"></app-categories-list>
+  </div>
+  <div mat-dialog-actions class="row btn-actions-modal">
+    <div class="col s6 left-align">
+      <button type="button" class="btn btn-flat btn-modal" (click)="close($event)" (keyup.escape)="close($event)">Cerrar</button>
+      <button type="button" class="btn btn-flat btn-modal" (click)="stateCategories = true" [disabled]="stateCategories === true">Regresar</button>
     </div>
-    <div class="container-fluid modal-footer">
-        <button class="modal-back btn-flat btn-back" (click)="backCategories = false" [disabled]="backCategories === false">Regresar</button>
+    <div class="col s6 right-align">
+      <button type="button" class="btn btn-flat btn-modal btn-create-category" (click)="createCategory()">Crear Categoría</button>
     </div>
+  </div>
 </div>

@@ -27,6 +27,10 @@
   background-color: rgba(189, 189, 189, .2);
 }
 
+.switch{
+  margin-left: 8%;
+}
+
 .switch label input[type=checkbox]:checked+.lever:after {
   background-color: var(--orange-color);
 }
