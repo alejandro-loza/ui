@@ -193,7 +193,9 @@ export class SharedBudgetComponentComponent implements OnInit {
 		this.categorySelected.subCategories.forEach((subcat) => {
 			this.ngModelAux.push({ name: subcat.name });
 		});
-		this.fillInputs();
+		if (this.editModeOfTheComponent) {
+			this.fillInputs();
+		}
 	}
 
 	backButtonRoute() {
