@@ -155,18 +155,4 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.buttonUrl = '/app/banks';
   }
 
-  validateAllMovements() {
-    // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
-    // Se manda un toast y se remueve la función del scroll.
-    if (
-      (this.movementService.getMovementList.length === 0) &&
-      this.showEmptyState === false
-    ) {
-      this.toastService.setCode = 200;
-      this.toastService.setMessage = 'Hemos cargamos todos tus movimientos';
-      this.toastService.toastGeneral();
-      this.spinnerBoolean = true;
-    }
-    this.isLoading = false;
-  }
 }

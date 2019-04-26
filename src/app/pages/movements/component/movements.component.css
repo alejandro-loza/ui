@@ -10,6 +10,9 @@
 .containerMovement.firstContainer {
   margin-top: 1%;
 }
+.spinnerContainer {
+  padding: 0 calc(2% + var(--paddingPages));
+}
 
 .movementheader {
 	padding: 1% 0%;
