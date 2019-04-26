@@ -118,6 +118,9 @@ export class AccountsTableComponent implements OnInit {
 		this.investmentsAccounts.sort((a, b) => {
 			return b.balance - a.balance;
 		});
+		this.creditAccounts.sort((a, b) => {
+			return a.balance - b.balance;
+		});
 	}
 
 	reloadDataOnChanges() {
