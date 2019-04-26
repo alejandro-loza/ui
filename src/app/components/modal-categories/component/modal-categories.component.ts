@@ -14,9 +14,9 @@ export class ModalCategoriesComponent implements OnInit {
   stateCategories: boolean;
   statusCategory: boolean;
   constructor(
-    private matDialogRef: MatDialogRef<ModalCategoriesComponent>,
     private categoriesBeanService: CategoriesBeanService,
     private router: Router,
+    private matDialogRef: MatDialogRef<ModalCategoriesComponent>,
     @Inject(MAT_DIALOG_DATA) matDialogData
   ) {
     this.stateCategories = true;

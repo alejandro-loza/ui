@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
+    <app-new-movement (createMovementStatus)="refreshMovement()"></app-new-movement>
   </ng-template>
   <ng-template #showMovements>
     <!-- Busqueda y filtrado -->
@@ -30,7 +30,7 @@
           <a class="btn modal-trigger finerio-orange" href="#newMovement">
             <i class="material-icons right">add</i>Nuevo Movimiento
           </a>
-          <app-new-movement (createMovementStatus)="statusMovement($event)"></app-new-movement>
+          <app-new-movement (createMovementStatus)="refreshMovement()"></app-new-movement>
         </div>
       </div>
     </div>
@@ -48,7 +48,8 @@
     <!-- Lista de Movimientos -->
     <div class="containerMovement">
       <app-item-list [categoryList]="categoryList" [movementList]="movementList" [spinnerBoolean]="spinnerBoolean"
-                     [getMoreMovements]="movementsListReady" (getMoreMovementsChange)="getMovements()"></app-item-list>
+                     [getMoreMovements]="movementsListReady" (getMoreMovementsChange)="getMovements()"
+                     (refreshMovementList)="refreshMovement()"></app-item-list>
     </div>
   </ng-template>
 </ng-template>

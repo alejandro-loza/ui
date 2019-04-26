@@ -38,12 +38,12 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Output() getMoreMovementsChange: EventEmitter<boolean>;
   @Output() movementListChange: EventEmitter<Movement[]>;
+  @Output() refreshMovementList: EventEmitter<boolean>;
 
   @ViewChild(CdkVirtualScrollViewport) scrollVirtual: CdkVirtualScrollViewport;
   private expansionElement: MatExpansionPanel;
   private expansionEvent: Event;
 
-  private statusModal: boolean;
   private index: number;
 
   auxMovement: Movement;
@@ -57,13 +57,12 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     private changeDetectorRef: ChangeDetectorRef
   ) {
     this.index = undefined;
-
-    this.statusModal = false;
     this.getMoreMovements = false;
     this.panelOpenState = false;
 
     this.getMoreMovementsChange = new EventEmitter();
     this.movementListChange = new EventEmitter();
+    this.refreshMovementList = new EventEmitter();
   }
 
   ngOnInit(): void { }
@@ -123,8 +122,7 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   deleteMovement(index: number): void {
-    this.collapsibleClose(index);
-    this.movementList.splice(index, 1);
+    this.refreshMovementList.emit(true);
   }
 
   handleSpacebar(ev) {
