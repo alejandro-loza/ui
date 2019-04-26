@@ -2,7 +2,8 @@
   <mat-accordion class="collapsible">
     <div *cdkVirtualFor="let movement of movementList; let i = index; trackBy: trackByFn">
       <div (keydown)="handleSpacebar($event)">
-        <mat-expansion-panel [id]="movement.id" class="fadeIn fast" (afterCollapse)="movement.editAvailable = false;" #matExpansionPanel >
+        <mat-expansion-panel [id]="movement.id" class="fadeIn fast" (afterExpand)="movement.editAvailable = true" (afterCollapse)="movement.editAvailable = false;"
+                             #matExpansionPanel >
           <mat-expansion-panel-header class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}"
                                       (click)="expandPanel(matExpansionPanel, $event, i)">
             <mat-panel-title>
