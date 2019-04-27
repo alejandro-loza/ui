@@ -10,6 +10,11 @@
     background-color: rgba(229, 57, 53, 0.7)
 }
 
+#finerio-logo {
+  padding: 3% 0;
+  width: 50%;
+}
+
 #rowForm {
     margin: 3% 0;
 }
@@ -18,20 +23,8 @@
     margin-top: 4%;
 }
 
-@media only screen and (max-width:600px) {
+@media only screen and (max-width: 1199px) {
     .formContainer {
-        margin-left: 0px;
-    }
-}
-
-@media only screen and (max-width:992px) {
-    .formContainer {
-        margin-left: 0px;
-    }
-}
-
-@media only screen and (max-width: 1200px) {
-    .formContainer {
-        margin-left: 0px;
+        margin-left: 0;
     }
 }

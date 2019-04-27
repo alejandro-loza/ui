@@ -1,38 +1,41 @@
+<div class="center-align container-img">
+  <img src="../../assets/media/img/finerio_logo/logo.svg" alt="Finerio Logo" class="center-align" [id]="'finerio-logo'">
+</div>
 <div class="loginContainer">
-    <h4 class="center">Iniciar Sesión</h4>
-    <div class="row" id="rowForm">
-        <div class="col s12 m6 section center">
-            <app-social-media [facebookText]="'Ingresar con Facebook'" [googleText]="'Ingresar con Google'"></app-social-media>
-            <div class="createAccount hide-on-small-only">
-                <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
-            </div>
-        </div>
-        <div class="col s12 m4 offset-m1 section">
-            <div class="formContainer center">
-                <form ngNativeValidate #f="ngForm" (ngSubmit)="login(f)">
-                    <div class="input-field">
-                        <input ngModel name="email" required id="Inputemail" type="email" class="validate" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" autocomplete="on">
-                        <label for="Inputemail">Correo Electrónico</label>
-                        <span class="helper-text" data-error="Correo invalido. Ej: contacto@finerio.mx" data-success="Correo Valido">Ej: contacto@finerio.mx</span>
-                    </div>
-                    <div class="input-field">
-                        <input ngModel name="password" required id="Inputpassword" type="password" class="form-control validate" autocomplete="on">
-                        <label for="Inputpassword">Contraseña</label>
-                        <span class="helper-text" data-error="Ingresa tu Contraseña" appPassword></span>
-                    </div>
-                    <button class="btn waves-effect waves-blue finerio-blue white-text" type="submit"
-                            name="action" [id]="'buttonElement'" [disabled]="f.invalid">Entrar
-                        <i class="material-icons right">send</i>
-                    </button>
-                </form>
-                <a class="center-align forgotLink hide-on-small-and-down" routerLink="/access/forgot">¿Olvidaste tu Contraseña?</a>
-            </div>
-        </div>
-        <div class="col s12 createAccount hide-on-med-and-up section" id="registerResponsive">
-            <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
-            <div class="center-align">
-                <a class="forgotLink blue-text text-accent-4" routerLink="/access/forgot">¿Olvidaste tu Contraseña?</a>
-            </div>
-        </div>
+  <h4 class="center">Iniciar Sesión</h4>
+  <div class="row" id="rowForm">
+    <div class="col s12 m6 section center">
+      <app-social-media [facebookText]="'Ingresar con Facebook'" [googleText]="'Ingresar con Google'"></app-social-media>
+      <div class="createAccount hide-on-small-only">
+        <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
+      </div>
     </div>
+    <div class="col s12 m4 offset-m1 section">
+      <div class="formContainer center">
+        <form ngNativeValidate #f="ngForm" (ngSubmit)="login(f)">
+          <div class="input-field">
+            <input ngModel name="email" required id="Inputemail" type="email" class="validate" pattern="[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" autocomplete="on">
+            <label for="Inputemail">Correo Electrónico</label>
+            <span class="helper-text" data-error="Correo invalido. Ej: contacto@finerio.mx" data-success="Correo Valido">Ej: contacto@finerio.mx</span>
+          </div>
+          <div class="input-field">
+            <input ngModel name="password" required id="Inputpassword" type="password" class="form-control validate" autocomplete="on">
+            <label for="Inputpassword">Contraseña</label>
+            <span class="helper-text" data-error="Ingresa tu Contraseña" appPassword></span>
+          </div>
+          <button class="btn finerio-main-color white-text" type="submit"
+                  name="action" [id]="'buttonElement'" [disabled]="f.invalid">Entrar
+            <i class="material-icons right">send</i>
+          </button>
+        </form>
+        <a class="center-align forgotLink hide-on-small-and-down" routerLink="/access/forgot">¿Olvidaste tu Contraseña?</a>
+      </div>
+    </div>
+    <div class="col s12 createAccount hide-on-med-and-up section" id="registerResponsive">
+      <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
+      <div class="center-align">
+        <a class="forgotLink blue-text text-accent-4" routerLink="/access/forgot">¿Olvidaste tu Contraseña?</a>
+      </div>
+    </div>
+  </div>
 </div>
