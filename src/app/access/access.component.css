@@ -1,44 +1,28 @@
-.container {
-  position: relative;
-  z-index: 2;
+.background {
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(to bottom, #16307a, #0c549e, #0879c0, #219fdf, #44c6fc);
 }
 
 .card {
-  position: relative;
   top: 0;
   left: 0;
-  transform: translate(0, 20%);
+  transform: translate(0, 10%);
 }
 
 .white-opacity-8 {
   background-color: rgba(245, 245, 245, 0.8);
 }
 
-.logo-white {
-  padding-top: 24px;
-  max-width: 25%;
-  margin: auto;
+@media only screen and (max-width: 1599px) {
+  .card { transform: translate(0); }
+  .row { margin: auto;}
 }
 
-.background::after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  margin-top: auto;
-  margin-bottom: auto;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:  url('../../assets/media/img/background/wallpaper.jpg');;
-  background-size: cover;
-}
-
-@media (max-width: 600px) {
-  .card {
-    margin-top: 30%;
-  }
-  .logo-white {
-    max-width: 50%;
-  }
+@media only screen and (min-width: 1600px) {
+  .background { position: absolute; background-attachment: fixed; }
 }
