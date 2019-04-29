@@ -1,17 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 body,
 html {
 	margin: 0;
 	padding: 0;
-	font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
-:root {
-	--navyblue-color: #18537b;
-	--orange-color: #ee883a;
-	--paddingPages: 128px;
-	--widthAmout: 50%;
+* {
+  --navyblue-color: #18537b;
+  --orange-color: #ee883a;
+  --main-color: #18537b;
+  --accent-color: #ee883a;
+  /*--white-color: */
+  --paddingPages: 128px;
+  --widthAmout: 50%;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1,h2,h3,h4,h5{
+  font-family: 'Roboto', sans-serif;
 }
 
 .showPassword {
@@ -20,8 +28,8 @@ html {
 }
 
 [type="checkbox"].filled-in:checked+span.showPassword:not(.lever):after{
-  background-color: var(--orange-color);
-  border-color: var(--orange-color);
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
 }
 
 .spinnerPosition {
@@ -30,27 +38,46 @@ html {
 }
 
 .finerio-blue-text {
-	color: var(--navyblue-color);
+  color: var(--navyblue-color);
 }
 
 .finerio-blue {
-	background-color: var(--navyblue-color) !important;
-	color: white !important;
+  background-color: var(--navyblue-color) !important;
+  color: white !important;
 }
 
 .finerio-orange {
-	background-color: var(--orange-color) !important;
-	color: white !important;
+  background-color: var(--orange-color) !important;
+  color: white !important;
 }
 
 .finerio-orange-text {
-	color: var(--orange-color);
+  color: var(--orange-color);
+}
+
+.finerio-main-color-text {
+	color: var(--main-color) !important;
+}
+
+.finerio-main-color {
+	background-color: var(--main-color) !important;
+	color: white;
+}
+
+.finerio-accent-color {
+	background-color: var(--accent-color) !important;
+	color: white;
+}
+
+.finerio-accent-color-text {
+	color: var(--accent-color);
 }
 
 .waves-effect.waves-blue .waves-ripple {
 	/* The alpha value allows the text and background color
     of the button to still show through. */
-	background-color: rgba(30, 136, 229, 0.65);
+	background-color: var(--main-color);
+  opacity: 0.65%;
 }
 
 .material-icons.md-18 {
@@ -88,8 +115,8 @@ input[type=tel]:not(.browser-default):focus:not([readonly]),
 input[type=number]:not(.browser-default):focus:not([readonly]),
 input[type=search]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-	border-bottom: 1px solid var(--orange-color) !important;
-	box-shadow: 0 1px 0 0 var(--orange-color) !important;
+	border-bottom: 1px solid var(--accent-color) !important;
+	box-shadow: 0 1px 0 0 var(--accent-color) !important;
 }
 
 input:not([type]):focus:not([readonly]) + label,
@@ -102,12 +129,12 @@ input[type=tel]:not(.browser-default):focus:not([readonly]) + label,
 input[type=number]:not(.browser-default):focus:not([readonly]) + label,
 input[type=search]:not(.browser-default):focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
-	color: var(--orange-color) !important;
+	color: var(--accent-color) !important;
 }
 
 [type="checkbox"].filled-in:checked + label:after {
-	border: 2px solid var(--orange-color) !important;
-	background-color: var(--orange-color) !important;
+	border: 2px solid var(--accent-color) !important;
+	background-color: var(--accent-color) !important;
 }
 
 input::-webkit-outer-spin-button,
@@ -116,6 +143,23 @@ input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 	/* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.datepicker-modal {
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.mat-expansion-indicator {
+  margin-right: 1%;
+  margin-left: -3%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.mat-expansion-indicator::after{
+  padding: 6px;
 }
 
 .animated {
@@ -128,6 +172,10 @@ input::-webkit-inner-spin-button {
 	animation-duration: 0.4s;
 }
 
+.fadeIn {
+  animation-name: fadeIn;
+}
+
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -137,6 +185,6 @@ input::-webkit-inner-spin-button {
 	}
 }
 
-.fadeIn {
-	animation-name: fadeIn;
+@media only screen and (min-width: 1600px) {
+  .datepicker-modal { left: 40% !important; }
 }

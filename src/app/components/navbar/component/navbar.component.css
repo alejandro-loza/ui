@@ -3,6 +3,7 @@ nav ul a:hover {
 }
 .sidenav {
 	padding-top: 15px;
+  background-color: var(--main-color);
 }
 .nav-wrapper {
 	margin: 0px 1%;
@@ -25,11 +26,11 @@ nav ul a:hover {
 }
 
 .user-list {
-	background-color: rgb(29, 56, 86);
+  background-color: rgb(29, 56, 86);
 }
 
 .user-list:hover {
-	background-color: rgb(26, 49, 77);
+  background-color: rgb(26, 49, 77);
 }
 
 .collapsible-accordion .mdi-chevron-up {

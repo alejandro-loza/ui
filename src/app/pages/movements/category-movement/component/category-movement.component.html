@@ -1,9 +1,12 @@
 <ng-container *ngIf="editAvailable === true; else noEditable">
-  <input type="button" class="btn category-container modal-trigger truncate" [attr.data-target]="'modal-target'" [ngModel]="category.name" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}" />
+  <label>
+    <input type="button" class="btn category-container truncate" [ngModel]="category.name" (click)="openDialog($event)"
+           [ngStyle]="{'background-color': category.color, 'color': category.textColor}"/>
+  </label>
 </ng-container>
 <ng-template #noEditable>
   <div class="left-align">
-    <button type="button" class="btn category-container truncate" [ngStyle]="{'background-color': category.color, 'color': category.textcolor}">
+    <button type="button" class="btn category-container truncate" [ngStyle]="{'background-color': category.color, 'color': category.textColor}">
       <i class="mdi mdi-24px left">
         <ng-container *ngIf="category.user || category.userId ; else noCategoryUser">
             <img
@@ -26,6 +29,3 @@
       </button>
   </div>
 </ng-template>
-
-<app-modal-categories [categoryList]="categoryList" [modalTrigger]="'modal-target'" (statusModal)="statusModal.emit($event)" (statusCategory)="statusCategory.emit($event)">
-</app-modal-categories>

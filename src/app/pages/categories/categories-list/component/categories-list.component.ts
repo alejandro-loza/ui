@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, DoCheck} from '@angular/core';
 import { Category } from '@interfaces/category.interface';
-import {isNull, isUndefined} from 'util';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
 
 @Component({
@@ -8,31 +7,37 @@ import {CategoriesBeanService} from '@services/categories/categories-bean.servic
   templateUrl: './categories-list.component.html',
   styleUrls: ['./categories-list.component.css']
 })
-export class CategoriesListComponent implements OnInit {
-  @Input() categoryList: Category[];
-  @Input() flagCategory: boolean;
-  @Output() filterStatus: EventEmitter<boolean>;
-  @Output() statusCategory: EventEmitter<boolean>;
+export class CategoriesListComponent implements OnInit, DoCheck {
+  @Input() categories: Category[];
+  @Input() stateCategories: boolean;
+  @Input() statusCategory: boolean;
+  @Output() stateCategoriesChange: EventEmitter<boolean>;
+  @Output() statusCategoryChange: EventEmitter<boolean>;
 
-  private category: Category;
+  category: Category;
 
-  constructor(
-    private categoriesBeanService: CategoriesBeanService
-  ) {
-    this.filterStatus = new EventEmitter();
-    this.statusCategory = new EventEmitter();
+  constructor( private categoriesBeanService: CategoriesBeanService ) {
+    this.stateCategoriesChange = new EventEmitter();
+    this.statusCategoryChange = new EventEmitter();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
-  filterCategories(index: number) {
-    this.category = this.categoryList[index];
-    if ( this.category.subCategories.length === 0 ) {
-      this.categoriesBeanService.setCategory = this.category;
-      this.statusCategory.emit(true);
+  ngDoCheck(): void {
+    if ( this.statusCategory ) {
+      this.statusCategoryChange.emit(this.statusCategory);
     }
-    this.flagCategory = true;
-    this.filterStatus.emit(this.flagCategory);
+  }
+
+  filterCategory(index: number) {
+    this.category = JSON.parse(JSON.stringify(this.categories[index]));
+    if ( this.category.subCategories.length > 0 ) {
+      this.stateCategories = false;
+      this.stateCategoriesChange.emit(this.stateCategories);
+    } else {
+      this.categoriesBeanService.setCategory = this.category;
+      this.statusCategory = true;
+      this.statusCategoryChange.emit(this.statusCategory);
+    }
   }
 }

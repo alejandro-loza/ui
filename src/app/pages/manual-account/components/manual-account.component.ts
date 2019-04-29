@@ -145,7 +145,7 @@ export class ManualAccountComponent implements OnInit {
 	submitForm(form: NgForm) {
 		this.showSpinner = true;
 		(<HTMLButtonElement>document.querySelector('#submitButton')).disabled = true;
-		(<HTMLButtonElement>document.querySelector('#deleteButton')).disabled = true;
+		if (this.editModeOfTheComponent) (<HTMLButtonElement>document.querySelector('#deleteButton')).disabled = true;
 
 		this.setBalanceToManualAccount(this.accountBalance);
 		this.setDefaultToManualAccount(this.cashDefault);
