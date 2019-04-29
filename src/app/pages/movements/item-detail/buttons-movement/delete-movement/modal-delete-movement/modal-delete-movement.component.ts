@@ -21,6 +21,11 @@ export class ModalDeleteMovementComponent implements OnInit {
 
   ngOnInit() { }
 
+  closeModal(event: Event) {
+    event.stopPropagation();
+    this.matDialogRef.close(false);
+  }
+
   deleteMovement() {
     this.movementService.deleteMovement(this.id).subscribe(
       (res) => {

@@ -9,7 +9,7 @@
   <div mat-dialog-actions>
     <div class="row center-align">
       <div class="col s12 m6">
-        <button type="button" class="modal-close btn btn-flat btn-cancel">Cancelar</button>
+        <button type="button" class="modal-close btn btn-flat btn-cancel" (click)="closeModal($event)" (keyup.escape)="closeModal($event)">Cancelar</button>
       </div>
       <div class="col s12 m6">
         <button type="button" class="modal-close btn btn-flat btn-delete" (keyup.enter)="deleteMovement()" (click)="deleteMovement()">Eliminar</button>
