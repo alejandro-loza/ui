@@ -35,9 +35,9 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 	preCategory: Category;
 	date: Date;
 
-	loaderSpinner: boolean;
+	loaderSpinner: boolean = true;
 	formatDate: string;
-	showSpinner: boolean;
+	showSpinner: boolean = true;
 
 	constructor(
 		private movementService: MovementsService,
@@ -55,12 +55,14 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 			type: 'charge'
 		};
 		this.date = new Date();
-		this.showSpinner = false;
 	}
 
 	ngOnInit() {
-		this.loaderSpinner = true;
 		this.fillNoPreCat();
+	}
+
+	ngAfterViewInit() {
+		const modal = new M.Modal(this.manualAccountsModal.nativeElement);
 	}
 
 	fillNoPreCat() {
@@ -73,14 +75,6 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 				id: 'finerio-icon'
 			}
 		};
-	}
-
-	ngAfterViewInit() {
-		const modal = new M.Modal(this.manualAccountsModal.nativeElement);
-	}
-
-	makeNewMovementStructure() {
-		this.newMovement.account = this.manualAccount;
 	}
 
 	preliminarCategory() {
@@ -106,10 +100,40 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 		});
 	}
 
-	createMovement(form: NgForm) {
-		this.showSpinner = true;
-		this.makeNewMovementStructure();
+	submitPorcess(form: NgForm) {
+		document.querySelector('#spinner').classList.add('d-block');
+		(<HTMLButtonElement>document.querySelector('#submitButton')).disabled = true;
 
+		this.manualAccount === undefined ? this.createMovement(form) : this.createManualAccountMovement();
+	}
+
+	createManualAccountMovement() {
+		this.movementService.createManualAccountMovement(this.newMovement, this.manualAccount.id).subscribe(
+			(res) => {
+				this.toastService.setCode = res.status;
+			},
+			(err) => {
+				this.toastService.setCode = err.status;
+				if (err.status === 401) {
+					this.toastService.toastGeneral();
+					this.createManualAccountMovement();
+				}
+				if (err.status === 500) {
+					this.toastService.setMessage = '¡Ha ocurrido un error al crear tu movimiento!';
+					this.toastService.toastGeneral();
+				}
+			},
+			() => {
+				this.cleanerService.cleanBudgetsVariables();
+				this.cleanerService.cleanDashboardVariables();
+				this.toastService.setMessage = 'Se creó su movimiento exitosamente';
+				this.toastService.toastGeneral();
+				return this.router.navigateByUrl('/app/movements');
+			}
+		);
+	}
+
+	createMovement(form: NgForm) {
 		this.movementService.createMovement(this.newMovement).subscribe(
 			(res) => {
 				this.toastService.setCode = res.status;
@@ -126,7 +150,6 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 				}
 			},
 			() => {
-				this.showSpinner = false;
 				this.cleanerService.cleanBudgetsVariables();
 				this.cleanerService.cleanDashboardVariables();
 				this.toastService.setMessage = 'Se creó su movimiento exitosamente';

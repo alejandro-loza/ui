@@ -107,32 +107,36 @@ export class MovementsService {
 		const id = this.configService.getUser.id;
 		let body: string;
 		// error de la cuenta porque no entra a este IF, por eso me lo manda como cash
-		if (!isNullOrUndefined(movement.category) && !isNullOrUndefined(movement.account)) {
-			body = JSON.stringify({
-				amount: movement.amount,
-				balance: 0,
-				customDate: this.dateService.dateApi(movement.date),
-				customDescription: movement.description,
-				date: this.dateService.dateApi(movement.date),
-				description: movement.description,
-				duplicated: movement.duplicated,
-				type: movement.type.toUpperCase(),
-				account: movement.account,
-				category: movement.category
-			});
-		} else {
-			body = JSON.stringify({
-				amount: movement.amount,
-				balance: 0,
-				customDate: this.dateService.dateApi(movement.date),
-				customDescription: movement.description,
-				date: this.dateService.dateApi(movement.date),
-				description: movement.description,
-				duplicated: movement.duplicated,
-				type: movement.type.toUpperCase()
-			});
-		}
+		body = JSON.stringify({
+			amount: movement.amount,
+			balance: 0,
+			customDate: this.dateService.dateApi(movement.date),
+			customDescription: movement.description,
+			date: this.dateService.dateApi(movement.date),
+			description: movement.description,
+			duplicated: movement.duplicated,
+			type: movement.type.toUpperCase()
+		});
 		return this.httpClient.post<Movement>(`${this.url}/${id}/movements`, body, {
+			observe: 'response',
+			headers: this.configService.getHeaders
+		});
+	}
+
+	createManualAccountMovement(movement: NewMovement, accountId: string) {
+		let URL = `${environment.backendUrl}/accounts/${accountId}/movements`;
+		let body = JSON.stringify({
+			amount: movement.amount,
+			balance: 0,
+			customDate: this.dateService.dateApi(movement.date),
+			customDescription: movement.description,
+			date: this.dateService.dateApi(movement.date),
+			description: movement.description,
+			duplicated: movement.duplicated,
+			type: movement.type.toUpperCase(),
+			category: movement.category
+		});
+		return this.httpClient.post<Movement>(URL, body, {
 			observe: 'response',
 			headers: this.configService.getHeaders
 		});

@@ -3,7 +3,7 @@
 <div class="container">
   <div class="row">
     <div class="col s12 m8">
-        <form #forma="ngForm" (ngSubmit)="createMovement(forma)">
+        <form #forma="ngForm" (ngSubmit)="submitPorcess(forma)">
 
          
             <div class="col s12 input-field">
@@ -87,41 +87,40 @@
               </p>
             </div>
     
-    
-    
           <div class="row" id="newMovementBtn">
             <div class="col s12 center-align">
-              <ng-container>
-                <div *ngIf="showSpinner !== true; else elseSpinner">
-                  <button class="btn btn-large btn-submit" [disabled]="forma.invalid" type="submit" #btnSubmit>Crear Movimiento
-                    <i class="material-icons right">send</i>
-                  </button>
-                </div>
-                <ng-template #elseSpinner>
-                  <div class="preloader-wrapper active">
-                    <div class="spinner-layer spinner-green-only">
-                      <div class="circle-clipper left">
-                        <div class="circle"></div>
-                      </div><div class="gap-patch">
-                      <div class="circle"></div>
-                    </div><div class="circle-clipper right">
-                      <div class="circle"></div>
-                    </div>
-                    </div>
-                  </div>
-                </ng-template>
-              </ng-container>
+                <button class="btn btn-large btn-submit" id="submitButton" [disabled]="forma.invalid" type="submit" #btnSubmit>Crear Movimiento
+                  <i class="material-icons right">send</i>
+                </button>
             </div>
           </div>
       
-      
         </form>
+
+        <div id="spinner" class="row pt-20">
+          <div class="col s12 center">
+            <div class="preloader-wrapper small active">
+              <div class="spinner-layer spinner-green-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      
     </div>
     <div class="col s12 m4 pt-20">
-      <button [ngStyle]="{'color': preCategory.textColor, 'background-color': preCategory.color }" class="btn category-container">
+      <a [ngStyle]="{'color': preCategory.textColor, 'background-color': preCategory.color }" class="btn category-container">
         <img id="categoryIcon" [src]="'assets/media/img/categories/' + preCategory.parent.id + '.svg'" [alt]="preCategory.name">
         {{ preCategory.name }}
-      </button>
+      </a>
     </div>
   </div>
 </div>

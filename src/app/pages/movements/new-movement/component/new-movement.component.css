@@ -126,3 +126,11 @@
 	top: 8px;
 	right: 5%;
 }
+
+#spinner {
+	display: none;
+}
+
+.d-block {
+	display: block !important;
+}
