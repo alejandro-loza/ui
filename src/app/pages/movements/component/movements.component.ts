@@ -1,19 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
 import { CategoriesService } from '@services/categories/categories.service';
-import { DateApiService } from '@services/date-api/date-api.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
 import { DashboardStatesService } from '@services/dashboard/dashboard-states.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
-import { Movement } from '@interfaces/movement.interface';
 import { Category } from '@interfaces/category.interface';
-
-import { fromEvent, interval, Subscription } from 'rxjs';
-import { debounce } from 'rxjs/operators';
+import {Movement} from '@interfaces/movement.interface';
+import {Subscription} from 'rxjs';
+import {DateApiService} from '@services/date-api/date-api.service';
 
 declare var $: any;
 
@@ -23,18 +21,16 @@ declare var $: any;
   styleUrls: [ './movements.component.css' ]
 })
 export class MovementsComponent implements OnInit, OnDestroy {
-  paramsMovements: ParamsMovements;
   movementList: Movement[];
   categoryList: Category[];
-  scrollResult: Subscription;
 
-  status: boolean;
-  filterflag: boolean;
   spinnerBoolean: boolean;
   isLoading: boolean;
-  auxSize: number;
-  statusMovementsList: boolean;
+  firstChange: boolean;
+  movementsListReady: boolean;
+  movementServiceSubscription: Subscription;
 
+  private movementsFromDashboard: boolean;
   // EMPTY STATE
   showEmptyState: boolean;
   imgName: string;
@@ -42,6 +38,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
   description: string;
   buttonText: string;
   buttonUrl: string;
+
+  paramsMovements: ParamsMovements;
 
   constructor(
     private categoryService: CategoriesService,
@@ -52,123 +50,64 @@ export class MovementsComponent implements OnInit, OnDestroy {
     private paramsMovementsService: ParamsMovementsService,
     private dashboardStatesService: DashboardStatesService
   ) {
-    this.showEmptyState = true;
-    this.isLoading = true;
-    this.status = false;
+    this.showEmptyState = false;
+    this.isLoading = false;
     this.spinnerBoolean = false;
-    this.filterflag = false;
-    this.statusMovementsList = false;
-    this.auxSize = 0;
+    this.firstChange = false;
+    this.movementsListReady = true;
+    this.movementsFromDashboard = false;
+    this.categoryList = [];
     this.movementList = [];
-    this.paramsMovements = {
-      charges: true,
-      deep: true,
-      deposits: true,
-      duplicates: true,
-      maxMovements: 35,
-      offset: 0
-    };
+    this.paramsMovements = { charges: true, deep: true, deposits: true, duplicates: true, maxMovements: 35, offset: 0 };
   }
 
   ngOnInit() {
     this.fillInformationForEmptyState();
     this.getCategories();
-    if (this.dashboardStatesService.getLoadListFromDashboard()) {
+    if ( this.dashboardStatesService.getLoadListFromDashboard() ) {
       this.getMovementsFromDashboard();
     } else {
       this.getMovements();
-      this.scrollResult = fromEvent(document, 'scroll').pipe(debounce(() => interval(100))).subscribe(() => {
-        this.offsetMovement();
-      });
     }
+    this.firstChange = true;
   }
 
   ngOnDestroy() {
-    if (this.scrollResult) {
-      this.scrollResult.unsubscribe();
-    }
     this.dashboardStatesService.setLoadListFromDashboard(false);
     this.dashboardStatesService.setListOfMovementsFromDashboard([]);
   }
 
-  /**
-   * @function statusMovement() - Esto es la función del output en los componentes. Esto es para notificar a los demás componentes
-   * @param {boolean} status - La bandera que actualiza la variable status
-   *
-   * En esta función se le agregó un setTimeout() debido a que la comunicación entre componentes es tan rápida que manda error de que los valores
-   * se han cambiado antes de ser enviados, y la única forma es enviar un estado genérico en la app ( Redux/RXJS (reduce) ) o enviando un
-   * setTimeout
-   */
-  statusMovement(status: boolean) {
-    setTimeout(() => {
-      this.status = status;
-    }, 0);
-    this.showEmptyState = false;
-    this.refreshMovement();
-  }
-
-  /**
-   * @function offsetMovement() - It's anonymous functions, its used for eventListener Scroll
-   */
-
-  offsetMovement() {
-    const scrollVertical = window.scrollY;
-    let scrollLimit: number;
-    scrollLimit = $(document).height() - $(window).height();
-    scrollLimit = Math.round((scrollLimit *= 0.7));
-    if (scrollVertical >= scrollLimit && this.statusMovementsList === false) {
-      this.spinnerBoolean = false;
-      this.getMovements();
+  getMovements() {
+    if ( this.movementsListReady === true ) {
+      this.getMovementFromService();
     }
   }
 
-  getMovements() {
-    this.statusMovementsList = true;
-    this.movementService.getMovements(this.paramsMovements).subscribe(
-      (res) => {
-        // Se le asigna el tamaño de la lista a la variable _auxSize_
-        this.auxSize = res.body.data.length;
-
-        // Se le agregan propiedades a los elementos de la lista y se agregan a la lista de movimientos
-        res.body.data.forEach((movement) => {
-          movement['formatDate'] = this.dateApiService.dateFormatMovement(
-            this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
-          );
-          movement['editAvailable'] = false;
-          movement['customAmount'] = movement.amount;
-          this.movementList.push(movement);
-        });
-      },
-      (err) => {
-        this.toastService.setCode = err.status;
-        if (err.status === 500) {
-          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
-          this.toastService.toastGeneral();
+  getMovementFromService() {
+    this.movementsListReady = false;
+    this.movementServiceSubscription = this.movementService.getMovements(this.paramsMovements)
+      .subscribe(
+        res => {
+          if ( res ) {
+            if ( res.body.data.length > 0 ) {
+              this.movementList = this.movementService.getMovementList;
+            }
+          } else {
+            this.movementServiceSubscription.unsubscribe();
+            this.spinnerBoolean = true;
+          }
+          return res;
+        },
+        err => err,
+        () => {
+          this.paramsMovements.offset += this.paramsMovements.maxMovements;
+          if (this.movementList.length !== 0) {
+            this.showEmptyState = true;
+          }
+          this.isLoading = true;
+          this.movementsListReady = true;
         }
-      },
-      () => {
-        if (this.movementService.getMovementList.length !== 0) {
-          this.showEmptyState = false;
-        }
-        this.validateAllMovements();
-        this.paramsMovements.offset += this.paramsMovements.maxMovements;
-        this.statusMovementsList = false;
-      }
-    );
-  }
-
-  getMovementsFromDashboard() {
-    this.dashboardStatesService.getListOfMovementsFromDashboard().forEach((movement) => {
-      movement['formatDate'] = this.dateApiService.dateFormatMovement(
-        this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
       );
-      movement['editAvailable'] = false;
-      movement['customAmount'] = movement.amount;
-      this.movementList.push(movement);
-    });
-    this.showEmptyState = false;
-    this.isLoading = false;
-    this.spinnerBoolean = true;
   }
 
   getCategories() {
@@ -183,11 +122,21 @@ export class MovementsComponent implements OnInit, OnDestroy {
           this.getCategories();
         }
         if (err.status === 500) {
-          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.setMessage = '¡Ha ocurrido un error al obtener tus movimientos!';
           this.toastService.toastGeneral();
         }
       }
     );
+  }
+
+  getMovementsFromDashboard() {
+    this.movementList = this.dashboardStatesService.getListOfMovementsFromDashboard();
+    this.movementsListReady = false;
+    this.isLoading = true;
+    this.spinnerBoolean = true;
+    if (this.movementList.length !== 0) {
+      this.showEmptyState = true;
+    }
   }
 
   refreshMovement() {
@@ -195,22 +144,6 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.paramsMovements.offset = 0;
     this.movementList = [];
     this.getMovements();
-  }
-
-  validateAllMovements() {
-    // Si la variable _auxSize_ es menor a el parametro _maxMocements_ ó igual a cero,
-    // Se manda un toast y se remueve la función del scroll.
-    if (
-      (this.auxSize < this.paramsMovements.maxMovements || this.movementService.getMovementList.length === 0) &&
-      this.showEmptyState === false
-    ) {
-      this.scrollResult.unsubscribe();
-      this.toastService.setCode = 200;
-      this.toastService.setMessage = 'Hemos cargamos todos tus movimientos';
-      this.toastService.toastGeneral();
-      this.spinnerBoolean = true;
-    }
-    this.isLoading = false;
   }
 
   fillInformationForEmptyState() {
@@ -221,4 +154,5 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.buttonText = 'Dar de alta una cuenta bancaria';
     this.buttonUrl = '/app/banks';
   }
+
 }

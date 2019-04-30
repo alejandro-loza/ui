@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { SharedModule } from '@shared/shared.module';
 
 import { DateModule } from '../date/date.module';
@@ -8,7 +9,7 @@ import { ConceptTypeMovementModule } from '../concept-type-movement/concept-type
 
 @NgModule({
   declarations: [
-    ItemComponent
+    ItemComponent,
   ],
   imports: [
     SharedModule,
@@ -18,6 +19,6 @@ import { ConceptTypeMovementModule } from '../concept-type-movement/concept-type
   exports: [
     ItemComponent
   ],
-  providers: [],
+  providers: []
 })
 export class ItemModule {}

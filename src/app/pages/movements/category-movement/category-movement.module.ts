@@ -1,18 +1,21 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { CategoryMovementComponent } from './component/category-movement.component';
-import { ModalCategoriesModule } from '@components/modal-categories/modal-categories.module';
+import {ModalCategoriesComponent} from '@components/modal-categories/component/modal-categories.component';
+import {ModalCategoriesModule} from '@components/modal-categories/modal-categories.module';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    ModalCategoriesModule
-  ],
   declarations: [
-    CategoryMovementComponent,
+    CategoryMovementComponent
+  ],
+  imports: [
+    ModalCategoriesModule,
+    SharedModule
   ],
   exports: [
     CategoryMovementComponent
-  ]
+  ],
+  providers: [],
+  entryComponents: [ ModalCategoriesComponent ]
 })
 export class CategoryMovementModule { }

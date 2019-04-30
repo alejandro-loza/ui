@@ -1,1 +1,10 @@
-<svg fill="#FFFFFF" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><path style="" d="M 86.150456,4.0919106 52.565313,37.928863 66.414857,51.872836 100,18.035883 86.150456,4.0919106 z M 0,6.2952474 0,95.908089 l 89.612842,0 0,-54.422411 -15.04564,15.04564 0,24.33113 -59.521561,0 0,-59.521561 40.446962,0 L 70.538244,6.2952474 0,6.2952474 z M 48.253069,43.090966 c -3.180302,-1e-6 -6.355383,1.224757 -8.78187,3.651243 -4.852965,4.85298 -7.566662,19.376996 -19.200503,26.093799 13.887751,1.013108 26.375718,0.777452 36.764243,-8.530059 5.111628,-4.57973 4.852966,-12.71077 0,-17.56374 -2.426488,-2.426487 -5.601568,-3.651242 -8.78187,-3.651243 z" fill-rule="evenodd" fill="#FFFFFF" fill-opacity="1" stroke="none"></path></svg>
+<svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <defs>
+        <style>
+            .cls-1{fill:#fff;fill-rule:evenodd;}
+        </style>
+    </defs>
+    <title>user-categories</title>
+    <path class="cls-1" d="M21.54,0,13.16,9.17,16.62,13,25,3.78ZM0,.6V25H22.46V10.25l-3.74,4.07v6.61h-15V4.67H13.81L17.55.6Zm12.09,10a2.94,2.94,0,0,0-2.19,
+        1C8.68,12.88,8,16.82,5.1,18.64c3.47.27,6.59.21,9.18-2.32a3.51,3.51,0,0,0,0-4.76A3,3,0,0,0,12.09,10.57Z" transform="translate(0 0)"/>
+</svg>

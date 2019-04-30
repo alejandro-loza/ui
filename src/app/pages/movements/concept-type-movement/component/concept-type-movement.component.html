@@ -14,9 +14,7 @@
         <app-category-movement
           [categoryList]="categoryList"
           [category]="concepts[0].category"
-          [editAvailable]="editAvailable"
-          (statusModal)="statusModal.emit($event)"
-          (statusCategory)="statusCategory.emit($event)">
+          [editAvailable]="editAvailable">
         </app-category-movement>
     </ng-template>
     ￼
@@ -25,9 +23,7 @@
         <app-category-movement
           [categoryList]="categoryList"
           [category]="noCategory"
-          [editAvailable]="editAvailable"
-          (statusModal)="statusModal.emit($event)"
-          (statusCategory)="statusCategory.emit($event)">
+          [editAvailable]="editAvailable">
         </app-category-movement>
     </ng-template>
 </ng-template>

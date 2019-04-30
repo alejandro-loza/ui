@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
+import {MovementsService} from '@services/movements/movements.service';
 
 import { SharedModule } from '@shared/shared.module';
 import { BackButtonModule } from '@components/back-button/back-button.module';

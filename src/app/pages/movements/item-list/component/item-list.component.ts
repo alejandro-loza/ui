@@ -1,136 +1,151 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  ElementRef,
-  Input,
-  OnChanges,
+  EventEmitter,
+  Input, OnChanges,
   OnInit,
+  Output,
   Renderer2,
-  SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
+import {MatExpansionPanel} from '@angular/material';
+
 import {Movement} from '@interfaces/movement.interface';
 import {Category} from '@interfaces/category.interface';
 
-import {isNull, isUndefined} from 'util';
+import {isNull} from 'util';
 
 import {CategoriesService} from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
-
-import * as M from 'materialize-css/dist/js/materialize';
+import {CdkVirtualScrollViewport, ScrollDispatcher} from '@angular/cdk/scrolling';
+import {filter} from 'rxjs/operators';
+import {DashboardStatesService} from '@services/dashboard/dashboard-states.service';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
-  styleUrls: ['./item-list.component.css']
+  styleUrls: ['./item-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() movementList: Movement[];
   @Input() categoryList: Category[];
-  @ViewChild('collapsible') collapsibleElement: ElementRef;
-  private auxMovement: Movement;
-  private instanceCollapsible: M.Collapsible;
-  private collapsibleinit: M.Collapsible;
-  private firstStateMovement: Movement;
-  private statusModal: boolean;
-  indexMovement: number;
-  keyEnter: boolean;
+  @Input() spinnerBoolean: boolean;
+  @Input() getMoreMovements: boolean;
+
+  @Output() getMoreMovementsChange: EventEmitter<boolean>;
+  @Output() movementListChange: EventEmitter<Movement[]>;
+  @Output() refreshMovementList: EventEmitter<boolean>;
+
+  @ViewChild(CdkVirtualScrollViewport) scrollVirtual: CdkVirtualScrollViewport;
+  private expansionElement: MatExpansionPanel;
+  private expansionEvent: Event;
+
+  private index: number;
+
+  auxMovement: Movement;
+  panelOpenState: boolean;
+
   constructor(
     private renderer: Renderer2,
     private categoriesService: CategoriesService,
-    private categoriesBeanService: CategoriesBeanService
+    private categoriesBeanService: CategoriesBeanService,
+    private scrollDispatcher: ScrollDispatcher,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
-    this.keyEnter = false;
-    this.statusModal = false;
-    this.indexMovement = undefined;
+    this.index = undefined;
+    this.getMoreMovements = false;
+    this.panelOpenState = false;
+
+    this.getMoreMovementsChange = new EventEmitter();
+    this.movementListChange = new EventEmitter();
+    this.refreshMovementList = new EventEmitter();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.renderer.listen('document','click', () => {
-    });
+  ngOnChanges(): void {
+    this.categoriesBeanService.changeCategory
+      .subscribe( res => {
+        if ( res ) {
+          this.movementList[this.index].concepts[0].category = this.categoriesBeanService.getCategory;
+          this.changeDetectorRef.detectChanges();
+          this.categoriesBeanService.changeCategory.emit(false);
+        }
+      });
   }
 
   ngAfterViewInit(): void {
-    this.collapsibleinit = new M.Collapsible( this.collapsibleElement.nativeElement, {
-      onOpenStart: () => this.firstStateMovement= JSON.parse(JSON.stringify(this.auxMovement))
-    });
-    this.instanceCollapsible = M.Collapsible.getInstance( this.collapsibleElement.nativeElement );
+    if ( this.scrollVirtual ) {
+      this.scrollDispatcher.scrolled().pipe(
+        filter(() => {
+          if (this.scrollVirtual.getRenderedRange().end === this.scrollVirtual.getDataLength()) {
+            return true;
+          }
+        })
+      ).subscribe((res: CdkVirtualScrollViewport) => {
+        this.getMoreMovementsChange.emit(true);
+        this.changeDetectorRef.detectChanges();
+      });
+    }
   }
 
-  /**
-   * @function trackByFn() - La función regresa el _id_ del movimiento, debido a que es un valor único que nos está dando el API, y para el compilador
-   * en JIT y/ o AOT mode, es mucho más rápido y eficiente. Si no hubiera el _id_, se recomienda usar el _index_..
-   *
-   * @param {number} index - Número en el arreglo del movimiento
-   * @param {Movement} movement - El movimiento en el indice;
-   *
-   */
-  trackByFn(index: number, movement: Movement): string {
+  trackByFn(index: number, movement: Movement) {
     return movement.id;
   }
 
-  collapsibleFunction(index: number): void {
-    /**
-     * Se valida si no es undefined _auxMovement_, si no lo es.
-     * Entonces su propiedad editAvailable se vuelve falso
-     */
-    if (!isUndefined(this.auxMovement) && this.statusModal === false) {
-      this.auxMovement.editAvailable = false;
-    }
-    /**
-     * Si es undefined _auxMovement_, o el modal está activo
-     * se toma el indice actual y se le asigna a la variable auxMovemente.
-     *
-     * Caso contrario solo se hace un return
-     */
-    if (isUndefined(this.auxMovement) || this.statusModal === false) {
-      this.indexMovement = index;
-      this.auxMovement = this.movementList[index];
-      this.auxMovement.customAmount = this.auxMovement.amount;
-    } else {
-      return;
-    }
-    this.auxMovement.editAvailable = true;
-    this.instanceCollapsible.open(this.indexMovement);
-    this.instanceCollapsible.destroy();
-  }
-
-  statusCategory(status: boolean): void {
-    if (status === true) {
-      this.auxMovement.concepts[0].category = this.categoriesBeanService.getCategory;
-      this.statusModal = false;
-    }
-    this.auxMovement.editAvailable = true;
-  }
-
   collapsibleCancel(index: number): void {
-    this.movementList[index] = this.firstStateMovement;
+    this.movementList[index] = this.auxMovement;
     this.movementList[index].editAvailable = false;
-    this.instanceCollapsible.close(index);
-    this.instanceCollapsible.destroy();
-    this.keyEnter = false;
+    this.expansionElement.toggle();
+    this.changeDetectorRef.detectChanges();
   }
 
   collapsibleClose(index: number): void {
-    if ( this.auxMovement.customDescription === '' || this.auxMovement.customDescription === null ) {
-      this.auxMovement.customDescription = this.firstStateMovement.customDescription;
+    if ( this.movementList[index].customDescription === '' || this.movementList[index].customDescription === null ) {
+      this.movementList[index].customDescription = this.auxMovement.customDescription;
     }
-    if (isNull(this.auxMovement.customDate)) {
-      this.auxMovement.customDate = this.firstStateMovement.date;
+    if (isNull(this.movementList[index].customDate)) {
+      this.movementList[index].customDate = this.auxMovement.date;
     }
-    if (isNull(this.auxMovement.amount)) {
-      this.auxMovement.amount = this.firstStateMovement.amount;
+    if (isNull(this.movementList[index].amount)) {
+      this.movementList[index].amount = this.auxMovement.amount;
     }
-    this.auxMovement.editAvailable = false;
-    this.instanceCollapsible.close(index);
-    this.instanceCollapsible.destroy();
-    this.keyEnter = false;
+    this.movementList[index].editAvailable = false;
+    this.expansionElement.toggle();
+    this.changeDetectorRef.detectChanges();
   }
 
   deleteMovement(index: number): void {
-    this.collapsibleClose(index);
-    this.movementList.splice(index, 1);
+    this.refreshMovementList.emit(true);
+  }
+
+  handleSpacebar(ev) {
+    if (ev.keyCode === 32) {
+      ev.stopPropagation();
+    }
+  }
+
+  expandPanel(matExpansionPanel: MatExpansionPanel, event: Event, index: number): void {
+    event.stopPropagation(); // Preventing event bubbling
+    if (!this._isExpansionIndicator(event.target as HTMLElement, index)) {
+      matExpansionPanel.toggle(); // Here's the magic
+    }
+    this.expansionElement = matExpansionPanel;
+    this.expansionEvent = event;
+  }
+
+  private _isExpansionIndicator(target: HTMLElement, index: number): boolean {
+    const expansionIndicatorClass = 'mat-expansion-indicator';
+    if ( (target.classList && target.classList.contains(expansionIndicatorClass) ) ) {
+      this.auxMovement = JSON.parse(JSON.stringify(this.movementList[index]));
+      this.movementList[index].editAvailable = true;
+      this.auxMovement.editAvailable = true;
+      this.index = index;
+    }
+    return (target.classList && target.classList.contains(expansionIndicatorClass) );
   }
 }

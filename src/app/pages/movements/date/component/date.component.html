@@ -1,1 +1,4 @@
-<input type="{{ type }}" class="datepicker {{ classes }}" id="{{ id }}" [ngModel]="formatDate" name="{{ name }}" #datepicker /> 
+<label for="{{ id }}">
+  <input [type]="type" class="datepicker {{ classes }}" id="{{ id }}" [ngModel]="formatDate" name="{{ name }}" #datepicker />
+</label>
+

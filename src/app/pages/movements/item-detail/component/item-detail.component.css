@@ -1,6 +1,12 @@
-.card-row, .card-text, .card-panel, .row-item-detail {
+.card-row, .card-text, .card-panel {
   margin:  0px;
 }
+
+.row-item-detail {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
 .btn {
   margin: 0% 1%;
 }

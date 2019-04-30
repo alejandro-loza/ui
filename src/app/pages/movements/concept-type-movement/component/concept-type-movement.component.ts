@@ -15,13 +15,9 @@ export class ConceptTypeMovementComponent implements OnInit {
   @Input() editAvailable: boolean;
   @Input() categoryList: Category[];
 
-  @Output() statusModal: EventEmitter<boolean>;
-  @Output() statusCategory: EventEmitter<boolean>;
   @Output() valueCategoryColor: EventEmitter<string>;
 
   constructor() {
-    this.statusModal = new EventEmitter();
-    this.statusCategory = new EventEmitter();
     this.valueCategoryColor = new EventEmitter();
 
     this.multiCategory = { id: 'multi', color: '#212121', name: 'Multi Categoria', textColor: '#fafafa' };
