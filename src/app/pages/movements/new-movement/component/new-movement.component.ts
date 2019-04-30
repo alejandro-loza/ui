@@ -93,7 +93,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
           this.createMovement(form);
         }
         if (err.status === 500) {
-          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.setMessage = '¡Ha ocurrido un error al obtener tus movimientos!';
           this.toastService.toastGeneral();
         }
       },

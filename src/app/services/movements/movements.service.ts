@@ -99,7 +99,7 @@ export class MovementsService {
             this.getMovements(paramsMovements);
             this.toastService.toastGeneral();
           } else if ( error.status === 500) {
-            this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+            this.toastService.setMessage = '¡Ha ocurrido un error al obtener tus movimientos!';
             this.toastService.toastGeneral();
           }
           return throwError(error);
