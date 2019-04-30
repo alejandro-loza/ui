@@ -106,6 +106,7 @@ export class MovementsService {
 	createMovement(movement: NewMovement): Observable<HttpResponse<Movement>> {
 		const id = this.configService.getUser.id;
 		let body: string;
+		// error de la cuenta porque no entra a este IF, por eso me lo manda como cash
 		if (!isNullOrUndefined(movement.category) && !isNullOrUndefined(movement.account)) {
 			body = JSON.stringify({
 				amount: movement.amount,

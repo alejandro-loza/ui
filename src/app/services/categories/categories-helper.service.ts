@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { CategoriesService } from '@services/categories/categories.service';
 import { Category } from '@app/interfaces/category.interface';
+import { isNullOrUndefined } from 'util';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class CategoriesHelperService {
 	conceptAcordingOfCategory: string;
-	constructor(private categoriesService: CategoriesService) {}
+	constructor() {}
 
 	set setConceptAcordingOfCategory(data: string) {
 		this.conceptAcordingOfCategory = data;
@@ -29,6 +29,42 @@ export class CategoriesHelperService {
 			}
 		});
 		return response;
+	}
+
+	getParentCategoryId(subcategoryId: string, categories: Category[]): string {
+		let parentId: string = '';
+		categories.forEach((category) => {
+			if (!isNullOrUndefined(category.subCategories)) {
+				category.subCategories.forEach((subcat) => {
+					if (subcat.id == subcategoryId) {
+						parentId = category.id;
+					}
+				});
+			} else {
+				if (category.id == subcategoryId) {
+					parentId = category.id;
+				}
+			}
+		});
+		return parentId;
+	}
+
+	getCategoryById(categoryId: String, categories: Category[]): Category {
+		let categoryToReturn: Category;
+		categories.forEach((category) => {
+			if (!isNullOrUndefined(category.subCategories)) {
+				category.subCategories.forEach((subcategory) => {
+					if (categoryId == subcategory.id) {
+						categoryToReturn = subcategory;
+					}
+				});
+			} else {
+				if (category.id == categoryId) {
+					categoryToReturn = category;
+				}
+			}
+		});
+		return categoryToReturn;
 	}
 
 	categoryForManualAccountMovement(nature: String, outcome: boolean, categories: Category[]): Category {

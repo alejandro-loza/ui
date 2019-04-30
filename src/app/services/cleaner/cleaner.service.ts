@@ -57,7 +57,7 @@ export class CleanerService {
 		// Movements memeory
 		this.emptyStateService.setShowEmptyState(false);
 		// Manual Accounts memory
-		this.accountsBeanService.setManualAccounts = [];
+		this.accountsBeanService.setManualAccounts = null;
 		this.accountsBeanService.setManualAccountToEdit = null;
 	}
 
