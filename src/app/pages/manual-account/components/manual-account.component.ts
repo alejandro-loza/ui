@@ -128,7 +128,7 @@ export class ManualAccountComponent implements OnInit {
 	}
 
 	createMovement(movement: NewMovement) {
-		this.movementsService.createMovement(movement).subscribe(
+		this.movementsService.createManualAccountMovement(movement, this.manualAccountToEdit.id).subscribe(
 			(res) => {},
 			(error) => {
 				this.toastService.setCode = error.error.status;

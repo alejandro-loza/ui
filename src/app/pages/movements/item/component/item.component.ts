@@ -3,6 +3,7 @@ import { AccountService } from '@services/account/account.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { Movement } from '@interfaces/movement.interface';
 import { Category } from '@interfaces/category.interface';
+import { isNullOrUndefined } from 'util';
 
 @Component({
 	selector: 'app-item',
@@ -25,11 +26,19 @@ export class ItemComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.traditionalImg = this.movement.account.nature.includes('ma_') ? false : true;
+		this.traditionalImg = this.traditionalImgProcess();
 		this.accountWithOutDefaults = this.accountService.getManualAccountNatureWithOutDefaults(
 			this.movement.account.nature
 		);
 		this.formatMovementDate();
+	}
+
+	traditionalImgProcess(): boolean {
+		if (!isNullOrUndefined(this.movement.account.nature)) {
+			return this.movement.account.nature.includes('ma_') ? false : true;
+		} else {
+			return true;
+		}
 	}
 
 	formatMovementDate() {
