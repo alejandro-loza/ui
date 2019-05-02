@@ -5,8 +5,6 @@ import { AuthService } from '@services/auth/auth.service';
 import { ToastService } from '@services/toast/toast.service';
 import { AccountService } from '@services/account/account.service';
 
-import { ToastInterface } from '@interfaces/toast.interface';
-
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
@@ -22,8 +20,7 @@ export class WelcomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.renderer.addClass(document.querySelector('img.logo-white'), 'hide');
-    this.personalInfoUser();
+    // this.personalInfoUser();
   }
 
   personalInfoUser() {
@@ -40,7 +37,6 @@ export class WelcomeComponent implements OnInit {
         this.toastService.setCode = err.status;
         this.toastService.setMessage = 'Ocurrió un error al obtener tus datos';
         this.toastService.toastGeneral();
-        this.renderer.removeClass( document.querySelector('img.logo-white'), 'hide' );
         return this.router.navigate(['access/login']);
       },
       () => {

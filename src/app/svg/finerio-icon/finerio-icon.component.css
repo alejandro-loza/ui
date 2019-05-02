@@ -1,0 +1,51 @@
+.fill-main-color{
+  fill:var(--main-color);
+}
+.fill-accent-color {
+  fill:var(--accent-color);
+}
+
+.cls-3, .cls-4{
+  fill-rule: evenodd;
+}
+
+.welcomeClass {
+  width: 40%;
+}
+
+.welcomeClass path, .welcomeClass polygon {
+    animation: fill 500ms alternate infinite ease-in-out;
+}
+
+.signupClass {
+  width: 50%;
+  margin: 11% auto;
+}
+
+.fill-accent-white-color {
+  fill: var(--light-color);
+}
+
+@-webkit-keyframes fill {
+  0% {
+    fill: transparent;
+  }
+  100% {
+    fill: #335479;
+  }
+}
+
+@keyframes fill {
+  0% {
+    fill: transparent;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .logo {
+    margin: 20% auto;
+  }
+}

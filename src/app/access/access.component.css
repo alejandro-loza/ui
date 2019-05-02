@@ -1,28 +1,15 @@
 .background {
+  min-height: 100vh;
+  min-width: 100vw;
   margin: 0;
   padding: 0;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(to bottom, #16307a, #0c549e, #0879c0, #219fdf, #44c6fc);
+  background-image: linear-gradient(to bottom, #17307b, #08539f, #0077c1, #009ce0, #2bc2fd);
 }
 
-.card {
-  top: 0;
-  left: 0;
-  transform: translate(0, 10%);
-}
-
-.white-opacity-8 {
-  background-color: rgba(245, 245, 245, 0.8);
-}
-
-@media only screen and (max-width: 1599px) {
-  .card { transform: translate(0); }
-  .row { margin: auto;}
-}
-
-@media only screen and (min-width: 1600px) {
-  .background { position: absolute; background-attachment: fixed; }
+.row {
+  margin: 0;
 }

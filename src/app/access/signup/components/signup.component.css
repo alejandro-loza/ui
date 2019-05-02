@@ -1,47 +1,38 @@
+.row {
+  margin: 0;
+}
+
 .socialBtn{
-	border-bottom: 2px solid #e48d2b;
+  border-bottom: 2px solid #e48d2b;
 }
 
-#checkbox-blog:checked+label::after{
-    border: 2px solid red!important;
-    background-color: red!important;
-}	
-
-.d-none{
-	display: none;
+.card {
+  transform: translate(0);
 }
 
-.pt-15{
-	padding-top: 15px;
-}
-
-#passwordError{
-	color: red;
-	font-size: 12px;
-}
-
-#termsError{
-	color: red;
-	font-size: 12px;
-}
-
-#tips-col h6, p{
-	padding-top: 30px;
-	margin: 10px!important;
-	font-size: 20px;
-}
-
-.input-field{
-	margin-bottom: 2rem;
+.btn {
+  margin-top: 1%;
 }
 
 [type="checkbox"].filled-in:checked+span:not(.lever):after{
-	border: 2px solid #e48d2b;
-    background-color: #e48d2b;
+  border: 2px solid #e48d2b;
+  background-color: #e48d2b;
 }
 
-@media screen and (max-width: 600px){
-	#tips-col{
-		display: none;
-	}
+#checkbox-blog:checked+label::after{
+  border: 2px solid red!important;
+  background-color: red!important;
+}
+#passwordError{
+  color: red;
+  font-size: 12px;
+}
+
+#termsError{
+  color: red;
+  font-size: 12px;
+}
+
+@media only screen and (min-width: 1200px) {
+  .card-content { padding: 7px 24px; }
 }

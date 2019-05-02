@@ -1,67 +1,61 @@
-<div class="row">
-    <div class="col s12 m7 l6 offset-l1">
-        <h5 class="center">Regístrate, y comienza a tomar el control de tu dinero.</h5>
-        <div class="row center socialBtn">
-            <div class="col s12">
-                <app-social-media [facebookText]="'Ingresar con Facebook'" [googleText]="'Ingresar con Google'"></app-social-media>
+<div class="card light-background">
+  <div class="card-content">
+    <div class="row">
+      <div class="col s12 m7 center-align">
+        <h5>Regístrate, y comienza a tomar el control de tu dinero.</h5>
+        <app-social-media [facebookText]="'Ingresar con Facebook'" [googleText]="'Ingresar con Google'"></app-social-media>
+        <hr>
+        <form [formGroup]="signupData" (ngSubmit)="signup()" method="POST">
+          <div class="input-field">
+            <input required formControlName="email" name="email" class="form-control" id="email-input" type="email" class="validate" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+            <label for="email-input">Correo Electrónico</label>
+            <span class="helper-text" data-error="Correo Inválido">Ej. contacto@finerio.mx</span>
+          </div>
+          <div class="input-field">
+            <input required formControlName="password" name="password" pattern="^(?=.*?[A-ZÑ])(?=.*?[a-zñ])(?=.*?[\d])(?=.*?[\W]).{8,}$" class="form-control" id="password-input" type="password" class="validate">
+            <label for="password-input">Contraseña</label>
+            <span class="helper-text" data-error="La contraseña debe tener al menos 8 caracteres, una mayúscula y debe incluir tanto un número como un símbolo"></span>
+          </div>
+          <div class="input-field">
+            <input required formControlName="passwordConfirm" name="confirmPassword" class="form-control" id="confirm-input" (keyup)="passwordMatch()" type="password">
+            <label for="confirm-input">Confirmar contraseña</label>
+            <span id="passwordError" *ngIf="!passwordValidate">Las contraseñas no coinciden</span>
+          </div>
+          <div class="left-align">
+            <div class="input-field">
+              <p>
+                <label>
+                  <input name="blog" type="checkbox" class="filled-in" checked="checked" id="checkbox-blog" formControlName="blog" />
+                  <span>Acepto subscribirme al blog de finanzas personales</span>
+                </label>
+              </p>
             </div>
-        </div>
-        <div class="row">
-            <div *ngIf="showSpinner" class="col s12 center">
-                <app-spinner></app-spinner>
+            <div class="input-field">
+              <p>
+                <label>
+                  <input name="termsAndConditions" type="checkbox" class="filled-in" checked id="checkbox-terms" formControlName="termsAndConditions" />
+                  <span>Acepto los términos y condiciones</span>
+                </label>
+                <span id="termsError" *ngIf="!termsAccepted">Debes aceptar los términos y condiciones</span>
+              </p>
             </div>
-            <div *ngIf="!showSpinner" class="col s12 l8 offset-l2">
-                <form [formGroup]="signupData" (ngSubmit)="signup()" method="POST">
-                    <div class="input-field">
-                        <input required formControlName="email" name="email" class="form-control" id="email-input" type="email" class="validate" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                        <label for="email-input">Correo Electrónico</label>
-                        <span class="helper-text" data-error="Correo Inválido">Ej. contacto@finerio.mx</span>
-                    </div>
-                    <div class="input-field">
-                        <input required formControlName="password" name="password" pattern="^(?=.*?[A-ZÑ])(?=.*?[a-zñ])(?=.*?[\d])(?=.*?[\W]).{8,}$" class="form-control" id="password-input" type="password" class="validate">
-                        <label for="password-input">Contraseña</label>
-                        <span class="helper-text" data-error="La contraseña debe tener al menos 8 caracteres, una mayúscula y debe incluir tanto un número como un símbolo"></span>
-                    </div>
-                    <div class="input-field">
-                        <input required formControlName="passwordConfirm" name="confirmPassword" class="form-control" id="confirm-input" (keyup)="passwordMatch()" type="password">
-                        <label for="confirm-input">Confirmar contraseña</label>
-                        <span id="passwordError" *ngIf="!passwordValidate">Las contraseñas no coinciden</span>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 m10 offset-m1">
-                            <label>
-                                <input name="blog" type="checkbox" class="filled-in" checked="checked" id="checkbox-blog" formControlName="blog" />
-                                <span>Acepto subscribirme al blog de finanzas personales</span>
-                            </label>
-                            <label>
-                                <input name="termsAndConditions" type="checkbox" class="filled-in" checked id="checkbox-terms" formControlName="termsAndConditions" />
-                                <span>Acepto los términos y condiciones</span>
-                            </label><br>    
-                            <span id="termsError" *ngIf="!termsAccepted">Debes aceptar los términos y condiciones</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-s6 center pt-15">
-                            <button [disabled]="!signupData.valid" class="btn waves-effect waves-blue finerio-blue white-text" type="submit" name="action">Entrar
-                                <i class="material-icons right">send</i>
-                            </button>
-                        </div>
-                        <div class="col-s6 center pt-15">
-                            <a class="waves-effect waves-teal btn-flat" routerLink="/access/login">Iniciar Sesión</a>
-                        </div>
-                    </div>
-                </form>
+            <div class="input-field">
+              <button [disabled]="!signupData.valid" class="btn waves-effect waves-blue finerio-blue white-text" type="submit" name="action">Entrar
+                <i class="material-icons right">send</i>
+              </button>
+              <a class="waves-effect waves-teal btn btn-flat finerio-accent-outline-color" routerLink="/access/login">Iniciar Sesión</a>
             </div>
-        </div>
+          </div>
+        </form>
+      </div>
+      <div class="col hide-on-small-and-down m4 offset-m1 center" id="tips-col">
+        <!--          <h6><b>Vincula tus tarjetas y controla tus gastos, en un solo lugar.</b></h6>-->
+        <!--          <p>Clasifica tus gastos.</p>-->
+        <!--          <p>Crea tus presupuestos y controla tus gastos.</p>-->
+        <!--          <p>Vincula tus cuentas bancarias.</p>-->
+        <!--          <p>Toda tu información financiera en un sólo lugar.</p>-->
+        <!--          <p>Gratis.</p>-->
+      </div>
     </div>
-    <div class="col m4 offset-m1" id="tips-col">
-        <div class="row center">
-            <h6><b>Vincula tus tarjetas y controla tus gastos, en un solo lugar.</b></h6>
-            <p>Clasifica tus gastos.</p>
-            <p>Crea tus presupuestos y controla tus gastos.</p>
-            <p>Vincula tus cuentas bancarias.</p>
-            <p>Toda tu información financiera en un sólo lugar.</p>
-            <p>Gratis.</p>
-        </div>
-    </div>
+  </div>
 </div>

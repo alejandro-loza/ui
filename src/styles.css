@@ -2,73 +2,136 @@
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 body,
 html {
+  min-height: 100vh;
+  min-width: 100vw;
   margin: 0;
   padding: 0;
   font-family: 'Open Sans', sans-serif;
 }
 
+/**
+ * Variable for all the project
+ */
+
 * {
-  --main-color: #16307a;
-  --accent-color: #44c6fc;
+  --main-color: #17307b;
+  --accent-color: #2bc2fd;
+  --light-color: #F9F7FF;
   --paddingPages: 128px;
   --widthAmout: 50%;
   font-family: 'Open Sans', sans-serif;
 }
 
-h1,h2,h3,h4,h5{
+h1,h2,h3,h4,h5 {
   font-family: 'Ubuntu', sans-serif;
 }
 
-.showPassword {
-  margin-top: 3%;
-  color: black;
-}
 
-[type="checkbox"].filled-in:checked+span.showPassword:not(.lever):after{
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-}
-
-.spinnerPosition {
-	position: relative;
-	top: 15rem;
-}
-
-.finerio-blue-text {
-  color: var(--navyblue-color);
-}
-
-.finerio-blue {
-  background-color: var(--navyblue-color) !important;
-  color: white !important;
-}
-
-.finerio-orange {
-  background-color: var(--orange-color) !important;
-  color: white !important;
-}
-
-.finerio-orange-text {
-  color: var(--orange-color);
-}
-
-.finerio-main-color-text {
-	color: var(--main-color) !important;
-}
+/**
+ * Main color & accent color
+ */
 
 .finerio-main-color {
-	background-color: var(--main-color) !important;
-	color: white;
+	background-color: var(--main-color);
+  color: var(--light-color);
 }
 
 .finerio-accent-color {
-	background-color: var(--accent-color) !important;
-	color: white;
+	background-color: var(--accent-color);
+  color: var(--light-color);
 }
 
-.finerio-accent-color-text {
-	color: var(--accent-color);
+.finerio-main-outline-color{
+  background-color: transparent;
+  color: var(--main-color);
 }
+
+.finerio-main-outline-color:hover {
+  background-color: var(--main-color);
+  color: var(--light-color);
+}
+
+.finerio-accent-outline-color {
+  background-color: transparent;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+}
+
+.finerio-accent-outline-color:hover {
+  background-color: var(--accent-color);
+  color: var(--light-color);
+}
+
+/**
+ * Buttons
+ */
+
+button.btn, a.btn, .btn {
+  transition: background-color 200ms, color 200ms;
+  transition-timing-function: ease-in-out;
+  border-radius: 5px;
+}
+
+/**
+ * Buttons w/ main-color
+ */
+.btn.finerio-main-color {
+  background-color: var(--main-color);
+  color: var(--light-color);
+}
+
+.btn.finerio-main-color:hover {
+  --main-color: #152a5d;
+  background-color: var(--main-color);
+}
+
+/**
+ * Buttons w/ accent-color
+ */
+
+.btn.finerio-accent-color {
+  background-color: var(--accent-color);
+  color: var(--light-color);
+}
+
+.btn.finerio-accent-color:hover {
+  --accent-color: #4392c7;
+  background-color: var(--accent-color);
+}
+
+/**
+ * Buttons w/ main-outline-color
+ */
+
+.btn.finerio-main-outline-color {
+  background-color: transparent;
+  color: black;
+  border: 1px solid var(--main-color);
+}
+
+.btn.finerio-main-outline-color:hover {
+  background-color: var(--main-color);
+  color: var(--light-color);
+}
+
+/**
+ * Buttons w/ accent-outline-color
+ */
+
+.btn.finerio-accent-outline-color {
+  background-color: transparent;
+  color: black;
+  border: 1px solid var(--accent-color);
+}
+
+.btn.finerio-accent-outline-color:hover {
+  background-color: var(--accent-color);
+  color: var(--light-color);
+}
+
+ /**
+  * Waves
+  */
 
 .waves-effect.waves-blue .waves-ripple {
 	/* The alpha value allows the text and background color
@@ -77,6 +140,9 @@ h1,h2,h3,h4,h5{
   opacity: 0.65%;
 }
 
+/**
+ * Material Icons
+ */
 .material-icons.md-18 {
 	font-size: 18px;
 }
@@ -93,6 +159,29 @@ h1,h2,h3,h4,h5{
 	font-size: 48px;
 }
 
+/**
+ * Cards
+ */
+
+.card {
+  top: 0;
+  left: 0;
+  transform: translate(0, 10%);
+}
+
+.light-background {
+  background-color: rgba(249, 247, 255, 0.85) !important;
+}
+
+@media only screen and (min-width: 1200px ) and (max-width: 1299px) {
+  .card { transform: translate(0); }
+  .row { margin: auto;}
+}
+
+@media only screen and (min-width: 1300px) and (max-width: 1499px) {
+  .card { transform: translate(0, 5%); }
+}
+
 .inputMovement {
 	border-bottom: none !important;
 	height: 100% !important;
@@ -100,6 +189,21 @@ h1,h2,h3,h4,h5{
 
 .collection {
 	border: 0px solid #e0e0e0 !important;
+}
+
+.showPassword {
+  margin-top: 3%;
+  color: black;
+}
+
+[type="checkbox"].filled-in:checked+span.showPassword:not(.lever):after{
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.spinnerPosition {
+  position: relative;
+  top: 15rem;
 }
 
 input:not([type]):focus:not([readonly]),
