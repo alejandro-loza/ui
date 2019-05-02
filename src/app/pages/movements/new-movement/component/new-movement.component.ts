@@ -231,7 +231,9 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 		const matDialogRef = this.matDialog.open(ModalCategoriesComponent, matDialogConfig);
 		matDialogRef.afterClosed().subscribe(
 			(res) => {
-				this.preCategory = res;
+				if (!isNullOrUndefined(res)) {
+					this.preCategory = res;
+				}
 			},
 			(err) => {
 				this.toastService.setCode = err.code;

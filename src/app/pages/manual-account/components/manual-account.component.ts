@@ -28,6 +28,8 @@ export class ManualAccountComponent implements OnInit {
 	manualAccountBalance: string = 'positive';
 	showSpinner: boolean = false;
 
+	showDefaultCheckbox: boolean = false;
+
 	// NgModel Variables
 	accountName: string;
 	accountBalance: number;
@@ -54,12 +56,28 @@ export class ManualAccountComponent implements OnInit {
 		this.setModeOfTheComponent();
 		this.setBackButtonRoute();
 		this.editModeOfTheComponent ? this.setManualAccountForEdit() : this.setManualAccountDefaultSettings();
+		this.showDefaultCheckboxForAtm();
 	}
 
 	ngAfterViewInit() {
 		const modal = new M.Modal(this.elModal.nativeElement);
 		const modal2 = new M.Modal(this.elModal2.nativeElement);
 		const modal3 = new M.Modal(this.elModal3.nativeElement);
+	}
+
+	showDefaultCheckboxForAtm() {
+		if (this.editModeOfTheComponent) {
+			this.showDefaultCheckbox =
+				this.accountService.getManualAccountNatureWithOutDefaults(this.manualAccountToEdit.nature) == 'ma_cash'
+					? true
+					: false;
+		} else {
+			if (this.manualAccountPick.accountKey == 'cash') {
+				this.showDefaultCheckbox = true;
+			} else {
+				this.showDefaultCheckbox = false;
+			}
+		}
 	}
 
 	setManualAccountForEdit() {
@@ -241,6 +259,7 @@ export class ManualAccountComponent implements OnInit {
 
 	manualAccountSelected(event: ManualAccountList) {
 		this.manualAccountPick = event;
+		this.showDefaultCheckboxForAtm();
 	}
 
 	setBackButtonRoute() {

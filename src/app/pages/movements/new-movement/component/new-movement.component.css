@@ -10,6 +10,10 @@
 	margin-bottom: 0px;
 }
 
+.rowFecha {
+	padding: 0 0.75rem;
+}
+
 .deposit {
 	color: rgb(67, 160, 71);
 }
@@ -17,6 +21,7 @@
 .category-container {
 	width: 100%;
 	margin-bottom: 15px;
+	border-radius: 10px;
 }
 
 .btn {
@@ -127,6 +132,10 @@
 	right: 5%;
 	max-height: 25px;
 	max-width: 25px;
+}
+
+#categoryP {
+	margin-bottom: 5px;
 }
 
 #spinner {

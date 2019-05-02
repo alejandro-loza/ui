@@ -41,7 +41,7 @@
             </label>
           </p>
         </div>
-        <div class="col m6 offset-m3">
+        <div *ngIf="showDefaultCheckbox" class="col m6 offset-m3">
           <p>
             <label>
               <input type="checkbox" name="atmDefault" class="filled-in" [(ngModel)]="atmDefault"/>

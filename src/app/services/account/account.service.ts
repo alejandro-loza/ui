@@ -72,7 +72,7 @@ export class AccountService {
 	}
 
 	getManualAccountNatureWithOutDefaults(nature: string): string {
-		let result: string = 'ma_cash';
+		let result: string = '';
 		let natureNames: string[] = [
 			'ma_cash',
 			'ma_creditCard',
