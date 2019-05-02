@@ -7,7 +7,11 @@ import { AccountService } from '@services/account/account.service';
 import { ToastService } from '@services/toast/toast.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { CategoriesService } from '@services/categories/categories.service';
+import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { CategoriesHelperService } from '@services/categories/categories-helper.service';
+
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { ModalCategoriesComponent } from '@components/modal-categories/component/modal-categories.component';
 
 import { NewMovement } from '@interfaces/newMovement.interface';
 import * as M from 'materialize-css/dist/js/materialize';
@@ -31,6 +35,8 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 	manualAccountName: string;
 	disableModalTrigger: boolean = true;
 
+	categoriesList: Category[] = [];
+
 	newMovement: NewMovement;
 	preCategory: Category;
 	date: Date;
@@ -47,7 +53,9 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 		private router: Router,
 		private accountService: AccountService,
 		private categoriesService: CategoriesService,
-		private categoriesHelperService: CategoriesHelperService
+		private categoriesHelperService: CategoriesHelperService,
+		private matDialog: MatDialog,
+		private categoriesBeanService: CategoriesBeanService
 	) {
 		this.formatDate = 'Otro...';
 		this.newMovement = {
@@ -55,6 +63,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 			type: 'charge'
 		};
 		this.date = new Date();
+		this.categoriesList = this.categoriesBeanService.getCategories();
 	}
 
 	ngOnInit() {
@@ -77,6 +86,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 		};
 	}
 
+	// Function called from HTML
 	preliminarCategory() {
 		let income = this.newMovement.type == 'INCOME' ? true : false;
 		let categoryId: string;
@@ -92,6 +102,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 
 	getEntireCategory(categoryId: string) {
 		this.categoriesService.getCategoriesInfo().subscribe((res) => {
+			this.categoriesList = res.body;
 			this.newMovement.category = this.categoriesHelperService.getCategoryById(categoryId, res.body);
 			this.preCategory = this.newMovement.category;
 			this.preCategory.parent = {
@@ -108,6 +119,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 	}
 
 	createManualAccountMovement() {
+		this.newMovement.category = this.preCategory;
 		this.movementService.createManualAccountMovement(this.newMovement, this.manualAccount.id).subscribe(
 			(res) => {
 				this.toastService.setCode = res.status;
@@ -199,5 +211,43 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 			return;
 		}
 		this.newMovement.date = auxDate;
+	}
+
+	// Categories process
+
+	openDialog(event: Event) {
+		event.stopPropagation();
+		let matDialogConfig: MatDialogConfig<any>;
+		matDialogConfig = {
+			autoFocus: true,
+			disableClose: true,
+			closeOnNavigation: true,
+			restoreFocus: true,
+			width: '80%',
+			data: {
+				categoryList: this.categoriesList
+			}
+		};
+		const matDialogRef = this.matDialog.open(ModalCategoriesComponent, matDialogConfig);
+		matDialogRef.afterClosed().subscribe(
+			(res) => {
+				this.preCategory = res;
+			},
+			(err) => {
+				this.toastService.setCode = err.code;
+				if (err.code === 500) {
+					const message = 'Ocurrío un error al cambiar la categoría';
+					this.toastService.setMessage = message;
+				}
+				this.toastService.toastGeneral();
+			},
+			() => {
+				if (!isNullOrUndefined(this.preCategory.userId)) {
+					this.preCategory.parent = {
+						id: 'userCategory'
+					};
+				}
+			}
+		);
 	}
 }

@@ -125,6 +125,8 @@
 	position: relative;
 	top: 8px;
 	right: 5%;
+	max-height: 25px;
+	max-width: 25px;
 }
 
 #spinner {
