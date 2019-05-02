@@ -42,7 +42,7 @@ export class ModalDeleteMovementComponent implements OnInit {
           this.toastService.toastGeneral();
         }
         if (err.status === 500) {
-          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.setMessage = '¡Ha ocurrido un error al obtener tus movimientos!';
           this.toastService.toastGeneral();
         }
       },
