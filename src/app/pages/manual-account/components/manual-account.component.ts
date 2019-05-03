@@ -112,17 +112,17 @@ export class ManualAccountComponent implements OnInit {
 		let movement: NewMovement = {};
 		this.categoriesService.getCategoriesInfo().subscribe((res) => {
 			movement.account = this.manualAccountToEdit;
-			movement.amount = Math.abs(this.accountBalance - this.manualAccountToEdit.balance);
+			movement.amount = Math.abs(this.manualAccount.balance - this.manualAccountToEdit.balance);
 			movement.balance = 0;
 			movement.date = new Date();
 			movement.category = this.categoriesHelperService.categoryForManualAccountMovement(
 				this.accountService.getManualAccountNatureWithOutDefaults(this.manualAccountToEdit.nature),
-				this.manualAccountToEdit.balance > this.accountBalance,
+				this.manualAccountToEdit.balance > this.manualAccount.balance,
 				res.body
 			);
 			movement.description = this.categoriesHelperService.getConceptAcordingOfCategory;
 			movement.duplicated = false;
-			movement.type = this.manualAccountToEdit.balance > this.accountBalance ? 'CHARGE' : 'DEPOSIT';
+			movement.type = this.manualAccountToEdit.balance > this.manualAccount.balance ? 'CHARGE' : 'DEPOSIT';
 			this.createMovement(movement);
 		});
 	}

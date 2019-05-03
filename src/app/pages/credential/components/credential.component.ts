@@ -89,10 +89,10 @@ export class CredentialComponent implements OnInit {
 		this.accounts = this.credentialBean.getAccounts();
 		this.institutions = this.credentialBean.getInstitutions();
 		this.manualAccounts = this.accountsBeanService.getManualAccounts;
-		/*this.credentials.forEach((credential) => {
+		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
 			this.automaticSync(credential);
-		});*/
+		});
 		this.emptyStateProcess();
 		this.showSpinner = false;
 	}

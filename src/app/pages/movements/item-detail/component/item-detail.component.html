@@ -31,7 +31,7 @@
     <ng-template [ngIf]="movement.editAvailable === true">
       <app-save-movement [keyEnter]="keyEnter" [movement]="movement" [auxMovement]="auxMovement" (status)="status.emit($event)" (keyEnterPressed)="keyEnterPressed.emit($event)"></app-save-movement>
       <app-cancel-movement (statusCancel)="statusCancel.emit($event)"></app-cancel-movement>
-      <app-delete-movement *ngIf="movement.account.name === 'Efectivo'" (status)="statusDelete.emit($event)" [id]="movement.id"></app-delete-movement>
+      <app-delete-movement *ngIf="showDeleteButton" (status)="statusDelete.emit($event)" [id]="movement.id"></app-delete-movement>
     </ng-template>
   </div>
 </div>
