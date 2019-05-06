@@ -43,6 +43,10 @@ mat-expansion-panel.mat-expanded>.collapsible-header:hover {
     color: #212121;
 }
 
+.spinnerContainer {
+  margin-top: 1%;
+}
+
 @media only screen and (min-width: 1024px) {
   .scroll-viewport {
     height: 68vh;

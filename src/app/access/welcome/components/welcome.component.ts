@@ -20,7 +20,7 @@ export class WelcomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.personalInfoUser();
+    this.personalInfoUser();
   }
 
   personalInfoUser() {
