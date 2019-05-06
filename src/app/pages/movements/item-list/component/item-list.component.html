@@ -11,7 +11,7 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>
-            <app-item-detail class="item-detail" [movement]="movement" [auxMovement]="auxMovement"
+            <app-item-detail class="item-detail" [movement]="movement"
                              (statusCancel)="collapsibleCancel(i)" (status)="collapsibleClose(i)"
                              (statusDelete)="deleteMovement(i)">
             </app-item-detail>

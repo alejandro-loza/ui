@@ -13,8 +13,6 @@ import {Movement} from '@interfaces/movement.interface';
 import {Subscription} from 'rxjs';
 import {DateApiService} from '@services/date-api/date-api.service';
 
-declare var $: any;
-
 @Component({
   selector: 'app-movements',
   templateUrl: './movements.component.html',

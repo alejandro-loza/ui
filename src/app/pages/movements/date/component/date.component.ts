@@ -26,7 +26,7 @@ export class DateComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() id: string;
   @Input() reset: boolean;
 
-  @Output() valueDate: EventEmitter<string>;
+  @Output() valueDate: EventEmitter<Date>;
   @Output() valueFormatDate: EventEmitter<string>;
 
   @ViewChild('datepicker') elementDatePicker: ElementRef;

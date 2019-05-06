@@ -21,7 +21,6 @@ import {CategoriesService} from '@services/categories/categories.service';
 import {CategoriesBeanService} from '@services/categories/categories-bean.service';
 import {CdkVirtualScrollViewport, ScrollDispatcher} from '@angular/cdk/scrolling';
 import {filter} from 'rxjs/operators';
-import {DashboardStatesService} from '@services/dashboard/dashboard-states.service';
 
 @Component({
   selector: 'app-item-list',
@@ -37,6 +36,7 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() getMoreMovements: boolean;
 
   @Output() getMoreMovementsChange: EventEmitter<boolean>;
+  @Output() testChange: EventEmitter<Movement>;
   @Output() movementListChange: EventEmitter<Movement[]>;
   @Output() refreshMovementList: EventEmitter<boolean>;
 
@@ -61,6 +61,7 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     this.panelOpenState = false;
 
     this.getMoreMovementsChange = new EventEmitter();
+    this.testChange = new EventEmitter();
     this.movementListChange = new EventEmitter();
     this.refreshMovementList = new EventEmitter();
   }
@@ -88,20 +89,22 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
         })
       ).subscribe((res: CdkVirtualScrollViewport) => {
         this.getMoreMovementsChange.emit(true);
-        this.changeDetectorRef.detectChanges();
       });
     }
   }
 
   trackByFn(index: number, movement: Movement) {
+    if (movement.editAvailable) {
+      console.log(movement);
+    }
     return movement.id;
   }
 
   collapsibleCancel(index: number): void {
-    this.movementList[index] = this.auxMovement;
-    this.movementList[index].editAvailable = false;
+    console.log('%c item-list.component: Movement from Array: ', 'color: #7986CB', this.movementList[index]);
+    // this.movementList[index] = this.auxMovement;
+    // this.movementList[index].editAvailable = false;
     this.expansionElement.toggle();
-    this.changeDetectorRef.detectChanges();
   }
 
   collapsibleClose(index: number): void {
@@ -116,7 +119,6 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
     }
     this.movementList[index].editAvailable = false;
     this.expansionElement.toggle();
-    this.changeDetectorRef.detectChanges();
   }
 
   deleteMovement(index: number): void {

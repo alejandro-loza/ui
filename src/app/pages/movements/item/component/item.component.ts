@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { Movement } from '@interfaces/movement.interface';
 import { Category } from '@interfaces/category.interface';
