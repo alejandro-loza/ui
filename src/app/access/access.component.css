@@ -1,13 +1,9 @@
 .background {
-  min-height: 100vh;
-  min-width: 100vw;
-  margin: 0;
-  padding: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  min-height: 100%;
   background-image: linear-gradient(to bottom, #17307b, #08539f, #0077c1, #009ce0, #2bc2fd);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .row {
