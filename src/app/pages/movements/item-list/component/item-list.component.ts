@@ -98,8 +98,6 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   collapsibleCancel(index: number): void {
-    console.log(this.auxMovement.concepts[0].category);
-    console.log(this.movementList[index].concepts[0].category);
     this.movementList[index] = this.auxMovement;
     this.movementList[index].editAvailable = false;
     this.expansionElement.toggle();

@@ -21,6 +21,11 @@ export class ModalDeleteMovementComponent implements OnInit {
 
   ngOnInit() { }
 
+  closeModal(event: Event) {
+    event.stopPropagation();
+    this.matDialogRef.close(false);
+  }
+
   deleteMovement() {
     this.movementService.deleteMovement(this.id).subscribe(
       (res) => {
@@ -37,7 +42,7 @@ export class ModalDeleteMovementComponent implements OnInit {
           this.toastService.toastGeneral();
         }
         if (err.status === 500) {
-          this.toastService.setMessage = '¡Ha ocurrido un error al obterner tus movimiento!';
+          this.toastService.setMessage = '¡Ha ocurrido un error al obtener tus movimientos!';
           this.toastService.toastGeneral();
         }
       },

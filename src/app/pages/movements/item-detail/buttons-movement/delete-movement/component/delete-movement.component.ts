@@ -33,6 +33,10 @@ export class DeleteMovementComponent implements OnInit {
       data: { id: this.id }
     };
     const matDialogRef = this.matDialog.open(ModalDeleteMovementComponent, matDialogConfig);
-    matDialogRef.afterClosed().subscribe( res => this.status.emit(res));
+    matDialogRef.afterClosed().subscribe( res => {
+      if ( res ) {
+        this.status.emit(res);
+      }
+    });
   }
 }
