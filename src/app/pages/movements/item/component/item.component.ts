@@ -1,7 +1,8 @@
-import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { Movement } from '@interfaces/movement.interface';
 import { Category } from '@interfaces/category.interface';
+import {MovementsService} from '@services/movements/movements.service';
 
 @Component({
   selector: 'app-item',
@@ -15,7 +16,10 @@ export class ItemComponent implements OnInit {
   @Output() movementEdited: EventEmitter<Movement>;
   @Output() valueCategoryColor: EventEmitter<string>;
 
-  constructor(private dateApi: DateApiService) {
+  constructor(
+    private dateApi: DateApiService,
+    private movementService: MovementsService
+  ) {
     this.movementEdited = new EventEmitter();
     this.valueCategoryColor = new EventEmitter();
   }
@@ -26,5 +30,9 @@ export class ItemComponent implements OnInit {
 
   formatMovementDate() {
     this.movement.customDate = this.dateApi.formatDateForAllBrowsers(this.movement.customDate.toString());
+  }
+
+  updateMovement(movement: Movement) {
+    console.log(movement);
   }
 }

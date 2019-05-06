@@ -11,8 +11,8 @@ nav ul a:hover {
 }
 
 .close-session:hover {
-  --main-color: #0d225f;
-  background-color: var(--main-color);
+  --main-custom-color: #0d225f;
+  background-color: var(--main-custom-color);
 }
 
 .pages-list {
