@@ -7,7 +7,8 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class FinerioIconComponent implements OnInit {
   @Input() svgClasses: string;
-  @Input() accentClasses: string;
+  @Input() fillMainClasses: string;
+  @Input() fillAccentClasses: string;
   constructor() { }
 
   ngOnInit() {
