@@ -10,6 +10,10 @@
   background-color: rgba(229, 57, 53, 0.7)
 }
 
+.card {
+  margin: 1rem 0;
+}
+
 #finerio-logo {
   padding: 3% 0;
   width: 50%;
