@@ -32,11 +32,11 @@
 }
 
 .switch label input[type=checkbox]:checked+.lever:after {
-  background-color: var(--orange-color);
+  background-color: var(--accent-color);
 }
 
 .switch label input[type=checkbox]:checked+.lever {
-  background-color: #ffcc80;
+  background-color: #a4e1f9e6;
 }
 
 .inputPadding {
