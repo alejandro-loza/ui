@@ -9,7 +9,16 @@
     margin-right: 40px;
 }
 
-@media (max-width: 992px) {
+li:hover {
+  --main-color: #0d225f;
+  background-color: var(--main-color);
+}
+
+li.finerio-accent-color:hover {
+  background-color: var(--accent-color);
+}
+
+@media only screen and (max-width: 992px) {
     .pages-list {
         height: 56px;
         line-height: 56px;

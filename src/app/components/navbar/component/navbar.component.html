@@ -7,12 +7,13 @@
         <ul class="left hide-on-med-and-down">
           <li id="iconLi">
             <a [routerLink]="['app', 'dashboard']" class="icon-link">
-              <app-finerio-icon></app-finerio-icon>
+              <app-finerio-icon [svgClasses]="'logo-navbar'"
+                                [fillMainClasses]="'fill-White-color'"></app-finerio-icon>
             </a>
           </li>
         </ul>
         <ul class="right hide-on-med-and-down">
-          <li>
+          <li class="close-session">
             <a class="white-text" (click)="logout()">
               <i class="material-icons left medium">exit_to_app</i>Cerrar Sesión
             </a>

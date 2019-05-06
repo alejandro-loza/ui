@@ -1,12 +1,18 @@
 nav ul a:hover {
 	background-color: rgba(0, 0, 0, 0);
 }
+
 .sidenav {
 	padding-top: 15px;
   background-color: var(--main-color);
 }
 .nav-wrapper {
 	margin: 0px 1%;
+}
+
+.close-session:hover {
+  --main-color: #0d225f;
+  background-color: var(--main-color);
 }
 
 .pages-list {
@@ -49,6 +55,10 @@ nav ul a:hover {
 
 #iconLi {
 	height: 64px;
+}
+
+.fill-main-color, .fill-accent-color {
+  fill: whitesmoke;
 }
 
 @media only screen and (max-width: 600px) {
