@@ -26,10 +26,9 @@
 }
 
 .logo-navbar {
-  --widthImage: 17%;
-  width: var(--widthImage);
-  margin-top: 4%;
-  margin-left: 5%;
+  width: 70%;
+  margin-top: 6%;
+  margin-left: 20%;
 }
 
 .fill-White-color {
@@ -66,4 +65,8 @@
   .logo {
     margin: 20% auto;
   }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1499px) {
+  .logo-navbar { margin-left: 30%; }
 }
