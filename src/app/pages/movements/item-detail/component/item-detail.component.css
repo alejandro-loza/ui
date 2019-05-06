@@ -1,33 +1,43 @@
-.card-row, .card-text, .card-panel {
-  margin:  0px;
+.card-row,
+.card-text,
+.card-panel {
+	margin: 0px;
 }
 
 .row-item-detail {
-  margin-top: 20px;
-  margin-bottom: 0;
+	margin-top: 20px;
+	margin-bottom: 0;
 }
 
 .btn {
-  margin: 0% 1%;
+	margin: 0% 1%;
 }
 
 .card-panel {
-  width: 82%;
-  border: 1px solid #4dd0e1;
-  padding: 12px;
-  background-color: rgba(225, 245, 254, 0.4);
+	width: 82%;
+	border: 1px solid #4dd0e1;
+	padding: 12px;
+	background-color: rgba(225, 245, 254, 0.4);
 }
 
+[type="checkbox"].filled-in:checked + span:not(.lever):after {
+	top: 0;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #ee883a;
+	background-color: #ee883a;
+	z-index: 0;
+}
 
 @media only screen and (min-width: 1201px) and (max-width: 1440px) {
-  #buttons-movement-action {
-    text-align: right;
-  }
+	#buttons-movement-action {
+		text-align: right;
+	}
 }
 
 @media only screen and (min-width: 1441px) {
-  #buttons-movement-action {
-    text-align: right;
-    padding-right: 2.2%;
-  }
+	#buttons-movement-action {
+		text-align: right;
+		padding-right: 2.2%;
+	}
 }

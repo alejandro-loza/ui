@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { AccountService } from '@services/account/account.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { Movement } from '@interfaces/movement.interface';
@@ -10,7 +10,7 @@ import { isNullOrUndefined } from 'util';
 	templateUrl: './item.component.html',
 	styleUrls: [ './item.component.css' ]
 })
-export class ItemComponent implements OnInit {
+export class ItemComponent implements OnInit, OnDestroy {
 	@Input() movement: Movement;
 	@Input() categoryList: Category[];
 
@@ -21,6 +21,8 @@ export class ItemComponent implements OnInit {
 	accountWithOutDefaults: string;
 
 	constructor(private dateApi: DateApiService, private accountService: AccountService) {
+		this.traditionalImg = true;
+		this.accountWithOutDefaults = '';
 		this.movementEdited = new EventEmitter();
 		this.valueCategoryColor = new EventEmitter();
 	}
@@ -31,6 +33,11 @@ export class ItemComponent implements OnInit {
 			this.movement.account.nature
 		);
 		this.formatMovementDate();
+	}
+
+	ngOnDestroy() {
+		this.traditionalImg = true;
+		this.accountWithOutDefaults = '';
 	}
 
 	traditionalImgProcess(): boolean {

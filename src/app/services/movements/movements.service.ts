@@ -151,6 +151,7 @@ export class MovementsService {
 			date: movement.date,
 			description: movement.description,
 			duplicated: movement.duplicated,
+			inBalance: isNullOrUndefined(movement.inBalance) ? null : movement.inBalance,
 			type: movement.type.toUpperCase()
 		};
 		if (movement.concepts[0].category) {

@@ -1,9 +1,17 @@
 <div class="row row-item-detail">
   <!-- Diseño para movimientos en efectivo-->
-  <ng-container *ngIf="movement.account.name === 'Efectivo'; then efectivoTemplate; else creditoTemplate"></ng-container>
+  <ng-container *ngIf="movement.account.institution.code === 'DINERIO'; then efectivoTemplate; else creditoTemplate"></ng-container>
   <ng-template #efectivoTemplate>
-    <div class="col m6">
-      <app-type (keyEnterPressed)="keyEnter=$event" [type]="movement.type" (valueType)="movement.type=$event"></app-type>
+    <div class="col m4 center-align">
+        <ng-container *ngIf="showInBalance">
+            <p><label>
+                <input (change)="inBalanceChange()" type="checkbox" class="filled-in" name="inBalanceCheckBox" [(ngModel)]="inBalanceCheckBox">
+                <span>No tomar en cuenta en saldos de cuentas manuales</span>
+            </label></p>
+        </ng-container>
+    </div>
+    <div class="col m3 right-align">
+        <app-type (keyEnterPressed)="keyEnter=$event" [type]="movement.type" (valueType)="movement.type=$event"></app-type>
     </div>
   </ng-template>
   <ng-template #creditoTemplate>
@@ -27,7 +35,7 @@
     </div>
   </ng-template>
   <!-- Diseño para editar movimientos -->
-  <div class="col m5 push-m1" id="buttons-movement-action">
+  <div class="col m5" id="buttons-movement-action">
     <ng-template [ngIf]="movement.editAvailable === true">
       <app-save-movement [keyEnter]="keyEnter" [movement]="movement" [auxMovement]="auxMovement" (status)="status.emit($event)" (keyEnterPressed)="keyEnterPressed.emit($event)"></app-save-movement>
       <app-cancel-movement (statusCancel)="statusCancel.emit($event)"></app-cancel-movement>

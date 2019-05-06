@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Movement } from '@interfaces/movement.interface';
+import { isNullOrUndefined } from 'util';
 
 @Component({
 	selector: 'app-item-detail',
@@ -13,6 +14,8 @@ export class ItemDetailComponent implements OnInit {
 	@Input() keyEnter: boolean;
 
 	showDeleteButton: boolean;
+	showInBalance: boolean;
+	inBalanceCheckBox: boolean;
 
 	@Output() status: EventEmitter<boolean>;
 	@Output() statusCancel: EventEmitter<boolean>;
@@ -25,10 +28,23 @@ export class ItemDetailComponent implements OnInit {
 		this.statusDelete = new EventEmitter();
 		this.keyEnterPressed = new EventEmitter();
 		this.showDeleteButton = true;
+		this.showInBalance = false;
 	}
 
 	ngOnInit() {
+		this.showInBalanceProcess();
 		this.funcShowDeleteButton();
+	}
+
+	inBalanceChange() {
+		this.movement.inBalance = this.inBalanceCheckBox;
+	}
+
+	showInBalanceProcess() {
+		if (!isNullOrUndefined(this.movement.inBalance)) {
+			this.showInBalance = true;
+			this.inBalanceCheckBox = this.movement.inBalance;
+		}
 	}
 
 	funcShowDeleteButton() {
