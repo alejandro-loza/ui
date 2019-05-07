@@ -41,6 +41,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 	preCategory: Category;
 	date: Date;
 
+	reset: boolean;
 	loaderSpinner: boolean = true;
 	formatDate: string;
 	showSpinner: boolean = true;
@@ -63,6 +64,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 			type: 'charge'
 		};
 		this.date = new Date();
+		this.reset = false;
 		this.categoriesList = this.categoriesBeanService.getCategories();
 	}
 
@@ -138,6 +140,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 			() => {
 				this.cleanerService.cleanBudgetsVariables();
 				this.cleanerService.cleanDashboardVariables();
+				this.reset = true;
 				this.toastService.setMessage = 'Se creó su movimiento exitosamente';
 				this.toastService.toastGeneral();
 				return this.router.navigateByUrl('/app/movements');
@@ -164,6 +167,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 			() => {
 				this.cleanerService.cleanBudgetsVariables();
 				this.cleanerService.cleanDashboardVariables();
+				this.reset = true;
 				this.toastService.setMessage = 'Se creó su movimiento exitosamente';
 				this.toastService.toastGeneral();
 				return this.router.navigateByUrl('/app/movements');
