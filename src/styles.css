@@ -13,8 +13,8 @@ html {
  */
 
 * {
-  --main-color: #17307b;
-  --accent-color: #2bc2fd;
+  --main-color: #18537b;
+  --accent-color: #ee883a;
   --light-color: #F9F7FF;
   --paddingPages: 128px;
   --widthAmout: 50%;
@@ -81,7 +81,6 @@ button.btn, a.btn, .btn {
 }
 
 .btn.finerio-main-color:hover {
-  --main-color: #152a5d;
   background-color: var(--main-color);
 }
 
@@ -95,7 +94,6 @@ button.btn, a.btn, .btn {
 }
 
 .btn.finerio-accent-color:hover {
-  --accent-color: #4392c7;
   background-color: var(--accent-color);
 }
 
@@ -200,10 +198,6 @@ button.btn, a.btn, .btn {
 .spinnerPosition {
   position: relative;
   top: 15rem;
-}
-
-.btn {
-  border-radius: 20px !important;
 }
 
 input:not([type]):focus:not([readonly]),

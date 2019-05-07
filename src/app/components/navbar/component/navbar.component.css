@@ -11,7 +11,6 @@ nav ul a:hover {
 }
 
 .close-session:hover {
-  --main-color: #0d225f;
   background-color: var(--main-color);
 }
 
@@ -23,6 +22,7 @@ nav ul a:hover {
 
 .icon-link{
   padding-left: 0 ;
+  height: 64px;
 }
 
 .icon-list {

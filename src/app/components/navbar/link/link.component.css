@@ -10,7 +10,6 @@
 }
 
 li:hover {
-  --main-color: #0d225f;
   background-color: var(--main-color);
 }
 

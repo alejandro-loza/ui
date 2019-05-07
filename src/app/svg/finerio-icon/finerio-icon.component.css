@@ -6,10 +6,6 @@
   fill:var(--accent-color);
 }
 
-.cls-3, .cls-4{
-  fill-rule: evenodd;
-}
-
 .welcomeClass {
   --widthImage: 40%;
   width: var(--widthImage);
@@ -32,6 +28,11 @@
   margin-left: 5%;
 }
 
+.logo-app {
+  width: 40%;
+  margin-left: 8% !important;
+}
+
 .fill-White-color {
   fill: whitesmoke;
 }
@@ -42,6 +43,10 @@
 
 .fill-accent-white-color {
   fill: var(--light-color);
+}
+
+#finerio-icon {
+  margin-left: 35%;
 }
 
 @-webkit-keyframes fill {
