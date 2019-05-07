@@ -138,8 +138,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 				}
 			},
 			() => {
-				this.cleanerService.cleanBudgetsVariables();
-				this.cleanerService.cleanDashboardVariables();
+				this.cleanerService.cleanAllVariables();
 				this.reset = true;
 				this.toastService.setMessage = 'Se creó su movimiento exitosamente';
 				this.toastService.toastGeneral();
@@ -165,8 +164,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 				}
 			},
 			() => {
-				this.cleanerService.cleanBudgetsVariables();
-				this.cleanerService.cleanDashboardVariables();
+				this.cleanerService.cleanAllVariables();
 				this.reset = true;
 				this.toastService.setMessage = 'Se creó su movimiento exitosamente';
 				this.toastService.toastGeneral();

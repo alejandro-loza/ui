@@ -19,12 +19,14 @@ export class ItemComponent implements OnInit, OnDestroy {
 
 	traditionalImg: boolean;
 	accountWithOutDefaults: string;
+	amountEdit: boolean;
 
 	constructor(private dateApi: DateApiService, private accountService: AccountService) {
 		this.traditionalImg = true;
 		this.accountWithOutDefaults = '';
 		this.movementEdited = new EventEmitter();
 		this.valueCategoryColor = new EventEmitter();
+		this.amountEdit = true;
 	}
 
 	ngOnInit() {
@@ -33,11 +35,16 @@ export class ItemComponent implements OnInit, OnDestroy {
 			this.movement.account.nature
 		);
 		this.formatMovementDate();
+		this.editAmountAvailable();
 	}
 
 	ngOnDestroy() {
 		this.traditionalImg = true;
 		this.accountWithOutDefaults = '';
+	}
+
+	editAmountAvailable() {
+		this.amountEdit = this.movement.account.institution.code == 'DINERIO' ? true : false;
 	}
 
 	traditionalImgProcess(): boolean {
