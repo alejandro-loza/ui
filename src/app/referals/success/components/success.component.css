@@ -1,0 +1,11 @@
+.background {
+	min-height: 100%;
+	background-image: linear-gradient(to bottom, #17307b, #08539f, #0077c1, #009ce0, #2bc2fd);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#downloadButton {
+	margin-top: 50px;
+}

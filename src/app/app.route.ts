@@ -16,6 +16,10 @@ const AppRouting: Routes = [
 		loadChildren: './referals/referals.module#ReferalsModule'
 	},
 	{
+		path: 'invitation-success',
+		loadChildren: './referals/success/success.module#SuccessModule'
+	},
+	{
 		path: '',
 		pathMatch: 'full',
 		redirectTo: '/access/login'

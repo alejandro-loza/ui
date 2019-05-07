@@ -27,7 +27,6 @@ export class SignupService {
 			referralCode: isNullOrUndefined(data.referalCode) ? null : data.referalCode,
 			blog: data.blog
 		});
-		console.log(body);
 		return this.http.post<User>(`${this.url}/users`, body, {
 			observe: 'response',
 			headers: this.configService.getHeaders

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { SignupService } from '@services/signup/signup.service';
+import { ToastService } from '@services/toast/toast.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Signup } from '@app/interfaces/signup.interface';
 
@@ -14,7 +15,6 @@ export class ReferalsComponent implements OnInit {
 	termsAccepted: boolean = true;
 	password: string = '';
 	signupStruct: Signup = {};
-	showSpinner: boolean = false;
 	signupData: FormGroup = new FormGroup({
 		email: new FormControl(),
 		blog: new FormControl(true),
@@ -22,7 +22,12 @@ export class ReferalsComponent implements OnInit {
 		referralCode: new FormControl({ value: this.referralCodeModel, disabled: true }, Validators.required)
 	});
 
-	constructor(private activatedRoute: ActivatedRoute, private signupService: SignupService) {}
+	constructor(
+		private activatedRoute: ActivatedRoute,
+		private signupService: SignupService,
+		private toastService: ToastService,
+		private router: Router
+	) {}
 
 	ngOnInit() {
 		this.getReferalCode();
@@ -43,10 +48,21 @@ export class ReferalsComponent implements OnInit {
 	}
 
 	doRequest() {
-		console.log(this.signupStruct);
-		this.signupService.signup(this.signupStruct).subscribe((res) => {
-			console.log(res);
-		});
+		this.signupService.signup(this.signupStruct).subscribe(
+			(res) => {
+				this.toastService.setCode = res.status;
+			},
+			(error) => {
+				this.toastService.setCode = error.status;
+				this.toastService.setMessage = error.error.message;
+				this.toastService.toastGeneral();
+			},
+			() => {
+				this.toastService.setMessage = '¡Registro exitoso!';
+				this.toastService.toastGeneral();
+				return this.router.navigateByUrl('/invitation-success');
+			}
+		);
 	}
 
 	getReferalCode() {
