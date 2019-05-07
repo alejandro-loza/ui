@@ -32,7 +32,7 @@
 }
 
 .switch label input[type=checkbox]:checked+.lever:after {
-  background-color: var(--accent-color);
+    background-color: var(--accent-color);
 }
 
 .switch label input[type=checkbox]:checked+.lever {

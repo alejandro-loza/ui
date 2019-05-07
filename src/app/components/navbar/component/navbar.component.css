@@ -7,11 +7,12 @@ nav ul a:hover {
   background-color: var(--main-color);
 }
 .nav-wrapper {
-	margin: 0px 1%;
+	margin: 0 1%;
 }
 
 .close-session:hover {
-  background-color: var(--main-color);
+  --main-custom-color: #0d225f;
+  background-color: var(--main-custom-color);
 }
 
 .pages-list {
@@ -22,7 +23,6 @@ nav ul a:hover {
 
 .icon-link{
   padding-left: 0 ;
-  height: 64px;
 }
 
 .icon-list {
@@ -53,7 +53,8 @@ nav ul a:hover {
 	margin-top: 5px;
 }
 
-#iconLi {
+#icon-app {
+  max-width: 30%;
 	height: 64px;
 }
 
@@ -78,6 +79,7 @@ nav ul a:hover {
 	.icon-list {
 		line-height: 56px;
 	}
+
 	.brand-logo.center {
 		left: 0%;
 		margin: 0px var(--paddingPages);
