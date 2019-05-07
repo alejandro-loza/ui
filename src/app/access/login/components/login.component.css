@@ -15,7 +15,8 @@
 }
 
 #finerio-logo {
-  width: 30%;
+  padding: 3% 0;
+  width: 50%;
 }
 
 #rowForm {
@@ -30,4 +31,8 @@
   .formContainer {
     margin-left: 0;
   }
+}
+
+@media only screen and (min-width: 1200px) {
+  #finerio-logo { padding: 2% 0; }
 }
