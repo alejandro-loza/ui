@@ -121,7 +121,7 @@ button.btn, a.btn, .btn {
 
 .btn.finerio-main-outline-color {
   background-color: transparent;
-  color: black;
+  color: var(--main-color);
   border: 1px solid var(--main-color);
 }
 
