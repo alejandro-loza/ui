@@ -26,6 +26,15 @@ h1,h2,h3,h4,h5 {
   font-family: 'Ubuntu', sans-serif;
 }
 
+.finerio-blue {
+  background-color: var(--main-color);
+  color: var(--light-color);
+}
+
+.finerio-orange {
+  background-color: var(--accent-color);
+  color: var(--light-color);
+}
 
 /**
  * Main color & accent color
