@@ -5,6 +5,7 @@ import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ToastService } from '@services/toast/toast.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { WorkshopCategory } from '@app/interfaces/categories/workshopCategory.interface';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
 @Component({
 	selector: 'app-category-workshop',
@@ -30,7 +31,8 @@ export class CategoryWorkshopComponent implements OnInit {
 		private router: Router,
 		private toastService: ToastService,
 		private categoriesBeanService: CategoriesBeanService,
-		private cleanerService: CleanerService
+		private cleanerService: CleanerService,
+		private mixpanelService: MixpanelService
 	) {}
 
 	ngOnInit() {
@@ -79,6 +81,7 @@ export class CategoryWorkshopComponent implements OnInit {
 			this.toastService.setMessage = '¡Categoría creada con éxito!';
 			this.toastService.toastGeneral();
 			this.categoriesBeanService.setCategories([]);
+			this.mixpanelEvent('Create category');
 			return this.router.navigateByUrl('/app/categories');
 		}),
 			(error) => {
@@ -146,6 +149,11 @@ export class CategoryWorkshopComponent implements OnInit {
 		if (this.editMode) {
 			this.setupForEditMode();
 		}
+	}
+
+	mixpanelEvent(track: string) {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent(track);
 	}
 
 	/*selectedTextColor(color: string) {
