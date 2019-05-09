@@ -11,7 +11,8 @@
 }
 
 .welcomeClass {
-  --widthImage: 40%;
+  --widthImage: 25%;
+  margin: 5% 0;
   width: var(--widthImage);
 }
 

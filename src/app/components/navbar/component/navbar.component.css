@@ -21,10 +21,6 @@ nav ul a:hover {
 	font-size: 16px;
 }
 
-.icon-link{
-  padding-left: 0 ;
-}
-
 .icon-list {
 	line-height: 64px !important;
 	margin-right: 40px;
@@ -48,13 +44,15 @@ nav ul a:hover {
 	transform: rotate(180deg);
 }
 
-#finerio-logo {
-	height: 55px;
-	margin-top: 5px;
+.logo-container {
+  max-width: 7%;
+}
+
+.icon-link {
+  padding: 0;
 }
 
 #icon-app {
-  max-width: 30%;
 	height: 64px;
 }
 
@@ -70,37 +68,18 @@ nav ul a:hover {
 }
 
 @media only screen and (max-width: 992px) {
-	.nav-wrapper {
-		padding-left: 0;
-	}
-	.pages-list {
-		line-height: 56px;
-	}
-	.icon-list {
-		line-height: 56px;
-	}
-
-	.brand-logo.center {
-		left: 0%;
-		margin: 0px var(--paddingPages);
-	}
+	.nav-wrapper { padding-left: 0; }
+	.pages-list { line-height: 56px; }
+	.icon-list { line-height: 56px; }
+  .brand-logo.center { left: 0; margin: 0 var(--paddingPages); }
 }
 
 @media only screen and (min-width: 993px) {
-	#slide-out {
-		width: 128px;
-	}
-	.sidenav {
-		margin-top: 63px;
-	}
-	.brand-logo {
-		padding-left: 128px;
-	}
+	#slide-out { width: 128px; }
+  .sidenav { margin-top: 63px; }
+	.brand-logo { padding-left: 128px; }
 }
 
-@media only screen and (min-width: 993px) {
-	#finerio-logo {
-		height: 51px;
-		margin-top: 7px;
-	}
+@media only screen and (min-width: 1200px) and (max-width:1499px) {
+	.logo-container { max-width: 9% }
 }
