@@ -1,16 +1,9 @@
 <div class="row valign-wrapper center-align">
   <!-- Image Start -->
-  <div *ngIf="traditionalImg; else manualAccountImg" class="col m1">
-    <img src="https://cdn.finerio.mx/banks/{{movement.account.institution.code}}_shield.png"
-        [srcset]="'assets/media/img/movements/' + movement.account.institution.code + '.png'"
+  <div class="col m1">
+    <img [src]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc" (error)="onErrorFunc( movement.account.type )"
          alt="{{movement.account.institution.code}}" class="imgMovement" />
   </div>
-  <ng-template #manualAccountImg>
-    <div class="col m1">
-        <img [src]="'assets/media/img/manual_account/' + accountWithOutDefaults + '.svg'"
-        alt="{{movement.account.institution.code}}" class="imgMovement" />
-    </div>
-  </ng-template>
   <!-- Image End -->
 
   <!-- Date Start -->
