@@ -1,0 +1,39 @@
+.maBtn {
+	height: 110px;
+	margin: 5px;
+	min-width: 190px;
+}
+
+.maBtn img {
+	width: 50px;
+	padding-top: 10px;
+}
+
+.maBtn span {
+	position: relative;
+	bottom: 10px;
+}
+
+.amountBtn {
+	width: 120px;
+	margin: 0px 5px;
+	color: #18537b;
+}
+
+.active {
+	color: white !important;
+	background-color: #18537b !important;
+}
+
+#modal {
+	width: 70%;
+}
+
+[type="checkbox"].filled-in:checked + span:not(.lever):after {
+	border: 2px solid #e48d2b;
+	background-color: #e48d2b;
+}
+
+.margin-10 {
+	margin: 10px;
+}

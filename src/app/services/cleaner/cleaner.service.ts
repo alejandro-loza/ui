@@ -5,6 +5,7 @@ import { CredentialBeanService } from '@services/credentials/credential-bean.ser
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
+import { AccountsBeanService } from '@services/account/accounts-bean.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,7 +17,8 @@ export class CleanerService {
 		private credentialBeanService: CredentialBeanService,
 		private budgetsBeanService: BudgetsBeanService,
 		private categoriesBeanService: CategoriesBeanService,
-		private emptyStateService: EmptyStateService
+		private emptyStateService: EmptyStateService,
+		private accountsBeanService: AccountsBeanService
 	) {}
 
 	cleanAllVariables() {
@@ -54,6 +56,9 @@ export class CleanerService {
 		this.categoriesBeanService.setSubcategoryToViewDetails(null);
 		// Movements memeory
 		this.emptyStateService.setShowEmptyState(false);
+		// Manual Accounts memory
+		this.accountsBeanService.setManualAccounts = null;
+		this.accountsBeanService.setManualAccountToEdit = null;
 	}
 
 	cleanDashboardVariables() {

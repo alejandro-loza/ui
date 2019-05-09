@@ -83,10 +83,10 @@ h1,h2,h3,h4,h5 {
  * Buttons
  */
 
-button.btn, a.btn, .btn {
+.btn {
   transition: background-color 200ms, color 200ms;
   transition-timing-function: ease-in-out;
-  border-radius: 5px;
+  border-radius: 20px
 }
 
 /**
@@ -236,10 +236,6 @@ button.btn, a.btn, .btn {
 .spinnerPosition {
   position: relative;
   top: 15rem;
-}
-
-.btn {
-  border-radius: 20px !important;
 }
 
 input:not([type]):focus:not([readonly]),
