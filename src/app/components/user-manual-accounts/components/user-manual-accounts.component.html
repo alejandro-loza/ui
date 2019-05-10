@@ -2,7 +2,7 @@
   <h4>Seleccionar cuenta manual: </h4>
   <ul>
     <li class="manualAccountLi" *ngFor="let manualAccount of userManualAccounts; let i = index">
-    <button (click)="manualAccountSelected( manualAccount )" class="btn transparent black-text">
+    <button (click)="manualAccountSelected( manualAccount )" class="btn transparent black-text truncate">
       <img [src]="'assets/media/img/manual_account/'+ namesForUi[i] +'.svg'" alt=""><br>
       {{ manualAccount.name }}
     </button>

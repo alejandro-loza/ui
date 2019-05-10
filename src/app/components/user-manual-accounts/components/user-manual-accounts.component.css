@@ -10,6 +10,7 @@ ul {
 	height: 110px;
 	margin: 5px;
 	min-width: 190px;
+	max-width: 250px;
 	border-radius: 5px;
 }
 

@@ -3,7 +3,7 @@
   <ng-container *ngIf="movement.account.institution.code === 'DINERIO'; then efectivoTemplate; else creditoTemplate"></ng-container>
   <ng-template #efectivoTemplate>
     <div class="col m4 center-align">
-      <h6 id="account-name"><b>Cuenta:</b> {{ movement.account.name }}</h6>
+      <h6 id="account-name" class="truncate"><b>Cuenta:</b> {{ movement.account.name }}</h6>
         <ng-container *ngIf="showInBalance">
             <p><label>
                 <input (change)="inBalanceChange()" type="checkbox" class="filled-in" name="inBalanceCheckBox" [(ngModel)]="inBalanceCheckBox">
