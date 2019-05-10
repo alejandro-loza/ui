@@ -77,6 +77,7 @@
 
 .maBtn {
 	min-height: 55px;
+	max-width: 400px;
 }
 
 .maBtn span {

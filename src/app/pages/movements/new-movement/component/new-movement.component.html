@@ -28,14 +28,14 @@
                 </div>
                 <div class="col m8 l9">
                   <ng-container *ngIf="!loaderSpinner; else showSpinner">
-                      <a *ngIf="disableModalTrigger; else modalTrigger" class="btn maBtn transparent black-text valign-wrapper" id="manualAccountsTrigger">
+                      <a *ngIf="disableModalTrigger; else modalTrigger" class="btn maBtn transparent black-text valign-wrapper truncate" id="manualAccountsTrigger">
                         <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'">
                         <span>
                             {{ manualAccountName }}
                         </span>
                       </a>
                       <ng-template #modalTrigger>
-                        <a class="btn maBtn transparent black-text modal-trigger valign-wrapper" id="manualAccountsTrigger" href="#manualAccountsModal">
+                        <a class="btn maBtn transparent black-text modal-trigger valign-wrapper truncate" id="manualAccountsTrigger" href="#manualAccountsModal">
                           <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'">
                           <span>
                               {{ manualAccountName }}

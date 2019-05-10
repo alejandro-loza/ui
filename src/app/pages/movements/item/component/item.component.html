@@ -2,10 +2,10 @@
   <!-- Image Start -->
   <div class="col m1 customComponent">
     <ng-container *ngIf="movement.editAvailable === true; else elseAccount">
-      <a (click)="openAccountModal()">
-          <img [src]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc" (error)="onErrorFunc( movement.account.type )"
-          alt="{{movement.account.institution.code}}" class="imgMovement" />
-      </a>
+        <app-manual-account-editer 
+          [imgSrc]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc"
+          [movement]="movement">
+        </app-manual-account-editer>
     </ng-container>
     <ng-template #elseAccount>
         <img [src]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc" (error)="onErrorFunc( movement.account.type )"

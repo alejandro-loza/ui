@@ -1,6 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Input,
+	Output,
+	EventEmitter,
+	ChangeDetectorRef,
+	ViewChild,
+	ElementRef
+} from '@angular/core';
 import { AccountService } from '@services/account/account.service';
 import { DateApiService } from '@services/date-api/date-api.service';
+import { AccountsBeanService } from '@services/account/accounts-bean.service';
 import { Movement } from '@interfaces/movement.interface';
 import { Category } from '@interfaces/category.interface';
 import { MovementsService } from '@services/movements/movements.service';
@@ -26,7 +36,9 @@ export class ItemComponent implements OnInit {
 	constructor(
 		private dateApi: DateApiService,
 		private accountService: AccountService,
-		private movementService: MovementsService
+		private movementService: MovementsService,
+		private changeDetectorRef: ChangeDetectorRef,
+		private accountsBeanService: AccountsBeanService
 	) {
 		this.movementEdited = new EventEmitter();
 		this.valueCategoryColor = new EventEmitter();
@@ -41,6 +53,20 @@ export class ItemComponent implements OnInit {
 		this.traditionalImgSrc = `https://cdn.finerio.mx/banks/${this.movement.account.institution.code}_shield.png`;
 		this.formatMovementDate();
 		this.editAmountAvailable();
+	}
+
+	ngOnChanges(): void {
+		this.accountsBeanService.changeManualAccountOnMovements.subscribe((res) => {
+			if (res) {
+				this.accountWithOutDefaults = this.accountService.getManualAccountNatureWithOutDefaults(
+					this.movement.account.type
+				);
+				this.manualAccountImgSrc = `assets/media/img/manual_account/${this.accountWithOutDefaults}.svg`;
+				this.traditionalImgSrc = `https://cdn.finerio.mx/banks/${this.movement.account.institution
+					.code}_shield.png`;
+				this.accountsBeanService.changeManualAccountOnMovements.emit(false);
+			}
+		});
 	}
 
 	onErrorFunc(type: string) {
