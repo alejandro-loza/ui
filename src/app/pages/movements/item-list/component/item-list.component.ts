@@ -69,13 +69,12 @@ export class ItemListComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnInit(): void { }
 
   ngOnChanges(): void {
-    this.categoriesBeanService.changeCategory
-      .subscribe( res => {
+    this.categoriesBeanService.changeCategory.subscribe( res => {
         if ( res ) {
           this.movementList[this.index].concepts[0].category = this.categoriesBeanService.getCategory;
-          this.changeDetectorRef.detectChanges();
           this.categoriesBeanService.changeCategory.emit(false);
         }
+        this.changeDetectorRef.detectChanges();
       });
   }
 

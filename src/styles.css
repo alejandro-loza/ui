@@ -83,10 +83,10 @@ h1,h2,h3,h4,h5 {
  * Buttons
  */
 
-.btn {
+a.btn, button.btn, .btn {
   transition: background-color 200ms, color 200ms;
   transition-timing-function: ease-in-out;
-  border-radius: 20px
+  border-radius: 20px;
 }
 
 /**

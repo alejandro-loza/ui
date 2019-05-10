@@ -89,12 +89,14 @@ export class MovementsComponent implements OnInit, OnDestroy {
           if ( res ) {
             if ( res.body.data.length > 0 ) {
               this.movementList = this.movementService.getMovementList;
+            } else {
+              if ( this.movementList.length > 0) {
+                this.movementServiceSubscription.unsubscribe();
+                this.showEmptyState = true;
+                this.spinnerBoolean = true;
+                this.isLoading = true;
+              }
             }
-          } else {
-            this.movementServiceSubscription.unsubscribe();
-            this.isLoading = true;
-            this.showEmptyState = false;
-            this.spinnerBoolean = true;
           }
           return res;
         },
