@@ -239,7 +239,7 @@ export class CredentialComponent implements OnInit {
 	}
 
 	emptyStateProcess() {
-		if (this.credentialBean.getCredentials().length == 0 && this.credentialBean.getAccounts().length == 0) {
+		if (this.credentialBean.getCredentials().length == 0 && this.credentialBean.getAccounts().length <= 1) {
 			this.credentialBean.setShowEmptyState(true);
 		} else {
 			this.credentialBean.setShowEmptyState(false);
