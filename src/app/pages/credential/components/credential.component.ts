@@ -11,6 +11,7 @@ import { InteractiveFieldService } from '@services/interactive-field/interactive
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { ToastService } from '@services/toast/toast.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
 // Interfaces
 import { AccountInterface } from '@interfaces/account.interfaces';
@@ -62,7 +63,8 @@ export class CredentialComponent implements OnInit {
 		private credentialBean: CredentialBeanService,
 		private dateApiService: DateApiService,
 		private toastService: ToastService,
-		private accountsBeanService: AccountsBeanService
+		private accountsBeanService: AccountsBeanService,
+		private mixpanelService: MixpanelService
 	) {
 		this.credentials = [];
 		this.showSpinner = true;
@@ -160,6 +162,7 @@ export class CredentialComponent implements OnInit {
 		this.toastService.setDisplayLength = 3000;
 		this.validateStatusFinished = true;
 		this.toastService.toastGeneral();
+		this.mixpanelEvent('Failed syncing');
 	}
 
 	messageForNewActiveStatus() {
@@ -169,6 +172,7 @@ export class CredentialComponent implements OnInit {
 		this.toastService.setDisplayLength = 3000;
 		this.toastService.toastGeneral();
 
+		this.mixpanelEvent('Successful syncing');
 		this.successMessage = '¡Tus datos han sido sincronizados';
 		this.validateStatusFinished = true;
 		this.showGoMovementsButton = true;
@@ -323,5 +327,13 @@ export class CredentialComponent implements OnInit {
 			});
 			this.credentialBean.setInstitutions(this.institutions);
 		});
+	}
+
+	// MIXPANEL
+	mixpanelEvent(status: string) {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setSuperProperties();
+		this.mixpanelService.setPeopleProperties();
+		this.mixpanelService.setTrackEvent(status, { bank: this.credentialInProcess.institution.code });
 	}
 }

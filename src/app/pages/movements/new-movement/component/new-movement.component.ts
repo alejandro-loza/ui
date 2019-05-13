@@ -9,6 +9,7 @@ import { CleanerService } from '@services/cleaner/cleaner.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { CategoriesHelperService } from '@services/categories/categories-helper.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ModalCategoriesComponent } from '@components/modal-categories/component/modal-categories.component';
@@ -56,7 +57,8 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 		private categoriesService: CategoriesService,
 		private categoriesHelperService: CategoriesHelperService,
 		private matDialog: MatDialog,
-		private categoriesBeanService: CategoriesBeanService
+		private categoriesBeanService: CategoriesBeanService,
+		private mixpanelService: MixpanelService
 	) {
 		this.formatDate = 'Otro...';
 		this.newMovement = {
@@ -140,6 +142,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 			() => {
 				this.cleanerService.cleanAllVariables();
 				this.reset = true;
+				this.mixpanelEvent();
 				this.toastService.setMessage = 'Se creó su movimiento exitosamente';
 				this.toastService.toastGeneral();
 				return this.router.navigateByUrl('/app/movements');
@@ -166,11 +169,17 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
 			() => {
 				this.cleanerService.cleanAllVariables();
 				this.reset = true;
+				this.mixpanelEvent();
 				this.toastService.setMessage = 'Se creó su movimiento exitosamente';
 				this.toastService.toastGeneral();
 				return this.router.navigateByUrl('/app/movements');
 			}
 		);
+	}
+
+	mixpanelEvent() {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent('Create movement');
 	}
 
 	manualAccountSelected(account: AccountInterface) {

@@ -105,6 +105,8 @@ export class BankFormComponent implements OnInit {
 
 	mixpanelEvent() {
 		this.mixpanelService.setIdentify();
+		this.mixpanelService.setSuperProperties();
+		this.mixpanelService.setPeopleProperties();
 		this.mixpanelService.setTrackEvent('Create credential', { bank: this.institutionCode });
 	}
 
