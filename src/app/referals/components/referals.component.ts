@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { SignupService } from '@services/signup/signup.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { ToastService } from '@services/toast/toast.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Signup } from '@app/interfaces/signup.interface';
@@ -26,7 +27,8 @@ export class ReferalsComponent implements OnInit {
 		private activatedRoute: ActivatedRoute,
 		private signupService: SignupService,
 		private toastService: ToastService,
-		private router: Router
+		private router: Router,
+		private mixpanelService: MixpanelService
 	) {}
 
 	ngOnInit() {
@@ -50,6 +52,7 @@ export class ReferalsComponent implements OnInit {
 	doRequest() {
 		this.signupService.signup(this.signupStruct).subscribe(
 			(res) => {
+				this.mixpanelEvent(res.body.id);
 				this.toastService.setCode = res.status;
 			},
 			(error) => {
@@ -63,6 +66,12 @@ export class ReferalsComponent implements OnInit {
 				return this.router.navigateByUrl('/invitation-success');
 			}
 		);
+	}
+
+	mixpanelEvent(id: string) {
+		this.mixpanelService.setIdentify(id);
+		this.mixpanelService.setSignupPeopleProperties(this.signupData.value.email, new Date());
+		this.mixpanelService.setTrackEvent('Sign up', { from: 'Email', referred: true });
 	}
 
 	getReferalCode() {

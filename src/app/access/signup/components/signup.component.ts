@@ -75,8 +75,7 @@ export class SignupComponent {
 
 	mixpanelEvent(id: string) {
 		this.mixpanelService.setIdentify(id);
-		this.mixpanelService.setSuperProperties();
-		this.mixpanelService.setPeopleProperties();
+		this.mixpanelService.setSignupPeopleProperties(this.signupData.value.email, new Date());
 		this.mixpanelService.setTrackEvent('Sign up', { from: 'Email', referred: false });
 	}
 

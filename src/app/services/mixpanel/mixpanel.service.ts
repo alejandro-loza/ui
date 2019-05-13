@@ -29,8 +29,12 @@ export class MixpanelService {
 	}
 
 	setTrackEvent(event: any, property?: any) {
-		console.log(property ? 'ON' : 'OFF', property);
 		property ? mixpanel.track(event, property) : mixpanel.track(event);
+	}
+
+	setSignupPeopleProperties(email: string, created: Date) {
+		mixpanel.people.set({ $email: email });
+		mixpanel.people.set({ $created: created });
 	}
 
 	setSuperProperties() {
