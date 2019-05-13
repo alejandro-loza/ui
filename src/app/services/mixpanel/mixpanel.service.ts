@@ -19,8 +19,8 @@ export class MixpanelService {
 		mixpanel.identify(this.configService.getUser.id);
 	}
 
-	setTrackEvent(event: any) {
-		mixpanel.track(event);
+	setTrackEvent(event: any, property?: any) {
+		property ? mixpanel.track(event, property) : mixpanel.track(event);
 	}
 
 	setSuperProperties() {

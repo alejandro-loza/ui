@@ -7,6 +7,7 @@ import { FieldService } from '@services/field/field.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { Patterns } from '@services/banks/patterns.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
 import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
@@ -38,7 +39,8 @@ export class BankFormComponent implements OnInit {
 		private router: Router,
 		private helpTexts: HelpTexts,
 		private patterns: Patterns,
-		private credentialBeanService: CredentialBeanService
+		private credentialBeanService: CredentialBeanService,
+		private mixpanelService: MixpanelService
 	) {
 		this.institutionCode = '';
 		this.institutionField = [];
@@ -92,12 +94,18 @@ export class BankFormComponent implements OnInit {
 		this.credential.institution = this.findCurrentInstitution();
 		this.credentialService.createCredential(this.credential).subscribe((res) => {
 			this.credentialBeanService.setLoadInformation(true);
+			this.mixpanelEvent();
 			this.router.navigateByUrl('/app/credentials');
 			M.toast({
 				html: 'Recuperando información...',
 				displayLength: 3000
 			});
 		});
+	}
+
+	mixpanelEvent() {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent('Create credential', { bank: this.institutionCode });
 	}
 
 	findCurrentInstitution() {
