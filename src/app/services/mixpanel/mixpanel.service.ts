@@ -24,8 +24,8 @@ export class MixpanelService {
 		this.validCredentials = false;
 	}
 
-	setIdentify() {
-		mixpanel.identify(this.configService.getUser.id);
+	setIdentify(id?: string) {
+		id ? mixpanel.identify(id) : mixpanel.identify(this.configService.getUser.id);
 	}
 
 	setTrackEvent(event: any, property?: any) {
