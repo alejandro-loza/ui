@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 
 // SERVICES
 import { AccountService } from '@services/account/account.service';
+import { AccountsBeanService } from '@services/account/accounts-bean.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
@@ -16,6 +17,7 @@ import { AccountInterface } from '@interfaces/account.interfaces';
 import { CredentialInterface } from '@interfaces/credential.interface';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
 import * as M from 'materialize-css/dist/js/materialize';
+import { isNullOrUndefined } from 'util';
 
 @Component({
 	selector: 'app-credential',
@@ -25,16 +27,10 @@ import * as M from 'materialize-css/dist/js/materialize';
 })
 export class CredentialComponent implements OnInit {
 	accounts: AccountInterface[];
+	manualAccounts: AccountInterface[];
 	credentials: CredentialInterface[];
 	institutions: InstitutionInterface[] = [];
-
-	creditBalance: number;
-	debitBalance: number;
 	interactiveFields = [];
-	totalBalance: number;
-
-	debitAccounts: AccountInterface[] = [];
-	creditAccounts: AccountInterface[] = [];
 
 	// Aux properties
 	showSpinner: boolean;
@@ -57,8 +53,6 @@ export class CredentialComponent implements OnInit {
 	showEmptyState: boolean = false;
 
 	@ViewChild('modal') interactiveModal: ElementRef;
-	@ViewChild('collapsible') elementCollapsible: ElementRef;
-
 	constructor(
 		private accountService: AccountService,
 		private credentialService: CredentialService,
@@ -67,18 +61,15 @@ export class CredentialComponent implements OnInit {
 		private cleanerService: CleanerService,
 		private credentialBean: CredentialBeanService,
 		private dateApiService: DateApiService,
-		private toastService: ToastService
+		private toastService: ToastService,
+		private accountsBeanService: AccountsBeanService
 	) {
 		this.credentials = [];
-		this.debitBalance = 0;
-		this.creditBalance = 0;
-		this.totalBalance = 0;
 		this.showSpinner = true;
 		this.validateStatusFinished = true;
 		this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede tardar unos minutos.';
 		this.successMessage = '';
 		this.failMessage = '';
-		this.fillInformationForEmptyState();
 	}
 
 	ngOnInit() {
@@ -90,20 +81,20 @@ export class CredentialComponent implements OnInit {
 			this.loadInformationFromRam();
 		}
 		this.windowPosition();
+		this.fillInformationForEmptyState();
 	}
 
 	loadInformationFromRam() {
 		this.credentials = this.credentialBean.getCredentials();
 		this.accounts = this.credentialBean.getAccounts();
 		this.institutions = this.credentialBean.getInstitutions();
+		this.manualAccounts = this.accountsBeanService.getManualAccounts;
 		this.credentials.forEach((credential) => {
 			this.checkStatusOfCredential(credential);
 			this.automaticSync(credential);
 		});
-		this.getBalance(this.accounts);
-		this.accountsTable(this.accounts);
 		this.emptyStateProcess();
-		this.initMaterialize();
+		this.showSpinner = false;
 	}
 
 	// Main method for getting data
@@ -224,60 +215,36 @@ export class CredentialComponent implements OnInit {
 	}
 
 	getAccounts() {
-		this.accounts = [];
 		this.credentialBean.setAccounts([]);
 		this.accountService.getAccounts().subscribe((res) => {
 			this.accounts = res.body.data;
 			this.credentialBean.setAccounts(this.accounts);
 			this.credentialBean.setLoadInformation(false);
-			this.getBalance(this.accounts);
-			this.accountsTable(this.accounts);
-			this.initMaterialize();
+			this.manualAccountsFilter();
+			this.emptyStateProcess();
 		});
 	}
 
-	// Information for the accounts collapsible
-	accountsTable(accounts: AccountInterface[]) {
-		accounts.forEach((account) => {
-			if (account.type == 'Crédito') {
-				this.creditAccounts.push(account);
-			} else {
-				if (account.institution.code != 'DINERIO') {
-					this.debitAccounts.push(account);
+	manualAccountsFilter() {
+		this.manualAccounts = [];
+		this.accounts.forEach((account) => {
+			if (!isNullOrUndefined(account.nature)) {
+				if (account.nature.includes('ma_')) {
+					this.manualAccounts.push(account);
 				}
 			}
 		});
-		this.debitAccounts.sort((a, b) => {
-			return b.balance - a.balance;
-		});
-		this.creditAccounts.sort((a, b) => {
-			return a.balance - b.balance;
-		});
-	}
-
-	// Amount for each type of credential
-	getBalance(accountsArray: AccountInterface[]) {
-		this.debitBalance = 0;
-		this.creditBalance = 0;
-		this.totalBalance = 0;
-		accountsArray.forEach((element) => {
-			if (element.nature !== 'Crédito' && element.institution.code != 'DINERIO') {
-				this.debitBalance += element.balance;
-			} else if (element.nature == 'Crédito') {
-				this.creditBalance += element.balance;
-			}
-		});
-		this.totalBalance = this.debitBalance + this.creditBalance;
+		this.accountsBeanService.setManualAccounts = this.manualAccounts;
+		this.showSpinner = false;
 	}
 
 	emptyStateProcess() {
-		if (this.credentialBean.getCredentials().length == 0) {
+		if (this.credentialBean.getCredentials().length == 0 && this.credentialBean.getAccounts().length <= 1) {
 			this.credentialBean.setShowEmptyState(true);
 		} else {
 			this.credentialBean.setShowEmptyState(false);
 		}
 		this.showEmptyState = this.credentialBean.getShowEmptyState();
-		this.showSpinner = false;
 	}
 
 	fillInformationForEmptyState() {
@@ -330,23 +297,13 @@ export class CredentialComponent implements OnInit {
 		this.getInteractiveFields(credential);
 	}
 
-	initMaterialize() {
-		if (!this.showEmptyState) {
-			setTimeout(() => {
-				const initModal = new M.Modal(this.interactiveModal.nativeElement);
-				const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
-			}, 300);
-		}
+	ngAfterViewInit(): void {
+		const initModal = new M.Modal(this.interactiveModal.nativeElement);
 	}
 
 	clearMemory() {
 		this.credentials = [];
 		this.accounts = [];
-		this.debitAccounts = [];
-		this.creditAccounts = [];
-		this.debitBalance = 0;
-		this.creditBalance = 0;
-		this.totalBalance = 0;
 	}
 
 	windowPosition() {

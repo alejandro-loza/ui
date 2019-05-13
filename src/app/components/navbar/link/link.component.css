@@ -10,8 +10,8 @@
 }
 
 li:hover {
-  --main-color: #0d225f;
-  background-color: var(--main-color);
+  --main-custom-color: #0d225f;
+  background-color: var(--main-custom-color);
 }
 
 li.finerio-accent-color:hover {

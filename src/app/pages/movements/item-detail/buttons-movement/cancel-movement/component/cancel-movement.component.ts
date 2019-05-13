@@ -11,7 +11,11 @@ export class CancelMovementComponent implements OnInit {
     this.statusCancel = new EventEmitter();
   }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  emitCancelEvent(event: Event) {
+    event.stopPropagation();
+    this.statusCancel.emit( true );
   }
 
 }

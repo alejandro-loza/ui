@@ -12,10 +12,27 @@ html {
  * Variable for all the project
  */
 
-* {
+:root {
   --main-color: #17307b;
   --accent-color: #2bc2fd;
   --light-color: #F9F7FF;
+  --red-color: #c62828;
+
+  /**
+    * Custom colors
+    * if you need to overwrite the colors, please use custom-color vars.
+    *
+    * Use them, only IF YOU UNDERSTAND HOW TO OVERWRITE VARS ON CSS.
+    *
+    * If you need to overwrite a var and it doesnt exist, create one
+    *
+    * https://www.w3.org/TR/css-variables-1/#using-variables
+    * https://medium.freecodecamp.org/everything-you-need-to-know-about-css-variables-c74d922ea855
+    */
+  --main-custom-color: #17307b;
+  --accent-custom-color: #4392c7;
+  --light-custom-color: #F9F7FF;
+
   --paddingPages: 128px;
   --widthAmout: 50%;
   --widthImage: 100%;
@@ -66,10 +83,10 @@ h1,h2,h3,h4,h5 {
  * Buttons
  */
 
-button.btn, a.btn, .btn {
+.btn {
   transition: background-color 200ms, color 200ms;
   transition-timing-function: ease-in-out;
-  border-radius: 5px;
+  border-radius: 20px
 }
 
 /**
@@ -81,8 +98,8 @@ button.btn, a.btn, .btn {
 }
 
 .btn.finerio-main-color:hover {
-  --main-color: #152a5d;
-  background-color: var(--main-color);
+  --main-custom-color: #152a5d;
+  background-color: var(--main-custom-color);
 }
 
 /**
@@ -95,8 +112,7 @@ button.btn, a.btn, .btn {
 }
 
 .btn.finerio-accent-color:hover {
-  --accent-color: #4392c7;
-  background-color: var(--accent-color);
+  background-color: var(--accent-custom-color);
 }
 
 /**
@@ -105,7 +121,7 @@ button.btn, a.btn, .btn {
 
 .btn.finerio-main-outline-color {
   background-color: transparent;
-  color: black;
+  color: var(--main-color);
   border: 1px solid var(--main-color);
 }
 
@@ -128,6 +144,26 @@ button.btn, a.btn, .btn {
   background-color: var(--accent-color);
   color: var(--light-color);
 }
+ /**
+  * Button for delete something
+  * This class is used for buttons that have a second priority on the page,
+  * if u will used it for third priority, you need to erase the border on component's css
+  */
+
+.btn.btn-delete {
+  border: 1px solid var(--red-color);
+  color: var(--red-color);
+  background-color: var(--light-color);
+  transition: background-color 200ms, color 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+.btn.btn-delete:hover {
+  color: var(--light-color);
+  background-color: var(--red-color);
+  box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+}
+
 
  /**
   * Waves
@@ -200,10 +236,6 @@ button.btn, a.btn, .btn {
 .spinnerPosition {
   position: relative;
   top: 15rem;
-}
-
-.btn {
-  border-radius: 20px !important;
 }
 
 input:not([type]):focus:not([readonly]),
