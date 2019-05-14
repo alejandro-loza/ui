@@ -77,8 +77,8 @@ export class MovementsService {
       })
       .pipe(
         map(res => {
-          if ( res.body.data.length === 0) {
-            return;
+          if (res.body.data.length === 0) {
+            return res;
           }
           res.body.data.forEach(movement => {
             movement['formatDate'] = this.dateApiService.dateFormatMovement(
