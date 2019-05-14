@@ -5,6 +5,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { ToastService } from '@services/toast/toast.service';
 import { AccountService } from '@services/account/account.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
+import { SignupService } from '@services/signup/signup.service';
 
 @Component({
 	selector: 'app-welcome',
@@ -18,7 +19,8 @@ export class WelcomeComponent implements OnInit {
 		private router: Router,
 		private renderer: Renderer2,
 		private toastService: ToastService,
-		private mixpanelService: MixpanelService
+		private mixpanelService: MixpanelService,
+		private signupService: SignupService
 	) {}
 
 	ngOnInit() {
@@ -60,9 +62,11 @@ export class WelcomeComponent implements OnInit {
 	}
 
 	mixpanelEvent() {
-		this.mixpanelService.setIdentify();
-		this.mixpanelService.setSuperProperties();
-		this.mixpanelService.setPeopleProperties();
-		this.mixpanelService.setTrackEvent('Log in', { from: 'Web' });
+		if (!this.signupService.getComesFromSignup) {
+			this.mixpanelService.setIdentify();
+			this.mixpanelService.setSuperProperties();
+			this.mixpanelService.setPeopleProperties();
+			this.mixpanelService.setTrackEvent('Log in', { from: 'Web' });
+		}
 	}
 }

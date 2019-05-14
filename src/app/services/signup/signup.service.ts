@@ -16,7 +16,11 @@ export class SignupService {
 	url: string = environment.backendUrl;
 	data: Signup;
 
-	constructor(private http: HttpClient, private configService: ConfigService) {}
+	private comesFromSignup: boolean;
+
+	constructor(private http: HttpClient, private configService: ConfigService) {
+		this.comesFromSignup = false;
+	}
 
 	signup(data: Signup): Observable<HttpResponse<User>> {
 		const body = JSON.stringify({
@@ -31,5 +35,13 @@ export class SignupService {
 			observe: 'response',
 			headers: this.configService.getHeaders
 		});
+	}
+
+	set setComesFromSignup(data: boolean) {
+		this.comesFromSignup = data;
+	}
+
+	get getComesFromSignup(): boolean {
+		return this.comesFromSignup;
 	}
 }
