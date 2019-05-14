@@ -53,7 +53,7 @@ export class ManualAccountEditerComponent implements OnInit {
 				(err) => {
 					this.toastService.setCode = err.code;
 					if (err.code === 500) {
-						const message = 'Ocurrío un error al cambiar la categoría';
+						const message = 'Ocurrío un error al cambiar la cuenta';
 						this.toastService.setMessage = message;
 					}
 					this.toastService.toastGeneral();

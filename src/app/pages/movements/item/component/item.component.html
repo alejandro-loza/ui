@@ -1,11 +1,13 @@
 <div class="row valign-wrapper center-align">
   <!-- Image Start -->
-  <div class="col m1 customComponent">
+  <div class="col m1">
     <ng-container *ngIf="movement.editAvailable === true; else elseAccount">
+      <div id="accountContainer">
         <app-manual-account-editer 
           [imgSrc]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc"
           [movement]="movement">
         </app-manual-account-editer>
+      </div>
     </ng-container>
     <ng-template #elseAccount>
         <img [src]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc" (error)="onErrorFunc( movement.account.type )"

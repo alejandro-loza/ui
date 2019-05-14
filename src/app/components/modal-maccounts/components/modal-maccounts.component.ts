@@ -20,15 +20,20 @@ export class ModalMaccountsComponent implements OnInit {
 
 	close(event: Event) {
 		event.stopPropagation();
-		this.matDialogRef.close(this.manualAccount);
+		this.matDialogRef.close();
 	}
 
-	modalManualaccountsTrigger(event) {
-		this.showEmptyState = event;
+	closeWithNewAccount(event: Event) {
+		event.stopPropagation();
+		this.matDialogRef.close(this.manualAccount);
 	}
 
 	manualAccountSelected(event) {
 		this.manualAccount = event;
+	}
+
+	modalManualaccountsTrigger(event) {
+		this.showEmptyState = event;
 	}
 
 	createManualAccount() {

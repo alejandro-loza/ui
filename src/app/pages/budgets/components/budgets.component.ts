@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BudgetsService } from '@services/budgets/budgets.service';
+import { ToastService } from '@services/toast/toast.service';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
 import { isNullOrUndefined } from 'util';
@@ -30,7 +31,8 @@ export class BudgetsComponent implements OnInit {
 	constructor(
 		private budgetsService: BudgetsService,
 		private budgetsBeanService: BudgetsBeanService,
-		private router: Router
+		private router: Router,
+		private toastService: ToastService
 	) {
 		this.fillInformationForEmptyState();
 		this.showSpinner = true;
@@ -59,7 +61,9 @@ export class BudgetsComponent implements OnInit {
 				this.emptyStateProcess();
 			},
 			(error) => {
-				console.log(error);
+				this.toastService.setCode = error.status;
+				this.toastService.setMessage = 'Ocurrio un error al cargar tus presupuestos, intenta más tarde';
+				this.toastService.toastGeneral();
 			},
 			() => {
 				this.showSpinner = false;

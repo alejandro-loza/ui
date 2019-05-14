@@ -1,46 +1,51 @@
 .category-margin {
-  margin-bottom: -1%;
+	margin-bottom: -1%;
 }
 .row {
-  margin-bottom: 0px;
+	margin-bottom: 0px;
 }
 
 .description {
-  margin-left: 10%;
+	margin-left: 10%;
 }
 
 .imgMovement {
-  width: 42px;
-  height: auto;
+	width: 42px;
+	height: auto;
 }
 
 .charge {
-  color: rgb(198, 40, 40);
+	color: rgb(198, 40, 40);
 }
 
 .deposit {
-  color: #2e7d32;
+	color: #2e7d32;
 }
 
 .customComponent:hover {
-  transition: all .2s ease-in-out;
-  background-color: rgba(189, 189, 189, .2);
+	transition: all .2s ease-in-out;
+	background-color: rgba(189, 189, 189, .2);
 }
 
-.switch{
-  margin-left: 8%;
+.switch {
+	margin-left: 8%;
 }
 
-.switch label input[type=checkbox]:checked+.lever:after {
-    background-color: var(--accent-color);
+.switch label input[type=checkbox]:checked + .lever:after {
+	background-color: var(--accent-color);
 }
 
-.switch label input[type=checkbox]:checked+.lever {
-  background-color: #a4e1f9e6;
+.switch label input[type=checkbox]:checked + .lever {
+	background-color: #a4e1f9e6;
 }
 
 .inputPadding {
-  padding-left: 10% !important;
-  width: 90% !important;
+	padding-left: 10% !important;
+	width: 90% !important;
 }
 
+#accountContainer {
+	transition: all .2s ease-in-out;
+	min-height: 45px;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
