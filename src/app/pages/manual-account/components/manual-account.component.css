@@ -4,6 +4,16 @@
 	min-width: 190px;
 }
 
+.btn-delete {
+	border: none;
+	background-color: transparent;
+}
+
+.btn-delete:hover {
+	border: none;
+	background-color: var(--red-color);
+}
+
 .maBtn img {
 	width: 50px;
 	padding-top: 10px;
@@ -17,12 +27,12 @@
 .amountBtn {
 	width: 120px;
 	margin: 0px 5px;
-	color: #18537b;
+	color: #17307b;
 }
 
 .active {
 	color: white !important;
-	background-color: #18537b !important;
+	background-color: #17307b !important;
 }
 
 #modal {
@@ -30,8 +40,8 @@
 }
 
 [type="checkbox"].filled-in:checked + span:not(.lever):after {
-	border: 2px solid #e48d2b;
-	background-color: #e48d2b;
+	border: 2px solid #2bc2fd;
+	background-color: #2bc2fd;
 }
 
 .margin-10 {

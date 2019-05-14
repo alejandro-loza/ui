@@ -299,6 +299,7 @@ export class CredentialComponent implements OnInit {
 		const instanceModal = M.Modal.getInstance(this.interactiveModal.nativeElement);
 		instanceModal.open();
 		this.getInteractiveFields(credential);
+		this.mixpanelTokenEvent();
 	}
 
 	ngAfterViewInit(): void {
@@ -327,6 +328,11 @@ export class CredentialComponent implements OnInit {
 			});
 			this.credentialBean.setInstitutions(this.institutions);
 		});
+	}
+
+	mixpanelTokenEvent() {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent('Introduce token');
 	}
 
 	// MIXPANEL
