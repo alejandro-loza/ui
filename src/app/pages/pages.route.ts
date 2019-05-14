@@ -38,7 +38,7 @@ const PagesRouting: Routes = [
 				path: 'credentials',
 				loadChildren: './credential/credential.module#CredentialModule',
 				data: {
-					title: 'Cuentas bancarias'
+					title: 'Cuentas'
 				}
 			},
 			{

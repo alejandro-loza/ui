@@ -187,7 +187,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
 	mixpanelEvent() {
 		this.mixpanelService.setIdentify();
-		this.mixpanelService.setTrackEvent('Edit Credential');
+		this.mixpanelService.setTrackEvent('Edit Credential', { bank: this.institutionDetails.institution.code });
 	}
 
 	syncPossible(credential: CredentialInterface): boolean {

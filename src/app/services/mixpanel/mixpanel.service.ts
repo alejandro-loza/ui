@@ -41,7 +41,7 @@ export class MixpanelService {
 		this.credentialService.getAllCredentials().subscribe((res) => {
 			this.hasCredentials = res.body.size !== 0;
 			this.linkedCredentials = res.body.size;
-			mixpanel.register({
+			mixpanel.people.set({
 				'Has credentials': this.hasCredentials,
 				'Linked credentials': this.linkedCredentials
 			});
