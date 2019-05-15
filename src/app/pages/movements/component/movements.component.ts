@@ -49,8 +49,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
     private dashboardStatesService: DashboardStatesService
   ) {
     this.showEmptyState = false;
-    this.isLoading = false;
-    this.spinnerBoolean = false;
+    this.isLoading = true;
+    this.spinnerBoolean = true;
     this.firstChange = false;
     this.movementsListReady = true;
     this.movementsFromDashboard = false;
@@ -93,31 +93,26 @@ export class MovementsComponent implements OnInit, OnDestroy {
   }
 
   getMovementFromService() {
+    let index: number;
     this.movementsListReady = false;
-    this.movementServiceSubscription = this.movementService.getMovements(this.paramsMovements).subscribe(
-      (res) => {
-        if (res) {
-          if (res.body.data.length > 0) {
-            this.movementList = this.movementService.getMovementList;
+    this.movementServiceSubscription = this.movementService.getMovements(this.paramsMovements)
+      .subscribe(
+        res => {
+          this.movementList = this.movementService.getMovementList;
+          index = res.body.data.length;
+        },
+        err => err,
+        () => {
+          this.showEmptyState = this.movementList.length <= 0;
+          if (index < this.paramsMovements.maxMovements) {
+            this.movementServiceSubscription.unsubscribe();
+            this.spinnerBoolean = false;
           }
-        } else {
-          this.movementServiceSubscription.unsubscribe();
-          this.isLoading = true;
-          this.showEmptyState = false;
-          this.spinnerBoolean = true;
+          this.isLoading = false;
+          this.movementsListReady = true;
+          this.paramsMovements.offset += this.paramsMovements.maxMovements;
         }
-        return res;
-      },
-      (err) => err,
-      () => {
-        this.paramsMovements.offset += this.paramsMovements.maxMovements;
-        if (this.movementList.length !== 0) {
-          this.showEmptyState = true;
-        }
-        this.isLoading = true;
-        this.movementsListReady = true;
-      }
-    );
+      );
   }
 
   getCategories() {
