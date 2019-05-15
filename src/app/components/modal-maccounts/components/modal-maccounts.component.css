@@ -1,28 +1,9 @@
 .btn-modal {
-	border: 1px solid rgba(66, 66, 66, .7);
 	background-color: transparent;
 	transition: background-color .3s ease-in-out;
 	margin-right: 1%;
 }
 
-.btn-modal:hover {
-	background-color: #424242;
-	color: #fafafa;
-}
-
 .btn-actions-modal {
 	padding-bottom: 24px;
-}
-
-.btn-create-manual-account {
-	border: none;
-	color: #424242;
-	background-color: transparent;
-	transition: all .2s ease-in-out;
-}
-
-.btn-create-manual-account:hover {
-	color: whitesmoke;
-	background-color: #17307b;
-	box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
 }

@@ -83,7 +83,7 @@ h1,h2,h3,h4,h5 {
  * Buttons
  */
 
-a.btn, button.btn, .btn {
+a.btn, button.btn, input.btn, .btn {
   transition: background-color 200ms, color 200ms;
   transition-timing-function: ease-in-out;
   border-radius: 20px;
