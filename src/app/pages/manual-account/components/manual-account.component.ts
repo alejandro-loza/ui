@@ -10,6 +10,7 @@ import { CategoriesHelperService } from '@services/categories/categories-helper.
 import { CategoriesService } from '@services/categories/categories.service';
 import { AccountsBeanService } from '@services/account/accounts-bean.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { ToastService } from '@services/toast/toast.service';
 import { AccountInterface } from '@app/interfaces/account.interfaces';
 import { NewMovement } from '@app/interfaces/newMovement.interface';
@@ -49,7 +50,8 @@ export class ManualAccountComponent implements OnInit {
 		private accountsBeanService: AccountsBeanService,
 		private movementsService: MovementsService,
 		private categoriesHelperService: CategoriesHelperService,
-		private categoriesService: CategoriesService
+		private categoriesService: CategoriesService,
+		private mixpanelService: MixpanelService
 	) {}
 
 	ngOnInit() {
@@ -210,6 +212,7 @@ export class ManualAccountComponent implements OnInit {
 				this.toastService.setMessage = '¡Cuenta creada con éxito!';
 				this.toastService.toastGeneral();
 				this.cleanerService.cleanAllVariables();
+				this.mixpanelEvent();
 				this.router.navigateByUrl('/app/credentials');
 			}
 		);
@@ -242,6 +245,11 @@ export class ManualAccountComponent implements OnInit {
 			nature += '_atm_d';
 		}
 		this.manualAccount.nature = nature;
+	}
+
+	mixpanelEvent() {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent('Create manual account');
 	}
 
 	openGenerateMovementModal() {

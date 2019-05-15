@@ -3,6 +3,7 @@ import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
 import { Movement } from '@interfaces/movement.interface';
 import { CleanerService } from '@services/cleaner/cleaner.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { isNull } from 'util';
 
 @Component({
@@ -20,7 +21,8 @@ export class SaveMovementComponent implements OnInit, OnChanges {
 	constructor(
 		private movementService: MovementsService,
 		private toastService: ToastService,
-		private cleanerService: CleanerService
+		private cleanerService: CleanerService,
+		private mixpanelService: MixpanelService
 	) {
 		this.status = new EventEmitter();
 		this.keyEnterPressed = new EventEmitter();
@@ -65,11 +67,17 @@ export class SaveMovementComponent implements OnInit, OnChanges {
 			},
 			() => {
 				this.cleanerService.cleanAllVariables();
+				this.mixpanelEvent();
 				this.toastService.setMessage = 'Se actualizó tu movimiento exitosamente';
 				this.toastService.toastGeneral();
 				this.status.emit(true);
 				this.keyEnterPressed.emit(false);
 			}
 		);
+	}
+
+	mixpanelEvent() {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent('Edit movement');
 	}
 }

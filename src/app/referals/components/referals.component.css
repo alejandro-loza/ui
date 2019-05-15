@@ -1,0 +1,93 @@
+.background {
+	min-height: 100%;
+	background-image: linear-gradient(to bottom, #17307b, #08539f, #0077c1, #009ce0, #2bc2fd);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.facebook-color {
+	background-color: #3b5998;
+	color: #f5f5f5;
+}
+
+.facebook-color:hover {
+	background-color: #f5f5f5;
+	color: #3b5998;
+}
+
+.mdi {
+	margin: 0 10px;
+}
+
+.logo-signup {
+	border-left: 1px solid #f5f5f5;
+}
+
+ul {
+	list-style-type: initial;
+}
+
+.information-point {
+	list-style-type: initial;
+	margin: 6% 0;
+}
+
+.row {
+	margin-bottom: auto;
+	margin: 0;
+}
+
+.card-content {
+	padding: 0;
+}
+
+.card-content-inside {
+	padding: 24px;
+}
+
+.socialBtn {
+	border-bottom: 2px solid #e48d2b;
+}
+
+.btn {
+	margin-top: 1%;
+}
+
+[type="checkbox"].filled-in:checked + span:not(.lever):after {
+	border: 2px solid #e48d2b;
+	background-color: #e48d2b;
+}
+
+#checkbox-blog:checked + label::after {
+	border: 2px solid red !important;
+	background-color: red !important;
+}
+#passwordError {
+	color: red;
+	font-size: 12px;
+}
+
+#termsError {
+	color: red;
+	font-size: 12px;
+}
+
+#finerio-text {
+	margin-top: 0px;
+}
+
+@media only screen and (max-width: 600px) {
+	.card {
+		transform: translate(0, 1%) !important;
+	}
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1499px) {
+	.card {
+		transform: translate(0);
+	}
+	.input-field {
+		margin-top: 0;
+	}
+}

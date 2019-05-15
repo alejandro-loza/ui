@@ -3,7 +3,7 @@
         <app-user-manual-accounts 
             (noManualAccounts)="modalManualaccountsTrigger($event)" 
             (manualAccount)="manualAccountSelected($event)" 
-            (click)="close($event)">
+            (click)="closeWithNewAccount($event)">
         </app-user-manual-accounts>
     </ng-container>
     <ng-template #EmptyState>

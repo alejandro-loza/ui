@@ -14,6 +14,7 @@ import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { CredentialInterface } from '@interfaces/credential.interface';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
 import * as M from 'materialize-css/dist/js/materialize';
 
@@ -45,7 +46,8 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 		private toastService: ToastService,
 		private credentialBeanService: CredentialBeanService,
 		private cleanerService: CleanerService,
-		private institutionService: InstitutionService
+		private institutionService: InstitutionService,
+		private mixpanelService: MixpanelService
 	) {
 		this.fields = [];
 		this.accounts = [];
@@ -154,6 +156,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 				this.credentialBeanService.setLoadInformation(true);
 				this.cleanerService.cleanDashboardVariables();
 				this.cleanerService.cleanBudgetsVariables();
+				this.mixpanelEvent();
 				return this.router.navigateByUrl('/app/credentials');
 			}
 		);
@@ -176,9 +179,15 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 				this.credentialBeanService.setLoadInformation(true);
 				this.cleanerService.cleanDashboardVariables();
 				this.cleanerService.cleanBudgetsVariables();
+				this.mixpanelEvent();
 				return this.router.navigateByUrl('/app/credentials');
 			}
 		);
+	}
+
+	mixpanelEvent() {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent('Edit Credential', { bank: this.institutionDetails.institution.code });
 	}
 
 	syncPossible(credential: CredentialInterface): boolean {
