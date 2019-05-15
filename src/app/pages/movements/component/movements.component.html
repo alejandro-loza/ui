@@ -1,12 +1,19 @@
-<div *ngIf="isLoading === false; then showSpinner else hideSpinner"></div>
+<div *ngIf="isLoading; then showSpinner else hideSpinner"></div>
+
 <ng-template #showSpinner>
   <div class="spinnerLoading">
     <app-spinner></app-spinner>
   </div>
 </ng-template>
+
 <ng-template #hideSpinner>
+
   <app-back-button *ngIf="dashboardStatesService.getLoadListFromDashboard()" [ruta]="'/app/dashboard'"></app-back-button>
-  <div *ngIf="showEmptyState === false; then emptyState else showMovements"></div>
+
+  <!-- Se pregunta si se muestra el Empty State o no  -->
+  <div *ngIf="showEmptyState; then emptyState else showMovements"></div>
+
+  <!--  Empty State Start -->
   <ng-template #emptyState>
     <app-empty-states [imgName]="imgName" [title]="title" [description]="description" [buttonText]="buttonText" [buttonUrl]="buttonUrl">
     </app-empty-states>
@@ -20,8 +27,10 @@
       </div>
     </div>
   </ng-template>
+  <!--  Empty State End -->
+
+  <!-- Lista de movimientos Start-->
   <ng-template #showMovements>
-    <!-- Busqueda y filtrado -->
     <div class="containerMovement firstContainer">
       <div class="row valign-wrapper">
         <div class="col s12 right-align">
@@ -32,6 +41,7 @@
         </div>
       </div>
     </div>
+
     <!-- Encabezado de movimientos -->
     <div class="containerMovement">
       <div class="row center-align z-depth-1 white" id="header">
@@ -50,4 +60,5 @@
                      (refreshMovementList)="refreshMovement()"></app-item-list>
     </div>
   </ng-template>
+  <!-- Lista de movimientos End-->
 </ng-template>
