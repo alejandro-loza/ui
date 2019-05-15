@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {StateMovementsService} from '@services/movements/state-movements/state-movements.service';
 
 @Component({
   selector: 'app-cancel-movement',
@@ -7,7 +8,9 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class CancelMovementComponent implements OnInit {
   @Output() statusCancel: EventEmitter<boolean>;
-  constructor() {
+  constructor(
+    private stateMovementsService: StateMovementsService
+  ) {
     this.statusCancel = new EventEmitter();
   }
 
@@ -15,7 +18,7 @@ export class CancelMovementComponent implements OnInit {
 
   emitCancelEvent(event: Event) {
     event.stopPropagation();
-    this.statusCancel.emit( true );
+    this.stateMovementsService.stateMovement.emit(true);
   }
 
 }

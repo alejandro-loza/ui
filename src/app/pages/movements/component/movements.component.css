@@ -1,10 +1,10 @@
 .collapsible-header {
-	padding: 0%;
+	padding: 0;
 	border-bottom: 1px solid #757575;
 }
 
 .containerMovement {
-	padding: 0% 2%;
+	padding: 0 2%;
 }
 
 .containerMovement.firstContainer {
@@ -15,7 +15,7 @@
 }
 
 .movementheader {
-	padding: 1% 0%;
+	padding: 1% 0;
 	border: 1px solid #757575;
 }
 

@@ -7,13 +7,13 @@ mat-expansion-panel,
 mat-expansion-panel.mat-expanded {
     border-left-width: 0px;
     border-left-style: solid;
-    border-left-color: rgba(238, 136, 58, 1);
+    border-left-color: var(--accent-color);
     transition: all .3s ease-in-out;
 }
 
 mat-expansion-panel.mat-expanded {
     border-left-width: 4px;
-    background-color: #ffffff;
+    background-color: var(--light-color);
 }
 
 .mat-expansion-panel-spacing {
@@ -34,9 +34,9 @@ mat-expansion-panel.mat-expanded {
 }
 
 .collapsible-header:hover {
-    border-color: rgba(238, 136, 58, .8);
+    border-color: var(--accent-color);
     border-width: 2px;
-    color: rgba(238, 136, 58, .8);
+    color: var(--accent-color);
 }
 
 mat-expansion-panel.mat-expanded>.collapsible-header:hover {

@@ -10,10 +10,11 @@ import { MovementsRoutes } from './movements.route';
 import { EmptyStateModule } from '@components/empty-states/empty-states.module';
 
 import { MovementsComponent } from './component/movements.component';
+import {StateMovementsService} from '@services/movements/state-movements/state-movements.service';
 
 @NgModule({
-	imports: [ SharedModule, ItemListModule, BackButtonModule, FilterModule, EmptyStateModule, MovementsRoutes ],
-	declarations: [ MovementsComponent ],
-	providers: [ ParamsMovementsService ]
+  imports: [ SharedModule, ItemListModule, BackButtonModule, FilterModule, EmptyStateModule, MovementsRoutes ],
+  declarations: [ MovementsComponent ],
+  providers: [ ParamsMovementsService, StateMovementsService ]
 })
 export class MovementsModule {}

@@ -17,12 +17,11 @@
 .amountBtn {
 	width: 120px;
 	margin: 0px 5px;
-	color: #18537b;
 }
 
-.active {
-	color: white !important;
-	background-color: #18537b !important;
+.finerio-accent-outline-color.active {
+	color: var(--light-color);
+	background-color: var(--accent-color);
 }
 
 #modal {
@@ -30,8 +29,8 @@
 }
 
 [type="checkbox"].filled-in:checked + span:not(.lever):after {
-	border: 2px solid #e48d2b;
-	background-color: #e48d2b;
+	border: 2px solid var(--accent-color);
+	background-color: var(--accent-color);
 }
 
 .margin-10 {

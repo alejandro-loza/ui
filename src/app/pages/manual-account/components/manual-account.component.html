@@ -25,10 +25,10 @@
         </div>
         <div class="row">
           <div class="col s12 center">
-            <a id="positive" (click)="balanceBtnClick('positive')" class="btn amountBtn transparent">
+            <a id="positive" (click)="balanceBtnClick('positive')" class="btn finerio-accent-outline-color amountBtn">
               Positivo
             </a>
-            <a id="negative" (click)="balanceBtnClick('negative')" class="btn amountBtn transparent">
+            <a id="negative" (click)="balanceBtnClick('negative')" class="btn finerio-accent-outline-color amountBtn">
               Negativo
             </a>
           </div>
@@ -50,10 +50,10 @@
           </p>
         </div>
         <div class="col s12 center">
-          <button *ngIf="editModeOfTheComponent" data-target="deleteModal" id="deleteButton" class=" margin-10 modal-trigger btn red white-text">
+          <button *ngIf="editModeOfTheComponent" data-target="deleteModal" id="deleteButton" class=" margin-10 modal-trigger btn btn-delete white-text">
             Eliminar
           </button>
-          <button id="submitButton" class="btn finerio-blue margin-10" [disabled]="!manualAccount.valid" type="submit">
+          <button id="submitButton" class="btn finerio-main-color margin-10" [disabled]="!manualAccount.valid" type="submit">
             Guardar
           </button>
         </div>
