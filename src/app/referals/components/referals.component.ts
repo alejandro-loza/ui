@@ -32,7 +32,7 @@ export class ReferalsComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.getReferalCode();
+		this.router.navigateByUrl('/access/signup');
 	}
 
 	submitAction() {
