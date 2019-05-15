@@ -52,4 +52,5 @@ ul {
 
 .card {
 	margin: 0px;
+	transform: translate(0) !important;
 }

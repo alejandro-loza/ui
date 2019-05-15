@@ -1,0 +1,98 @@
+<div class="background">
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <div class="card light-background">
+          <div class="card-content">
+            <div class="row">
+              <div class="col s12 m7 card-content-inside center-align">
+                <div class="hide-on-med-and-up show-on-small center-align">
+                  <app-finerio-icon [svgClasses]="'widthImage'"></app-finerio-icon>
+                  <h3 id="finerio-text">Finerio</h3>
+                </div>
+                <h6>Regístrate, y comienza a tomar el control de tu dinero.</h6>
+                <!-- Button for production -->
+                <a class="btn facebook-color valign-wrapper btn-socialMedia" href="https://api.finerio.mx/oauth/authenticate/facebook?callback=https%3A%2F%2Fapp.finerio.mx%2Ftoken%3Ftype%3Dsignup%26from%3DFacebook%26finerioCode%3D{{referralCodeModel}}%26accessToken%3D">
+                  <span class="mdi mdi-facebook-box mdi-24px left-align"></span> Ingresar con Facebook
+                </a>
+                <!-- Button for testing -->
+                <!--a class="btn facebook-color valign-wrapper btn-socialMedia" href="https://api.finerio.mx/oauth/authenticate/facebook?callback=http%3A%2F%2Flocalhost:4200%2Finvitation-success%3Ftype%3Dsignup%26from%3DFacebook%26finerioCode%3D{{referralCodeModel}}%26accessToken%3D">
+                  <span class="mdi mdi-facebook-box mdi-24px left-align"></span> Ingresar con Facebook
+                </a-->
+                <hr>
+                <div class="row">
+                  <div class="col s12 m10 offset-m1">
+                    <form [formGroup]="signupData" (ngSubmit)="submitAction()" method="POST">
+                      <div class="input-field">
+                        <input required formControlName="email" name="email" class="form-control" id="email-input" type="email" class="validate" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                        <label for="email-input">Correo Electrónico</label>
+                        <span class="helper-text" data-error="Correo Inválido">Ej. contacto@finerio.mx</span>
+                      </div>
+                      <div class="input-field">
+                        <input required [(ngModel)]="password" [ngModelOptions]="{standalone: true}" name="password" minlength="8" class="form-control" id="password-input" type="password" class="validate">
+                        <label for="password-input">Contraseña</label>
+                        <span class="helper-text" data-error="La contraseña debe contener al menos 8 caracteres"></span>
+                      </div>
+                      <div class="input-field">
+                        <input formControlName="referralCode" [value]="referralCodeModel" name="referralCode" class="form-control" id="confirm-input" type="text">
+                        <span class="helper-text">Código de invitación</span>
+                      </div>
+                      <div class="left-align">
+                        <div class="input-field">
+                          <p>
+                            <label>
+                              <input name="blog" type="checkbox" class="filled-in" checked="checked" id="checkbox-blog" formControlName="blog" />
+                              <span>Acepto subscribirme al blog de finanzas personales</span>
+                            </label>
+                          </p>
+                        </div>
+                        <div class="input-field">
+                          <p>
+                            <label>
+                              <input name="termsAndConditions" type="checkbox" class="filled-in" checked id="checkbox-terms" formControlName="termsAndConditions" />
+                              <span>Acepto los términos y condiciones</span>
+                            </label>
+                            <span id="termsError" *ngIf="!termsAccepted">Debes aceptar los términos y condiciones</span>
+                          </p>
+                        </div>
+                        <div class="center-align">
+                          <button [disabled]="!signupData.valid" class="btn finerio-main-color" type="submit" name="action">Registrar
+                            <i class="material-icons right">send</i>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col hide-on-small-only m5 logo-signup">
+                <div class="card-content-inside">
+                  <div class="center-align">
+                    <app-finerio-icon [svgClasses]="'widthImage'"></app-finerio-icon>
+                    <h3>Finerio</h3>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col m10 offset-m1">
+                      <div class="information-signup">
+                        <h6><b>Vincula tus tarjetas y controla tus gastos, en un solo lugar.</b></h6>
+                        <ul>
+                          <li class="information-point">Clasifica tus gastos.</li>
+                          <li class="information-point">Crea tus presupuestos y controla tus gastos.</li>
+                          <li class="information-point">Vincula tus cuentas bancarias.</li>
+                          <li class="information-point">Toda tu información financiera en un sólo lugar.</li>
+                          <li class="information-point">Gratis.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

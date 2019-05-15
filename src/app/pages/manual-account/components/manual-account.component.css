@@ -1,0 +1,49 @@
+.maBtn {
+	height: 110px;
+	margin: 5px;
+	min-width: 190px;
+}
+
+.btn-delete {
+	border: none;
+	background-color: transparent;
+}
+
+.btn-delete:hover {
+	border: none;
+	background-color: var(--red-color);
+}
+
+.maBtn img {
+	width: 50px;
+	padding-top: 10px;
+}
+
+.maBtn span {
+	position: relative;
+	bottom: 10px;
+}
+
+.amountBtn {
+	width: 120px;
+	margin: 0px 5px;
+	color: #17307b;
+}
+
+.active {
+	color: white !important;
+	background-color: #17307b !important;
+}
+
+#modal {
+	width: 70%;
+}
+
+[type="checkbox"].filled-in:checked + span:not(.lever):after {
+	border: 2px solid #2bc2fd;
+	background-color: #2bc2fd;
+}
+
+.margin-10 {
+	margin: 10px;
+}

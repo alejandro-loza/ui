@@ -8,12 +8,14 @@ import { LoginRoutes } from                          './login.route';
 
 import { LoginComponent } from                       './components/login.component';
 import {PasswordDirective} from                      '@directives/password/password.directive';
+import {SvgIconsModule} from '@app/svg/svg-icons.module';
 
 @NgModule({
   imports: [
     SharedModule,
     SocialMediaModule,
     RegisterLoginButtonModule,
+    SvgIconsModule,
     LoginRoutes
   ],
   declarations: [

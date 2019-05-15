@@ -6,10 +6,25 @@
 	padding-top: 30px;
 }
 
+.py-20 {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
 .backBtn {
 	background-color: #1d3865;
 }
 
 .background {
 	background-color: #1d3865;
+}
+
+#manualAccountRow {
+	margin-bottom: 0px;
+	padding-bottom: 20px;
+	background-color: white;
+}
+
+.border-top {
+	border-top: 1px solid #aaaaaa;
 }

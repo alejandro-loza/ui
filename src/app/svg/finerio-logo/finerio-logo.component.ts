@@ -8,8 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
 export class FinerioLogoComponent implements OnInit {
   @Input() fillMainColor: string;
   @Input() fillAccentColor: string;
-  @Input() svgClasses: string;
-
+  @Input() svgClass: string;
   constructor() { }
 
   ngOnInit() {

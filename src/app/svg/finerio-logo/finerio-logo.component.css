@@ -1,9 +1,40 @@
-.logo-icon {
-  width: 30%;
-  margin-top: 2%;
+.login {
+  width: 50%;
+  margin: 5% 0;
 }
-.cls-1{fill:#17537b;}
-.cls-2{fill:#231f20;}
-.white-fill {
-  fill: whitesmoke;
+
+.navbar {
+  width: 75%;
+  margin-top: 23px;
+}
+
+.fill-main-color {
+  fill: #17307b;
+}
+
+.fill-accent-color {
+  fill: #2bc2fd;
+}
+
+.fill-light-color {
+  fill: var(--light-color);
+}
+
+.square {
+  fill-rule: evenodd;
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+  .login { width: 40%; margin: 2% 0; }
+  .navbar { width: 90%; margin-top: 15%; }
+}
+
+@media only screen and (min-width: 1400px) and (max-width: 1599px) {
+  .login { width: 45%; margin: 2% 0;}
+  .navbar { width: 80%; margin-top: 15%; }
+}
+
+@media only screen and (min-width: 1600px) and (max-width: 1799px) {
+  .login { width: 45%; margin: 2% 0;}
+  .navbar { width: 95%; margin-top: 15%; }
 }

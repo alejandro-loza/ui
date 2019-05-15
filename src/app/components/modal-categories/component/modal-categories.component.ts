@@ -1,47 +1,51 @@
-import {Component, Inject, OnInit } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {Router} from '@angular/router';
-import {Category} from '@interfaces/category.interface';
-import {CategoriesBeanService} from '@services/categories/categories-bean.service';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Router } from '@angular/router';
+import { Category } from '@interfaces/category.interface';
+import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 
 @Component({
-  selector: 'app-modal-categories',
-  templateUrl: './modal-categories.component.html',
-  styleUrls: ['./modal-categories.component.css']
+	selector: 'app-modal-categories',
+	templateUrl: './modal-categories.component.html',
+	styleUrls: [ './modal-categories.component.css' ]
 })
 export class ModalCategoriesComponent implements OnInit {
-  categoryList: Category[];
-  stateCategories: boolean;
-  statusCategory: boolean;
-  constructor(
-    private categoriesBeanService: CategoriesBeanService,
-    private router: Router,
-    private matDialogRef: MatDialogRef<ModalCategoriesComponent>,
-    @Inject(MAT_DIALOG_DATA) matDialogData
-  ) {
-    this.stateCategories = true;
-    this.statusCategory = false;
-    this.categoryList = matDialogData.categoryList;
-  }
+	categoryList: Category[];
+	stateCategories: boolean;
+	statusCategory: boolean;
+	constructor(
+		private categoriesBeanService: CategoriesBeanService,
+		private router: Router,
+		private matDialogRef: MatDialogRef<ModalCategoriesComponent>,
+		@Inject(MAT_DIALOG_DATA) matDialogData
+	) {
+		this.stateCategories = true;
+		this.statusCategory = false;
+		this.categoryList = matDialogData.categoryList;
+	}
 
-  ngOnInit() {}
+	ngOnInit() {}
 
-  close(event: Event) {
-    event.stopPropagation();
-    this.matDialogRef.close();
-  }
+	close(event: Event) {
+		event.stopPropagation();
+		this.matDialogRef.close();
+	}
 
-  save(flag: boolean) {
-    if ( flag ) {
-      setTimeout(() => {
-        const category: Category = this.categoriesBeanService.getCategory;
-        this.matDialogRef.close(category);
-      }, 0);
-    }
-  }
+	save(flag: boolean) {
+		if (flag) {
+			setTimeout(() => {
+				const category: Category = this.categoriesBeanService.getCategory;
+				this.matDialogRef.close(category);
+			}, 0);
+		}
+	}
 
-  createCategory() {
-    this.matDialogRef.close();
-    return this.router.navigate(['app', 'categories', 'workshop', 'new']);
-  }
+	createCategory() {
+		this.matDialogRef.close();
+		return this.router.navigate([ 'app', 'categories', 'workshop', 'new' ]);
+	}
+
+	createManualAccount() {
+		this.router.navigateByUrl('/app/manual-account/new');
+	}
 }

@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { ToastService } from '@services/toast/toast.service';
 import { BudgetsService } from '@services/budgets/budgets.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { Category } from '@app/interfaces/category.interface';
 import { isNullOrUndefined } from 'util';
 import { NewBudget, SubBudget } from '@interfaces/budgets/new-budget.interface';
@@ -38,7 +39,8 @@ export class SharedBudgetComponentComponent implements OnInit {
 		private router: Router,
 		private budgetsService: BudgetsService,
 		private toastService: ToastService,
-		private activatedRoute: ActivatedRoute
+		private activatedRoute: ActivatedRoute,
+		private mixpanelService: MixpanelService
 	) {
 		this.categorySelected = this.budgetsBeanService.getCategoryToSharedComponent();
 		this.budgetToEdit = this.budgetsBeanService.getBudgetToEdit();
@@ -240,6 +242,7 @@ export class SharedBudgetComponentComponent implements OnInit {
 				this.toastService.setMessage = 'Presupuesto modificado con éxito';
 				this.toastService.toastGeneral();
 				this.budgetsBeanService.setLoadInformation(true);
+				this.mixpanelEvent('Update budget');
 				return this.router.navigateByUrl('/app/budgets');
 			}
 		);
@@ -269,8 +272,14 @@ export class SharedBudgetComponentComponent implements OnInit {
 				this.budgetsBeanService.setLoadInformation(true);
 				this.toastService.setMessage = 'Presupuesto creado con éxito';
 				this.toastService.toastGeneral();
+				this.mixpanelEvent('Create budget');
 				return this.router.navigateByUrl('/app/budgets');
 			}
 		);
+	}
+
+	mixpanelEvent(track: string) {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent(track);
 	}
 }

@@ -4,6 +4,7 @@ import { CategoriesBeanService } from '@services/categories/categories-bean.serv
 import { CategoriesService } from '@services/categories/categories.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 import { ToastService } from '@services/toast/toast.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { Category } from '@app/interfaces/category.interface';
 import { WorkshopCategory } from '@app/interfaces/categories/workshopCategory.interface';
 import * as M from 'materialize-css/dist/js/materialize';
@@ -33,7 +34,8 @@ export class SubcategoryWorkshopComponent implements OnInit {
 		private activatedRoute: ActivatedRoute,
 		private categoriesService: CategoriesService,
 		private toastService: ToastService,
-		private cleanerService: CleanerService
+		private cleanerService: CleanerService,
+		private mixpanelService: MixpanelService
 	) {}
 
 	ngOnInit() {
@@ -63,6 +65,7 @@ export class SubcategoryWorkshopComponent implements OnInit {
 				this.toastService.setMessage = 'Subcategoría creada con éxito!';
 				this.toastService.toastGeneral();
 				this.categoriesBeanService.setCategories([]);
+				this.mixpanelEvent('Create subcategory');
 				return this.router.navigateByUrl('/app/categories');
 			},
 			(error) => {
@@ -205,5 +208,10 @@ export class SubcategoryWorkshopComponent implements OnInit {
 		if (this.editMode) {
 			this.setupForEditMode();
 		}
+	}
+
+	mixpanelEvent(track: string) {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent(track);
 	}
 }

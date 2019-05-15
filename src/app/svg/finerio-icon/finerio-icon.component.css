@@ -6,8 +6,13 @@
   fill:var(--accent-color);
 }
 
+.cls-3, .cls-4{
+  fill-rule: evenodd;
+}
+
 .welcomeClass {
-  --widthImage: 40%;
+  --widthImage: 25%;
+  margin: 5% 0;
   width: var(--widthImage);
 }
 
@@ -22,15 +27,9 @@
 }
 
 .logo-navbar {
-  --widthImage: 17%;
-  width: var(--widthImage);
-  margin-top: 4%;
-  margin-left: 5%;
-}
-
-.logo-app {
-  width: 40%;
-  margin-left: 8% !important;
+  width: 70%;
+  margin-top: 6%;
+  margin-left: 20%;
 }
 
 .fill-White-color {
@@ -43,10 +42,6 @@
 
 .fill-accent-white-color {
   fill: var(--light-color);
-}
-
-#finerio-icon {
-  margin-left: 35%;
 }
 
 @-webkit-keyframes fill {
@@ -71,4 +66,8 @@
   .logo {
     margin: 20% auto;
   }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1499px) {
+  .logo-navbar { margin-left: 30%; }
 }
