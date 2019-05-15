@@ -1,9 +1,18 @@
 <div class="row valign-wrapper center-align">
   <!-- Image Start -->
   <div class="col m1">
-    <img src="https://cdn.finerio.mx/banks/{{movement.account.institution.code}}_shield.png"
-         [srcset]="'assets/media/img/movements/' + movement.account.institution.code + '.png'"
-         alt="{{movement.account.institution.code}}" class="imgMovement" />
+    <ng-container *ngIf="movement.editAvailable === true; else elseAccount">
+      <div id="accountContainer">
+        <app-manual-account-editer 
+          [imgSrc]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc"
+          [movement]="movement">
+        </app-manual-account-editer>
+      </div>
+    </ng-container>
+    <ng-template #elseAccount>
+        <img [src]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc" (error)="onErrorFunc( movement.account.type )"
+        alt="{{movement.account.institution.code}}" class="imgMovement" />
+    </ng-template>
   </div>
   <!-- Image End -->
 
@@ -43,7 +52,7 @@
 
   <!-- Amount start -->
   <div class="col m2 customComponent right-align">
-    <ng-container *ngIf="movement.account.name === 'Efectivo'; else elseAmount">
+    <ng-container *ngIf="amountEdit; else elseAmount">
       <ng-container *ngIf="movement.editAvailable === true; else elseAmount">
         <label>
           <input [(ngModel)]="movement.amount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" (keydown)="$event.stopPropagation()"/>
@@ -65,6 +74,7 @@
         Si
         <input
           [(ngModel)]="movement.duplicated"
+          (click)="updateMovement(movement)"
           name="duplicated"
           type="checkbox"/>
         <span class="lever"></span>

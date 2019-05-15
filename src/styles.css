@@ -2,84 +2,185 @@
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 body,
 html {
+	height: 100%;
 	margin: 0;
 	padding: 0;
-  font-family: 'Roboto', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 }
 
-* {
-  --navyblue-color: #18537b;
-  --orange-color: #ee883a;
-  --main-color: #18537b;
-  --accent-color: #ee883a;
-  /*--white-color: */
-  --paddingPages: 128px;
-  --widthAmout: 50%;
-  font-family: 'Roboto', sans-serif;
+/**
+ * Variable for all the project
+ */
+
+:root {
+	--main-color: #17307b;
+	--accent-color: #2bc2fd;
+	--light-color: #f9f7ff;
+	--red-color: #c62828;
+
+	/**
+    * Custom colors
+    * if you need to overwrite the colors, please use custom-color vars.
+    *
+    * Use them, only IF YOU UNDERSTAND HOW TO OVERWRITE VARS ON CSS.
+    *
+    * If you need to overwrite a var and it doesnt exist, create one
+    *
+    * https://www.w3.org/TR/css-variables-1/#using-variables
+    * https://medium.freecodecamp.org/everything-you-need-to-know-about-css-variables-c74d922ea855
+    */
+	--main-custom-color: #17307b;
+	--accent-custom-color: #4392c7;
+	--light-custom-color: #f9f7ff;
+
+	--paddingPages: 128px;
+	--widthAmout: 50%;
+	--widthImage: 100%;
+	font-family: 'Open Sans', sans-serif;
 }
 
-h1,h2,h3,h4,h5{
-  font-family: 'Roboto', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: 'Ubuntu', sans-serif;
 }
 
-.showPassword {
-  margin-top: 3%;
-  color: black;
-}
-
-[type="checkbox"].filled-in:checked+span.showPassword:not(.lever):after{
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-}
-
-.spinnerPosition {
-	position: relative;
-	top: 15rem;
-}
-
-.finerio-blue-text {
-  color: var(--navyblue-color);
-}
-
-.finerio-blue {
-  background-color: var(--navyblue-color) !important;
-  color: white !important;
-}
-
-.finerio-orange {
-  background-color: var(--orange-color) !important;
-  color: white !important;
-}
-
-.finerio-orange-text {
-  color: var(--orange-color);
-}
-
-.finerio-main-color-text {
-	color: var(--main-color) !important;
-}
+/**
+ * Main color & accent color
+ */
 
 .finerio-main-color {
-	background-color: var(--main-color) !important;
-	color: white;
+	background-color: var(--main-color);
+	color: var(--light-color);
 }
 
 .finerio-accent-color {
-	background-color: var(--accent-color) !important;
-	color: white;
+	background-color: var(--accent-color);
+	color: var(--light-color);
 }
 
-.finerio-accent-color-text {
-	color: var(--accent-color);
+.finerio-main-outline-color {
+	background-color: transparent;
+	color: var(--main-color);
 }
+
+.finerio-main-outline-color:hover {
+	background-color: var(--main-color);
+	color: var(--light-color);
+}
+
+.finerio-accent-outline-color {
+	background-color: transparent;
+	color: var(--accent-color);
+	border: 1px solid var(--accent-color);
+}
+
+.finerio-accent-outline-color:hover {
+	background-color: var(--accent-color);
+	color: var(--light-color);
+}
+
+/**
+ * Buttons
+ */
+
+.btn {
+	transition: background-color 200ms, color 200ms;
+	transition-timing-function: ease-in-out;
+	border-radius: 20px !important;
+}
+
+/**
+ * Buttons w/ main-color
+ */
+.btn.finerio-main-color {
+	background-color: var(--main-color);
+	color: var(--light-color);
+}
+
+.btn.finerio-main-color:hover {
+	--main-custom-color: #152a5d;
+	background-color: var(--main-custom-color);
+}
+
+/**
+ * Buttons w/ accent-color
+ */
+
+.btn.finerio-accent-color {
+	background-color: var(--accent-color);
+	color: var(--light-color);
+}
+
+.btn.finerio-accent-color:hover {
+	background-color: var(--accent-custom-color);
+}
+
+/**
+ * Buttons w/ main-outline-color
+ */
+
+.btn.finerio-main-outline-color {
+	background-color: transparent;
+	color: var(--main-color);
+	border: 1px solid var(--main-color);
+}
+
+.btn.finerio-main-outline-color:hover {
+	background-color: var(--main-color);
+	color: var(--light-color);
+}
+
+/**
+ * Buttons w/ accent-outline-color
+ */
+
+.btn.finerio-accent-outline-color {
+	background-color: transparent;
+	color: black;
+	border: 1px solid var(--accent-color);
+}
+
+.btn.finerio-accent-outline-color:hover {
+	background-color: var(--accent-color);
+	color: var(--light-color);
+}
+/**
+  * Button for delete something
+  * This class is used for buttons that have a second priority on the page,
+  * if u will used it for third priority, you need to erase the border on component's css
+  */
+
+.btn.btn-delete {
+	border: 1px solid var(--red-color);
+	color: var(--red-color);
+	background-color: var(--light-color);
+	transition: background-color 200ms, color 200ms;
+	transition-timing-function: ease-in-out;
+}
+
+.btn.btn-delete:hover {
+	color: var(--light-color);
+	background-color: var(--red-color);
+	box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
+}
+
+/**
+  * Waves
+  */
 
 .waves-effect.waves-blue .waves-ripple {
 	/* The alpha value allows the text and background color
     of the button to still show through. */
 	background-color: var(--main-color);
-  opacity: 0.65%;
+	opacity: 0.65%;
 }
 
+/**
+ * Material Icons
+ */
 .material-icons.md-18 {
 	font-size: 18px;
 }
@@ -96,13 +197,47 @@ h1,h2,h3,h4,h5{
 	font-size: 48px;
 }
 
+/**
+ * Cards
+ */
+
+.card {
+	top: 0;
+	left: 0;
+	transform: translate(0, 10%);
+}
+
+.light-background {
+	background-color: rgba(249, 247, 255, 0.85) !important;
+}
+
 .inputMovement {
 	border-bottom: none !important;
 	height: 100% !important;
 }
 
+.tabs .indicator {
+	background-color: #2bc2fd !important;
+	height: 5px;
+}
+
 .collection {
 	border: 0px solid #e0e0e0 !important;
+}
+
+.showPassword {
+	margin-top: 3%;
+	color: black;
+}
+
+[type="checkbox"].filled-in:checked + span.showPassword:not(.lever):after {
+	background-color: var(--accent-color);
+	border-color: var(--accent-color);
+}
+
+.spinnerPosition {
+	position: relative;
+	top: 15rem;
 }
 
 input:not([type]):focus:not([readonly]),
@@ -146,20 +281,20 @@ input::-webkit-inner-spin-button {
 }
 
 .datepicker-modal {
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
+	left: 50% !important;
+	top: 50% !important;
+	transform: translate(-50%, -50%) !important;
 }
 
 .mat-expansion-indicator {
-  margin-right: 1%;
-  margin-left: -3%;
-  padding: 10px;
-  cursor: pointer;
+	margin-right: 1%;
+	margin-left: -3%;
+	padding: 10px;
+	cursor: pointer;
 }
 
-.mat-expansion-indicator::after{
-  padding: 6px;
+.mat-expansion-indicator::after {
+	padding: 6px;
 }
 
 .animated {
@@ -173,7 +308,7 @@ input::-webkit-inner-spin-button {
 }
 
 .fadeIn {
-  animation-name: fadeIn;
+	animation-name: fadeIn;
 }
 
 @keyframes fadeIn {
@@ -186,5 +321,22 @@ input::-webkit-inner-spin-button {
 }
 
 @media only screen and (min-width: 1600px) {
-  .datepicker-modal { left: 40% !important; }
+	.datepicker-modal {
+		left: 40% !important;
+	}
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1299px) {
+	.card {
+		transform: translate(0);
+	}
+	.row {
+		margin: auto;
+	}
+}
+
+@media only screen and (min-width: 1300px) and (max-width: 1499px) {
+	.card {
+		transform: translate(0, 5%);
+	}
 }

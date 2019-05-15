@@ -1,0 +1,73 @@
+.fill-main-color{
+  fill:var(--main-color);
+}
+
+.fill-accent-color {
+  fill:var(--accent-color);
+}
+
+.cls-3, .cls-4{
+  fill-rule: evenodd;
+}
+
+.welcomeClass {
+  --widthImage: 25%;
+  margin: 5% 0;
+  width: var(--widthImage);
+}
+
+.widthImage {
+  --widthImage: 40%;
+  width: var(--widthImage);
+}
+
+.width-100 {
+  width: 100%;
+  height: auto;
+}
+
+.logo-navbar {
+  width: 70%;
+  margin-top: 6%;
+  margin-left: 20%;
+}
+
+.fill-White-color {
+  fill: whitesmoke;
+}
+
+.welcomeClass path, .welcomeClass polygon {
+    animation: fill 500ms alternate infinite ease-in-out;
+}
+
+.fill-accent-white-color {
+  fill: var(--light-color);
+}
+
+@-webkit-keyframes fill {
+  0% {
+    fill: transparent;
+  }
+  100% {
+    fill: #335479;
+  }
+}
+
+@keyframes fill {
+  0% {
+    fill: transparent;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .logo {
+    margin: 20% auto;
+  }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1499px) {
+  .logo-navbar { margin-left: 30%; }
+}

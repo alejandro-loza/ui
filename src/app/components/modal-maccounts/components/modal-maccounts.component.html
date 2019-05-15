@@ -1,0 +1,27 @@
+<div mat-dialog-content>
+    <ng-container *ngIf="!showEmptyState; else EmptyState">
+        <app-user-manual-accounts 
+            (noManualAccounts)="modalManualaccountsTrigger($event)" 
+            (manualAccount)="manualAccountSelected($event)" 
+            (click)="closeWithNewAccount($event)">
+        </app-user-manual-accounts>
+    </ng-container>
+    <ng-template #EmptyState>
+        <div class="container row">
+            <div class="col s12 center">
+                <h4>No tienes cuentas manuales o de efectivo</h4>
+                <p>Crea cuentas manuales para llevar un mejor control de tu efectivo y otros instrumentos y agrupa los movimientos que registras manualmente en distintas cuentas.</p>
+                <button type="button" class="btn btn-flat btn-modal btn-create-manual-account" (click)="createManualAccount()">Crear Cuenta Manual</button>
+            </div>
+        </div>
+    </ng-template>
+ </div>
+ <div mat-dialog-actions class="row btn-actions-modal">
+    <div class="col s6 left-align">
+        <button type="button" class="btn btn-flat btn-modal" (click)="close($event)" (keyup.escape)="close($event)">Cerrar</button>
+    </div>
+    <div class="col s6 right-align">
+        <button *ngIf="!showEmptyState" 
+            type="button" class="btn btn-flat btn-modal btn-create-manual-account" (click)="createManualAccount()">Crear Cuenta Manual</button>
+    </div>
+ </div>

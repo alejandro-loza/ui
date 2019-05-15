@@ -6,6 +6,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastService } from '@services/toast/toast.service';
 import { SignupService } from '@services/signup/signup.service';
 import { LoginService } from '@services/login/login.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { User } from '@app/interfaces/user.interface';
 
 @Component({
@@ -30,7 +31,8 @@ export class SignupComponent {
 		private signupService: SignupService,
 		private router: Router,
 		private toastService: ToastService,
-		private loginService: LoginService
+		private loginService: LoginService,
+		private mixpanelService: MixpanelService
 	) {}
 
 	signup() {
@@ -40,6 +42,7 @@ export class SignupComponent {
 			this.showSpinner = true;
 			this.signupService.signup(this.signupData.value).subscribe(
 				(res) => {
+					this.mixpanelEvent(res.body.id);
 					this.toastService.setCode = res.status;
 				},
 				(error) => {
@@ -68,6 +71,13 @@ export class SignupComponent {
 				return this.router.navigate([ '/access/welcome' ]);
 			}
 		);
+	}
+
+	mixpanelEvent(id: string) {
+		this.signupService.setComesFromSignup = true;
+		this.mixpanelService.setIdentify(id);
+		this.mixpanelService.setSignupPeopleProperties(this.signupData.value.email, new Date());
+		this.mixpanelService.setTrackEvent('Sign up', { from: 'Email', referred: false });
 	}
 
 	passwordMatch() {

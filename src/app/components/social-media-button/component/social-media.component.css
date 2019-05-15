@@ -19,19 +19,22 @@
 }
 
 .mdi {
-    margin: 0% 10px;
+    margin: 0 10px;
 }
 
 .btn {
-    margin: 1% 0%;
-    min-width: 50%;
+    margin: 1% 0;
+    min-width: 60%;
 }
 
-@media only screen and (max-width: 360px) {
-    .btn-socialMedia i {
-        display: none;
-    }
-    .btn {
-        width: 100%;
-    }
+@media only screen and (min-width: 360px) and (max-width: 1199px) {
+    .btn-socialMedia i { display: none; } .btn { width: 100%; }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1299px) {
+  .btn { width: 75%; }
+}
+
+@media only screen and (min-width: 1300px) and (max-width: 1499px) {
+  .btn { width: 70%; }
 }

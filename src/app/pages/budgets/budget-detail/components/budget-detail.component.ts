@@ -4,6 +4,7 @@ import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { ToastService } from '@services/toast/toast.service';
 import { BudgetsService } from '@services/budgets/budgets.service';
+import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
 import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
@@ -30,7 +31,8 @@ export class BudgetDetailComponent implements OnInit {
 		private budgetsService: BudgetsService,
 		private categoriesBeanService: CategoriesBeanService,
 		private router: Router,
-		private toastService: ToastService
+		private toastService: ToastService,
+		private mixpanelService: MixpanelService
 	) {}
 
 	ngOnInit() {
@@ -149,9 +151,15 @@ export class BudgetDetailComponent implements OnInit {
 					this.budgetsBeanService.setLoadInformation(true);
 					this.toastService.setMessage = 'Presupuesto eliminado con éxito';
 					this.toastService.toastGeneral();
+					this.mixpanelEvent('Delete budget');
 					return this.router.navigateByUrl('/app/budgets');
 				}
 			);
 		}, 1000);
+	}
+
+	mixpanelEvent(track: string) {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setTrackEvent(track);
 	}
 }

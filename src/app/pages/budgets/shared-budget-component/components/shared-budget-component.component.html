@@ -10,7 +10,7 @@
       <div id="backgroundContainer" [ngStyle]="{'background-color': categorySelected.color, 'height':setHeightToCol }">
         <div class="content">
           <img *ngIf="!categoryWithUserIdProperty" src="https://cdn.finerio.mx/categories/web/{{ categorySelected.id }}.svg"
-          onerror="this.src='/assets/media/img/categories/finerio-icon.svg'" alt="{{ categorySelected.name }}">
+          onerror="this.src='/assets/media/img/categories/icon.svg'" alt="{{ categorySelected.name }}">
 
           <img *ngIf="categoryWithUserIdProperty" src="/assets/media/img/categories/userCategory.svg" alt="{{ categorySelected.name }}">
           <br>
@@ -69,7 +69,7 @@
           </div>
         </div>
         <div class="col s12 right-align py-10">
-          <button type="submit" id="submitBtn" [disabled]="!amount.valid" class="btn finerio-blue white-text right-align">
+          <button type="submit" id="submitBtn" [disabled]="!amount.valid" class="btn finerio-main-color right-align">
             Guardar
           </button>
         </div>

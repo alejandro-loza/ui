@@ -1,3 +1,6 @@
+import { AccountInterface } from './account.interfaces';
+import { Category } from './category.interface';
+
 /**
  *
  * @interface NewMovement lleva los campos necesarios que se deben enviar para las peticiones al servidor
@@ -12,10 +15,14 @@
  *               CHARGE o DEPOSIT, cualquier otro valor mandará un error status 22 - Unprocessable Entity
  */
 export interface NewMovement {
-  amount?: number;
-  balance?: number;
-  date?: Date;
-  description?: string;
-  duplicated?: boolean;
-  type?: string;
+	amount?: number;
+	balance?: number;
+	date?: Date;
+	customDate?: Date;
+	description?: string;
+	customDescription?: string;
+	duplicated?: boolean;
+	type?: string;
+	account?: AccountInterface;
+	category?: Category;
 }

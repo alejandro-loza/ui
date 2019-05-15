@@ -16,7 +16,7 @@
 .tab a:hover,
 .tab a.active {
   color: rgba(1, 87, 155, 0.7);
-  background: rgba(1, 87, 155, 0.1)
+  background: rgba(1, 87, 155, 0.1);
 }
 
 .tab a:focus.active {
@@ -33,6 +33,6 @@
 }
 
 .tabs .indicator {
-  background-color: var(--orange-color)!important;
+  background-color: #2bc2fd !important;
   height: 5px;
 }

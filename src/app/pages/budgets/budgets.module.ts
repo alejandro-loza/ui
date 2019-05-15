@@ -7,12 +7,14 @@ import { BUDGETS_ROUTES } from './budgets.route';
 
 // Components
 import { BudgetsComponent } from './components/budgets.component';
+import {SvgIconsModule} from '@app/svg/svg-icons.module';
 
 @NgModule({
   imports: [
     SharedModule,
     EmptyStateModule,
-    BUDGETS_ROUTES
+    BUDGETS_ROUTES,
+    SvgIconsModule
   ],
   declarations: [
     BudgetsComponent

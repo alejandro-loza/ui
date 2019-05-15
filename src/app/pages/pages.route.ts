@@ -38,7 +38,7 @@ const PagesRouting: Routes = [
 				path: 'credentials',
 				loadChildren: './credential/credential.module#CredentialModule',
 				data: {
-					title: 'Cuentas bancarias'
+					title: 'Cuentas'
 				}
 			},
 			{
@@ -46,6 +46,13 @@ const PagesRouting: Routes = [
 				loadChildren: './banks/banks.module#BanksModule',
 				data: {
 					title: 'Bancos'
+				}
+			},
+			{
+				path: 'manual-account/:mode',
+				loadChildren: './manual-account/manual-account.module#ManualAccountModule',
+				data: {
+					title: 'Nueva cuenta manual'
 				}
 			},
 			{

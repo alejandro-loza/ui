@@ -16,7 +16,7 @@
             class="btn categoryButton" [ngStyle]="{'color':category.textColor, 'background-color':category.color}">
         <img *ngIf="!category.userId" 
             src="https://cdn.finerio.mx/categories/web/{{ category.id }}.svg"
-            onerror="this.src='/assets/media/img/categories/finerio-icon.svg'" alt="Category Name">
+            onerror="this.src='/assets/media/img/categories/icon.svg'" alt="Category Name">
         <img *ngIf="category.userId" 
             src="/assets/media/img/categories/userCategory.svg" alt="Category Name">
 

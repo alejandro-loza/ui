@@ -14,7 +14,7 @@
             <div class="row borderB-o">
               <div class="col s12">
                 <div class="col s6 valign-wrapper">
-                  <img src="/assets/media/img/budgets/default.jpg" alt="">
+                  <app-finerio-icon [svgClasses]="'width-100'" style="width: 4%;"></app-finerio-icon>
                   <p class="paddingL" id="mainName">Presupuesto Total</p>
                 </div>
                 <div class="col s6 right-align">
@@ -32,15 +32,15 @@
         </div>
       </div>
     </div>
-    <div class="row right-align marginB-0 finerio-blue">
+    <div class="row right-align marginB-0 finerio-main-color">
       <div class="col s5 m7">
         <h5>Categorías</h5>
       </div>
       <div class="col s7 m5">
-        <button [routerLink]="['/app/budgets/new-budget']"
-                id="createButton" class="btn-flat white black-text right truncate"> Crear Presupuesto <i class="material-icons right">
-          add
-        </i> </button>
+        <a [routerLink]="['/app/budgets/new-budget']"
+                id="createButton" class="btn btn-flat right truncate finerio-accent-color"> Crear Presupuesto
+          <i class="material-icons right"> add </i>
+        </a>
       </div>
     </div>
   </div>
