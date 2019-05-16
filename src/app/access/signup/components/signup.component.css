@@ -1,68 +1,79 @@
 .information-signup {
+}
 
+#finerio-text {
+	margin-top: 0px;
+}
+
+.card {
+	transform: translate(0, 5%);
 }
 
 .login-container {
-  margin-top: 5%;
+	margin-top: 5%;
 }
 
-.logo-signup{
-  border-left: 1px solid #f5f5f5;
+.logo-signup {
+	border-left: 1px solid #f5f5f5;
 }
 
-ul{
-  list-style-type: initial;
+ul {
+	list-style-type: initial;
 }
 
 .information-point {
-  list-style-type: initial;
-  margin: 6% 0;
+	list-style-type: initial;
+	margin: 6% 0;
 }
 
 .row {
-  margin-bottom: auto;
+	margin-bottom: auto;
 }
 
 .card-content {
-  padding: 0;
+	padding: 0;
 }
 
 .card-content-inside {
-  padding: 24px;
+	padding: 24px;
 }
 
-.socialBtn{
-  border-bottom: 2px solid #e48d2b;
+.socialBtn {
+	border-bottom: 2px solid #e48d2b;
 }
 
 .btn {
-  margin-top: 1%;
+	margin-top: 1%;
 }
 
-[type="checkbox"].filled-in:checked+span:not(.lever):after{
-  border: 2px solid #e48d2b;
-  background-color: #e48d2b;
+[type="checkbox"].filled-in:checked + span:not(.lever):after {
+	border: 2px solid #e48d2b;
+	background-color: #e48d2b;
 }
 
-#checkbox-blog:checked+label::after{
-  border: 2px solid red!important;
-  background-color: red!important;
+#checkbox-blog:checked + label::after {
+	border: 2px solid red !important;
+	background-color: red !important;
 }
-#passwordError{
-  color: red;
-  font-size: 12px;
+#passwordError {
+	color: red;
+	font-size: 12px;
 }
 
-#termsError{
-  color: red;
-  font-size: 12px;
+#termsError {
+	color: red;
+	font-size: 12px;
 }
 
 .container {
-  overflow-x: hidden;
+	overflow-x: hidden;
 }
 
-@media only screen and (min-width: 1200px) and (max-width: 1499px){
-  .card { transform: translate(0); }
-  .input-field{ margin-top: 0; }
+@media only screen and (min-width: 1200px) and (max-width: 1499px) {
+	.card {
+		transform: translate(0);
+	}
+	.input-field {
+		margin-top: 0;
+	}
 }
