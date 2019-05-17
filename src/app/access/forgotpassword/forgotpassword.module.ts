@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { SharedModule } from '@shared/shared.module';
+import {SvgIconsModule} from '@app/svg/svg-icons.module';
 
 // ROUTE
 import { FORGOT_PASS_ROUTES } from './forgotpassword.route';
@@ -14,6 +15,7 @@ import { ForgotpasswordComponent } from './components/forgotpassword.component';
   imports: [
     SharedModule,
     ReactiveFormsModule,
+    SvgIconsModule,
     FORGOT_PASS_ROUTES,
   ],
   declarations: [
