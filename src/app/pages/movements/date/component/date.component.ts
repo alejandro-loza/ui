@@ -10,6 +10,7 @@ import {
   EventEmitter,
   OnChanges
 } from '@angular/core';
+import {DomEventsService} from "@services/dom-events/dom-events.service";
 
 declare var M;
 @Component({
@@ -31,7 +32,10 @@ export class DateComponent implements OnInit, OnChanges, AfterContentInit {
 
   @ViewChild('datepicker') elementDatePicker: ElementRef;
 
-  constructor(private dateApiService: DateApiService) {
+  constructor(
+    private dateApiService: DateApiService,
+    private domEventsService: DomEventsService
+  ) {
     this.date = new Date();
     this.valueDate = new EventEmitter();
     this.valueFormatDate = new EventEmitter();
@@ -69,5 +73,9 @@ export class DateComponent implements OnInit, OnChanges, AfterContentInit {
     });
     const instanceDatepicker = new M.Datepicker.getInstance(this.elementDatePicker.nativeElement);
     instanceDatepicker.setDate(this.date);
+  }
+
+  stopEvents(event: Event) {
+    this.domEventsService.stopEvents(event);
   }
 }
