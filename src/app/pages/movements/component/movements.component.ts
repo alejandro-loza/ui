@@ -2,16 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
-import { CategoriesService } from '@services/categories/categories.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 import { ParamsMovementsService } from '@services/movements/params-movements/params-movements.service';
 import { DashboardStatesService } from '@services/dashboard/dashboard-states.service';
+import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
-import { Category } from '@interfaces/category.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { Subscription } from 'rxjs';
-import { DateApiService } from '@services/date-api/date-api.service';
 
 @Component({
   selector: 'app-movements',
@@ -20,11 +18,9 @@ import { DateApiService } from '@services/date-api/date-api.service';
 })
 export class MovementsComponent implements OnInit, OnDestroy {
   movementList: Movement[];
-  categoryList: Category[];
 
   spinnerBoolean: boolean;
   isLoading: boolean;
-  firstChange: boolean;
   movementsListReady: boolean;
   movementServiceSubscription: Subscription;
 
@@ -40,21 +36,18 @@ export class MovementsComponent implements OnInit, OnDestroy {
   paramsMovements: ParamsMovements;
 
   constructor(
-    private categoryService: CategoriesService,
     private movementService: MovementsService,
-    private dateApiService: DateApiService,
     private emptyStateService: EmptyStateService,
     private toastService: ToastService,
     private paramsMovementsService: ParamsMovementsService,
-    private dashboardStatesService: DashboardStatesService
+    private dashboardStatesService: DashboardStatesService,
+    private statefulMovementsService: StatefulMovementsService,
   ) {
     this.showEmptyState = false;
     this.isLoading = true;
     this.spinnerBoolean = true;
-    this.firstChange = false;
     this.movementsListReady = true;
     this.movementsFromDashboard = false;
-    this.categoryList = [];
     this.movementList = [];
     this.paramsMovements = {
       charges: true,
@@ -68,17 +61,13 @@ export class MovementsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fillInformationForEmptyState();
-    this.getCategories();
-    if (this.dashboardStatesService.getLoadListFromDashboard()) {
+    if (this.statefulMovementsService.getMovements) {
+      this.getMovementsFromStatefulService();
+    } else if ( this.dashboardStatesService.getLoadListFromDashboard() ) {
       this.getMovementsFromDashboard();
     } else {
       this.getMovements();
     }
-    this.firstChange = true;
-  }
-
-  ngOnChanges(): void {
-    console.log(this.movementList);
   }
 
   ngOnDestroy() {
@@ -87,7 +76,7 @@ export class MovementsComponent implements OnInit, OnDestroy {
   }
 
   getMovements() {
-    if (this.movementsListReady === true) {
+    if (this.movementsListReady) {
       this.getMovementFromService();
     }
   }
@@ -107,41 +96,31 @@ export class MovementsComponent implements OnInit, OnDestroy {
           if (index < this.paramsMovements.maxMovements) {
             this.movementServiceSubscription.unsubscribe();
             this.spinnerBoolean = false;
+            this.isLoading = false;
+            this.statefulMovementsService.setMovements = this.movementList;
+            return;
           }
           this.isLoading = false;
           this.movementsListReady = true;
           this.paramsMovements.offset += this.paramsMovements.maxMovements;
+          this.statefulMovementsService.setMovements = this.movementList;
         }
       );
   }
 
-  getCategories() {
-    this.categoryService.getCategoriesInfo().subscribe(
-      (res) => {
-        this.categoryList = res.body;
-      },
-      (err) => {
-        this.toastService.setCode = err.status;
-        if (err.status === 401) {
-          this.toastService.toastGeneral();
-          this.getCategories();
-        }
-        if (err.status === 500) {
-          this.toastService.setMessage = '¡Ha ocurrido un error al obtener tus movimientos!';
-          this.toastService.toastGeneral();
-        }
-      }
-    );
-  }
-
   getMovementsFromDashboard() {
     this.movementList = this.dashboardStatesService.getListOfMovementsFromDashboard();
+    this.showEmptyState = this.movementList.length <= 0;
+    this.spinnerBoolean = false;
     this.movementsListReady = false;
-    this.isLoading = true;
-    this.spinnerBoolean = true;
-    if (this.movementList.length !== 0) {
-      this.showEmptyState = true;
-    }
+    this.isLoading = false;
+  }
+
+  getMovementsFromStatefulService() {
+    this.movementList = this.statefulMovementsService.getMovements;
+    this.showEmptyState = this.movementList.length <= 0;
+    this.isLoading = false;
+    this.paramsMovements.offset = this.movementList.length;
   }
 
   refreshMovement() {
