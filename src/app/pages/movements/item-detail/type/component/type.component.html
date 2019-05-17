@@ -1,2 +1,0 @@
-<button class="btn btn-flat btn-small btn-type btn-charge" type="button" (click)="tipoIngresoGasto('CHARGE')" [ngClass]="{ 'active': type === 'CHARGE'}" (keyup.enter)="keyEnterPressed.emit($event.isTrusted)" #charge>Gasto</button>
-<button class="btn btn-flat btn-small btn-type btn-deposit" type="button" (click)="tipoIngresoGasto('DEPOSIT')" [ngClass]="{ 'active': type === 'DEPOSIT' }" (keyup.enter)="keyEnterPressed.emit($event.isTrusted)" #deposit>Ingreso</button>
