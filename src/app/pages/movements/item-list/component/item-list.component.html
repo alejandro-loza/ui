@@ -1,26 +1,11 @@
-<cdk-virtual-scroll-viewport itemSize="25" class="scroll-viewport" id="virtualScroll">
-  <mat-accordion class="collapsible">
-    <div *cdkVirtualFor="let movement of movementList; let i = index; trackBy: trackByFn">
-      <div (keydown)="handleSpacebar($event)">
-        <mat-expansion-panel [id]="movement.id" class="fadeIn fast"
-                             (afterExpand)="movement.editAvailable = true"
-                             (afterCollapse)="movement.editAvailable = false;"
-                             #matExpansionPanel>
-          <mat-expansion-panel-header class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}">
-            <mat-panel-title>
-              <app-item class="item" [categoryList]="categoryList" [movement]="movement"> </app-item>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <ng-template matExpansionPanelContent>
-            <app-item-detail class="item-detail" [movement]="movement"
-                             (statusCancel)="collapsibleCancel(i)" (status)="collapsibleClose(i)"
-                             (statusDelete)="deleteMovement(i)">
-            </app-item-detail>
-          </ng-template>
-        </mat-expansion-panel>
+<cdk-virtual-scroll-viewport itemSize="55*35" class="scroll-viewport" id="virtualScroll">
+  <ul class="collapsible">
+    <li class="fadeIn fast" *cdkVirtualFor="let movement of movementList; let i = index; trackBy: trackByFn">
+      <div class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}">
+        <app-item class="item" [movement]="movement" (click)="setMovement($event, movement)"></app-item>
       </div>
-    </div>
-  </mat-accordion>
+    </li>
+  </ul>
   <div class="spinnerContainer">
     <div class="center-align" *ngIf="spinnerBoolean">
       <app-spinner></app-spinner>
