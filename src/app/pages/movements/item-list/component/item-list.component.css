@@ -1,46 +1,17 @@
-.item,
-.item-detail {
-    width: 100%;
-}
-
-mat-expansion-panel,
-mat-expansion-panel.mat-expanded {
-    border-left-width: 0px;
-    border-left-style: solid;
-    border-left-color: var(--accent-color);
-    transition: all .3s ease-in-out;
-}
-
-mat-expansion-panel.mat-expanded {
-    border-left-width: 4px;
-    background-color: var(--light-color);
-}
-
-.mat-expansion-panel-spacing {
-   margin: 0;
-}
-
-.mat-expansion-panel-header {
-  padding: 0 8px;
-}
-
-.collapsible {
-  border:  none;
-  margin: 0;
+.item {
+  width: 100%;
 }
 
 .collapsible-header {
-    transition: all .2s ease-in-out;
+  padding: 2px;
+  transition: border 200ms, color 200ms;
+  transition-timing-function:  ease-in-out;
 }
 
 .collapsible-header:hover {
     border-color: var(--accent-color);
     border-width: 2px;
     color: var(--accent-color);
-}
-
-mat-expansion-panel.mat-expanded>.collapsible-header:hover {
-    color: #212121;
 }
 
 .spinnerContainer {
