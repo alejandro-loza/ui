@@ -52,7 +52,7 @@
     </div>
     <!-- Lista de Movimientos -->
     <div class="containerMovement">
-      <app-item-list [categoryList]="categoryList" [movementList]="movementList" [spinnerBoolean]="spinnerBoolean"
+      <app-item-list [movementList]="movementList" [spinnerBoolean]="spinnerBoolean"
                      [getMoreMovements]="movementsListReady" (getMoreMovementsChange)="getMovements()"
                      (refreshMovementList)="refreshMovement()"></app-item-list>
     </div>
