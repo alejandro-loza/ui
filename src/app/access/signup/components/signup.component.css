@@ -52,14 +52,15 @@ ul {
 	border: 2px solid red !important;
 	background-color: red !important;
 }
+
 #passwordError {
 	color: red;
 	font-size: 12px;
 }
 
-#termsError {
-	color: red;
-	font-size: 12px;
+#terms {
+	margin: 15px 0px;
+	color: #757575;
 }
 
 .container {
