@@ -1,69 +1,36 @@
-<div class="row valign-wrapper center-align">
+<div class="row center-align">
   <!-- Image Start -->
   <div class="col m1">
-    <ng-container *ngIf="movement.editAvailable === true; else elseAccount">
-      <div id="accountContainer">
-        <app-manual-account-editer 
-          [imgSrc]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc"
-          [movement]="movement">
-        </app-manual-account-editer>
-      </div>
-    </ng-container>
-    <ng-template #elseAccount>
-        <img [src]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc" (error)="onErrorFunc( movement.account.type )"
-        alt="{{movement.account.institution.code}}" class="imgMovement" />
-    </ng-template>
+    <img [src]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc" (error)="onErrorFunc( movement.account.type )"
+         alt="{{movement.account.institution.code}}" class="imgMovement" />
   </div>
   <!-- Image End -->
 
   <!-- Date Start -->
-  <div class="col m1 customComponent">
-    <ng-container *ngIf="movement.editAvailable === true; else elseDate">
-      <app-date [formatDate]="movement.formatDate" [date]="movement.customDate" [classes]="'inputMovement center'" [type]="'text'"
-                name="customDate" (valueDate)="movement.customDate=$event" (valueFormatDate)="movement.formatDate=$event">
-      </app-date>
-    </ng-container>
-    <ng-template #elseDate>
-      <h6>{{ movement.formatDate }}</h6>
-    </ng-template>
+  <div class="col m1">
+    <h6>{{ movement.customDate | date:'dd-MMM' }}</h6>
   </div>
   <!-- Date End -->
 
   <!-- Description Start-->
-  <div class="col m3 customComponent left-align">
-    <ng-container *ngIf="movement.editAvailable === true; else elseDescription">
-      <label>
-        <input [(ngModel)]="movement.customDescription" type="text" class="inputMovement inputPadding" name="description" (keydown)="$event.stopPropagation()" />
-      </label>
-    </ng-container>
-    <ng-template #elseDescription>
-      <h6 class="truncate description">{{ movement.customDescription | uppercase }}</h6>
-    </ng-template>
+  <div class="col m3 left-align">
+    <h6 class="truncate description">{{ movement.customDescription | uppercase }}</h6>
   </div>
   <!-- Description End-->
 
   <!-- Category Start -->
-  <div class="col m3 category-margin">
-    <app-concept-type-movement [editAvailable]="movement.editAvailable" [categoryList]="categoryList"
+  <div class="col m3 category-container">
+    <app-concept-type-movement [editAvailable]="movement.editAvailable"
                                [concepts]="movement.concepts">
     </app-concept-type-movement>
   </div>
   <!-- Category End-->
 
   <!-- Amount start -->
-  <div class="col m2 customComponent right-align">
-    <ng-container *ngIf="amountEdit; else elseAmount">
-      <ng-container *ngIf="movement.editAvailable === true; else elseAmount">
-        <label>
-          <input [(ngModel)]="movement.amount" name="amount" class="inputMovement right-align" min="0" step="10" type="number" (keydown)="$event.stopPropagation()"/>
-        </label>
-      </ng-container>
-    </ng-container>
-    <ng-template #elseAmount>
-      <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">
-        {{ movement.amount | currency:'USD':'symbol-narrow':'0.2' }}
-      </h6>
-    </ng-template>
+  <div class="col m2 right-align">
+    <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">
+      {{ movement.amount | currency:'USD':'symbol-narrow':'0.2' }}
+    </h6>
   </div>
   <!-- Amount End -->
 
@@ -72,11 +39,7 @@
     <div class="switch">
       <label>
         Si
-        <input
-          [(ngModel)]="movement.duplicated"
-          (click)="updateMovement(movement)"
-          name="duplicated"
-          type="checkbox"/>
+        <input type="checkbox" (change)="updateMovement(movement)" [checked]="movement.duplicated"/>
         <span class="lever"></span>
         No
       </label>
