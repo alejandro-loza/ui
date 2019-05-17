@@ -4,16 +4,16 @@ import { environment } from '@env/environment';
 
 import { ConfigService } from '@services/config/config.service';
 import { DateApiService } from '@services/date-api/date-api.service';
+import { ToastService } from '@services/toast/toast.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { NewMovement } from '@interfaces/newMovement.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { Response } from '@interfaces/response.interface';
 
-import { catchError, distinctUntilChanged, map, mergeMap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { isNullOrUndefined } from 'util';
-import { ToastService } from '@services/toast/toast.service';
 
 @Injectable()
 export class MovementsService {
@@ -27,17 +27,12 @@ export class MovementsService {
     private dateService: DateApiService,
     private toastService: ToastService,
     private dateApiService: DateApiService
-  ) {
-    this.movementsList = [];
-  }
+  ) { this.movementsList = []; }
 
   get getMovementList(): Movement[] {
     return this.movementsList;
   }
 
-  set setMovementList(movementsList: Movement[]) {
-    this.movementsList = movementsList;
-  }
   /**
    * @function allMovements Esta funcion lo que hace traer todos lo movimiento con los siguientes parametros
    *
@@ -77,11 +72,7 @@ export class MovementsService {
             return res;
           }
           res.body.data.forEach((movement) => {
-            movement['formatDate'] = this.dateApiService.dateFormatMovement(
-              this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
-            );
-            movement['editAvailable'] = false;
-            movement['customAmount'] = movement.amount;
+            movement.customDate = this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString());
           });
           this.movementsList = [ ...this.movementsList, ...res.body.data ];
           return res;
