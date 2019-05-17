@@ -29,7 +29,8 @@ export class SignupService {
 			passwordConfirmation: data.passwordConfirm,
 			termsAndConditionsAccepted: data.termsAndConditions,
 			referralCode: isNullOrUndefined(data.referalCode) ? null : data.referalCode,
-			blog: data.blog
+			blog: data.blog,
+			from: 'Webapp'
 		});
 		return this.http.post<User>(`${this.url}/users`, body, {
 			observe: 'response',
