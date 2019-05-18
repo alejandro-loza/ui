@@ -35,13 +35,11 @@ export class ItemListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(CdkVirtualScrollViewport) scrollVirtual: CdkVirtualScrollViewport;
 
-  private index: number;
   constructor(
     private scrollDispatcher: ScrollDispatcher,
     private statefulMovementsService: StatefulMovementsService,
     private router: Router
   ) {
-    this.index = 0;
     this.getMoreMovements = false;
 
     this.getMoreMovementsChange = new EventEmitter();
@@ -63,9 +61,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
 
   trackByFn = (index: number, movement: Movement) => movement.id;
 
-  setMovement(event: Event, movement: Movement): Promise<boolean> {
-    event.stopPropagation();
-    this.statefulMovementsService.setMovement = movement;
-    return this.router.navigate([movement.id]);
+  setMovement(movemment: Movement) {
+    this.statefulMovementsService.setMovement = movemment;
   }
+
 }
