@@ -1,5 +1,8 @@
 .btn{
-    border-radius: 5px;
-    margin-top: 10px;
-    margin-left: 5px;
+  margin-top: 10px;
+  margin-left: 5px;
+}
+
+.btn.noMargin {
+  margin: 0;
 }
