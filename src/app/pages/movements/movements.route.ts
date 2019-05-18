@@ -7,7 +7,7 @@ const MovementsRouting: Routes = [
     component: MovementsComponent
   },
   {
-    path: 'new-movement',
+    path: ':id',
     loadChildren: './new-movement/new-movement.module#NewMovementModule',
     data: {
       title: 'Nuevo movimiento'
