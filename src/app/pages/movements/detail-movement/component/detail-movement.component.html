@@ -1,0 +1,119 @@
+<app-back-button></app-back-button>
+<div class="container">
+  <div class="row">
+    <div class="col s12 m8 pt-20">
+      <form #forma="ngForm" (ngSubmit)="submitPorcess(forma)">
+        <div class="col s12 input-field">
+          <input (focusout)="preliminarCategory()" class="validate input-new-movement" id="description" name="description" [(ngModel)]="newMovement.description" required type="text" #description="ngModel" />
+          <label for="description">Descripción del Movimiento:</label>
+          <span class="helper-text" data-error="Ingresa una descripción para tu movimiento, Ej: Startbucks">Ej: Startbucks</span>
+        </div>
+        <div class="col s12">
+          <div class="row valign-wrapper">
+            <div class="col s12 m6 input-field">
+              <input class="validate input-new-movement" id="monto" name="amount" [(ngModel)]="newMovement.amount" min="0" required type="number" value="0" #amount="ngModel" />
+              <label for="monto">Monto del Movimiento:</label>
+              <span class="helper-text" data-error="Ingresa un valo numérico y mínimo de 1">Debes ingresar un valor numérico</span>
+            </div>
+            <div class="col s12 m6 center-align" id="type-section">
+              <input class="btn btn-type btn-charge active" type="button" ngModel="Gasto" (click)="valueType('charge')" [ngModelOptions]="{standalone: true}" id="charge" />
+              <input class="btn btn-type btn-deposit" type="button" ngModel="Ingreso" (click)="valueType('deposit')" [ngModelOptions]="{standalone: true}" id="deposit" />
+            </div>
+          </div>
+        </div>
+        <div class="col s12">
+          <div class="row valign-wrapper">
+            <div class="col m4 l3">
+              <h6>Tipo de cuenta:</h6>
+            </div>
+            <div class="col m8 l9">
+              <ng-container *ngIf="!loaderSpinner; else showSpinner">
+                <a *ngIf="disableModalTrigger; else modalTrigger" class="btn maBtn transparent black-text valign-wrapper truncate" id="manualAccountsTrigger">
+                  <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'">
+                  <span>
+                            {{ manualAccountName }}
+                        </span>
+                </a>
+                <ng-template #modalTrigger>
+                  <a class="btn maBtn transparent black-text modal-trigger valign-wrapper truncate" id="manualAccountsTrigger" href="#manualAccountsModal">
+                    <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'">
+                    <span>
+                              {{ manualAccountName }}
+                          </span>
+                  </a>
+                </ng-template>
+              </ng-container>
+              <ng-template #showSpinner>
+                <app-spinner></app-spinner>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 pt-20">
+          <div class="row rowFecha">
+            <input type="button" ngModel="Hoy" class="btn btn-date active" id="todayDate" (click)="changeClassDate('todayDate')" [ngModelOptions]="{standalone: true}">
+            <input type="button" ngModel="Ayer" class="btn btn-date" id="yesterdayDate" (click)="changeClassDate('yesterdayDate')" [ngModelOptions]="{standalone: true}">
+            <app-date [formatDate]="formatDate" [type]="'button'" [classes]="'btn btn-date'" [reset]="reset" [id]="'otherDate'" [date]="date" (valueDate)="newMovement.date=$event" (click)="changeClassDate('otherDate')">
+            </app-date>
+          </div>
+        </div>
+        <div class="col s12 pt-20">
+          <p>
+            <label>
+              <input
+                type="checkbox"
+                class="filled-in"
+                name="duplicated"
+                [ngModel]="checkboxDuplicate.nativeElement.checked"
+                (ngModelChange)="newMovement.duplicated"
+                #duplicated/>
+              <span>No tomar en cuenta en gráficas y presupuestos</span>
+            </label>
+          </p>
+        </div>
+        <div class="row" id="newMovementBtn">
+          <div class="col s12 center-align">
+            <button class="btn btn-large btn-submit" id="submitButton" [disabled]="forma.invalid" type="submit" #btnSubmit>Crear Movimiento
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <div id="spinner" class="row pt-20">
+        <div class="col s12 center">
+          <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-green-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <p [ngStyle]="{'color': preCategory.color }" class="center" id="categoryP">
+        Categoría
+      </p>
+      <a (click)="openDialog($event)" [ngStyle]="{'color': preCategory.textColor, 'background-color': preCategory.color }" class="btn category-container truncate">
+        <img id="categoryIcon" [src]="'assets/media/img/categories/' + preCategory.parent.id + '.svg'"
+             [alt]="preCategory.name">
+        {{ preCategory.name }}
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Structure -->
+<div id="manualAccountsModal" class="modal" #manualAccountsModal>
+  <div class="modal-content">
+    <div class="row">
+      <app-user-manual-accounts (noManualAccounts)="modalManualaccountsTrigger($event)" (manualAccount)="manualAccountSelected($event)" class="modal-close"></app-user-manual-accounts>
+    </div>
+  </div>
+</div>

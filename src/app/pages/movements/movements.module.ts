@@ -18,7 +18,11 @@ import { MovementsComponent } from './component/movements.component';
     EmptyStateModule,
     MovementsRoutes
   ],
-  declarations: [ MovementsComponent ],
-  providers: [ ParamsMovementsService ]
+  declarations: [
+    MovementsComponent
+  ],
+  providers: [
+    ParamsMovementsService
+  ]
 })
 export class MovementsModule {}

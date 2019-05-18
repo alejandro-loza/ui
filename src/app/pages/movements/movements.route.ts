@@ -8,9 +8,9 @@ const MovementsRouting: Routes = [
   },
   {
     path: ':id',
-    loadChildren: './new-movement/new-movement.module#NewMovementModule',
+    loadChildren: './detail-movement/detail-movement.module#DetailMovementModule',
     data: {
-      title: 'Nuevo movimiento'
+      title: 'Movimiento'
     }
   },
   {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -23,11 +23,11 @@ import { isNullOrUndefined } from 'util';
 import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
-  selector: 'app-new-movement',
-  templateUrl: './new-movement.component.html',
-  styleUrls: [ './new-movement.component.css' ]
+  selector: 'app-detail-movement',
+  templateUrl: './detail-movement.component.html',
+  styleUrls: ['./detail-movement.component.css']
 })
-export class NewMovementComponent implements OnInit, AfterViewInit {
+export class DetailMovementComponent implements OnInit {
   @ViewChild('duplicated') checkboxDuplicate: ElementRef;
   @ViewChild('manualAccountsModal') manualAccountsModal: ElementRef;
   @ViewChild('datepicker') elDatePickker: ElementRef;
