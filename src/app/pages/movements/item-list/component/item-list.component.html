@@ -1,10 +1,14 @@
 <cdk-virtual-scroll-viewport itemSize="55*35" class="scroll-viewport" id="virtualScroll">
   <ul class="collapsible">
-    <li class="fadeIn fast" *cdkVirtualFor="let movement of movementList; let i = index; trackBy: trackByFn">
-      <div class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}">
-        <app-item class="item" [movement]="movement" (click)="setMovement($event, movement)"></app-item>
-      </div>
-    </li>
+    <ng-template cdkVirtualFor let-movement let-i="index" [cdkVirtualForOf]="movementList"
+                 [cdkVirtualForTrackBy]="trackByFn">
+      <li class="fadeIn fast">
+        <div class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}">
+          <app-item class="item" [movement]="movement" (click)="setMovement(movement)"
+                    [routerLink]="[movement.id]"></app-item>
+        </div>
+      </li>
+    </ng-template>
   </ul>
   <div class="spinnerContainer">
     <div class="center-align" *ngIf="spinnerBoolean">
