@@ -8,6 +8,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import {Router} from '@angular/router';
 
 import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 
@@ -37,7 +38,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   private index: number;
   constructor(
     private scrollDispatcher: ScrollDispatcher,
-    private statefulMovementsService: StatefulMovementsService
+    private statefulMovementsService: StatefulMovementsService,
+    private router: Router
   ) {
     this.index = 0;
     this.getMoreMovements = false;
@@ -61,8 +63,9 @@ export class ItemListComponent implements OnInit, AfterViewInit {
 
   trackByFn = (index: number, movement: Movement) => movement.id;
 
-  setMovement(event: Event, movement: Movement) {
+  setMovement(event: Event, movement: Movement): Promise<boolean> {
     event.stopPropagation();
     this.statefulMovementsService.setMovement = movement;
+    return this.router.navigate([movement.id]);
   }
 }
