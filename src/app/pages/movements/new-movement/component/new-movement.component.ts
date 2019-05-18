@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import { MovementsService } from '@services/movements/movements.service';
 import { AccountService } from '@services/account/account.service';
@@ -44,6 +44,8 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
   preCategory: Category;
   date: Date;
 
+  id: string;
+
   reset: boolean;
   loaderSpinner: boolean = true;
   formatDate: string;
@@ -55,6 +57,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     private toastService: ToastService,
     private renderer: Renderer2,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private accountService: AccountService,
     private categoriesService: CategoriesService,
     private categoriesHelperService: CategoriesHelperService,
@@ -63,17 +66,19 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     private mixpanelService: MixpanelService
   ) {
     this.formatDate = 'Otro...';
-    this.newMovement = {
-      date: new Date(),
-      type: 'charge'
-    };
+    this.newMovement = { date: new Date(), type: 'charge' };
+    this.activatedRoute.params.subscribe( res =>  this.id = res.id );
     this.date = new Date();
     this.reset = false;
     this.categoriesList = this.categoriesBeanService.getCategories();
   }
 
   ngOnInit() {
-    this.fillNoPreCat();
+    if (this.id === 'new-movement') {
+      this.fillNoPreCat();
+    } else {
+
+    }
   }
 
   ngAfterViewInit() {
@@ -98,7 +103,7 @@ export class NewMovementComponent implements OnInit, AfterViewInit {
     let categoryId: string;
     this.categoriesService.getPreliminarCategory(this.newMovement.description, income).subscribe((res) => {
       categoryId = res.body.categoryId;
-      if (categoryId == undefined) {
+      if (categoryId === undefined) {
         this.fillNoPreCat();
       } else {
         this.getEntireCategory(categoryId);
