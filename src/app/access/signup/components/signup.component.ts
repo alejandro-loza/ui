@@ -37,7 +37,6 @@ export class SignupComponent {
 
 	signup() {
 		this.passwordMatch();
-		this.termsValidate();
 		if (this.passwordValidate && this.termsAccepted) {
 			this.showSpinner = true;
 			this.signupService.signup(this.signupData.value).subscribe(
@@ -84,9 +83,5 @@ export class SignupComponent {
 		this.signupData.value.password === this.signupData.value.passwordConfirm
 			? (this.passwordValidate = true)
 			: (this.passwordValidate = false);
-	}
-
-	termsValidate() {
-		this.signupData.value.termsAndConditions ? (this.termsAccepted = true) : (this.termsAccepted = false);
 	}
 }

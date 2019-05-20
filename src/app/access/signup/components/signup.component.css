@@ -1,3 +1,11 @@
+#finerio-text {
+	margin-top: 0px;
+}
+
+.card {
+	transform: translate(0, 5%);
+}
+
 .login-container {
   margin-top: 5%;
 }
@@ -54,11 +62,29 @@ ul{
   font-size: 12px;
 }
 
+#terms {
+	margin: 15px 0px;
+	color: #757575;
+}
+
 .container {
   overflow-x: hidden;
 }
 
-@media only screen and (min-width: 1200px) and (max-width: 1499px){
-  .card { transform: translate(0); }
-  .input-field{ margin-top: 0; }
+@media only screen and (max-width: 600px) {
+	.card {
+		transform: translate(0);
+	}
+	.input-field {
+		margin-top: 0;
+	}
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1499px) {
+	.card {
+		transform: translate(0);
+	}
+	.input-field {
+		margin-top: 0;
+	}
 }
