@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, Renderer2 } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, Renderer2, AfterViewInit} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -9,14 +9,14 @@ import { CleanerService } from '@services/cleaner/cleaner.service';
 import { CategoriesService } from '@services/categories/categories.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { CategoriesHelperService } from '@services/categories/categories-helper.service';
-import { MixpanelService } from '@services/mixpanel/mixpanel.service';
+import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ModalCategoriesComponent } from '@components/modal-categories/component/modal-categories.component';
 
-import { NewMovement } from '@interfaces/newMovement.interface';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { Category } from '@interfaces/category.interface';
+import {Movement} from '@interfaces/movement.interface';
 
 import { isNullOrUndefined } from 'util';
 
@@ -27,7 +27,7 @@ import * as M from 'materialize-css/dist/js/materialize';
   templateUrl: './detail-movement.component.html',
   styleUrls: ['./detail-movement.component.css']
 })
-export class DetailMovementComponent implements OnInit {
+export class DetailMovementComponent implements OnInit, AfterViewInit {
   @ViewChild('duplicated') checkboxDuplicate: ElementRef;
   @ViewChild('manualAccountsModal') manualAccountsModal: ElementRef;
   @ViewChild('datepicker') elDatePickker: ElementRef;
@@ -40,8 +40,8 @@ export class DetailMovementComponent implements OnInit {
 
   categoriesList: Category[] = [];
 
-  newMovement: NewMovement;
-  preCategory: Category;
+  movement: Movement;
+  category: Category;
   date: Date;
 
   id: string;
@@ -55,18 +55,19 @@ export class DetailMovementComponent implements OnInit {
     private movementService: MovementsService,
     private cleanerService: CleanerService,
     private toastService: ToastService,
-    private renderer: Renderer2,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
     private accountService: AccountService,
     private categoriesService: CategoriesService,
     private categoriesHelperService: CategoriesHelperService,
     private matDialog: MatDialog,
     private categoriesBeanService: CategoriesBeanService,
-    private mixpanelService: MixpanelService
+    private statefulMovementService: StatefulMovementsService,
+
+    private renderer: Renderer2,
+    private router: Router,
   ) {
     this.formatDate = 'Otro...';
-    this.newMovement = { date: new Date(), type: 'charge' };
+    this.movement = { date: new Date(), type: 'charge' };
     this.activatedRoute.params.subscribe( res =>  this.id = res.id );
     this.date = new Date();
     this.reset = false;
@@ -77,7 +78,7 @@ export class DetailMovementComponent implements OnInit {
     if (this.id === 'new-movement') {
       this.fillNoPreCat();
     } else {
-
+      this.getMovementForEdit();
     }
   }
 
@@ -86,7 +87,7 @@ export class DetailMovementComponent implements OnInit {
   }
 
   fillNoPreCat() {
-    this.preCategory = {
+    this.category = {
       color: '#AAAAAA',
       textColor: '#FFFFFF',
       id: null,
@@ -99,9 +100,9 @@ export class DetailMovementComponent implements OnInit {
 
   // Function called from HTML
   preliminarCategory() {
-    let income = this.newMovement.type == 'INCOME' ? true : false;
+    const income = this.movement.type === 'INCOME';
     let categoryId: string;
-    this.categoriesService.getPreliminarCategory(this.newMovement.description, income).subscribe((res) => {
+    this.categoriesService.getPreliminarCategory(this.movement.description, income).subscribe((res) => {
       categoryId = res.body.categoryId;
       if (categoryId === undefined) {
         this.fillNoPreCat();
@@ -111,13 +112,26 @@ export class DetailMovementComponent implements OnInit {
     });
   }
 
+  getMovementForEdit() {
+    this.movement = this.statefulMovementService.getMovement;
+    if (this.movement.concepts[0].category) {
+      this.category = this.movement.concepts[0].category;
+      if (!this.category.parent) {
+        this.category.parent = { id: 'userCategory' };
+      }
+    } else {
+      this.fillNoPreCat();
+    }
+  }
+
   getEntireCategory(categoryId: string) {
+    this.movement.concepts = [{}];
     this.categoriesService.getCategoriesInfo().subscribe((res) => {
       this.categoriesList = res.body;
-      this.newMovement.category = this.categoriesHelperService.getCategoryById(categoryId, res.body);
-      this.preCategory = this.newMovement.category;
-      this.preCategory.parent = {
-        id: this.categoriesHelperService.getParentCategoryId(this.preCategory.id, res.body)
+      this.movement.concepts[0].category = this.categoriesHelperService.getCategoryById(categoryId, res.body);
+      this.category = this.movement.concepts[0].category;
+      this.category.parent = {
+        id: this.categoriesHelperService.getParentCategoryId(this.category.id, res.body)
       };
     });
   }
@@ -130,8 +144,9 @@ export class DetailMovementComponent implements OnInit {
   }
 
   createManualAccountMovement() {
-    this.newMovement.category = this.preCategory;
-    this.movementService.createManualAccountMovement(this.newMovement, this.manualAccount.id).subscribe(
+    this.movement.concepts = [{}];
+    this.movement.concepts[0].category = this.category;
+    this.movementService.createManualAccountMovement(this.movement, this.manualAccount.id).subscribe(
       (res) => {
         this.toastService.setCode = res.status;
       },
@@ -149,7 +164,6 @@ export class DetailMovementComponent implements OnInit {
       () => {
         this.cleanerService.cleanAllVariables();
         this.reset = true;
-        this.mixpanelEvent();
         this.toastService.setMessage = 'Se creó su movimiento exitosamente';
         this.toastService.toastGeneral();
         return this.router.navigateByUrl('/app/movements');
@@ -158,7 +172,7 @@ export class DetailMovementComponent implements OnInit {
   }
 
   createMovement(form: NgForm) {
-    this.movementService.createMovement(this.newMovement).subscribe(
+    this.movementService.createMovement(this.movement).subscribe(
       (res) => {
         this.toastService.setCode = res.status;
       },
@@ -176,7 +190,6 @@ export class DetailMovementComponent implements OnInit {
       () => {
         this.cleanerService.cleanAllVariables();
         this.reset = true;
-        this.mixpanelEvent();
         this.toastService.setMessage = 'Se creó su movimiento exitosamente';
         this.toastService.toastGeneral();
         return this.router.navigateByUrl('/app/movements');
@@ -184,14 +197,9 @@ export class DetailMovementComponent implements OnInit {
     );
   }
 
-  mixpanelEvent() {
-    this.mixpanelService.setIdentify();
-    this.mixpanelService.setTrackEvent('Create movement');
-  }
-
   manualAccountSelected(account: AccountInterface) {
     setTimeout(() => {
-      let withoutDefault = isNullOrUndefined(account);
+      const withoutDefault = isNullOrUndefined(account);
       if (!withoutDefault) {
         this.manualAccount = account;
         this.manualAccountName = this.manualAccount.name;
@@ -214,7 +222,7 @@ export class DetailMovementComponent implements OnInit {
   valueType(id: string) {
     this.renderer.removeClass(document.querySelector('.btn-type.active'), 'active');
     this.renderer.addClass(document.getElementById(id), 'active');
-    this.newMovement.type = id;
+    this.movement.type = id;
   }
 
   // function for HTML
@@ -228,7 +236,7 @@ export class DetailMovementComponent implements OnInit {
     } else if (id === 'otherDate') {
       return;
     }
-    this.newMovement.date = auxDate;
+    this.movement.date = auxDate;
   }
 
   // Categories process
@@ -250,7 +258,7 @@ export class DetailMovementComponent implements OnInit {
     matDialogRef.afterClosed().subscribe(
       (res) => {
         if (!isNullOrUndefined(res)) {
-          this.preCategory = res;
+          this.category = res;
         }
       },
       (err) => {
@@ -262,8 +270,8 @@ export class DetailMovementComponent implements OnInit {
         this.toastService.toastGeneral();
       },
       () => {
-        if (!isNullOrUndefined(this.preCategory.userId)) {
-          this.preCategory.parent = {
+        if (!isNullOrUndefined(this.category.userId)) {
+          this.category.parent = {
             id: 'userCategory'
           };
         }

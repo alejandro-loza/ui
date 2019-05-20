@@ -4,15 +4,15 @@
     <div class="col s12 m8 pt-20">
       <form #forma="ngForm" (ngSubmit)="submitPorcess(forma)">
         <div class="col s12 input-field">
-          <input (focusout)="preliminarCategory()" class="validate input-new-movement" id="description" name="description" [(ngModel)]="newMovement.description" required type="text" #description="ngModel" />
-          <label for="description">Descripción del Movimiento:</label>
+          <input (focusout)="preliminarCategory()" class="validate input-new-movement" placeholder="Descripción del Movimiento:"
+                 id="description" name="description" [(ngModel)]="movement.description" required type="text" #description="ngModel" />
           <span class="helper-text" data-error="Ingresa una descripción para tu movimiento, Ej: Startbucks">Ej: Startbucks</span>
         </div>
         <div class="col s12">
           <div class="row valign-wrapper">
             <div class="col s12 m6 input-field">
-              <input class="validate input-new-movement" id="monto" name="amount" [(ngModel)]="newMovement.amount" min="0" required type="number" value="0" #amount="ngModel" />
-              <label for="monto">Monto del Movimiento:</label>
+              <input class="validate input-new-movement" id="monto" name="amount" placeholder="Monto del Movimiento:"
+                     [(ngModel)]="movement.amount" min="0" required type="number" value="0" #amount="ngModel" />
               <span class="helper-text" data-error="Ingresa un valo numérico y mínimo de 1">Debes ingresar un valor numérico</span>
             </div>
             <div class="col s12 m6 center-align" id="type-section">
@@ -28,18 +28,16 @@
             </div>
             <div class="col m8 l9">
               <ng-container *ngIf="!loaderSpinner; else showSpinner">
-                <a *ngIf="disableModalTrigger; else modalTrigger" class="btn maBtn transparent black-text valign-wrapper truncate" id="manualAccountsTrigger">
-                  <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'">
-                  <span>
-                            {{ manualAccountName }}
-                        </span>
-                </a>
+                <div *ngIf="disableModalTrigger; else modalTrigger">
+                  <a class="btn maBtn transparent black-text valign-wrapper truncate" id="manualAccountsTrigger">
+                    <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'" alt="manualAccountName">
+                    <span>{{ manualAccountName }}</span>
+                  </a>
+                </div>
                 <ng-template #modalTrigger>
                   <a class="btn maBtn transparent black-text modal-trigger valign-wrapper truncate" id="manualAccountsTrigger" href="#manualAccountsModal">
-                    <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'">
-                    <span>
-                              {{ manualAccountName }}
-                          </span>
+                    <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'" alt="manualAccountName">
+                    <span>{{ manualAccountName }}</span>
                   </a>
                 </ng-template>
               </ng-container>
@@ -51,9 +49,12 @@
         </div>
         <div class="col s12 pt-20">
           <div class="row rowFecha">
-            <input type="button" ngModel="Hoy" class="btn btn-date active" id="todayDate" (click)="changeClassDate('todayDate')" [ngModelOptions]="{standalone: true}">
-            <input type="button" ngModel="Ayer" class="btn btn-date" id="yesterdayDate" (click)="changeClassDate('yesterdayDate')" [ngModelOptions]="{standalone: true}">
-            <app-date [formatDate]="formatDate" [type]="'button'" [classes]="'btn btn-date'" [reset]="reset" [id]="'otherDate'" [date]="date" (valueDate)="newMovement.date=$event" (click)="changeClassDate('otherDate')">
+            <input type="button" ngModel="Hoy" class="btn btn-date active" id="todayDate"
+                   (click)="changeClassDate('todayDate')" [ngModelOptions]="{standalone: true}">
+            <input type="button" ngModel="Ayer" class="btn btn-date" id="yesterdayDate"
+                   (click)="changeClassDate('yesterdayDate')" [ngModelOptions]="{standalone: true}">
+            <app-date [formatDate]="formatDate" [type]="'button'" [classes]="'btn btn-date'" [reset]="reset"
+                      [id]="'otherDate'" [date]="date" (valueDate)="movement.date=$event" (click)="changeClassDate('otherDate')">
             </app-date>
           </div>
         </div>
@@ -64,14 +65,13 @@
                 type="checkbox"
                 class="filled-in"
                 name="duplicated"
-                [ngModel]="checkboxDuplicate.nativeElement.checked"
-                (ngModelChange)="newMovement.duplicated"
+                [(ngModel)]="movement.duplicated"
                 #duplicated/>
               <span>No tomar en cuenta en gráficas y presupuestos</span>
             </label>
           </p>
         </div>
-        <div class="row" id="newMovementBtn">
+        <div class="row" id="movementBtn">
           <div class="col s12 center-align">
             <button class="btn btn-large btn-submit" id="submitButton" [disabled]="forma.invalid" type="submit" #btnSubmit>Crear Movimiento
               <i class="material-icons right">send</i>
@@ -96,13 +96,13 @@
       </div>
     </div>
     <div class="col s12 m4">
-      <p [ngStyle]="{'color': preCategory.color }" class="center" id="categoryP">
+      <p [ngStyle]="{'color': category.color }" class="center" id="categoryP">
         Categoría
       </p>
-      <a (click)="openDialog($event)" [ngStyle]="{'color': preCategory.textColor, 'background-color': preCategory.color }" class="btn category-container truncate">
-        <img id="categoryIcon" [src]="'assets/media/img/categories/' + preCategory.parent.id + '.svg'"
-             [alt]="preCategory.name">
-        {{ preCategory.name }}
+      <a (click)="openDialog($event)" [ngStyle]="{'color': category.textColor, 'background-color': category.color }" class="btn category-container truncate">
+        <img id="categoryIcon" [src]="'assets/media/img/categories/' + category.parent.id + '.svg'"
+             [alt]="category.name" alt="category.name">
+        {{ category.name }}
       </a>
     </div>
   </div>
