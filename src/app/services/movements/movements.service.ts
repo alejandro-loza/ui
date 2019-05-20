@@ -5,9 +5,9 @@ import { environment } from '@env/environment';
 import { ConfigService } from '@services/config/config.service';
 import { DateApiService } from '@services/date-api/date-api.service';
 import { ToastService } from '@services/toast/toast.service';
+import {MixpanelService} from '@services/mixpanel/mixpanel.service';
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
-import { NewMovement } from '@interfaces/newMovement.interface';
 import { Movement } from '@interfaces/movement.interface';
 import { Response } from '@interfaces/response.interface';
 
@@ -26,7 +26,8 @@ export class MovementsService {
     private configService: ConfigService,
     private dateService: DateApiService,
     private toastService: ToastService,
-    private dateApiService: DateApiService
+    private dateApiService: DateApiService,
+    private mixpanelService: MixpanelService,
   ) { this.movementsList = []; }
 
   get getMovementList(): Movement[] {
@@ -94,13 +95,14 @@ export class MovementsService {
       );
   }
 
-  createMovement(movement: NewMovement): Observable<HttpResponse<Movement>> {
+  createMovement(movement: Movement): Observable<HttpResponse<Movement>> {
     const id = this.configService.getUser.id;
     let body: string;
     // error de la cuenta porque no entra a este IF, por eso me lo manda como cash
     body = JSON.stringify({
       amount: movement.amount,
       balance: 0,
+      category: movement.concepts[0].category,
       customDate: this.dateService.dateApi(movement.date),
       customDescription: movement.description,
       date: this.dateService.dateApi(movement.date),
@@ -111,26 +113,34 @@ export class MovementsService {
     return this.httpClient.post<Movement>(`${this.url}/${id}/movements`, body, {
       observe: 'response',
       headers: this.configService.getHeaders
-    });
+    }).pipe(map(res => {
+      this.mixpanelService.setIdentify();
+      this.mixpanelService.setTrackEvent('Create movement');
+      return res;
+    }));
   }
 
-  createManualAccountMovement(movement: NewMovement, accountId: string) {
-    let URL = `${environment.backendUrl}/accounts/${accountId}/movements`;
-    let body = JSON.stringify({
+  createManualAccountMovement(movement: Movement, accountId: string): Observable<HttpResponse<Movement>>  {
+    const URL = `${environment.backendUrl}/accounts/${accountId}/movements`;
+    const body = JSON.stringify({
       amount: movement.amount,
       balance: 0,
+      category: movement.concepts[0].category,
       customDate: this.dateService.dateApi(movement.date),
       customDescription: movement.description,
       date: this.dateService.dateApi(movement.date),
       description: movement.description,
       duplicated: movement.duplicated,
       type: movement.type.toUpperCase(),
-      category: movement.category
     });
     return this.httpClient.post<Movement>(URL, body, {
       observe: 'response',
       headers: this.configService.getHeaders
-    });
+    }).pipe( map(res => {
+      this.mixpanelService.setIdentify();
+      this.mixpanelService.setTrackEvent('Create movement');
+      return res;
+    }));
   }
 
   updateMovement(movement: Movement) {
