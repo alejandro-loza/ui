@@ -296,14 +296,18 @@ export class CredentialComponent implements OnInit {
 	}
 
 	modalProcessForInteractive(credential: CredentialInterface) {
-		const instanceModal = M.Modal.getInstance(this.interactiveModal.nativeElement);
+		const instanceModal = M.Modal.getInstance(this.interactiveModal.nativeElement, {
+			dismissible: false
+		});
 		instanceModal.open();
 		this.getInteractiveFields(credential);
 		this.mixpanelTokenEvent();
 	}
 
 	ngAfterViewInit(): void {
-		const initModal = new M.Modal(this.interactiveModal.nativeElement);
+		const initModal = new M.Modal(this.interactiveModal.nativeElement, {
+			dismissible: false
+		});
 	}
 
 	clearMemory() {
