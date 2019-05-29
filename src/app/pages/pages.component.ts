@@ -26,9 +26,7 @@ export class PagesComponent implements OnInit {
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     idle.onTimeout.subscribe(() => {
-      this.cleanerService.cleanAllVariables();
-      this.configService.resetVariable();
-      return this.router.navigate([ '/' ]);
+      document.location.reload(true);
     });
     this.reset();
   }
