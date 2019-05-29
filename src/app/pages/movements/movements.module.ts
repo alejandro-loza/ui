@@ -19,7 +19,7 @@ import { MovementsComponent } from './component/movements.component';
     MovementsRoutes
   ],
   declarations: [
-    MovementsComponent
+    MovementsComponent,
   ],
   providers: [
     ParamsMovementsService
