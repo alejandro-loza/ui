@@ -26,10 +26,10 @@
             </div>
             <div class="col s12 m6 center-align" id="type-section">
               <div *ngIf="id === 'new-movement', then newType else editType"></div>
-                <ng-template #newType>
-                  <input class="btn btn-type btn-charge active" type="button" ngModel="Gasto" (click)="valueType('charge')" [ngModelOptions]="{standalone: true}" id="charge" />
-                  <input class="btn btn-type btn-deposit" type="button" ngModel="Ingreso" (click)="valueType('deposit')" [ngModelOptions]="{standalone: true}" id="deposit" />
-                </ng-template>
+              <ng-template #newType>
+                <input class="btn btn-type btn-charge active" type="button" ngModel="Gasto" (click)="valueType('charge')" [ngModelOptions]="{standalone: true}" id="charge" />
+                <input class="btn btn-type btn-deposit" type="button" ngModel="Ingreso" (click)="valueType('deposit')" [ngModelOptions]="{standalone: true}" id="deposit" />
+              </ng-template>
               <ng-template #editType>
                 <div *ngIf="movement.account.institution.code.toLowerCase() === 'dinerio', then newType"></div>
               </ng-template>
@@ -85,6 +85,16 @@
               <span>No tomar en cuenta en gráficas y presupuestos</span>
             </label>
           </p>
+          <ng-template [ngIf]="id !== 'new-movement'">
+            <ng-template [ngIf]="movement.account.institution.code === 'DINERIO'">
+              <p>
+                <label>
+                  <input type="checkbox" class="filled-in" name="inBalance" [(ngModel)]="movement.inBalance"/>
+                  <span>No tomar en cuenta en saldos de cuentas manuales</span>
+                </label>
+              </p>
+            </ng-template>
+          </ng-template>
         </div>
         <div class="row" id="movementBtn">
           <div class="col s12 center-align">
