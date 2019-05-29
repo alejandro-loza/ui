@@ -10,10 +10,16 @@ import {DetailMovementRoutes} from './detail-movement.route';
 
 import { DateModule } from '../date/date.module';
 import {DetailMovementComponent} from './component/detail-movement.component';
+import { BankAccountComponent } from './bank-account/bank-account.component';
+import {EditItemComponent} from '@pages/movements/detail-movement/edit-item/edit-item.component';
+import { ManualAccountMovementComponent } from './manual-account-movement/manual-account-movement.component';
 
 @NgModule({
   declarations: [
-    DetailMovementComponent
+    DetailMovementComponent,
+    BankAccountComponent,
+    EditItemComponent,
+    ManualAccountMovementComponent
   ],
   imports: [
     SharedModule,

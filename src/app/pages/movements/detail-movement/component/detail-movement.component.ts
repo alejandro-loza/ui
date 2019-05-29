@@ -1,5 +1,11 @@
-import {Component, ElementRef, OnInit, ViewChild, Renderer2, AfterViewInit} from '@angular/core';
-import { NgForm } from '@angular/forms';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  Renderer2,
+  AfterViewInit
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import { MovementsService } from '@services/movements/movements.service';
@@ -21,6 +27,10 @@ import {Movement} from '@interfaces/movement.interface';
 import { isNullOrUndefined } from 'util';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import {AccountsBeanService} from '@services/account/accounts-bean.service';
+import {EditMovementListService} from '@services/movements/edit-list/edit-movement-list.service';
+import {NgForm} from '@angular/forms';
+import {DateApiService} from '@services/date-api/date-api.service';
 
 @Component({
   selector: 'app-detail-movement',
@@ -28,15 +38,14 @@ import * as M from 'materialize-css/dist/js/materialize';
   styleUrls: ['./detail-movement.component.css']
 })
 export class DetailMovementComponent implements OnInit, AfterViewInit {
-  @ViewChild('duplicated') checkboxDuplicate: ElementRef;
-  @ViewChild('manualAccountsModal') manualAccountsModal: ElementRef;
   @ViewChild('datepicker') elDatePickker: ElementRef;
-  @ViewChild('btnSubmit') buttonSubmit: ElementRef;
+  @ViewChild('manualAccountsModal') manualAccountsModal: ElementRef;
 
   manualAccount: AccountInterface;
-  manualAccountNature: string;
   manualAccountName: string;
-  disableModalTrigger: boolean = true;
+  manualAccountNature: string;
+  hasManualAccount: boolean;
+  disableModalTrigger: boolean;
 
   categoriesList: Category[] = [];
 
@@ -51,39 +60,48 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
   formatDate: string;
   showSpinner: boolean = true;
 
+  private isViewAvailable: boolean;
+
   constructor(
     private movementService: MovementsService,
     private cleanerService: CleanerService,
+    private dateApiService: DateApiService,
     private toastService: ToastService,
     private activatedRoute: ActivatedRoute,
     private accountService: AccountService,
+    private accountsBeanService: AccountsBeanService,
     private categoriesService: CategoriesService,
     private categoriesHelperService: CategoriesHelperService,
     private matDialog: MatDialog,
     private categoriesBeanService: CategoriesBeanService,
     private statefulMovementService: StatefulMovementsService,
-
+    private editMovementListService: EditMovementListService,
     private renderer: Renderer2,
     private router: Router,
   ) {
-    this.formatDate = 'Otro...';
-    this.movement = { date: new Date(), type: 'charge' };
+    this.movement = { customDate: new Date(), type: 'charge' };
     this.activatedRoute.params.subscribe( res =>  this.id = res.id );
-    this.date = new Date();
-    this.reset = false;
+    this.formatDate = 'Otro...';
+    this.reset = true;
+    this.isViewAvailable = false;
+    this.hasManualAccount = false;
     this.categoriesList = this.categoriesBeanService.getCategories();
   }
 
   ngOnInit() {
-    if (this.id === 'new-movement') {
-      this.fillNoPreCat();
-    } else {
-      this.getMovementForEdit();
-    }
+    (this.id === 'new-movement') ? this.fillNoPreCat() : this.getMovementForEdit();
   }
 
   ngAfterViewInit() {
     const modal = new M.Modal(this.manualAccountsModal.nativeElement);
+    if (this.isViewAvailable) {
+      this.checkDate(this.movement.customDate);
+      if (this.movement.account.institution.code.toLowerCase() === 'dinerio') {
+        this.valueType(this.movement.type.toLowerCase());
+      }
+    } else {
+      this.checkDate(new Date());
+    }
   }
 
   fillNoPreCat() {
@@ -98,14 +116,16 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
     };
   }
 
-  // Function called from HTML
+// Function called from HTML
   preliminarCategory() {
     const income = this.movement.type === 'INCOME';
     let categoryId: string;
-    this.categoriesService.getPreliminarCategory(this.movement.description, income).subscribe((res) => {
+    this.categoriesService.getPreliminarCategory(this.movement.customDescription, income).subscribe((res) => {
       categoryId = res.body.categoryId;
-      if (categoryId === undefined) {
+      if (isNullOrUndefined(categoryId)) {
         this.fillNoPreCat();
+        this.movement.concepts = [{}];
+        this.movement.concepts[0].category = this.category;
       } else {
         this.getEntireCategory(categoryId);
       }
@@ -113,7 +133,8 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
   }
 
   getMovementForEdit() {
-    this.movement = this.statefulMovementService.getMovement;
+    this.movement = JSON.parse(JSON.stringify(this.statefulMovementService.getMovement));
+    this.movement.customDate = this.dateApiService.formatDateForAllBrowsers(this.movement.customDate.toString());
     if (this.movement.concepts[0].category) {
       this.category = this.movement.concepts[0].category;
       if (!this.category.parent) {
@@ -122,11 +143,12 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
     } else {
       this.fillNoPreCat();
     }
+    this.isViewAvailable = true;
   }
 
   getEntireCategory(categoryId: string) {
-    this.movement.concepts = [{}];
     this.categoriesService.getCategoriesInfo().subscribe((res) => {
+      this.movement.concepts = [{}];
       this.categoriesList = res.body;
       this.movement.concepts[0].category = this.categoriesHelperService.getCategoryById(categoryId, res.body);
       this.category = this.movement.concepts[0].category;
@@ -136,11 +158,67 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
     });
   }
 
-  submitPorcess(form: NgForm) {
-    document.querySelector('#spinner').classList.add('d-block');
-    (<HTMLButtonElement>document.querySelector('#submitButton')).disabled = true;
+  saveData(ngForm: NgForm) {
+    this.id === 'new-movement' ?
+      (
+        (this.manualAccount === undefined) ?
+          this.createMovement() :
+          this.createManualAccountMovement()
+      ) :
+      this.editMovement();
+  }
 
-    this.manualAccount === undefined ? this.createMovement(form) : this.createManualAccountMovement();
+  deleteMovement(event: Event, id: string) {
+    event.stopPropagation();
+    this.movementService.deleteMovement(id).subscribe(
+      res => {
+        this.statefulMovementService.setMovement = res.body;
+        this.toastService.setCode = res.status;
+      },
+      (err) => {
+        this.toastService.setCode = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral();
+          this.createManualAccountMovement();
+        }
+        if (err.status === 500) {
+          this.toastService.setMessage = '¡Ha ocurrido un error al crear tu movimiento!';
+          this.toastService.toastGeneral();
+        }
+      },
+      () => {
+        this.editMovementListService.deleteMovement();
+        this.toastService.setMessage = 'Se borró su movimiento exitosamente';
+        this.toastService.toastGeneral();
+        return this.router.navigateByUrl('/app/movements');
+      }
+    );
+  }
+
+  editMovement() {
+    this.movementService.updateMovement(this.movement).subscribe(
+      res => {
+        this.statefulMovementService.setMovement = this.movement;
+        this.toastService.setCode = res.status;
+      },
+      (err) => {
+        this.toastService.setCode = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral();
+          this.createManualAccountMovement();
+        }
+        if (err.status === 500) {
+          this.toastService.setMessage = '¡Ha ocurrido un error al crear tu movimiento!';
+          this.toastService.toastGeneral();
+        }
+      },
+      () => {
+        this.editMovementListService.editMovement();
+        this.toastService.setMessage = 'Se editó su movimiento exitosamente';
+        this.toastService.toastGeneral();
+        return this.router.navigateByUrl('/app/movements');
+      }
+    );
   }
 
   createManualAccountMovement() {
@@ -163,7 +241,6 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
       },
       () => {
         this.cleanerService.cleanAllVariables();
-        this.reset = true;
         this.toastService.setMessage = 'Se creó su movimiento exitosamente';
         this.toastService.toastGeneral();
         return this.router.navigateByUrl('/app/movements');
@@ -171,7 +248,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
     );
   }
 
-  createMovement(form: NgForm) {
+  createMovement() {
     this.movementService.createMovement(this.movement).subscribe(
       (res) => {
         this.toastService.setCode = res.status;
@@ -180,7 +257,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
         this.toastService.setCode = err.status;
         if (err.status === 401) {
           this.toastService.toastGeneral();
-          this.createMovement(form);
+          this.createMovement();
         }
         if (err.status === 500) {
           this.toastService.setMessage = '¡Ha ocurrido un error al crear tu movimiento!';
@@ -189,12 +266,57 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
       },
       () => {
         this.cleanerService.cleanAllVariables();
-        this.reset = true;
         this.toastService.setMessage = 'Se creó su movimiento exitosamente';
         this.toastService.toastGeneral();
         return this.router.navigateByUrl('/app/movements');
       }
     );
+  }
+
+// function for HTML Buttons
+  valueType(id: string) {
+    this.renderer.removeClass(document.querySelector('.btn-type.active'), 'active');
+    this.renderer.addClass(document.getElementById(id), 'active');
+    this.movement.type = id;
+  }
+
+// function for HTML
+  changeClassDate(id: string) {
+    const auxDate = new Date();
+    this.renderer.removeClass(document.querySelector('.btn-date.active'), 'active');
+    this.renderer.addClass(document.getElementById(id), 'active');
+    if (id === 'yesterdayDate') {
+      const newdate = auxDate.getDate() - 1;
+      auxDate.setDate(newdate);
+    } else if (id === 'otherDate') {
+      return;
+    }
+    this.movement.customDate = auxDate;
+  }
+
+  checkDate(date: Date) {
+    const checkDate = this.checkFormatDate(date);
+    const auxDate = new Date();
+    const changeDate = auxDate.getDate() - 1;
+    auxDate.setDate(changeDate);
+    const yesterday = this.checkFormatDate(auxDate);
+    const today = this.checkFormatDate(new Date());
+    if ( checkDate === today ) {
+      this.changeClassDate('todayDate');
+    } else if ( checkDate === yesterday ) {
+      this.changeClassDate('yesterdayDate');
+    } else {
+      this.changeClassDate('otherDate');
+    }
+  }
+
+  checkFormatDate = (date: Date) => {
+    const formatDate = date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear();
+    return formatDate;
+  }
+
+  modalManualaccountsTrigger(noManualAccounts: boolean) {
+    this.disableModalTrigger = noManualAccounts;
   }
 
   manualAccountSelected(account: AccountInterface) {
@@ -214,33 +336,12 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
-  modalManualaccountsTrigger(noManualAccounts: boolean) {
-    this.disableModalTrigger = noManualAccounts;
+  hasManualAccountChanged() {
+    this.movement.account = this.accountsBeanService.getMaualAccountToMovementsEditer;
+    this.hasManualAccount = false;
   }
 
-  // function for HTML Buttons
-  valueType(id: string) {
-    this.renderer.removeClass(document.querySelector('.btn-type.active'), 'active');
-    this.renderer.addClass(document.getElementById(id), 'active');
-    this.movement.type = id;
-  }
-
-  // function for HTML
-  changeClassDate(id: string) {
-    const auxDate = new Date();
-    this.renderer.removeClass(document.querySelector('.btn-date.active'), 'active');
-    this.renderer.addClass(document.getElementById(id), 'active');
-    if (id === 'yesterdayDate') {
-      const newdate = auxDate.getDate() - 1;
-      auxDate.setDate(newdate);
-    } else if (id === 'otherDate') {
-      return;
-    }
-    this.movement.date = auxDate;
-  }
-
-  // Categories process
-
+// Categories process
   openDialog(event: Event) {
     event.stopPropagation();
     let matDialogConfig: MatDialogConfig<any>;

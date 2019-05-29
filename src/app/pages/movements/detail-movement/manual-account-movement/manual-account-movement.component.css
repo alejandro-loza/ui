@@ -1,0 +1,36 @@
+.maBtn {
+  min-height: 55px;
+  max-width: 400px;
+}
+
+.maBtn span {
+  position: relative;
+  bottom: 17px;
+  padding-left: 15px;
+}
+
+.maBtn img {
+  height: 45px;
+  margin-top: 5px;
+}
+
+ul {
+  margin: 0px;
+}
+
+.manualAccount {
+  float: left;
+}
+
+.manualAccount > button {
+  height: 110px;
+  margin: 5px;
+  min-width: 190px;
+  max-width: 250px;
+  border-radius: 5px;
+}
+
+.manualAccount > button > img {
+  width: 50px;
+  padding-top: 10px;
+}

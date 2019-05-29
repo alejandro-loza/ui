@@ -1,0 +1,28 @@
+<a class="btn maBtn transparent black-text valign-wrapper truncate modal-trigger" href="#manualAccountsTrigger">
+  <img *ngIf="account.nature; else accountDefault" [src]="'assets/media/img/manual_account/'+ account.nature +'.svg'" [alt]="account.nature">
+  <ng-template #accountDefault>
+    <img [src]="'https://cdn.finerio.mx/banks/'+ account.institution.code +'_shield.png'" alt="{{account.institution.code}}">
+  </ng-template>
+  <span>{{ account.name }}</span>
+</a>
+
+<!-- Modal Structure -->
+<div id="manualAccountsTrigger" class="modal" #modal>
+  <div class="modal-content">
+    <div class="row">
+      <div class="col s12">
+        <h4 class="center-align">Seleccionar cuenta manual: </h4>
+        <ul>
+          <li class="manualAccount" *ngFor="let account of accounts; let i = index">
+            <button class="btn transparent black-text truncate" (click)="selectManualAccount(account)">
+              <img [src]="'assets/media/img/manual_account/'+ accountsNatureDefault[i] +'.svg'" [alt]="account.nature">
+              <br>
+              <span>{{ account.name }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -58,13 +58,13 @@
 }
 
 .btn-date:hover {
-  border-color: rgb(29, 91, 135);
-  background-color: rgb(29, 91, 135);
+  border-color: var(--main-color);
+  background-color: var(--main-color);
 }
 
 .btn-date.active {
-  border-color: #18537b;
-  background-color: #18537b;
+  border-color: var(--main-color);
+  background-color: var(--main-color);
 }
 
 .btn-charge.active {
@@ -97,13 +97,16 @@
 
 .btn-submit {
   transition: 0.3ms;
-  background-color: rgb(29, 91, 135);
+  background-color: var(--main-color);
   color: whitesmoke;
 }
 
-.btn-submit:hover {
-  background-color: transparent;
-  color: rgb(29, 91, 135);
+.buttons-edit-container {
+  margin-top: 2%;
+}
+
+.amount-for-card {
+  border-bottom: 1px solid black;
 }
 
 #type-section {
