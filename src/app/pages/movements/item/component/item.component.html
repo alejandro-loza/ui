@@ -1,31 +1,31 @@
 <div class="row center-align">
   <!-- Image Start -->
-  <div class="col m1">
+  <div class="col m1" (click)="editMovement.emit()">
     <img [src]="movement.account.type.includes('ma_') ? manualAccountImgSrc : traditionalImgSrc" (error)="onErrorFunc( movement.account.type )"
          alt="{{movement.account.institution.code}}" class="imgMovement" />
   </div>
   <!-- Image End -->
 
   <!-- Date Start -->
-  <div class="col m1">
+  <div class="col m1" (click)="editMovement.emit()">
     <h6>{{ movement.customDate | date:'dd-MMM' }}</h6>
   </div>
   <!-- Date End -->
 
   <!-- Description Start-->
-  <div class="col m3 left-align">
+  <div class="col m3 left-align" (click)="editMovement.emit()">
     <h6 class="truncate description">{{ movement.customDescription | uppercase }}</h6>
   </div>
   <!-- Description End-->
 
   <!-- Category Start -->
-  <div class="col m3 category-container">
+  <div class="col m3 category-container" (click)="editMovement.emit()">
     <app-concept-type-movement [concepts]="movement.concepts"></app-concept-type-movement>
   </div>
   <!-- Category End-->
 
   <!-- Amount start -->
-  <div class="col m2 right-align">
+  <div class="col m2 right-align" (click)="editMovement.emit()">
     <h6 [ngClass]=" { 'deposit': movement.type === 'DEPOSIT', 'charge': movement.type !== 'DEPOSIT' }">
       {{ movement.amount | currency:'USD':'symbol-narrow':'0.2' }}
     </h6>
@@ -37,7 +37,7 @@
     <div class="switch">
       <label>
         Si
-        <input type="checkbox" (change)="updateMovement(movement)" [checked]="movement.duplicated"/>
+        <input type="checkbox" (click)="updateMovement($event, movement)" [checked]="movement.duplicated"/>
         <span class="lever"></span>
         No
       </label>

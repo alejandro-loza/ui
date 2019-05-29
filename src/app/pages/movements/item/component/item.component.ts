@@ -1,7 +1,7 @@
 import {
   Component,
   OnInit,
-  Input,
+  Input, EventEmitter, Output,
 } from '@angular/core';
 import { AccountService } from '@services/account/account.service';
 import { Movement } from '@interfaces/movement.interface';
@@ -14,6 +14,7 @@ import {MovementsService} from '@services/movements/movements.service';
 })
 export class ItemComponent implements OnInit {
   @Input() movement: Movement;
+  @Output() editMovement: EventEmitter<void>;
 
   traditionalImgSrc: string;
   manualAccountImgSrc: string;
@@ -22,7 +23,9 @@ export class ItemComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private movementsService: MovementsService
-  ) { }
+  ) {
+    this.editMovement = new EventEmitter();
+  }
 
   ngOnInit() {
     this.accountWithOutDefaults = this.accountService.getManualAccountNatureWithOutDefaults( this.movement.account.type );
@@ -35,7 +38,8 @@ export class ItemComponent implements OnInit {
     this.manualAccountImgSrc = `assets/media/img/manual_account/${this.accountWithOutDefaults}.svg`;
   }
 
-  updateMovement(movement: Movement) {
+  updateMovement(event: Event, movement: Movement) {
+    event.stopPropagation();
     movement.duplicated = !movement.duplicated;
     this.movementsService.updateMovement(movement);
   }
