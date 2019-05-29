@@ -72,9 +72,7 @@ export class MovementsService {
           if (res.body.data.length === 0) {
             return res;
           }
-          res.body.data.forEach((movement) => {
-            movement.customDate = this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString());
-          });
+          res.body.data.map(movement => movement.customDate = this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString()));
           this.movementsList = [ ...this.movementsList, ...res.body.data ];
           return res;
         }),
@@ -103,10 +101,10 @@ export class MovementsService {
       amount: movement.amount,
       balance: 0,
       category: movement.concepts[0].category,
-      customDate: this.dateService.dateApi(movement.date),
-      customDescription: movement.description,
-      date: this.dateService.dateApi(movement.date),
-      description: movement.description,
+      customDate: this.dateService.dateApi(movement.customDate),
+      customDescription: movement.customDescription,
+      date: this.dateService.dateApi(movement.customDate),
+      description: movement.customDescription,
       duplicated: movement.duplicated,
       type: movement.type.toUpperCase()
     });
@@ -126,10 +124,10 @@ export class MovementsService {
       amount: movement.amount,
       balance: 0,
       category: movement.concepts[0].category,
-      customDate: this.dateService.dateApi(movement.date),
-      customDescription: movement.description,
-      date: this.dateService.dateApi(movement.date),
-      description: movement.description,
+      customDate: this.dateService.dateApi(movement.customDate),
+      customDescription: movement.customDescription,
+      date: this.dateService.dateApi(movement.customDate),
+      description: movement.customDescription,
       duplicated: movement.duplicated,
       type: movement.type.toUpperCase(),
     });
@@ -145,13 +143,9 @@ export class MovementsService {
 
   updateMovement(movement: Movement) {
     const body = {
-      account: movement.account,
       amount: movement.amount,
-      balance: movement.balance,
       customDate: this.dateService.dateApi(movement.customDate),
       customDescription: movement.customDescription,
-      date: movement.date,
-      description: movement.description,
       duplicated: movement.duplicated,
       inBalance: isNullOrUndefined(movement.inBalance) ? null : movement.inBalance,
       type: movement.type.toUpperCase()
@@ -159,10 +153,17 @@ export class MovementsService {
     if (movement.concepts[0].category) {
       body['category'] = { id: movement.concepts[0].category.id };
     }
-    return this.httpClient.put<Movement>(`${environment.backendUrl}/movements/${movement.id}`, body, {
-      observe: 'response',
-      headers: this.configService.getHeaders
-    });
+    if (movement.account) {
+      body['account'] = { id: movement.account.id};
+    }
+    return this.httpClient.put<Movement>(
+      `${environment.backendUrl}/movements/${movement.id}`,
+      body,
+      {
+        observe: 'response',
+        headers: this.configService.getHeaders
+      }
+    );
   }
 
   deleteMovement(idMovement: string): Observable<HttpResponse<Movement>> {
