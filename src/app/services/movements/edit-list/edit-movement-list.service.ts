@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Movement} from '@interfaces/movement.interface';
 import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 import {DateApiService} from '@services/date-api/date-api.service';
+import {isNull} from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class EditMovementListService {
         const currentlyDate = movement.customDate;
         const newDate = this.dateApiService.formatDateForAllBrowsers(this.movement.customDate.toString());
 
-        if (movement.amount !== this.movement.amount) {
+        if (movement.amount !== this.movement.amount && !isNull(this.movement.amount)) {
           movement = { ...movement, amount: this.movement.amount };
         }
 
@@ -38,7 +39,7 @@ export class EditMovementListService {
           this.dateChanged = true;
         }
 
-        if (movement.customDescription !== this.movement.customDescription) {
+        if (movement.customDescription !== this.movement.customDescription  &&!isNull(this.movement.customDescription) && this.movement.customDescription !== '') {
           movement = { ...movement, customDescription: this.movement.customDescription };
         }
 

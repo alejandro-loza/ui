@@ -13,7 +13,7 @@ import { Response } from '@interfaces/response.interface';
 
 import { catchError, distinctUntilChanged, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
-import { isNullOrUndefined } from 'util';
+import {isNull, isNullOrUndefined} from 'util';
 
 @Injectable()
 export class MovementsService {
@@ -142,20 +142,21 @@ export class MovementsService {
   }
 
   updateMovement(movement: Movement) {
-    const body = {
-      amount: movement.amount,
-      customDate: this.dateService.dateApi(movement.customDate),
-      customDescription: movement.customDescription,
+    let body: Movement = {
       duplicated: movement.duplicated,
+      customDate: new Date(this.dateService.dateApi(movement.customDate)),
       inBalance: isNullOrUndefined(movement.inBalance) ? null : movement.inBalance,
       type: movement.type.toUpperCase()
     };
-    if (movement.concepts[0].category) {
-      body['category'] = { id: movement.concepts[0].category.id };
-    }
-    if (movement.account) {
-      body['account'] = { id: movement.account.id};
-    }
+
+    (movement.customDescription !== '' && !isNull(movement.customDescription)) ?
+      body = { ...body, customDescription: movement.customDescription } :
+      body = { ...body, customDescription: movement.description };
+
+    if (!isNull(movement.amount)) { body = { ...body, amount: movement.amount }; }
+    if (movement.concepts[0].category) { body.concepts[0].category = { ...body.concepts[0].category, id: movement.concepts[0].category.id}; }
+    if (movement.account) { body.account = { ...body.account, id: movement.account.id}; }
+
     return this.httpClient.put<Movement>(
       `${environment.backendUrl}/movements/${movement.id}`,
       body,
