@@ -16,7 +16,7 @@ import { Movement } from '@interfaces/movement.interface';
 
 import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
 
-import { filter } from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-item-list',
@@ -51,7 +51,7 @@ export class ItemListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.scrollVirtual) {
-      this.scrollDispatcher.scrolled() .pipe(
+      this.scrollDispatcher.scrolled().pipe(
         filter(() => {
           if (this.scrollVirtual.getRenderedRange().end === this.scrollVirtual.getDataLength()) { return true; }
         })
@@ -62,7 +62,8 @@ export class ItemListComponent implements OnInit, AfterViewInit {
   trackByFn = (index: number, movement: Movement) => movement.id;
 
   setMovement(movemment: Movement) {
-    this.statefulMovementsService.setMovement = movemment;
+    this.statefulMovementsService.setMovement = JSON.parse(JSON.stringify(movemment));
+    this.router.navigateByUrl(`/app/movements/${movemment.id}`);
   }
 
 }
