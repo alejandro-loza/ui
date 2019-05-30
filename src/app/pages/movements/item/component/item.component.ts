@@ -15,8 +15,10 @@ import {ToastService} from '@services/toast/toast.service';
   templateUrl: './item.component.html',
   styleUrls: [ './item.component.css' ]
 })
+
 export class ItemComponent implements OnInit {
   @Input() movement: Movement;
+  @Output() movementChange: EventEmitter<Movement>;
   @Output() editMovement: EventEmitter<void>;
 
   traditionalImgSrc: string;
@@ -26,11 +28,12 @@ export class ItemComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private movementsService: MovementsService,
-    private statefulMovementService: StatefulMovementsService,
+    private statefulMovementsService: StatefulMovementsService,
     private editMovementListService: EditMovementListService,
     private toastService: ToastService,
   ) {
     this.editMovement = new EventEmitter();
+    this.movementChange = new EventEmitter();
   }
 
   ngOnInit() {
@@ -45,17 +48,16 @@ export class ItemComponent implements OnInit {
   }
 
   updateMovement(movement: Movement) {
-    const auxMovement = { ...movement, duplicated: movement.duplicated };
-    this.movementsService.updateMovement(auxMovement).subscribe(
+    this.movementsService.updateMovement(movement).subscribe(
       res => {
-        this.statefulMovementService.setMovement = this.movement;
+        this.statefulMovementsService.setMovement = movement;
         this.toastService.setCode = res.status;
       },
       (err) => {
         this.toastService.setCode = err.status;
         if (err.status === 401) {
           this.toastService.toastGeneral();
-          this.updateMovement(auxMovement);
+          this.updateMovement(movement);
         }
         if (err.status === 500) {
           this.toastService.setMessage = '¡Ha ocurrido un error al crear tu movimiento!';
@@ -68,5 +70,11 @@ export class ItemComponent implements OnInit {
         this.toastService.toastGeneral();
       }
     );
+  }
+
+  changeDuplicated(changed: boolean) {
+    this.movement = { ...this.movement, duplicated: changed};
+    this.updateMovement(this.movement);
+    this.movementChange.next(this.movement);
   }
 }
