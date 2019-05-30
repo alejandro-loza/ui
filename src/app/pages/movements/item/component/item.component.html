@@ -37,7 +37,7 @@
     <div class="switch">
       <label>
         Si
-        <input type="checkbox" (click)="updateMovement($event, movement)" [checked]="movement.duplicated"/>
+        <input type="checkbox" (click)="updateMovement(movement)" [(ngModel)]="movement.duplicated"/>
         <span class="lever"></span>
         No
       </label>

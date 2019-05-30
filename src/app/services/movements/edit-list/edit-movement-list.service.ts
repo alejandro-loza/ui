@@ -3,6 +3,7 @@ import {Movement} from '@interfaces/movement.interface';
 import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 import {DateApiService} from '@services/date-api/date-api.service';
 import {isNull} from 'util';
+import {connectableObservableDescriptor} from 'rxjs/internal/observable/ConnectableObservable';
 
 @Injectable({
   providedIn: 'root'
@@ -51,8 +52,8 @@ export class EditMovementListService {
           movement = {...movement, inBalance: this.movement.inBalance};
         }
 
-        if (movement.type !== this.movement.type) {
-          movement = { ...movement, type: this.movement.type };
+        if (movement.type.toUpperCase() !== this.movement.type.toUpperCase()) {
+          movement = { ...movement, type: this.movement.type.toUpperCase() };
         }
 
         if (movement.concepts[0].category && movement.concepts[0].category.id !== this.movement.concepts[0].category.id) {

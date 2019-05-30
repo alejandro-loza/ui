@@ -168,8 +168,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
       this.editMovement();
   }
 
-  deleteMovement(event: Event, id: string) {
-    event.stopPropagation();
+  deleteMovement(id: string) {
     this.movementService.deleteMovement(id).subscribe(
       res => {
         this.statefulMovementService.setMovement = res.body;
@@ -205,7 +204,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
         this.toastService.setCode = err.status;
         if (err.status === 401) {
           this.toastService.toastGeneral();
-          this.createManualAccountMovement();
+          this.editMovement();
         }
         if (err.status === 500) {
           this.toastService.setMessage = '¡Ha ocurrido un error al crear tu movimiento!';

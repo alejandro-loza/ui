@@ -29,7 +29,10 @@ export class ManualAccountMovementComponent implements OnInit, AfterViewInit {
     this.hasManualAccountChange = new EventEmitter();
   }
 
-  ngOnInit() { this.getUserAccounts(); }
+  ngOnInit() {
+    this.account.nature = this.accountService.getManualAccountNatureWithOutDefaults(this.account.nature);
+    this.getUserAccounts();
+  }
 
   ngAfterViewInit(): void {
     this.modal = new M.Modal(this.modalElement.nativeElement, {});
@@ -51,7 +54,10 @@ export class ManualAccountMovementComponent implements OnInit, AfterViewInit {
     this.accounts = this.accountsBeanService.getAccounts;
     this.accounts = this.accounts.filter(account => account.nature);
     this.accounts = this.accounts.filter(account =>  account.nature.includes('ma_'));
-    this.accounts.map( account => this.accountsNatureDefault.push(this.accountService.getManualAccountNatureWithOutDefaults(account.nature)));
+    this.accounts = this.accounts.map( account => {
+      account.nature = this.accountService.getManualAccountNatureWithOutDefaults(account.nature);
+      return account;
+    });
   }
 
   selectManualAccount = (account: AccountInterface) => {

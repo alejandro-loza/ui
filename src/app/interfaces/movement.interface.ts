@@ -21,6 +21,7 @@ export interface Movement {
   account?: AccountInterface;
   amount?: number;
   balance?: number;
+  category?: { id: string };
   concepts?: Concept[];
   customAmount?: number;
   customDate?: Date;
