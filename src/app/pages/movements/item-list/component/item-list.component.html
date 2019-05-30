@@ -1,6 +1,6 @@
 <cdk-virtual-scroll-viewport itemSize="52*35" class="scroll-viewport" id="virtualScroll">
   <ul class="collapsible">
-    <ng-template cdkVirtualFor let-movement let-i="index" [cdkVirtualForOf]="movementList"
+    <ng-template cdkVirtualFor let-movement let-i="index" let-templateCacheSize="55*35" [cdkVirtualForOf]="movementList"
                  [cdkVirtualForTrackBy]="trackByFn">
       <li class="fadeIn fast">
         <div class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}">
