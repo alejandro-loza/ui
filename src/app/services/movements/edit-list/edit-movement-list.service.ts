@@ -3,7 +3,6 @@ import {Movement} from '@interfaces/movement.interface';
 import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 import {DateApiService} from '@services/date-api/date-api.service';
 import {isNull} from 'util';
-import {connectableObservableDescriptor} from 'rxjs/internal/observable/ConnectableObservable';
 
 @Injectable({
   providedIn: 'root'

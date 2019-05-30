@@ -8,15 +8,16 @@ import { AccountInterface } from '@interfaces/account.interfaces';
 
 import { ConfigService } from '@services/config/config.service';
 import { ConfigParamsService } from '@params/config/config-params.service';
-
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {AccountsBeanService} from '@services/account/accounts-bean.service';
 
 // MA
 import { ManualAccountHttp } from '@app/interfaces/manual-accounts/manual-account-http.interface';
 import { MAResponse } from '@app/interfaces/manual-accounts/manual-account-response.interface';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { isNullOrUndefined } from 'util';
-import {AccountsBeanService} from '@services/account/accounts-bean.service';
 
 @Injectable({
   providedIn: 'root'
