@@ -4,7 +4,7 @@
                  [cdkVirtualForTrackBy]="trackByFn">
       <li class="fadeIn fast">
         <div class="collapsible-header" [ngClass]="{'grey lighten-3': movement.duplicated}">
-          <app-item class="item" [movement]="movement" (editMovement)="setMovement(movement)"></app-item>
+          <app-item class="item" [(movement)]="movement" (editMovement)="setMovement(movement)"></app-item>
         </div>
       </li>
     </ng-template>
