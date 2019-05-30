@@ -109,7 +109,7 @@
                 <button class="btn btn-submit" [disabled]="forma.invalid" type="submit">Guardar
                   <i class="material-icons right">send</i>
                 </button>
-                <button class="btn btn-delete" id="deleteButton" type="button" (click)="deleteMovement($event, movement.id)">Eliminar
+                <button *ngIf="movement.account.institution.code === 'DINERIO'" class="btn btn-delete" id="deleteButton" type="button" (click)="deleteMovement(movement.id)">Eliminar
                   <i class="material-icons right">delete</i>
                 </button>
               </div>

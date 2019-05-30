@@ -144,7 +144,7 @@ export class MovementsService {
   updateMovement(movement: Movement) {
     let body: Movement = {
       duplicated: movement.duplicated,
-      customDate: new Date(this.dateService.dateApi(movement.customDate)),
+      customDate: <any>this.dateService.dateApi(movement.customDate),
       inBalance: isNullOrUndefined(movement.inBalance) ? null : movement.inBalance,
       type: movement.type.toUpperCase()
     };
@@ -154,9 +154,8 @@ export class MovementsService {
       body = { ...body, customDescription: movement.description };
 
     if (!isNull(movement.amount)) { body = { ...body, amount: movement.amount }; }
-    if (movement.concepts[0].category) { body.concepts[0].category = { ...body.concepts[0].category, id: movement.concepts[0].category.id}; }
+    if (movement.concepts[0].category) { body.category = { id: movement.concepts[0].category.id}; }
     if (movement.account) { body.account = { ...body.account, id: movement.account.id}; }
-
     return this.httpClient.put<Movement>(
       `${environment.backendUrl}/movements/${movement.id}`,
       body,

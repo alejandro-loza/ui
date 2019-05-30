@@ -168,8 +168,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
       this.editMovement();
   }
 
-  deleteMovement(event: Event, id: string) {
-    event.stopPropagation();
+  deleteMovement(id: string) {
     this.movementService.deleteMovement(id).subscribe(
       res => {
         this.statefulMovementService.setMovement = res.body;
