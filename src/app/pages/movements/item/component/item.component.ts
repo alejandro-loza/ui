@@ -6,6 +6,9 @@ import {
 import { AccountService } from '@services/account/account.service';
 import { Movement } from '@interfaces/movement.interface';
 import {MovementsService} from '@services/movements/movements.service';
+import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
+import {EditMovementListService} from '@services/movements/edit-list/edit-movement-list.service';
+import {ToastService} from '@services/toast/toast.service';
 
 @Component({
   selector: 'app-item',
@@ -22,7 +25,10 @@ export class ItemComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private movementsService: MovementsService
+    private movementsService: MovementsService,
+    private statefulMovementService: StatefulMovementsService,
+    private editMovementListService: EditMovementListService,
+    private toastService: ToastService,
   ) {
     this.editMovement = new EventEmitter();
   }
@@ -38,9 +44,29 @@ export class ItemComponent implements OnInit {
     this.manualAccountImgSrc = `assets/media/img/manual_account/${this.accountWithOutDefaults}.svg`;
   }
 
-  updateMovement(event: Event, movement: Movement) {
-    event.stopPropagation();
-    movement.duplicated = !movement.duplicated;
-    this.movementsService.updateMovement(movement);
+  updateMovement(movement: Movement) {
+    const auxMovement = { ...movement, duplicated: movement.duplicated };
+    this.movementsService.updateMovement(auxMovement).subscribe(
+      res => {
+        this.statefulMovementService.setMovement = this.movement;
+        this.toastService.setCode = res.status;
+      },
+      (err) => {
+        this.toastService.setCode = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral();
+          this.updateMovement(auxMovement);
+        }
+        if (err.status === 500) {
+          this.toastService.setMessage = '¡Ha ocurrido un error al crear tu movimiento!';
+          this.toastService.toastGeneral();
+        }
+      },
+      () => {
+        this.editMovementListService.editMovement();
+        this.toastService.setMessage = 'Se editó su movimiento exitosamente';
+        this.toastService.toastGeneral();
+      }
+    );
   }
 }
