@@ -15,7 +15,7 @@
         <ul>
           <li class="manualAccount" *ngFor="let account of accounts; let i = index">
             <button class="btn transparent black-text truncate" type="button" (click)="selectManualAccount(account)">
-              <img [src]="'assets/media/img/manual_account/'+ accountsNatureDefault[i] +'.svg'" [alt]="account.nature">
+              <img [src]="'assets/media/img/manual_account/'+ account.nature +'.svg'" [alt]="account.nature">
               <br>
               <span>{{ account.name }}</span>
             </button>
