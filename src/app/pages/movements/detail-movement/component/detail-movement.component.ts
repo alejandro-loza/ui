@@ -195,6 +195,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
   }
 
   editMovement() {
+    this.movement.concepts[0] = {...this.movement.concepts[0], category: this.category};
     this.movementService.updateMovement(this.movement).subscribe(
       res => {
         this.statefulMovementService.setMovement = this.movement;

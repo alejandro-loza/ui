@@ -106,11 +106,11 @@
             </ng-template>
             <ng-template #editMovementButton>
               <div class="buttons-edit-container">
-                <button class="btn btn-submit" [disabled]="forma.invalid" type="submit">Guardar
-                  <i class="material-icons right">send</i>
-                </button>
                 <button *ngIf="movement.account.institution.code === 'DINERIO'" class="btn btn-delete" id="deleteButton" type="button" (click)="deleteMovement(movement.id)">Eliminar
                   <i class="material-icons right">delete</i>
+                </button>
+                <button class="btn btn-submit" [disabled]="forma.invalid" type="submit">Guardar
+                  <i class="material-icons right">send</i>
                 </button>
               </div>
             </ng-template>
@@ -122,8 +122,9 @@
       <p [ngStyle]="{'color': category.color }" class="center" id="categoryP">
         Categoría
       </p>
+
       <a (click)="openDialog($event)" [ngStyle]="{'color': category.textColor, 'background-color': category.color }" class="btn category-container truncate">
-        <img id="categoryIcon" [src]="'assets/media/img/categories/' + category.parent.id + '.svg'"
+        <img id="categoryIcon" src="assets/media/img/categories/{{  (category.user) ? 'userCategory' : category.parent.id }}.svg"
              [alt]="category.name" alt="category.name">
         {{ category.name }}
       </a>
