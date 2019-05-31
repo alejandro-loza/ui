@@ -49,12 +49,12 @@
         <div class="col m2 movementheader">Considerar</div>
       </div>
     </div>
+
     <!-- Lista de Movimientos -->
     <div class="containerMovement">
-      <app-item-list [movementList]="movementList" [spinnerBoolean]="spinnerBoolean"
-                     [getMoreMovements]="movementsListReady" (getMoreMovementsChange)="getMovements()"
-                     (refreshMovementList)="refreshMovement()"></app-item-list>
+      <app-item-list [movementList]="movementList" [spinnerBoolean]="spinnerBoolean"></app-item-list>
     </div>
-  </ng-template>
   <!-- Lista de movimientos End-->
+
+  </ng-template>
 </ng-template>
