@@ -16,7 +16,7 @@ import { Movement } from '@interfaces/movement.interface';
 
 import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
 
-import {filter, map} from 'rxjs/operators';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-item-list',

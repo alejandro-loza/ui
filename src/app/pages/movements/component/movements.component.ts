@@ -1,5 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
+import {fromEvent, interval, Subscription} from 'rxjs';
+import {debounce} from 'rxjs/operators';
+
 import { MovementsService } from '@services/movements/movements.service';
 import { ToastService } from '@services/toast/toast.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
@@ -9,7 +12,7 @@ import {StatefulMovementsService} from '@services/stateful/movements/stateful-mo
 
 import { ParamsMovements } from '@interfaces/paramsMovements.interface';
 import { Movement } from '@interfaces/movement.interface';
-import { Subscription } from 'rxjs';
+import * as $ from 'jquery/dist/jquery';
 
 @Component({
   selector: 'app-movements',
@@ -18,11 +21,12 @@ import { Subscription } from 'rxjs';
 })
 export class MovementsComponent implements OnInit, OnDestroy {
   movementList: Movement[];
-
+  movementListSize: number;
   spinnerBoolean: boolean;
   isLoading: boolean;
   movementsListReady: boolean;
   movementServiceSubscription: Subscription;
+  scrollResult: Subscription;
 
   private movementsFromDashboard: boolean;
   // EMPTY STATE
@@ -68,44 +72,56 @@ export class MovementsComponent implements OnInit, OnDestroy {
     } else {
       this.getMovements();
     }
+    this.scrollResult = fromEvent(document, 'scroll')
+      .pipe(debounce(() => interval(100)))
+      .subscribe(() => this.offsetMovement());
   }
 
   ngOnDestroy() {
     this.dashboardStatesService.setLoadListFromDashboard(false);
     this.dashboardStatesService.setListOfMovementsFromDashboard([]);
+    this.scrollResult.unsubscribe();
   }
 
-  getMovements() {
-    if (this.movementsListReady) {
-      this.getMovementFromService();
+  offsetMovement() {
+    const scrollVertical = window.scrollY;
+    let scrollLimit: number;
+    scrollLimit = $(document).height() - $(window).height();
+    scrollLimit = Math.floor(scrollLimit * .7);
+    if (scrollVertical >= scrollLimit && this.movementsListReady) {
+      this.getMovements();
     }
   }
 
-  getMovementFromService() {
-    let index: number;
+  getMovements() {
     this.movementsListReady = false;
     this.movementServiceSubscription = this.movementService.getMovements(this.paramsMovements)
       .subscribe(
         res => {
-          this.movementList = this.movementService.getMovementList;
-          index = res.body.data.length;
+          this.movementList = [...this.movementList, ...res.body.data];
+          this.movementListSize = res.body.data.length;
         },
         err => err,
         () => {
-          this.showEmptyState = this.movementList.length <= 0;
-          if (index < this.paramsMovements.maxMovements) {
-            this.movementServiceSubscription.unsubscribe();
-            this.spinnerBoolean = false;
-            this.isLoading = false;
-            this.statefulMovementsService.setMovements = this.movementList;
-            return;
-          }
-          this.isLoading = false;
+          this.validateAllMovements();
           this.movementsListReady = true;
-          this.paramsMovements.offset += this.paramsMovements.maxMovements;
-          this.statefulMovementsService.setMovements = this.movementList;
         }
       );
+  }
+
+  validateAllMovements() {
+    this.showEmptyState = this.movementList.length <= 0;
+    if (this.movementListSize < this.paramsMovements.maxMovements) {
+      this.movementServiceSubscription.unsubscribe();
+      this.scrollResult.unsubscribe();
+      this.statefulMovementsService.setMovements = this.movementList;
+      this.spinnerBoolean = false;
+      this.isLoading = false;
+      return;
+    }
+    this.isLoading = false;
+    this.statefulMovementsService.setMovements = this.movementList;
+    this.paramsMovements.offset += this.paramsMovements.maxMovements;
   }
 
   getMovementsFromDashboard() {

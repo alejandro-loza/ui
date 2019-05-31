@@ -40,12 +40,14 @@ import {DateApiService} from '@services/date-api/date-api.service';
 export class DetailMovementComponent implements OnInit, AfterViewInit {
   @ViewChild('datepicker') elDatePickker: ElementRef;
   @ViewChild('manualAccountsModal') manualAccountsModal: ElementRef;
+  @ViewChild('modalDelete') modalDeleteElement: ElementRef;
 
   manualAccount: AccountInterface;
   manualAccountName: string;
   manualAccountNature: string;
   hasManualAccount: boolean;
   disableModalTrigger: boolean;
+  canShowSpinner: boolean;
 
   categoriesList: Category[] = [];
 
@@ -85,6 +87,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
     this.reset = true;
     this.isViewAvailable = false;
     this.hasManualAccount = false;
+    this.canShowSpinner = false;
     this.categoriesList = this.categoriesBeanService.getCategories();
   }
 
@@ -94,6 +97,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const modal = new M.Modal(this.manualAccountsModal.nativeElement);
+    const modalDelete = new M.Modal(this.modalDeleteElement.nativeElement);
     if (this.isViewAvailable) {
       this.checkDate(this.movement.customDate);
       if (this.movement.account.institution.code.toLowerCase() === 'dinerio') {
@@ -169,6 +173,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
   }
 
   deleteMovement(id: string) {
+    this.canShowSpinner = true;
     this.movementService.deleteMovement(id).subscribe(
       res => {
         this.statefulMovementService.setMovement = res.body;
@@ -195,6 +200,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
   }
 
   editMovement() {
+    this.canShowSpinner = true;
     this.movement.concepts[0] = {...this.movement.concepts[0], category: this.category};
     this.movementService.updateMovement(this.movement).subscribe(
       res => {

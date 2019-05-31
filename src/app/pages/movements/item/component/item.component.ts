@@ -9,6 +9,7 @@ import {MovementsService} from '@services/movements/movements.service';
 import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 import {EditMovementListService} from '@services/movements/edit-list/edit-movement-list.service';
 import {ToastService} from '@services/toast/toast.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-item',
@@ -20,6 +21,8 @@ export class ItemComponent implements OnInit {
   @Input() movement: Movement;
   @Output() movementChange: EventEmitter<Movement>;
   @Output() editMovement: EventEmitter<void>;
+
+  switcherSubscription: Subscription;
 
   traditionalImgSrc: string;
   manualAccountImgSrc: string;
@@ -48,7 +51,7 @@ export class ItemComponent implements OnInit {
   }
 
   updateMovement(movement: Movement) {
-    this.movementsService.updateMovement(movement).subscribe(
+    this.switcherSubscription = this.movementsService.updateMovement(movement).subscribe(
       res => {
         this.statefulMovementsService.setMovement = movement;
         this.toastService.setCode = res.status;
@@ -68,6 +71,7 @@ export class ItemComponent implements OnInit {
         this.editMovementListService.editMovement();
         this.toastService.setMessage = 'Se editó su movimiento exitosamente';
         this.toastService.toastGeneral();
+        this.switcherSubscription.unsubscribe();
       }
     );
   }

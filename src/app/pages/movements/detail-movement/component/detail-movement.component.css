@@ -109,6 +109,10 @@
   border-bottom: 1px solid black;
 }
 
+.btn-margin-right {
+  margin-right: 1em !important;
+}
+
 #type-section {
   padding-top: 2%;
   padding-bottom: 1%;

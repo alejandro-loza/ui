@@ -72,7 +72,10 @@ export class MovementsService {
           if (res.body.data.length === 0) {
             return res;
           }
-          res.body.data.map(movement => movement.customDate = this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString()));
+          res.body.data = res.body.data.map(movement => {
+            movement = { ...movement, customDate: this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())};
+            return movement;
+          });
           this.movementsList = [ ...this.movementsList, ...res.body.data ];
           return res;
         }),

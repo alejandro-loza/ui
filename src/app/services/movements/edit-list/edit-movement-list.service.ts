@@ -23,23 +23,26 @@ export class EditMovementListService {
     this.movement = this.statefulMovementsService.getMovement;
     this.movementList = this.statefulMovementsService.getMovements;
 
-    this.movementList = this.movementList.map(movement => {
+    const auxMovementList = this.movementList.map(movement => {
       if (movement.id === this.movement.id) {
         // toDO Se debe validar que el valor de la propiedad haya cambiado, en tal caso se crea una nueva instancia de esa propiedad.
 
         const currentlyDate = movement.customDate;
         const newDate = this.dateApiService.formatDateForAllBrowsers(this.movement.customDate.toString());
 
+        const currentDateString = `${movement.customDate.getDate()}-${movement.customDate.getMonth()}-${movement.customDate.getFullYear()}`;
+        const newDateString = `${this.movement.customDate.getDate()}-${this.movement.customDate.getMonth()}-${this.movement.customDate.getFullYear()}`;
+
         if (movement.amount !== this.movement.amount && !isNull(this.movement.amount)) {
           movement = { ...movement, amount: this.movement.amount };
         }
 
-        if (currentlyDate.getTime() !== newDate.getTime()) {
+        if (currentDateString !== newDateString) {
           movement = { ...movement, customDate: newDate };
           this.dateChanged = true;
         }
 
-        if (movement.customDescription !== this.movement.customDescription  &&!isNull(this.movement.customDescription) && this.movement.customDescription !== '') {
+        if (movement.customDescription !== this.movement.customDescription  && this.movement.customDescription !== '') {
           movement = { ...movement, customDescription: this.movement.customDescription };
         }
 
@@ -65,7 +68,7 @@ export class EditMovementListService {
       }
       return  movement;
     });
-    (this.dateChanged) ? this.statefulMovementsService.setMovements = undefined : this.statefulMovementsService.setMovements = this.movementList;
+    (this.dateChanged) ? this.statefulMovementsService.setMovements = undefined : this.statefulMovementsService.setMovements = auxMovementList;
     this.dateChanged = false;
   }
 
