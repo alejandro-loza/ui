@@ -3,6 +3,7 @@ import {Movement} from '@interfaces/movement.interface';
 import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 import {DateApiService} from '@services/date-api/date-api.service';
 import {isNull} from 'util';
+import {CleanerService} from '@services/cleaner/cleaner.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,11 @@ import {isNull} from 'util';
 export class EditMovementListService {
   private movementList: Movement[];
   private movement: Movement;
-  private index: number;
   private dateChanged: boolean;
   constructor(
     private statefulMovementsService: StatefulMovementsService,
     private dateApiService: DateApiService,
+    private cleanerService: CleanerService
   ) {
     this.dateChanged = false;
   }
@@ -58,7 +59,7 @@ export class EditMovementListService {
           movement = { ...movement, type: this.movement.type.toUpperCase() };
         }
 
-        if (movement.concepts[0].category && movement.concepts[0].category.id !== this.movement.concepts[0].category.id) {
+        if (movement.concepts[0].category && ( movement.concepts[0].category.id !== this.movement.concepts[0].category.id )) {
           movement.concepts[0] = { ...movement.concepts[0], category: this.movement.concepts[0].category };
         }
 
@@ -69,6 +70,7 @@ export class EditMovementListService {
       return  movement;
     });
     (this.dateChanged) ? this.statefulMovementsService.setMovements = undefined : this.statefulMovementsService.setMovements = auxMovementList;
+    this.cleanerService.cleanDashboardVariables();
     this.dateChanged = false;
   }
 
@@ -78,9 +80,6 @@ export class EditMovementListService {
 
     this.movementList = this.movementList.filter(movement => movement.id !== this.movement.id);
     this.statefulMovementsService.setMovements = this.movementList;
-  }
-
-  get getIndex(): number {
-    return  this.index;
+    this.cleanerService.cleanDashboardVariables();
   }
 }

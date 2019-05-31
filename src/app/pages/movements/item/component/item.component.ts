@@ -3,12 +3,15 @@ import {
   OnInit,
   Input, EventEmitter, Output,
 } from '@angular/core';
+
 import { AccountService } from '@services/account/account.service';
-import { Movement } from '@interfaces/movement.interface';
 import {MovementsService} from '@services/movements/movements.service';
 import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
 import {EditMovementListService} from '@services/movements/edit-list/edit-movement-list.service';
 import {ToastService} from '@services/toast/toast.service';
+
+import { Movement } from '@interfaces/movement.interface';
+
 import {Subscription} from 'rxjs';
 
 @Component({

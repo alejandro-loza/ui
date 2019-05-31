@@ -5,8 +5,8 @@ import {Movement} from '@interfaces/movement.interface';
   providedIn: 'root'
 })
 export class StatefulMovementsService {
-  private movement: Movement;
   private movements: Movement[];
+  private movement: Movement;
   constructor() {}
 
   set setMovement(movement: Movement) {
