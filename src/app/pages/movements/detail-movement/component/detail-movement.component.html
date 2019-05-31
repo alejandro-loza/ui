@@ -105,14 +105,18 @@
               </button>
             </ng-template>
             <ng-template #editMovementButton>
-              <div class="buttons-edit-container">
-                <button *ngIf="movement.account.institution.code === 'DINERIO'" class="btn btn-delete" id="deleteButton" type="button" (click)="deleteMovement(movement.id)">Eliminar
+              <div *ngIf="!canShowSpinner; else finishEdit" class="buttons-edit-container">
+                <button *ngIf="movement.account.institution.code === 'DINERIO'" class="btn btn-delete modal-trigger"
+                        id="deleteButton" type="button" data-target="modalDelete" >Eliminar
                   <i class="material-icons right">delete</i>
                 </button>
                 <button class="btn btn-submit" [disabled]="forma.invalid" type="submit">Guardar
                   <i class="material-icons right">send</i>
                 </button>
               </div>
+              <ng-template #finishEdit>
+                <app-spinner></app-spinner>
+              </ng-template>
             </ng-template>
           </div>
         </div>
@@ -137,6 +141,28 @@
   <div class="modal-content">
     <div class="row">
       <app-user-manual-accounts (noManualAccounts)="modalManualaccountsTrigger($event)" (manualAccount)="manualAccountSelected($event)" class="modal-close"></app-user-manual-accounts>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Structure -->
+<div id="modalDelete" class="modal" #modalDelete>
+  <div class="modal-content center-align">
+    <div class="modal-content">
+      <h4>¿ Quieres eliminar este movimiento?</h4>
+      <hr>
+      <h6>Está acción no se podrá revertir</h6>
+    </div>
+    <div class="modal-footer">
+      <div class="center-align">
+        <button class="btn blt-flat finerio-accent-outline-color btn-margin-right modal-close" type="button">Cancelar
+          <i class="material-icons right">close</i>
+        </button>
+        <button class="btn btn-delete modal-close" type="button" (click)="deleteMovement(movement.id)">Eliminar
+          <i class="material-icons right">delete</i>
+        </button>
+      </div>
     </div>
   </div>
 </div>
