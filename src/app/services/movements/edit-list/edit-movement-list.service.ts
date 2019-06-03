@@ -28,7 +28,6 @@ export class EditMovementListService {
       if (movement.id === this.movement.id) {
         // toDO Se debe validar que el valor de la propiedad haya cambiado, en tal caso se crea una nueva instancia de esa propiedad.
 
-        const currentlyDate = movement.customDate;
         const newDate = this.dateApiService.formatDateForAllBrowsers(this.movement.customDate.toString());
 
         const currentDateString = `${movement.customDate.getDate()}-${movement.customDate.getMonth()}-${movement.customDate.getFullYear()}`;
@@ -59,7 +58,7 @@ export class EditMovementListService {
           movement = { ...movement, type: this.movement.type.toUpperCase() };
         }
 
-        if (movement.concepts[0].category && ( movement.concepts[0].category.id !== this.movement.concepts[0].category.id )) {
+        if (!movement.concepts[0].category || ( movement.concepts[0].category.id !== this.movement.concepts[0].category.id )) {
           movement.concepts[0] = { ...movement.concepts[0], category: this.movement.concepts[0].category };
         }
 

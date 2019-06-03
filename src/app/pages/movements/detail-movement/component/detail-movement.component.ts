@@ -88,10 +88,10 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
     this.isViewAvailable = false;
     this.hasManualAccount = false;
     this.canShowSpinner = false;
-    this.categoriesList = this.categoriesBeanService.getCategories();
   }
 
   ngOnInit() {
+    this.getCategories();
     (this.id === 'new-movement') ? this.fillNoPreCat() : this.getMovementForEdit();
   }
 
@@ -134,6 +134,25 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
         this.getEntireCategory(categoryId);
       }
     });
+  }
+
+  getCategories() {
+    this.categoriesService.getCategoriesInfo().subscribe(
+      (res) => {
+        this.categoriesList = res.body;
+      },
+      (err) => {
+        this.toastService.setCode = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral();
+          this.getCategories();
+        }
+        if (err.status === 500) {
+          this.toastService.setMessage = '¡Ha ocurrido un error al obtener tus movimientos!';
+          this.toastService.toastGeneral();
+        }
+      }
+    );
   }
 
   getMovementForEdit() {
@@ -349,7 +368,6 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
 
 // Categories process
   openDialog(event: Event) {
-    event.stopPropagation();
     let matDialogConfig: MatDialogConfig<any>;
     matDialogConfig = {
       autoFocus: true,
