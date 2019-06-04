@@ -6,6 +6,7 @@ import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { EmptyStateService } from '@services/movements/empty-state/empty-state.service';
 import { AccountsBeanService } from '@services/account/accounts-bean.service';
+import { StatefulMovementsService } from '@services/stateful/movements/stateful-movements.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -18,7 +19,8 @@ export class CleanerService {
 		private budgetsBeanService: BudgetsBeanService,
 		private categoriesBeanService: CategoriesBeanService,
 		private emptyStateService: EmptyStateService,
-		private accountsBeanService: AccountsBeanService
+		private accountsBeanService: AccountsBeanService,
+		private statefulMovementsService: StatefulMovementsService
 	) {}
 
 	cleanAllVariables() {
@@ -59,6 +61,18 @@ export class CleanerService {
 		// Manual Accounts memory
 		this.accountsBeanService.setManualAccounts = null;
 		this.accountsBeanService.setManualAccountToEdit = null;
+		// Movements stateful service
+		this.statefulMovementsService.setMovements = null;
+		this.statefulMovementsService.setMovement = undefined;
+	}
+
+	cleanCredentialsVariables() {
+		// Credentials Memory
+		this.credentialBeanService.setCredentials([]);
+		this.credentialBeanService.setAccounts([]);
+		this.credentialBeanService.setInstitutions([]);
+		this.credentialBeanService.setLoadInformation(true);
+		this.credentialBeanService.setShowEmptyState(false);
 	}
 
 	cleanDashboardVariables() {

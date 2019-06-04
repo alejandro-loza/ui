@@ -1,66 +1,70 @@
-.item,
-.item-detail {
-    width: 100%;
-}
-
-mat-expansion-panel,
-mat-expansion-panel.mat-expanded {
-    border-left-width: 0px;
-    border-left-style: solid;
-    border-left-color: rgba(238, 136, 58, 1);
-    transition: all .3s ease-in-out;
-}
-
-mat-expansion-panel.mat-expanded {
-    border-left-width: 4px;
-    background-color: #ffffff;
-}
-
-.mat-expansion-panel-spacing {
-   margin: 0;
-}
-
-.mat-expansion-panel-header {
-  padding: 0 8px;
-}
-
-.collapsible {
-  border:  none;
-  margin: 0;
+.item {
+  width: 100%;
 }
 
 .collapsible-header {
-    transition: all .2s ease-in-out;
+  padding: 2px;
+  transition-property: background-color, border, color;
+  transition-duration: 200ms;
+  transition-timing-function:  ease-in-out;
 }
 
 .collapsible-header:hover {
-    border-color: rgba(238, 136, 58, .8);
-    border-width: 2px;
-    color: rgba(238, 136, 58, .8);
-}
-
-mat-expansion-panel.mat-expanded>.collapsible-header:hover {
-    color: #212121;
+    border-color: var(--accent-color);
+    color: var(--accent-color);
 }
 
 .spinnerContainer {
   margin-top: 1%;
 }
 
-@media only screen and (min-width: 1024px) {
-  .scroll-viewport {
-    height: 68vh;
-  }
+#virtualScroll::-webkit-scrollbar {
+  width: 5px;
+  background-color: #f5f5f5;
 }
 
-@media only screen and (min-width: 1600px) {
-  .scroll-viewport {
-    height: 74vh;
-  }
+#virtualScroll::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  transition: background-color 200ms ease-in-out;
 }
 
-@media only screen and (min-width: 1920px) {
-  .scroll-viewport {
-    height: 77vh;
-  }
+#virtualScroll::-webkit-scrollbar-thumb:hover {
+  background-color: #229AC9;
+}
+
+#virtualScroll::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #f5f5f5;
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1300px) {
+  .scroll-viewport { height: calc(8 * 51px); }
+}
+
+@media only screen and (min-width: 1301px) and (max-width: 1400px) {
+  .scroll-viewport { height: calc(9 * 51px) }
+}
+
+@media only screen and (min-width: 1401px) and (max-width: 1500px) {
+  .scroll-viewport { height: calc(9 * 55px); }
+}
+
+@media only screen and (min-width: 1501px) and (max-width: 1600px) {
+  .scroll-viewport { height: calc(11 * 53px); }
+}
+
+@media only screen and (min-width: 1601px) and (max-width: 1700px)  {
+  .scroll-viewport { height: calc(12 * 55px); }
+}
+
+@media only screen and (min-width: 1701px) and (max-width: 1800px)  {
+  .scroll-viewport { height: calc(12 * 55px); }
+}
+
+@media only screen and (min-width: 1801px) and (max-width: 1900px)  {
+  .scroll-viewport { height: calc(12 * 56px); }
+}
+
+@media only screen and (min-width: 1901px) {
+  .scroll-viewport { height: calc(13 * 57px); }
 }

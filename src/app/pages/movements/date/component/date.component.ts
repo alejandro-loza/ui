@@ -1,4 +1,3 @@
-import { DateApiService } from '@services/date-api/date-api.service';
 import {
   Component,
   OnInit,
@@ -10,8 +9,12 @@ import {
   EventEmitter,
   OnChanges
 } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
-declare var M;
+import { DateApiService } from '@services/date-api/date-api.service';
+import * as M from 'materialize-css/dist/js/materialize';
+import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
+
 @Component({
   selector: 'app-date',
   templateUrl: './date.component.html',
@@ -19,40 +22,49 @@ declare var M;
 })
 export class DateComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() date: Date;
-  @Input() formatDate: string;
   @Input() name: string;
   @Input() classes: string;
-  @Input() type: string;
-  @Input() id: string;
+  @Input() dateID: string;
   @Input() reset: boolean;
 
-  @Output() valueDate: EventEmitter<Date>;
-  @Output() valueFormatDate: EventEmitter<string>;
+  private id: string;
+  formatDate: string;
+
+  @Output() dateChange: EventEmitter<Date>;
 
   @ViewChild('datepicker') elementDatePicker: ElementRef;
 
-  constructor(private dateApiService: DateApiService) {
-    this.date = new Date();
-    this.valueDate = new EventEmitter();
-    this.valueFormatDate = new EventEmitter();
+  constructor(
+    private dateApiService: DateApiService,
+    private activatedRoute: ActivatedRoute,
+    private statefulMovementService: StatefulMovementsService,
+  ) {
+    this.activatedRoute.params.subscribe( res =>  this.id = res.id );
+    this.dateChange = new EventEmitter();
   }
 
-  ngOnInit() {}
-
-  ngOnChanges() {
-    if (this.reset === true) {
+  ngOnInit() {
+    if (this.id === 'new-movement') {
       this.formatDate = 'Otro...';
       this.date = new Date();
-      this.reset = false;
+    } else {
+      this.formatDate = this.dateApiService.dateFormatMovement(this.statefulMovementService.getMovement.customDate);
+    }
+  }
+
+  ngOnChanges() {
+    if (this.reset) {
+      this.formatDate = 'Otro...';
+      this.date = new Date();
     }
   }
 
   ngAfterContentInit() {
     const initDatepicker = new M.Datepicker(this.elementDatePicker.nativeElement, {
       autoClose: true,
-      format: 'dd mmm',
-      showDaysInNextAndPreviousMonths: true,
       container: 'body',
+      defaultDate: new Date(),
+      format: 'dd mmm',
       i18n: {
         months: [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre' ],
         monthsShort: [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ags', 'Sep', 'Oct', 'Nov', 'Dic' ],
@@ -63,11 +75,13 @@ export class DateComponent implements OnInit, OnChanges, AfterContentInit {
       maxDate: new Date(),
       onDraw: (datepicker) => {
         this.formatDate = this.dateApiService.dateFormatMovement(datepicker.date);
-        this.valueDate.emit(datepicker.date);
-        this.valueFormatDate.emit(this.formatDate);
-      }
+        this.dateChange.emit(datepicker.date);
+      },
+      showDaysInNextAndPreviousMonths: true,
+      setDefaultDate: true
     });
-    const instanceDatepicker = new M.Datepicker.getInstance(this.elementDatePicker.nativeElement);
+    const instanceDatepicker = M.Datepicker.getInstance(this.elementDatePicker.nativeElement);
     instanceDatepicker.setDate(this.date);
+    instanceDatepicker.gotoDate(this.date);
   }
 }

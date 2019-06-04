@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Location} from '@angular/common';
+
 
 @Component({
   selector: 'app-back-button',
@@ -6,12 +8,12 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./back-button.component.css']
 })
 export class BackButtonComponent implements OnInit {
+  @Input() styleClass: string;
+  constructor( private location: Location) { }
 
-  @Input() ruta: string;
+  ngOnInit() { }
 
-  constructor() { }
-
-  ngOnInit() {
+  goBack() {
+    this.location.back();
   }
-
 }

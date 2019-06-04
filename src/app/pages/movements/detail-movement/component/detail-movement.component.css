@@ -1,0 +1,155 @@
+.pt-20 {
+  padding-top: 20px;
+}
+
+.charge {
+  color: rgb(198, 40, 40);
+}
+
+.row {
+  margin-bottom: 0px;
+}
+
+.rowFecha {
+  padding: 0 0.75rem;
+}
+
+.deposit {
+  color: rgb(67, 160, 71);
+}
+
+.category-container {
+  width: 100%;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+
+.btn {
+  margin-right: 1%;
+  color: black;
+}
+
+.btn-date {
+  background-color: whitesmoke;
+  border: thin solid rgba(119, 136, 153, 1);
+}
+
+.btn-charge {
+  border: 1px solid rgb(198, 40, 40);
+  background-color: rgba(198, 40, 40, 0.1);
+}
+
+.btn-deposit {
+  border: 1px solid #2e7d32;
+  background-color: rgba(67, 160, 71, 0.1);
+}
+
+.btn:hover {
+  transition: 0.3s;
+  color: #f5f5f5;
+}
+
+.btn-charge:hover {
+  background-color: rgb(198, 40, 40);
+}
+
+.btn-deposit:hover {
+  background-color: rgb(67, 160, 71);
+}
+
+.btn-date:hover {
+  border-color: var(--main-color);
+  background-color: var(--main-color);
+}
+
+.btn-date.active {
+  border-color: var(--main-color);
+  background-color: var(--main-color);
+}
+
+.btn-charge.active {
+  background-color: rgb(198, 40, 40);
+}
+
+.btn-deposit.active {
+  background-color: rgb(67, 160, 71);
+}
+
+.maBtn {
+  min-height: 55px;
+  max-width: 400px;
+}
+
+.maBtn span {
+  position: relative;
+  bottom: 17px;
+  padding-left: 15px;
+}
+
+.maBtn img {
+  height: 45px;
+  margin-top: 5px;
+}
+
+.active {
+  color: #f5f5f5;
+}
+
+.btn-submit {
+  transition: 0.3ms;
+  background-color: var(--main-color);
+  color: whitesmoke;
+}
+
+.buttons-edit-container {
+  margin-top: 2%;
+}
+
+.amount-for-card {
+  border-bottom: 1px solid black;
+}
+
+.btn-margin-right {
+  margin-right: 1em !important;
+}
+
+#type-section {
+  padding-top: 2%;
+  padding-bottom: 1%;
+}
+
+#date-left-section {
+  margin-right: 1%;
+}
+#date-mid-section {
+  margin-right: 2%;
+}
+
+/* Responsive Modal for _newMovement_ */
+#newMovement {
+  padding: 1% 0%;
+}
+
+#modalAccountsModal {
+  width: 70%;
+}
+
+#categoryIcon {
+  position: relative;
+  top: 8px;
+  right: 5%;
+  max-height: 25px;
+  max-width: 25px;
+}
+
+#categoryP {
+  margin-bottom: 5px;
+}
+
+#spinner {
+  display: none;
+}
+
+.d-block {
+  display: block !important;
+}

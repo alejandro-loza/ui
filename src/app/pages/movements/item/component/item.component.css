@@ -1,8 +1,18 @@
-.category-margin {
-	margin-bottom: -1%;
+h6 {
+  max-height: 25px;
+  line-height: 25px;
 }
+
+.category-container {
+  max-height: 48px;
+}
+
 .row {
-	margin-bottom: 0px;
+	margin-bottom: 0;
+}
+
+.col {
+  min-height: 52px;
 }
 
 .description {
@@ -12,6 +22,7 @@
 .imgMovement {
 	width: 42px;
 	height: auto;
+  margin-top: 4px;
 }
 
 .charge {
@@ -22,12 +33,8 @@
 	color: #2e7d32;
 }
 
-.customComponent:hover {
-	transition: all .2s ease-in-out;
-	background-color: rgba(189, 189, 189, .2);
-}
-
 .switch {
+  margin-top: 10px;
 	margin-left: 8%;
 }
 
@@ -37,11 +44,6 @@
 
 .switch label input[type=checkbox]:checked + .lever {
 	background-color: #a4e1f9e6;
-}
-
-.inputPadding {
-	padding-left: 10% !important;
-	width: 90% !important;
 }
 
 #accountContainer {

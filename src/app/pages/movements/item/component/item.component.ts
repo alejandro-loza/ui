@@ -1,88 +1,87 @@
 import {
-	Component,
-	OnInit,
-	Input,
-	Output,
-	EventEmitter,
-	ChangeDetectorRef,
-	ViewChild,
-	ElementRef
+  Component,
+  OnInit,
+  Input, EventEmitter, Output,
 } from '@angular/core';
+
 import { AccountService } from '@services/account/account.service';
-import { DateApiService } from '@services/date-api/date-api.service';
-import { AccountsBeanService } from '@services/account/accounts-bean.service';
+import {MovementsService} from '@services/movements/movements.service';
+import {StatefulMovementsService} from '@services/stateful/movements/stateful-movements.service';
+import {EditMovementListService} from '@services/movements/edit-list/edit-movement-list.service';
+import {ToastService} from '@services/toast/toast.service';
+
 import { Movement } from '@interfaces/movement.interface';
-import { Category } from '@interfaces/category.interface';
-import { MovementsService } from '@services/movements/movements.service';
+
+import {Subscription} from 'rxjs';
 
 @Component({
-	selector: 'app-item',
-	templateUrl: './item.component.html',
-	styleUrls: [ './item.component.css' ]
+  selector: 'app-item',
+  templateUrl: './item.component.html',
+  styleUrls: [ './item.component.css' ]
 })
+
 export class ItemComponent implements OnInit {
-	@Input() movement: Movement;
-	@Input() categoryList: Category[];
+  @Input() movement: Movement;
+  @Output() movementChange: EventEmitter<Movement>;
+  @Output() editMovement: EventEmitter<void>;
 
-	@Output() movementEdited: EventEmitter<Movement>;
-	@Output() valueCategoryColor: EventEmitter<string>;
+  switcherSubscription: Subscription;
 
-	traditionalImgSrc: string;
-	manualAccountImgSrc: string;
+  traditionalImgSrc: string;
+  manualAccountImgSrc: string;
+  accountWithOutDefaults: string;
 
-	accountWithOutDefaults: string;
-	amountEdit: boolean;
+  constructor(
+    private accountService: AccountService,
+    private movementsService: MovementsService,
+    private statefulMovementsService: StatefulMovementsService,
+    private editMovementListService: EditMovementListService,
+    private toastService: ToastService,
+  ) {
+    this.editMovement = new EventEmitter();
+    this.movementChange = new EventEmitter();
+  }
 
-	constructor(
-		private dateApi: DateApiService,
-		private accountService: AccountService,
-		private movementService: MovementsService,
-		private changeDetectorRef: ChangeDetectorRef,
-		private accountsBeanService: AccountsBeanService
-	) {
-		this.movementEdited = new EventEmitter();
-		this.valueCategoryColor = new EventEmitter();
-		this.amountEdit = true;
-	}
+  ngOnInit() {
+    this.accountWithOutDefaults = this.accountService.getManualAccountNatureWithOutDefaults( this.movement.account.type );
+    this.manualAccountImgSrc = `assets/media/img/manual_account/${this.accountWithOutDefaults}.svg`;
+    this.traditionalImgSrc = `https://cdn.finerio.mx/banks/${this.movement.account.institution.code}_shield.png`;
+  }
 
-	ngOnInit() {
-		this.accountWithOutDefaults = this.accountService.getManualAccountNatureWithOutDefaults(
-			this.movement.account.type
-		);
-		this.manualAccountImgSrc = `assets/media/img/manual_account/${this.accountWithOutDefaults}.svg`;
-		this.traditionalImgSrc = `https://cdn.finerio.mx/banks/${this.movement.account.institution.code}_shield.png`;
-		this.formatMovementDate();
-		this.editAmountAvailable();
-	}
+  onErrorFunc(type: string) {
+    this.accountWithOutDefaults = this.accountService.getManualAccountNatureWithOutDefaults(type);
+    this.manualAccountImgSrc = `assets/media/img/manual_account/${this.accountWithOutDefaults}.svg`;
+  }
 
-	ngOnChanges(): void {
-		this.accountsBeanService.changeManualAccountOnMovements.subscribe((res) => {
-			if (res) {
-				this.accountWithOutDefaults = this.accountService.getManualAccountNatureWithOutDefaults(
-					this.movement.account.type
-				);
-				this.manualAccountImgSrc = `assets/media/img/manual_account/${this.accountWithOutDefaults}.svg`;
-				this.traditionalImgSrc = `https://cdn.finerio.mx/banks/${this.movement.account.institution
-					.code}_shield.png`;
-				this.accountsBeanService.changeManualAccountOnMovements.emit(false);
-			}
-		});
-	}
+  updateMovement(movement: Movement) {
+    this.switcherSubscription = this.movementsService.updateMovement(movement).subscribe(
+      res => {
+        this.statefulMovementsService.setMovement = movement;
+        this.toastService.setCode = res.status;
+      },
+      (err) => {
+        this.toastService.setCode = err.status;
+        if (err.status === 401) {
+          this.toastService.toastGeneral();
+          this.updateMovement(movement);
+        }
+        if (err.status === 500) {
+          this.toastService.setMessage = '¡Ha ocurrido un error al crear tu movimiento!';
+          this.toastService.toastGeneral();
+        }
+      },
+      () => {
+        this.editMovementListService.editMovement();
+        this.toastService.setMessage = 'Se editó su movimiento exitosamente';
+        this.toastService.toastGeneral();
+        this.switcherSubscription.unsubscribe();
+      }
+    );
+  }
 
-	onErrorFunc(type: string) {
-		this.accountWithOutDefaults = this.accountService.getManualAccountNatureWithOutDefaults(type);
-		this.manualAccountImgSrc = `assets/media/img/manual_account/${this.accountWithOutDefaults}.svg`;
-	}
-
-	editAmountAvailable() {
-		this.amountEdit = this.movement.account.institution.code == 'DINERIO' ? true : false;
-	}
-
-	formatMovementDate() {
-		this.movement.customDate = this.dateApi.formatDateForAllBrowsers(this.movement.customDate.toString());
-	}
-
-	updateMovement(movement: Movement) {
-		console.log(movement);
-	}
+  changeDuplicated(changed: boolean) {
+    this.movement = { ...this.movement, duplicated: changed};
+    this.updateMovement(this.movement);
+    this.movementChange.next(this.movement);
+  }
 }

@@ -1,0 +1,7 @@
+<div *ngIf="account.institution.code.toLowerCase() === 'dinerio'; then cuentaManual else cuentaBancaria"></div>
+<ng-template #cuentaManual>
+  <app-manual-account-movement [account]="account" [hasManualAccount]="hasManualAccount" (hasManualAccountChange)="hasManualAccountChange.next($event)"></app-manual-account-movement>
+</ng-template>
+<ng-template #cuentaBancaria>
+  <app-bank-account [name]="account.name" [code]="account.institution.code"></app-bank-account>
+</ng-template>

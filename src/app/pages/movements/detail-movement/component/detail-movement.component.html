@@ -1,0 +1,168 @@
+<app-back-button></app-back-button>
+<div class="container">
+  <div class="row">
+    <div class="col s12 m8 pt-20">
+      <form #forma="ngForm" (ngSubmit)="saveData(forma)">
+        <div class="col s12 input-field">
+          <input (focusout)="preliminarCategory()" class="validate input-new-movement" placeholder="Descripción del Movimiento:"
+                 name="description" [(ngModel)]="movement.customDescription" type="text" required/>
+          <span class="helper-text" data-error="Ingresa una descripción para tu movimiento, Ej: Startbucks">Ej: Startbucks</span>
+        </div>
+        <div class="col s12">
+          <div class="row valign-wrapper">
+            <div class="col s12 m6 input-field">
+              <div *ngIf="id === 'new-movement'; then canEditAmount; else editAmountMovement"></div>
+              <ng-template #canEditAmount>
+                <input class="validate input-new-movement" name="amount" placeholder="Monto del Movimiento:"
+                       [(ngModel)]="movement.amount" min="0" type="number" value="0" required/>
+                <span class="helper-text" data-error="Ingresa un valo numérico y mínimo de 1">Debes ingresar un valor numérico</span>
+              </ng-template>
+              <ng-template #editAmountMovement>
+                <div *ngIf="movement.account.institution.code.toLowerCase() === 'dinerio'; then canEditAmount; else noEditAmount"></div>
+                <ng-template #noEditAmount>
+                  <h6 class="amount-for-card">{{ movement.amount }}</h6>
+                </ng-template>
+              </ng-template>
+            </div>
+            <div class="col s12 m6 center-align" id="type-section">
+              <div *ngIf="id === 'new-movement', then newType else editType"></div>
+              <ng-template #newType>
+                <input class="btn btn-type btn-charge active" type="button" ngModel="Gasto" (click)="valueType('charge')" [ngModelOptions]="{standalone: true}" id="charge" />
+                <input class="btn btn-type btn-deposit" type="button" ngModel="Ingreso" (click)="valueType('deposit')" [ngModelOptions]="{standalone: true}" id="deposit" />
+              </ng-template>
+              <ng-template #editType>
+                <div *ngIf="movement.account.institution.code.toLowerCase() === 'dinerio', then newType"></div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="col s12">
+          <div class="row valign-wrapper">
+            <div class="col m4 l3">
+              <h6>Tipo de cuenta:</h6>
+            </div>
+            <div class="col m8 l9">
+              <ng-container *ngIf="!loaderSpinner; else showSpinner">
+                <div *ngIf="id === 'new-movement'; then new else edit"></div>
+                <ng-template #new>
+                  <a *ngIf="disableModalTrigger; else modalTrigger" class="btn maBtn transparent black-text valign-wrapper truncate" id="manualAccountsTrigger">
+                    <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'">
+                    <span>{{ manualAccountName }}</span>
+                  </a>
+                  <ng-template #modalTrigger>
+                    <a class="btn maBtn transparent black-text modal-trigger valign-wrapper truncate" id="manualAccountsTrigger" href="#manualAccountsModal">
+                      <img [src]="'assets/media/img/manual_account/'+ manualAccountNature +'.svg'">
+                      <span>{{ manualAccountName }}</span>
+                    </a>
+                  </ng-template>
+                </ng-template>
+                <ng-template #edit>
+                  <app-edit-item [account]="movement.account" [hasManualAccount]="hasManualAccount" (hasManualAccountChange)="hasManualAccountChanged()"></app-edit-item>
+                </ng-template>
+              </ng-container>
+              <ng-template #showSpinner>
+                <app-spinner></app-spinner>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 pt-20">
+          <div class="row rowFecha">
+            <input type="button" ngModel="Hoy" class="btn btn-date active" id="todayDate"
+                   (click)="changeClassDate('todayDate')" [ngModelOptions]="{standalone: true}">
+            <input type="button" ngModel="Ayer" class="btn btn-date" id="yesterdayDate"
+                   (click)="changeClassDate('yesterdayDate')" [ngModelOptions]="{standalone: true}">
+            <app-date (click)="changeClassDate('otherDate')"
+                      [classes]="'btn btn-date'" [reset]="reset"
+                      [dateID]="'otherDate'" [(date)]="movement.customDate">
+            </app-date>
+          </div>
+        </div>
+        <div class="col s12 pt-20">
+          <p>
+            <label>
+              <input type="checkbox" class="filled-in" name="duplicated" [(ngModel)]="movement.duplicated"/>
+              <span>No tomar en cuenta en gráficas y presupuestos</span>
+            </label>
+          </p>
+          <ng-template [ngIf]="id !== 'new-movement'">
+            <ng-template [ngIf]="movement.account.institution.code === 'DINERIO'">
+              <p>
+                <label>
+                  <input type="checkbox" class="filled-in" name="inBalance" [(ngModel)]="movement.inBalance"/>
+                  <span>No tomar en cuenta en saldos de cuentas manuales</span>
+                </label>
+              </p>
+            </ng-template>
+          </ng-template>
+        </div>
+        <div class="row" id="movementBtn">
+          <div class="col s12 center-align">
+            <div *ngIf="id === 'new-movement'; then newMovementButton else editMovementButton"></div>
+            <ng-template #newMovementButton>
+              <button class="btn btn-large btn-submit" id="submitButton" [disabled]="forma.invalid" type="submit">Crear Movimiento
+                <i class="material-icons right">send</i>
+              </button>
+            </ng-template>
+            <ng-template #editMovementButton>
+              <div *ngIf="!canShowSpinner; else finishEdit" class="buttons-edit-container">
+                <button *ngIf="movement.account.institution.code === 'DINERIO'" class="btn btn-delete modal-trigger"
+                        id="deleteButton" type="button" data-target="modalDelete" >Eliminar
+                  <i class="material-icons right">delete</i>
+                </button>
+                <button class="btn btn-submit" [disabled]="forma.invalid" type="submit">Guardar
+                  <i class="material-icons right">send</i>
+                </button>
+              </div>
+              <ng-template #finishEdit>
+                <app-spinner></app-spinner>
+              </ng-template>
+            </ng-template>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col s12 m4">
+      <p [ngStyle]="{'color': category.color }" class="center" id="categoryP">
+        Categoría
+      </p>
+
+      <a (click)="openDialog($event)" [ngStyle]="{'color': category.textColor, 'background-color': category.color }" class="btn category-container truncate">
+        <img id="categoryIcon" src="assets/media/img/categories/{{  (category.user) ? 'userCategory' : category.parent.id }}.svg"
+             [alt]="category.name" alt="category.name">
+        {{ category.name }}
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="manualAccountsModal" class="modal" #manualAccountsModal>
+  <div class="modal-content">
+    <div class="row">
+      <app-user-manual-accounts (noManualAccounts)="modalManualaccountsTrigger($event)" (manualAccount)="manualAccountSelected($event)" class="modal-close"></app-user-manual-accounts>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Structure -->
+<div id="modalDelete" class="modal" #modalDelete>
+  <div class="modal-content center-align">
+    <div class="modal-content">
+      <h4>¿ Quieres eliminar este movimiento?</h4>
+      <hr>
+      <h6>Está acción no se podrá revertir</h6>
+    </div>
+    <div class="modal-footer">
+      <div class="center-align">
+        <button class="btn blt-flat finerio-accent-outline-color btn-margin-right modal-close" type="button">Cancelar
+          <i class="material-icons right">close</i>
+        </button>
+        <button class="btn btn-delete modal-close" type="button" (click)="deleteMovement(movement.id)">Eliminar
+          <i class="material-icons right">delete</i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
