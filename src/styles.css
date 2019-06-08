@@ -146,7 +146,7 @@ a.btn, button.btn, input.btn, .btn {
 }
  /**
   * Button for delete something
-  * This class is used for buttons that have a second priority on the page,
+  * This classes is used for buttons that have a second priority on the page,
   * if u will used it for third priority, you need to erase the border on component's css
   */
 
