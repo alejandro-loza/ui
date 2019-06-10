@@ -9,7 +9,6 @@ export class GTMService {
   constructor() { }
 
   trigger() {
-    console.log(this.gtm);
     (<any>window).dataLayer.push(this.gtm);
   }
 

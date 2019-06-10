@@ -21,329 +21,329 @@ import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
 
 @Component({
-	selector: 'app-credential',
-	templateUrl: './credential.component.html',
-	styleUrls: [ './credential.component.css' ],
-	providers: [ InstitutionService, InteractiveFieldService ]
+  selector: 'app-credential',
+  templateUrl: './credential.component.html',
+  styleUrls: [ './credential.component.css' ],
+  providers: [ InstitutionService, InteractiveFieldService ]
 })
 export class CredentialComponent implements OnInit {
-	accounts: AccountInterface[];
-	manualAccounts: AccountInterface[];
-	credentials: CredentialInterface[];
-	institutions: InstitutionInterface[] = [];
-	interactiveFields = [];
+  accounts: AccountInterface[];
+  manualAccounts: AccountInterface[];
+  credentials: CredentialInterface[];
+  institutions: InstitutionInterface[] = [];
+  interactiveFields = [];
 
-	// Aux properties
-	showSpinner: boolean;
-	credentialInProcess: CredentialInterface;
-	errorWithCredentials: boolean = false;
-	showGoMovementsButton: boolean = false;
+  // Aux properties
+  showSpinner: boolean;
+  credentialInProcess: CredentialInterface;
+  errorWithCredentials: boolean = false;
+  showGoMovementsButton: boolean = false;
 
-	// USER MESSAGES
-	loaderMessagge: string;
-	successMessage: string;
-	failMessage: string;
-	validateStatusFinished: boolean;
+  // USER MESSAGES
+  loaderMessagge: string;
+  successMessage: string;
+  failMessage: string;
+  validateStatusFinished: boolean;
 
-	// EMPTY STATE
-	imgName: string;
-	title: string;
-	description: string;
-	buttonText: string;
-	buttonUrl: string;
-	showEmptyState: boolean = false;
+  // EMPTY STATE
+  imgName: string;
+  title: string;
+  description: string;
+  buttonText: string;
+  buttonUrl: string;
+  showEmptyState: boolean = false;
 
-	@ViewChild('modal') interactiveModal: ElementRef;
-	constructor(
-		private accountService: AccountService,
-		private credentialService: CredentialService,
-		private institutionService: InstitutionService,
-		private interactiveService: InteractiveFieldService,
-		private cleanerService: CleanerService,
-		private credentialBean: CredentialBeanService,
-		private dateApiService: DateApiService,
-		private toastService: ToastService,
-		private accountsBeanService: AccountsBeanService,
-		private mixpanelService: MixpanelService
-	) {
-		this.credentials = [];
-		this.showSpinner = true;
-		this.validateStatusFinished = true;
-		this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede tardar unos minutos.';
-		this.successMessage = '';
-		this.failMessage = '';
-	}
+  @ViewChild('modal') interactiveModal: ElementRef;
+  constructor(
+    private accountService: AccountService,
+    private credentialService: CredentialService,
+    private institutionService: InstitutionService,
+    private interactiveService: InteractiveFieldService,
+    private cleanerService: CleanerService,
+    private credentialBean: CredentialBeanService,
+    private dateApiService: DateApiService,
+    private toastService: ToastService,
+    private accountsBeanService: AccountsBeanService,
+    private mixpanelService: MixpanelService
+  ) {
+    this.credentials = [];
+    this.showSpinner = true;
+    this.validateStatusFinished = true;
+    this.loaderMessagge = 'Finerio se está sincronizando con tu banca en línea, esto puede tardar unos minutos.';
+    this.successMessage = '';
+    this.failMessage = '';
+  }
 
-	ngOnInit() {
-		if (this.credentialBean.getLoadInformation()) {
-			this.getAllCredentials();
-			this.loadInstitutions();
-			this.getAccounts();
-		} else {
-			this.loadInformationFromRam();
-		}
-		this.windowPosition();
-		this.fillInformationForEmptyState();
-	}
+  ngOnInit() {
+    if (this.credentialBean.getLoadInformation()) {
+      this.getAllCredentials();
+      this.loadInstitutions();
+      this.getAccounts();
+    } else {
+      this.loadInformationFromRam();
+    }
+    this.windowPosition();
+    this.fillInformationForEmptyState();
+  }
 
-	loadInformationFromRam() {
-		this.credentials = this.credentialBean.getCredentials();
-		this.accounts = this.credentialBean.getAccounts();
-		this.institutions = this.credentialBean.getInstitutions();
-		this.manualAccounts = this.accountsBeanService.getManualAccounts;
-		this.credentials.forEach((credential) => {
-			this.checkStatusOfCredential(credential);
-			this.automaticSync(credential);
-		});
-		this.emptyStateProcess();
-		this.showSpinner = false;
-	}
+  loadInformationFromRam() {
+    this.credentials = this.credentialBean.getCredentials();
+    this.accounts = this.credentialBean.getAccounts();
+    this.institutions = this.credentialBean.getInstitutions();
+    this.manualAccounts = this.accountsBeanService.getManualAccounts;
+    this.credentials.forEach((credential) => {
+      this.checkStatusOfCredential(credential);
+      this.automaticSync(credential);
+    });
+    this.emptyStateProcess();
+    this.showSpinner = false;
+  }
 
-	// Main method for getting data
-	getAllCredentials() {
-		this.clearMemory();
-		this.credentialService.getAllCredentials().subscribe(
-			(res) => {
-				this.credentials = res.body.data;
-			},
-			(error) => {
-				this.errorWithCredentials = true;
-				this.showSpinner = false;
-			},
-			() => {
-				this.credentials.forEach((element: CredentialInterface) => {
-					this.checkStatusOfCredential(element);
-					this.automaticSync(element);
-				});
-				this.credentialBean.setCredentials(this.credentials);
-				this.emptyStateProcess();
-			}
-		);
-	}
+  // Main method for getting data
+  getAllCredentials() {
+    this.clearMemory();
+    this.credentialService.getAllCredentials().subscribe(
+      (res) => {
+        this.credentials = res.body.data;
+      },
+      (error) => {
+        this.errorWithCredentials = true;
+        this.showSpinner = false;
+      },
+      () => {
+        this.credentials.forEach((element: CredentialInterface) => {
+          this.checkStatusOfCredential(element);
+          this.automaticSync(element);
+        });
+        this.credentialBean.setCredentials(this.credentials);
+        this.emptyStateProcess();
+      }
+    );
+  }
 
-	// Checking status of credencials methods
+  // Checking status of credencials methods
 
-	checkStatusOfCredential(credential: CredentialInterface) {
-		if (credential.status === 'ACTIVE') {
-			this.validateStatusFinished = true;
-		} else if (credential.status === 'INVALID') {
-			this.failMessage = '¡Hubo un problema con alguna(s) de tus cuentas bancarias!';
-		} else if (credential.status === 'VALIDATE') {
-			this.cleanerService.cleanDashboardVariables();
-			this.cleanerService.cleanBudgetsVariables();
-			this.getNewInfoCredential(credential.id);
-		} else if (credential.status === 'TOKEN') {
-			this.getNewInfoCredential(credential.id);
-		}
-	}
+  checkStatusOfCredential(credential: CredentialInterface) {
+    if (credential.status === 'ACTIVE') {
+      this.validateStatusFinished = true;
+    } else if (credential.status === 'INVALID') {
+      this.failMessage = '¡Hubo un problema con alguna(s) de tus cuentas bancarias!';
+    } else if (credential.status === 'VALIDATE') {
+      this.cleanerService.cleanDashboardVariables();
+      this.cleanerService.cleanBudgetsVariables();
+      this.getNewInfoCredential(credential.id);
+    } else if (credential.status === 'TOKEN') {
+      this.getNewInfoCredential(credential.id);
+    }
+  }
 
-	getNewInfoCredential(credentialId: string) {
-		this.credentialService.getCredential(credentialId).subscribe((res) => {
-			this.credentialInProcess = res.body;
-			if (this.credentialInProcess.status === 'VALIDATE') {
-				this.validateStatusFinished = false;
-				setTimeout(() => {
-					this.checkStatusOfCredential(res.body);
-				}, 4000);
-			} else if (this.credentialInProcess.status === 'ACTIVE') {
-				this.loadNewCredentials();
-			} else if (this.credentialInProcess.status === 'TOKEN') {
-				this.validateStatusFinished = false;
-				this.modalProcessForInteractive(res.body);
-			} else if (this.credentialInProcess.status === 'INVALID') {
-				this.loadNewCredentials();
-			}
-		});
-	}
+  getNewInfoCredential(credentialId: string) {
+    this.credentialService.getCredential(credentialId).subscribe((res) => {
+      this.credentialInProcess = res.body;
+      if (this.credentialInProcess.status === 'VALIDATE') {
+        this.validateStatusFinished = false;
+        setTimeout(() => {
+          this.checkStatusOfCredential(res.body);
+        }, 4000);
+      } else if (this.credentialInProcess.status === 'ACTIVE') {
+        this.loadNewCredentials();
+      } else if (this.credentialInProcess.status === 'TOKEN') {
+        this.validateStatusFinished = false;
+        this.modalProcessForInteractive(res.body);
+      } else if (this.credentialInProcess.status === 'INVALID') {
+        this.loadNewCredentials();
+      }
+    });
+  }
 
-	messageForNewInvalidStatus() {
-		this.toastService.setMessage = '¡Revisa tu cuenta de  ' + this.credentialInProcess.institution.name + '!';
-		this.toastService.setCode = 200;
-		this.toastService.setDisplayLength = 3000;
-		this.validateStatusFinished = true;
-		this.toastService.toastGeneral();
-		this.mixpanelEvent('Failed syncing');
-	}
+  messageForNewInvalidStatus() {
+    this.toastService.setMessage = '¡Revisa tu cuenta de  ' + this.credentialInProcess.institution.name + '!';
+    this.toastService.setCode = 200;
+    this.toastService.setDisplayLength = 3000;
+    this.validateStatusFinished = true;
+    this.toastService.toastGeneral();
+    this.mixpanelEvent('Failed syncing');
+  }
 
-	messageForNewActiveStatus() {
-		this.toastService.setMessage =
-			'Tu cuenta de ' + this.credentialInProcess.institution.name + ' ha sido sincronizada';
-		this.toastService.setCode = 200;
-		this.toastService.setDisplayLength = 3000;
-		this.toastService.toastGeneral();
+  messageForNewActiveStatus() {
+    this.toastService.setMessage =
+      'Tu cuenta de ' + this.credentialInProcess.institution.name + ' ha sido sincronizada';
+    this.toastService.setCode = 200;
+    this.toastService.setDisplayLength = 3000;
+    this.toastService.toastGeneral();
 
-		this.mixpanelEvent('Successful syncing');
-		this.successMessage = '¡Tus datos han sido sincronizados';
-		this.validateStatusFinished = true;
-		this.showGoMovementsButton = true;
-	}
+    this.mixpanelEvent('Successful syncing');
+    this.successMessage = '¡Tus datos han sido sincronizados';
+    this.validateStatusFinished = true;
+    this.showGoMovementsButton = true;
+  }
 
-	toastController() {
-		this.credentialInProcess.status === 'ACTIVE'
-			? this.messageForNewActiveStatus()
-			: this.messageForNewInvalidStatus();
-	}
+  toastController() {
+    this.credentialInProcess.status === 'ACTIVE'
+      ? this.messageForNewActiveStatus()
+      : this.messageForNewInvalidStatus();
+  }
 
-	// Method for each conclusion of sync
-	loadNewCredentials() {
-		this.clearMemory();
-		this.toastController();
-		this.credentialService.getAllCredentials().subscribe(
-			(res) => {
-				this.credentials = res.body.data;
-			},
-			(error) => {
-				this.errorWithCredentials = true;
-			},
-			() => {
-				this.credentialBean.setCredentials(this.credentials);
-				this.getAccounts();
-			}
-		);
-		this.cleanerService.cleanDashboardVariables();
-		this.cleanerService.cleanBudgetsVariables();
-	}
+  // Method for each conclusion of sync
+  loadNewCredentials() {
+    this.clearMemory();
+    this.toastController();
+    this.credentialService.getAllCredentials().subscribe(
+      (res) => {
+        this.credentials = res.body.data;
+      },
+      (error) => {
+        this.errorWithCredentials = true;
+      },
+      () => {
+        this.credentialBean.setCredentials(this.credentials);
+        this.getAccounts();
+      }
+    );
+    this.cleanerService.cleanDashboardVariables();
+    this.cleanerService.cleanBudgetsVariables();
+  }
 
-	// AUTOMATIC SYNC PROCESS FOR EACH CREDENTIAL
-	automaticSync(credential: CredentialInterface) {
-		if (credential.institution.code != 'BBVA') {
-			if (credential.status == 'ACTIVE') {
-				if (this.moreThanEightHours(credential)) {
-					this.validateStatusFinished = false;
-					this.credentialService.updateCredential(credential).subscribe((res) => {
-						this.checkStatusOfCredential(res.body);
-					});
-				}
-			}
-		}
-	}
+  // AUTOMATIC SYNC PROCESS FOR EACH CREDENTIAL
+  automaticSync(credential: CredentialInterface) {
+    if (credential.institution.code != 'BBVA') {
+      if (credential.status == 'ACTIVE') {
+        if (this.moreThanEightHours(credential)) {
+          this.validateStatusFinished = false;
+          this.credentialService.updateCredential(credential).subscribe((res) => {
+            this.checkStatusOfCredential(res.body);
+          });
+        }
+      }
+    }
+  }
 
-	getAccounts() {
-		this.credentialBean.setAccounts([]);
-		this.accountService.getAccounts().subscribe((res) => {
-			this.accounts = res.body.data;
-			this.credentialBean.setAccounts(this.accounts);
-			this.credentialBean.setLoadInformation(false);
-			this.manualAccountsFilter();
-			this.emptyStateProcess();
-		});
-	}
+  getAccounts() {
+    this.credentialBean.setAccounts([]);
+    this.accountService.getAccounts().subscribe((res) => {
+      this.accounts = res.body.data;
+      this.credentialBean.setAccounts(this.accounts);
+      this.credentialBean.setLoadInformation(false);
+      this.manualAccountsFilter();
+      this.emptyStateProcess();
+    });
+  }
 
-	manualAccountsFilter() {
-		this.manualAccounts = [];
-		this.accounts.forEach((account) => {
-			if (!isNullOrUndefined(account.nature)) {
-				if (account.nature.includes('ma_')) {
-					this.manualAccounts.push(account);
-				}
-			}
-		});
-		this.accountsBeanService.setManualAccounts = this.manualAccounts;
-		this.showSpinner = false;
-	}
+  manualAccountsFilter() {
+    this.manualAccounts = [];
+    this.accounts.forEach((account) => {
+      if (!isNullOrUndefined(account.nature)) {
+        if (account.nature.includes('ma_')) {
+          this.manualAccounts.push(account);
+        }
+      }
+    });
+    this.accountsBeanService.setManualAccounts = this.manualAccounts;
+    this.showSpinner = false;
+  }
 
-	emptyStateProcess() {
-		if (this.credentialBean.getCredentials().length == 0 && this.credentialBean.getAccounts().length <= 1) {
-			this.credentialBean.setShowEmptyState(true);
-		} else {
-			this.credentialBean.setShowEmptyState(false);
-		}
-		this.showEmptyState = this.credentialBean.getShowEmptyState();
-	}
+  emptyStateProcess() {
+    if (this.credentialBean.getCredentials().length == 0 && this.credentialBean.getAccounts().length <= 1) {
+      this.credentialBean.setShowEmptyState(true);
+    } else {
+      this.credentialBean.setShowEmptyState(false);
+    }
+    this.showEmptyState = this.credentialBean.getShowEmptyState();
+  }
 
-	fillInformationForEmptyState() {
-		this.imgName = 'credentials';
-		this.title = 'No tienes cuentas bancarias';
-		this.description = "Pulsa el botón de 'Agregar Credencial' para dar de alta tus cuentas bancarias.";
-		this.buttonText = 'Agregar Credencial';
-		this.buttonUrl = '/app/banks';
-	}
+  fillInformationForEmptyState() {
+    this.imgName = 'credentials';
+    this.title = 'No tienes cuentas bancarias';
+    this.description = "Pulsa el botón de 'Agregar Credencial' para dar de alta tus cuentas bancarias.";
+    this.buttonText = 'Agregar Credencial';
+    this.buttonUrl = '/app/banks';
+  }
 
-	moreThanEightHours(credential: CredentialInterface): boolean {
-		let currentMoment: Date = new Date();
-		let dateObj: Date = this.dateApiService.formatDateForAllBrowsers(credential.lastUpdated);
-		let diff: number = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
-		if (diff >= 8) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+  moreThanEightHours(credential: CredentialInterface): boolean {
+    let currentMoment: Date = new Date();
+    let dateObj: Date = this.dateApiService.formatDateForAllBrowsers(credential.lastUpdated);
+    let diff: number = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+    if (diff >= 8) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-	// SyncButton process
-	syncButton(credential: CredentialInterface) {
-		this.validateStatusFinished = false;
-		this.credentialService.updateCredential(credential).subscribe((res) => {
-			this.checkStatusOfCredential(res.body);
-		});
-	}
+  // SyncButton process
+  syncButton(credential: CredentialInterface) {
+    this.validateStatusFinished = false;
+    this.credentialService.updateCredential(credential).subscribe((res) => {
+      this.checkStatusOfCredential(res.body);
+    });
+  }
 
-	// InteractiveFields Process
+  // InteractiveFields Process
 
-	getInteractiveFields(credential: CredentialInterface) {
-		this.interactiveFields = [];
-		this.interactiveService.findAllFields(credential).subscribe((data: any) => {
-			data.forEach((element) => {
-				this.interactiveFields.push(element);
-			});
-		});
-	}
+  getInteractiveFields(credential: CredentialInterface) {
+    this.interactiveFields = [];
+    this.interactiveService.findAllFields(credential).subscribe((data: any) => {
+      data.forEach((element) => {
+        this.interactiveFields.push(element);
+      });
+    });
+  }
 
-	interactiveSubmit(form: NgForm) {
-		this.interactiveService.sendToken(this.credentialInProcess, form.value).subscribe((res) => {
-			this.checkStatusOfCredential(this.credentialInProcess);
-		});
-	}
+  interactiveSubmit(form: NgForm) {
+    this.interactiveService.sendToken(this.credentialInProcess, form.value).subscribe((res) => {
+      this.checkStatusOfCredential(this.credentialInProcess);
+    });
+  }
 
-	modalProcessForInteractive(credential: CredentialInterface) {
-		const instanceModal = M.Modal.getInstance(this.interactiveModal.nativeElement, {
-			dismissible: false
-		});
-		instanceModal.open();
-		this.getInteractiveFields(credential);
-		this.mixpanelTokenEvent();
-	}
+  modalProcessForInteractive(credential: CredentialInterface) {
+    const instanceModal = M.Modal.getInstance(this.interactiveModal.nativeElement, {
+      dismissible: false
+    });
+    instanceModal.open();
+    this.getInteractiveFields(credential);
+    this.mixpanelTokenEvent();
+  }
 
-	ngAfterViewInit(): void {
-		const initModal = new M.Modal(this.interactiveModal.nativeElement, {
-			dismissible: false
-		});
-	}
+  ngAfterViewInit(): void {
+    const initModal = new M.Modal(this.interactiveModal.nativeElement, {
+      dismissible: false
+    });
+  }
 
-	clearMemory() {
-		this.credentials = [];
-		this.accounts = [];
-	}
+  clearMemory() {
+    this.credentials = [];
+    this.accounts = [];
+  }
 
-	windowPosition() {
-		window.scrollTo(0, 0);
-		let html = document.querySelector('html');
-		html.style.overflowX = 'hidden';
-	}
+  windowPosition() {
+    window.scrollTo(0, 0);
+    let html = document.querySelector('html');
+    html.style.overflowX = 'hidden';
+  }
 
-	// Loading Institutions in Session Storage
+  // Loading Institutions in Session Storage
 
-	loadInstitutions() {
-		this.institutionService.getAllInstitutions().subscribe((res) => {
-			res.body.data.forEach((institution) => {
-				if (institution.code !== 'DINERIO') {
-					this.institutions.push(institution);
-				}
-			});
-			this.credentialBean.setInstitutions(this.institutions);
-		});
-	}
+  loadInstitutions() {
+    this.institutionService.getAllInstitutions().subscribe((res) => {
+      res.body.data.forEach((institution) => {
+        if (institution.code !== 'DINERIO') {
+          this.institutions.push(institution);
+        }
+      });
+      this.credentialBean.setInstitutions(this.institutions);
+    });
+  }
 
-	mixpanelTokenEvent() {
-		this.mixpanelService.setIdentify();
-		this.mixpanelService.setTrackEvent('Introduce token');
-	}
+  mixpanelTokenEvent() {
+    this.mixpanelService.setIdentify();
+    this.mixpanelService.setTrackEvent('Introduce token');
+  }
 
-	// MIXPANEL
-	mixpanelEvent(status: string) {
-		this.mixpanelService.setIdentify();
-		this.mixpanelService.setSuperProperties();
-		this.mixpanelService.setPeopleProperties();
-		this.mixpanelService.setTrackEvent(status, { bank: this.credentialInProcess.institution.code });
-	}
+  // MIXPANEL
+  mixpanelEvent(status: string) {
+    this.mixpanelService.setIdentify();
+    this.mixpanelService.setSuperProperties();
+    this.mixpanelService.setPeopleProperties();
+    this.mixpanelService.setTrackEvent(status, { bank: this.credentialInProcess.institution.code });
+  }
 }
