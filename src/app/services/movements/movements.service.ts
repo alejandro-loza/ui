@@ -45,7 +45,7 @@ export class MovementsService {
    * @param paramsMovements
    */
 
-	getMovements(paramsMovements: ParamsMovements): Observable<HttpResponse<Response<Movement>>> {
+	getMovementsOnlyDashboard(paramsMovements: ParamsMovements): Observable<HttpResponse<Response<Movement>>> {
 		this.id = this.configService.getUser.id;
 		if (paramsMovements.offset === 0) {
 			this.movementsList = [];
@@ -82,6 +82,57 @@ export class MovementsService {
 						return movement;
 					});
 					this.movementsList = [ ...this.movementsList, ...res.body.data ];
+					return res;
+				}),
+				catchError((error: HttpErrorResponse) => {
+					this.toastService.setCode = error.status;
+					if (error.status === 0) {
+						this.toastService.toastGeneral();
+					} else if (error.status === 401) {
+						this.getMovements(paramsMovements);
+						this.toastService.toastGeneral();
+					} else if (error.status === 500) {
+						this.toastService.setMessage = '¡Ha ocurrido un error al obtener tus movimientos!';
+						this.toastService.toastGeneral();
+					}
+					return throwError(error);
+				})
+			);
+	}
+
+	getMovements(paramsMovements: ParamsMovements): Observable<HttpResponse<Response<Movement>>> {
+		this.id = this.configService.getUser.id;
+		let urlMovements =
+			`${this.url}/` +
+			`${this.id}/movements` +
+			`?deep=${paramsMovements.deep}` +
+			`&offset=${paramsMovements.offset}` +
+			`&max=${paramsMovements.maxMovements}` +
+			`&includeCharges=${paramsMovements.charges}` +
+			`&includeDeposits=${paramsMovements.deposits}` +
+			`&includeDuplicates=${paramsMovements.duplicates}`;
+
+		if (!isNullOrUndefined(paramsMovements.startDate || paramsMovements.endDate)) {
+			urlMovements =
+				urlMovements + `&startDate=${paramsMovements.startDate}` + `&endDate=${paramsMovements.endDate}`;
+		}
+		return this.httpClient
+			.get<Response<Movement>>(urlMovements, {
+				observe: 'response',
+				headers: this.configService.getHeaders
+			})
+			.pipe(
+				map((res) => {
+					if (res.body.data.length === 0) {
+						return res;
+					}
+					res.body.data = res.body.data.map((movement) => {
+						movement = {
+							...movement,
+							customDate: this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString())
+						};
+						return movement;
+					});
 					return res;
 				}),
 				distinctUntilChanged(),
