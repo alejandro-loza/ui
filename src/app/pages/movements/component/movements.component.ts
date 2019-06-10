@@ -65,10 +65,10 @@ export class MovementsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fillInformationForEmptyState();
-    if (this.statefulMovementsService.getMovements) {
-      this.getMovementsFromStatefulService();
-    } else if ( this.dashboardStatesService.getLoadListFromDashboard() ) {
+    if ( this.dashboardStatesService.getLoadListFromDashboard() ) {
       this.getMovementsFromDashboard();
+    } else if (this.statefulMovementsService.getMovements) {
+      this.getMovementsFromStatefulService();
     } else {
       this.getMovements();
     }
