@@ -32,9 +32,22 @@ export class SeeMovementsButtonComponent implements OnInit {
 	}
 
 	goToMovementsClick() {
+		this.sortMovementsPerDate();
 		this.dashboardStatesService.setLoadListFromDashboard(true);
 		this.dashboardStatesService.setListOfMovementsFromDashboard(this.movementsForComponent);
 		this.router.navigateByUrl('/app/movements');
+	}
+
+	sortMovementsPerDate() {
+		this.movementsForComponent = this.movementsForComponent.sort((a, b) => {
+			if (a.customDate > b.customDate) {
+				return -1;
+			} else if (a.customDate == b.customDate) {
+				return 0;
+			} else {
+				return 1;
+			}
+		});
 	}
 
 	setMovementsList() {
