@@ -30,7 +30,7 @@
                         [required]="field.name != 'sec_code'">
                         <span class="helper-text" [attr.data-error]="field.name == 'username' ? usernameErrorMessage : passwordErrorMessage"></span>
                 </div>
-                <button class="mt-10 btn background" [disabled]="!bank.valid" type="submit">
+                <button class="mt-10 btn background" [disabled]="!bank.valid" type="submit" id="newCredentials">
                     Agregar
                 </button>
             </form>
