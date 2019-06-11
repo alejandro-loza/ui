@@ -85,7 +85,8 @@ export class SignupComponent {
   gtmEvent(id: string) {
     this.gtmService.gtmData = {
       event: 'Sign Up',
-      id: id.toString()
+      id: id.toString(),
+      order: this.gtmService.create_UUID()
     };
     this.gtmService.trigger();
   }

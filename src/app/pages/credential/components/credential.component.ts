@@ -1,24 +1,24 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgForm } from '@angular/forms';
-
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {NgForm} from '@angular/forms';
 // SERVICES
-import { AccountService } from '@services/account/account.service';
-import { AccountsBeanService } from '@services/account/accounts-bean.service';
-import { CredentialService } from '@services/credentials/credential.service';
-import { CredentialBeanService } from '@services/credentials/credential-bean.service';
-import { InstitutionService } from '@services/institution/institution.service';
-import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
-import { CleanerService } from '@services/cleaner/cleaner.service';
-import { DateApiService } from '@services/date-api/date-api.service';
-import { ToastService } from '@services/toast/toast.service';
-import { MixpanelService } from '@services/mixpanel/mixpanel.service';
-
+import {AccountService} from '@services/account/account.service';
+import {AccountsBeanService} from '@services/account/accounts-bean.service';
+import {CredentialService} from '@services/credentials/credential.service';
+import {CredentialBeanService} from '@services/credentials/credential-bean.service';
+import {InstitutionService} from '@services/institution/institution.service';
+import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
+import {CleanerService} from '@services/cleaner/cleaner.service';
+import {DateApiService} from '@services/date-api/date-api.service';
+import {ToastService} from '@services/toast/toast.service';
+import {MixpanelService} from '@services/mixpanel/mixpanel.service';
 // Interfaces
-import { AccountInterface } from '@interfaces/account.interfaces';
-import { CredentialInterface } from '@interfaces/credential.interface';
-import { InstitutionInterface } from '@app/interfaces/institution.interface';
+import {AccountInterface} from '@interfaces/account.interfaces';
+import {CredentialInterface} from '@interfaces/credential.interface';
+import {InstitutionInterface} from '@app/interfaces/institution.interface';
 import * as M from 'materialize-css/dist/js/materialize';
-import { isNullOrUndefined } from 'util';
+import {isNullOrUndefined} from 'util';
+import {ConfigService} from '@services/config/config.service';
+import {GTMService} from '@services/google-tag-manager/gtm.service';
 
 @Component({
   selector: 'app-credential',
@@ -64,7 +64,9 @@ export class CredentialComponent implements OnInit {
     private dateApiService: DateApiService,
     private toastService: ToastService,
     private accountsBeanService: AccountsBeanService,
-    private mixpanelService: MixpanelService
+    private configService: ConfigService,
+    private mixpanelService: MixpanelService,
+    private gtmService: GTMService
   ) {
     this.credentials = [];
     this.showSpinner = true;
@@ -125,8 +127,10 @@ export class CredentialComponent implements OnInit {
 
   checkStatusOfCredential(credential: CredentialInterface) {
     if (credential.status === 'ACTIVE') {
+      this.gtmEvent(credential);
       this.validateStatusFinished = true;
     } else if (credential.status === 'INVALID') {
+      this.gtmEvent(credential);
       this.failMessage = '¡Hubo un problema con alguna(s) de tus cuentas bancarias!';
     } else if (credential.status === 'VALIDATE') {
       this.cleanerService.cleanDashboardVariables();
@@ -146,11 +150,13 @@ export class CredentialComponent implements OnInit {
           this.checkStatusOfCredential(res.body);
         }, 4000);
       } else if (this.credentialInProcess.status === 'ACTIVE') {
+        this.gtmEvent(res.body);
         this.loadNewCredentials();
       } else if (this.credentialInProcess.status === 'TOKEN') {
         this.validateStatusFinished = false;
         this.modalProcessForInteractive(res.body);
       } else if (this.credentialInProcess.status === 'INVALID') {
+        this.gtmEvent(res.body);
         this.loadNewCredentials();
       }
     });
@@ -337,6 +343,17 @@ export class CredentialComponent implements OnInit {
   mixpanelTokenEvent() {
     this.mixpanelService.setIdentify();
     this.mixpanelService.setTrackEvent('Introduce token');
+  }
+
+  gtmEvent(credential: CredentialInterface) {
+    const id = this.configService.getUser.id;
+    this.gtmService.gtmData = {
+      event: credential.status,
+      id: id,
+      institution: credential.institution.code,
+      order: this.gtmService.create_UUID()
+    };
+    this.gtmService.trigger();
   }
 
   // MIXPANEL
