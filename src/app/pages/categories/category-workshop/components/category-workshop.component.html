@@ -22,21 +22,21 @@
                 </li>
               </ul>
               <!--button (click)="generateRandomColors()"  *ngIf="colorForCategory.length < 40"
-                    class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">add</i></button-->
+                    classes="colorPickerUl btn-floating btn-small grey"><i classes="material-icons">add</i></button-->
 
               <button (click)="reloadColors()"
                     class="colorPickerUl btn-floating btn-small transparent"><i class="material-icons black-text">loop</i></button>
             </div>
-            <!--div class="col s12 pt-20">
+            <!--div classes="col s12 pt-20">
               <span><b>Texto:</b></span>
               <ul>
-                <li class="colorPickerUl" *ngFor="let color of colorText">
+                <li classes="colorPickerUl" *ngFor="let color of colorText">
                   <button [ngStyle]="{'background-color': color}" (click)="selectedTextColor( color )"
-                    class="btn-floating btn-small"></button>
+                    classes="btn-floating btn-small"></button>
                 </li>
               </ul>
               <button (click)="reloadTextColors()"
-                  class="colorPickerUl btn-floating btn-small grey"><i class="material-icons">loop</i></button>
+                  classes="colorPickerUl btn-floating btn-small grey"><i classes="material-icons">loop</i></button>
             </div-->
             <div class="col s8 offset-s2">
               <div class="demoChip" [ngStyle]="{'background-color': colorForDemoChip ,'color': '#ffffff'}" >
