@@ -52,7 +52,7 @@ export class SignupComponent {
           if (error.error.message) {
             this.toastService.setMessage = error.error.message;
           } else {
-            this.toastService.setMessage = 'Ocurrió un error al querer crear tu cuenta';
+            this.toastService.setMessage = 'Ocurrió un error al crear tu cuenta';
           }
           this.toastService.toastGeneral();
         },
