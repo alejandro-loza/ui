@@ -1,0 +1,28 @@
+#finerio-loading {
+  width: 300px;
+  margin: 240px auto auto;
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1299px) {
+  #finerio-loading {
+    margin: 100px auto auto;
+  }
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1599px) {
+  #finerio-loading {
+    margin: 140px auto auto;
+  }
+}
+
+@media screen and (min-width: 1600px) and (max-width: 1899px) {
+  #finerio-loading {
+    margin: 180px auto auto;
+  }
+}
+
+@media screen and (min-width: 1900px) {
+  #finerio-loading {
+    margin: 300px auto auto;
+  }
+}

@@ -2,36 +2,35 @@
 <app-tabs (tabClicked)="tabClicked($event)"></app-tabs>
 
 <div *ngIf="!dataReady" class="row">
-    <div class="col s12 center">
-        <app-spinner class="spinnerPosition"></app-spinner>
-    </div>
+  <div class="col s12 center">
+    <app-loading></app-loading>
+  </div>
 </div>
 
 <div *ngIf="!showEmptyState" class="container-fluid">
-    <div class="row">
-        <div class="col s12" id="childComponentsCol">
-            <app-incomes *ngIf="tabSelected == 0 && dataReady"
-            id="incomes">
-            </app-incomes>
+  <div class="row">
+    <div class="col s12" id="childComponentsCol">
+      <app-incomes *ngIf="tabSelected == 0 && dataReady"
+                   id="incomes">
+      </app-incomes>
 
-            <app-expenses *ngIf="tabSelected == 1 && dataReady"
-            id="expenses">
-            </app-expenses>
+      <app-expenses *ngIf="tabSelected == 1 && dataReady"
+                    id="expenses">
+      </app-expenses>
 
-            <app-balance *ngIf="tabSelected == 2 && dataReady"
-            id="balance">
-            </app-balance>
-        </div>
-    </div> 
+      <app-balance *ngIf="tabSelected == 2 && dataReady"
+                   id="balance">
+      </app-balance>
+    </div>
+  </div>
 </div>
 
 <div *ngIf="showEmptyState" class="emptyState animated fadeIn">
-    <app-empty-states
-        [imgName]="imgName"
-        [title]="title"
-        [description]="description"
-        [buttonText]="buttonText"
-        [buttonUrl]="buttonUrl">
-    </app-empty-states>
+  <app-empty-states
+    [imgName]="imgName"
+    [title]="title"
+    [description]="description"
+    [buttonText]="buttonText"
+    [buttonUrl]="buttonUrl">
+  </app-empty-states>
 </div>
-        

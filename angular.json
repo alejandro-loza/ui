@@ -29,7 +29,8 @@
                         ],
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",
-                            "node_modules/materialize-css/dist/js/materialize.min.js"
+                            "node_modules/materialize-css/dist/js/materialize.min.js",
+                            "node_modules/lottie-web/build/player/lottie.min.js"
                         ]
                     },
                     "configurations": {

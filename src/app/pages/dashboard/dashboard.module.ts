@@ -17,19 +17,19 @@ import { DiagnosticModule } from './diagnostic/diagnostic.module';
 import { IncomesModule } from './incomes/incomes.module';
 
 @NgModule({
-	imports: [
-		SharedModule,
-		BalanceModule,
-		ExpensesModule,
-		DiagnosticModule,
-		IncomesModule,
-		DashboardRoutes,
-		SharedDashboardModule,
-		EmptyStateModule,
-		SeeMovementsButtonModule
-	],
-	declarations: [ DashboardComponent, TabsComponent ],
-	providers: [],
-	exports: []
+  imports: [
+    SharedModule,
+    BalanceModule,
+    ExpensesModule,
+    DiagnosticModule,
+    IncomesModule,
+    SharedDashboardModule,
+    EmptyStateModule,
+    SeeMovementsButtonModule,
+    DashboardRoutes
+  ],
+  declarations: [ DashboardComponent, TabsComponent ],
+  providers: [],
+  exports: []
 })
 export class DashboardModule {}
