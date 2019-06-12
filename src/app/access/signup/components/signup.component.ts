@@ -49,7 +49,11 @@ export class SignupComponent {
         },
         (error) => {
           this.toastService.setCode = error.status;
-          this.toastService.setMessage = error.error.message;
+          if (error.error.message) {
+            this.toastService.setMessage = error.error.message;
+          } else {
+            this.toastService.setMessage = 'Ocurrió un error al querer crear tu cuenta';
+          }
           this.toastService.toastGeneral();
         },
         () => {
