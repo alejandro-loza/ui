@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { SpinnerModule } from './spinner/spinner.module';
+import {LoadingModule} from './loading/loading.module';
 
 @NgModule({
   declarations: [],
@@ -11,13 +12,15 @@ import { SpinnerModule } from './spinner/spinner.module';
     CommonModule,
     RouterModule,
     FormsModule,
-    SpinnerModule
+    SpinnerModule,
+    LoadingModule
   ],
   exports: [
     CommonModule,
     RouterModule,
     FormsModule,
-    SpinnerModule
+    SpinnerModule,
+    LoadingModule
   ]
 })
 export class SharedModule {}
