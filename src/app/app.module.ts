@@ -21,24 +21,24 @@ import { AppComponent } from '@app/app.component';
 import { ConfigParamsService } from '@params/config/config-params.service';
 
 @NgModule({
-	declarations: [ AppComponent ],
-	imports: [
-		BrowserModule,
-		BrowserAnimationsModule,
-		HttpClientModule,
-		SharedModule,
-		NgIdleKeepaliveModule.forRoot(),
-		AppRoutes
-	],
-	providers: [
-		ConfigService,
-		AuthGuard,
-		AuthService,
-		ToastService,
-		ConfigParamsService,
-		AccountService,
-		InterceptorProvider
-	],
-	bootstrap: [ AppComponent ]
+  declarations: [ AppComponent ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    SharedModule,
+    NgIdleKeepaliveModule.forRoot(),
+    AppRoutes
+  ],
+  providers: [
+    ConfigService,
+    AuthGuard,
+    AuthService,
+    ToastService,
+    ConfigParamsService,
+    AccountService,
+    InterceptorProvider
+  ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule {}
