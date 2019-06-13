@@ -1,23 +1,76 @@
-<div class="center-align white-text">
-  <h3 class="title">Estás en buenas manos.</h3>
-  <h5 class="subtitle-1">
-    En finerio <strong class="finerio-accent-text-color">NO </strong>podemos hacer compras,
-    <br>
-    transferencias, ni cobros cobros con tus tarjetas.
-  </h5>
-  <div class="container img-container">
-    <div class="row">
-      <div class="col s12 m2 push-m3">
-        <app-cobros></app-cobros>
+<div class="slider fullscreen" #slider>
+  <ul class="slides">
+    <li class="finerio-main-color">
+      <div class="center-align white-text animated fadeIn fast" id="first">
+        <h3 class="title fadeIn fast">Estás en buenas manos.</h3>
+        <h5 class="subtitle-1 animated fadeIn fast">
+          En finerio <strong class="finerio-accent-text-color">NO </strong>podemos hacer compras,
+          <br>
+          transferencias, ni cobros con tus tarjetas.
+        </h5>
+        <div class="container img-container animated fadeIn slow">
+          <div class="row">
+            <div class="col s12 m2 push-m3">
+              <app-cobros></app-cobros>
+            </div>
+            <div class="col s12 m2 push-m3">
+              <app-compras></app-compras>
+            </div>
+            <div class="col s12 m2 push-m3">
+              <app-transferencia></app-transferencia>
+            </div>
+          </div>
+        </div>
+        <app-security-help-animation></app-security-help-animation>
       </div>
-      <div class="col s12 m2 push-m3">
-        <app-compras></app-compras>
+    </li>
+    <li class="finerio-main-color">
+      <div class="center-align white-text animated fadeIn fast" id="second">
+        <div class="container">
+          <div class="container">
+            <div class="card">
+              <div class="card-content white">
+                <h6 class="black-text" id="card-info-text">
+                  Nosotros sólo te
+                  <br>
+                  pedimos <b class="finerio-main-text-color">tus claves de
+                  <br>
+                  banca en línea</b> y con ellas
+                  <br>
+                  sólo podemos descargar
+                  <br>
+                  tus movimientos.
+                </h6>
+              </div>
+            </div>
+            <div class="box-container-info center-align">
+              <div class="arrow-right"></div>
+              <div class="finerio-accent-color" id="main-box-info">
+                <h5>
+                  Finerio <b class="finerio-main-text-color">NUNCA </b>
+                  <br>
+                  tiene acceso a tu dinero.
+                </h5>
+              </div>
+              <div class="arrow-left"></div>
+            </div>
+            <div class="last-container-info">
+              <h5>
+                <b class="finerio-accent-text-color">Así que no te preocupes,</b>
+                <br>
+                y si tienes alguna pregunta
+                <br>
+                no dudes en contactarnos.
+              </h5>
+            </div>
+          </div>
+          <a [routerLink]="['', '']" class="btn btn-large finerio-accent-color" id="access-to-app">
+            Continuar
+          </a>
+        </div>
       </div>
-      <div class="col s12 m2 push-m3">
-        <app-transferencia></app-transferencia>
-      </div>
-    </div>
-  </div>
-  <app-security-help-animation></app-security-help-animation>
-
+    </li>
+  </ul>
 </div>
+
+

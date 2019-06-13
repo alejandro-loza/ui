@@ -303,33 +303,16 @@ input::-webkit-inner-spin-button {
   padding: 6px;
 }
 
-.animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
+.main { width: calc(16px*4); height: auto; }
+
+.slider .indicators .indicator-item.active {
+  background-color: var(--accent-color) !important;
 }
 
-.fast {
-  -webkit-animation-duration: 0.4s;
-  animation-duration: 0.4s;
-}
-
-.fadeIn {
-  animation-name: fadeIn;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.main { width: calc(16px*6); height: auto; }
 
 @media only screen and (min-width: 1600px) {
   .datepicker-modal { left: 40% !important; }
+  .main { width: calc(16px*6);}
 }
 
 
@@ -340,4 +323,8 @@ input::-webkit-inner-spin-button {
 
 @media only screen and (min-width: 1300px) and (max-width: 1499px) {
   .card { transform: translate(0, 5%); }
+}
+
+@media only screen and (min-width: 1800px) {
+  .main { width: calc(16px*8);}
 }

@@ -8,7 +8,7 @@ import {TransferenciaComponent} from './transferencia/transferencia.component';
   declarations: [
     CobrosComponent,
     ComprasComponent,
-    TransferenciaComponent
+    TransferenciaComponent,
   ],
   imports: [
     CommonModule
@@ -16,7 +16,7 @@ import {TransferenciaComponent} from './transferencia/transferencia.component';
   exports: [
     CobrosComponent,
     ComprasComponent,
-    TransferenciaComponent
+    TransferenciaComponent,
   ]
 })
 export class SecuritySvgModule { }
