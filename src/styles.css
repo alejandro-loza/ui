@@ -303,7 +303,7 @@ input::-webkit-inner-spin-button {
   padding: 6px;
 }
 
-.main {
+.main-svg {
   width: 3.1333em;
 }
 
@@ -312,13 +312,13 @@ input::-webkit-inner-spin-button {
 }
 
 @media only screen and (min-width: 601px) {
-  .main { width: 55px; margin-top: 8px; }
+  .main-svg { width: 55px; margin-top: 8px; }
 }
 
 @media only screen and (min-width: 1201px ) and (max-width: 1299px) {
   .card { transform: translate(0); }
   .row { margin: auto;}
-  .main { width: 3.1333em; margin-top: 0; }
+  .main-svg { width: 3.1333em; margin-top: 0; }
 }
 
 @media only screen and (min-width: 1300px) and (max-width: 1499px) {
@@ -328,9 +328,9 @@ input::-webkit-inner-spin-button {
 
 @media only screen and (min-width: 1600px) {
   .datepicker-modal { left: 40% !important; }
-  .main { width: 4.1333em; margin-top: 0; }
+  .main-svg { width: 4.1333em; margin-top: 0; }
 }
 
 @media only screen and (min-width: 1800px) {
-  .main { width: 4.1333em; margin-top: 0; }
+  .main-svg { width: 4.1333em; margin-top: 0; }
 }
