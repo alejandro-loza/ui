@@ -57,7 +57,7 @@ export class WelcomeComponent implements OnInit {
         if (res.body.size > 1) {
           return this.router.navigate([ '/app/dashboard' ]);
         } else {
-          return this.router.navigate([ '/app/banks' ]);
+          return this.router.navigate([ '/access/security' ]);
         }
       }, 2000);
     });
