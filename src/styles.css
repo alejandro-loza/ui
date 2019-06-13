@@ -303,28 +303,34 @@ input::-webkit-inner-spin-button {
   padding: 6px;
 }
 
-.main { width: calc(16px*4); height: auto; }
+.main {
+  width: 3.1333em;
+}
 
 .slider .indicators .indicator-item.active {
   background-color: var(--accent-color) !important;
 }
 
-
-@media only screen and (min-width: 1600px) {
-  .datepicker-modal { left: 40% !important; }
-  .main { width: calc(16px*6);}
+@media only screen and (min-width: 601px) {
+  .main { width: 55px; margin-top: 8px; }
 }
 
-
-@media only screen and (min-width: 1200px ) and (max-width: 1299px) {
+@media only screen and (min-width: 1201px ) and (max-width: 1299px) {
   .card { transform: translate(0); }
   .row { margin: auto;}
+  .main { width: 3.1333em; margin-top: 0; }
 }
 
 @media only screen and (min-width: 1300px) and (max-width: 1499px) {
   .card { transform: translate(0, 5%); }
+  .main { width: 4.1333em; margin-top: 0; }
+}
+
+@media only screen and (min-width: 1600px) {
+  .datepicker-modal { left: 40% !important; }
+  .main { width: 4.1333em; margin-top: 0; }
 }
 
 @media only screen and (min-width: 1800px) {
-  .main { width: calc(16px*8);}
+  .main { width: 4.1333em; margin-top: 0; }
 }
