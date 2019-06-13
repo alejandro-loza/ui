@@ -23,5 +23,4 @@ export class WelcomeAnimationComponent implements OnInit, AfterViewInit {
     });
     lottieFinerioLogo.play();
   }
-
 }
