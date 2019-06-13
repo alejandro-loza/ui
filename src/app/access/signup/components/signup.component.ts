@@ -18,6 +18,7 @@ import {GTMService} from '@services/google-tag-manager/gtm.service';
 export class SignupComponent {
   passwordValidate: boolean = true;
   termsAccepted: boolean = true;
+  isButtonAvailable: boolean;
   signupData: FormGroup = new FormGroup({
     email: new FormControl(),
     password: new FormControl(),
@@ -35,11 +36,14 @@ export class SignupComponent {
     private loginService: LoginService,
     private mixpanelService: MixpanelService,
     private gtmService: GTMService
-  ) {}
+  ) {
+    this.isButtonAvailable = false;
+  }
 
   signup() {
     this.passwordMatch();
     if (this.passwordValidate && this.termsAccepted) {
+      this.isButtonAvailable = true;
       this.showSpinner = true;
       this.signupService.signup(this.signupData.value).subscribe(
         (res) => {
@@ -48,6 +52,7 @@ export class SignupComponent {
           this.toastService.setCode = res.status;
         },
         (error) => {
+          this.isButtonAvailable = false;
           this.toastService.setCode = error.status;
           if (error.error.message) {
             this.toastService.setMessage = error.error.message;
