@@ -1,0 +1,12 @@
+h3, h5 {
+  margin: 0;
+  padding: 0;
+}
+
+.title {
+  margin: 32px auto;
+}
+
+.img-container {
+  margin: 32px auto 0;
+}
