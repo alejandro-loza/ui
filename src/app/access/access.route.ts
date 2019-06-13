@@ -34,6 +34,11 @@ const AcessRouting: Routes = [
           './social-networks/social-networks.module#SocialNetworksModule'
       },
       {
+        path: 'security',
+        loadChildren:
+          './security-help/security-help.module#SecurityHelpModule'
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: 'login'
