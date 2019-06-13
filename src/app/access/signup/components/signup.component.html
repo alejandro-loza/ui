@@ -36,9 +36,16 @@
                   </p>
                 </div>
                 <div class="center-align">
-                  <button [disabled]="!signupData.valid" class="btn finerio-main-color white-text" type="submit" id="btnCreateUser" name="action">Enviar
-                    <i class="material-icons right">send</i>
-                  </button>
+                  <div *ngIf="isButtonAvailable; then thenBlock else elseBlock"></div>
+                  <ng-template #thenBlock>
+                    <app-spinner></app-spinner>
+                  </ng-template>
+                  <ng-template #elseBlock>
+                    <button [disabled]="!signupData.valid" class="btn finerio-main-color white-text" type="submit" id="btnCreateUser" name="action">Enviar
+                      <i class="material-icons right">send</i>
+                    </button>
+                  </ng-template>
+
                 </div>
               </div>
             </form>

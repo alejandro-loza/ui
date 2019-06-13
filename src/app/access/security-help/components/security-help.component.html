@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <div class="container-title animated fadeIn faster">
+        <app-title-security-help></app-title-security-help>
+      </div>
+    </div>
+    <div class="animated fadeIn fast">
+      <div class="col s6 white-text container-subtitle">
+        <p class="text-subtitle">En Finerio <b class="finerio-accent-text-color">NO</b> podemos
+          <br>
+          hacer <b class="finerio-accent-text-color">compras, transferencias</b>
+          <br>
+          o <b class="finerio-accent-text-color">cobros</b> con tus tarjetas.</p>
+      </div>
+      <div class="col s6 container-subtitle">
+        <div class="row">
+          <div class="col s4 center-align">
+            <app-cobros></app-cobros>
+          </div>
+          <div class="col s4 center-align">
+            <app-transferencia></app-transferencia>
+          </div>
+          <div class="col s4 center-align">
+            <app-compras></app-compras>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 animated fadeIn slow">
+      <div class="container-credit-card">
+        <app-credit-card-security></app-credit-card-security>
+      </div>
+    </div>
+    <div class="col s12 animated fadeIn slow">
+      <div class="container-ribbon center-align white-text">
+        <app-ribbon-security></app-ribbon-security>
+        <p class="text-subtitle second">Si tienes alguna pregunta no dudes en contactarnos.</p>
+        <a class="btn finerio-accent-color white-text" routerLink="/app/banks">Continuar</a>
+      </div>
+    </div>
+  </div>
+</div>
