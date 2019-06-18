@@ -1,23 +1,25 @@
-<div class="container username-container">
-  <div class="row">
-    <div class="center-align container-icon">
-      <app-finerio-icon
-        [svgClasses]="'width-5'"
-        [fillMainClasses]="'fill-accent-color'"
-        [fillAccentClasses]="'fill-White-color'">
-      </app-finerio-icon>
-      <form #form="ngForm" (ngSubmit)="sendName(form)" class="form-container-username">
-        <div>
-          <span class="text-hello white-text">¡Hola,   </span>
-          <div class="input-field inline white-text">
-            <label for="username"></label>
-            <input placeholder="Ingresa tu nombre" id="username" type="text" class="white-text"
-                   name="name" ngModel required>
+<div class="background">
+  <div class="container username-container">
+    <div class="row">
+      <div class="center-align container-icon">
+        <app-finerio-icon
+          [svgClasses]="'width-5'"
+          [fillMainClasses]="'fill-accent-color'"
+          [fillAccentClasses]="'fill-White-color'">
+        </app-finerio-icon>
+        <form #form="ngForm" (ngSubmit)="sendName(form)" class="form-container-username">
+          <div>
+            <span class="text-hello white-text">¡Hola,   </span>
+            <div class="input-field inline white-text">
+              <label for="username"></label>
+              <input placeholder="Ingresa tu nombre" id="username" type="text" class="white-text"
+                     name="name" ngModel required>
+            </div>
+            <span class="text-hello white-text">!</span>
           </div>
-          <span class="text-hello white-text">!</span>
-        </div>
-        <button class="btn btn-large finerio-accent-outline-color white-text" [disabled]="form.form.invalid">Continuar</button>
-      </form>
+          <button class="btn btn-large finerio-accent-outline-color white-text" [disabled]="form.form.invalid">Continuar</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>

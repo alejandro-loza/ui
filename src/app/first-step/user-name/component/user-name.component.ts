@@ -31,7 +31,7 @@ export class UserNameComponent implements OnInit {
       () => {
         this.toastService.setMessage = 'Se registró tu nombre';
         this.toastService.toastGeneral();
-        return this.router.navigate(['/access', 'adviser']);
+        return this.router.navigate(['/first-step', 'adviser']);
       }
     );
   }
