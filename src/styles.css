@@ -217,6 +217,18 @@ a.btn, button.btn, input.btn, .btn {
   background-color: rgb(255, 255, 255) !important;
 }
 
+/**
+ * Background for access and first-step pages routes
+ */
+.background {
+  min-height: 100%;
+  background-color: var(--main-color);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
 .inputMovement {
   border-bottom: none !important;
   height: 100% !important;
