@@ -56,10 +56,12 @@ export class WelcomeComponent implements OnInit {
   getAccount() {
     this.accountService.getAccounts().subscribe((res) => {
       setTimeout(() => {
-        if (res.body.size > 1 && this.configService.getUser.name) {
-          return this.router.navigate([ '/app/dashboard' ]);
+        if (this.configService.getUser.name && res.body.size > 1) {
+          return this.router.navigate([ '/app', 'dashboard' ]);
+        } else if (!this.configService.getUser.name) {
+          return this.router.navigate([ '/first-step', 'username' ]);
         } else {
-          return this.router.navigate([ '/access/username' ]);
+          return this.router.navigate([ '/app', 'banks' ]);
         }
       }, 2000);
     });
