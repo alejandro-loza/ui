@@ -330,7 +330,7 @@ input::-webkit-inner-spin-button {
 @media only screen and (min-width: 1201px ) and (max-width: 1299px) {
   .card { transform: translate(0); }
   .row { margin: auto;}
-  .main-svg { width: 3.1333em; margin-top: 0; }
+  .main-svg { width: 4.1333em; margin-top: 0; }
 }
 
 @media only screen and (min-width: 1300px) and (max-width: 1499px) {
@@ -344,5 +344,5 @@ input::-webkit-inner-spin-button {
 }
 
 @media only screen and (min-width: 1800px) {
-  .main-svg { width: 4.1333em; margin-top: 0; }
+  .main-svg { width: 5.3333em; margin-top: 0; }
 }

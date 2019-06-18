@@ -34,3 +34,15 @@
 .ae{fill:#f75757;}
 .af{fill:#fb824e;}
 .ag{stroke-width:4.573px;stroke-dasharray:0.152 9.146;}
+
+@media only screen and (min-width: 1201px) {
+  .credit-card-security{ width: 75%; }
+}
+
+@media only screen and (min-width: 1359px) {
+  .credit-card-security{ width: 70%; }
+}
+
+@media only screen and (min-width: 1800px) {
+  .credit-card-security{ width: 80%; }
+}

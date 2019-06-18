@@ -13,7 +13,7 @@ const AppRouting: Routes = [
   },
   {
     path: 'first-step',
-    canActivate: [ AuthGuard ],
+   canActivate: [ AuthGuard ],
     loadChildren: './first-step/first-step.module#FirstStepModule'
   },
   {
