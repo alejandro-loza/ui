@@ -29,6 +29,14 @@ const AcessRouting: Routes = [
         loadChildren: './welcome/welcome.module#WelcomeModule'
       },
       {
+        path: 'username',
+        loadChildren: './user-name/user-name.module#UserNameModule'
+      },
+      {
+        path: 'adviser',
+        loadChildren: './adviser/adviser.module#AdviserModule'
+      },
+      {
         path: 'socialNetworks',
         loadChildren:
           './social-networks/social-networks.module#SocialNetworksModule'
