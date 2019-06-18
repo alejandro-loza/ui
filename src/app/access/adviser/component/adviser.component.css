@@ -1,0 +1,26 @@
+h1,h2,h3,h4,h5,h6,.row {
+  margin: 0;
+  padding: 0;
+}
+
+.text-subtitle {
+  font-size: 1.2666em;
+  line-height: 1.2666em;
+}
+
+.first-container {
+  padding: 3% 0;
+}
+
+.title-adviser {
+  margin: 5% 0 0;
+}
+
+.subtitle-adviser {
+  margin-top: 3%;
+}
+
+@media only screen and (min-width: 1800px) {
+  .first-container{padding: 5% 0;}
+  .subtitle-adviser { margin-top: 5%; }
+}
