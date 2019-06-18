@@ -6,6 +6,7 @@ import { ToastService } from '@services/toast/toast.service';
 import { AccountService } from '@services/account/account.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { SignupService } from '@services/signup/signup.service';
+import {ConfigService} from '@services/config/config.service';
 
 @Component({
   selector: 'app-welcome',
@@ -19,6 +20,7 @@ export class WelcomeComponent implements OnInit {
     private router: Router,
     private renderer: Renderer2,
     private toastService: ToastService,
+    private configService: ConfigService,
     private mixpanelService: MixpanelService,
     private signupService: SignupService
   ) {}
@@ -54,10 +56,10 @@ export class WelcomeComponent implements OnInit {
   getAccount() {
     this.accountService.getAccounts().subscribe((res) => {
       setTimeout(() => {
-        if (res.body.size > 1) {
+        if (res.body.size > 1 && this.configService.getUser.name) {
           return this.router.navigate([ '/app/dashboard' ]);
         } else {
-          return this.router.navigate([ '/access/security' ]);
+          return this.router.navigate([ '/access/username' ]);
         }
       }, 2000);
     });
