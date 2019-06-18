@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from          '@angular/router';
 import { ModuleWithProviders } from           '@angular/core';
 
-import { UserNameComponent } from              './component/user-name.component';
+import { UserNameComponent } from './component/user-name.component';
 
 
 
