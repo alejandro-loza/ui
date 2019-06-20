@@ -1,0 +1,14 @@
+.a{fill:#fff;}
+.b{fill:#00c3ff;}
+
+@media only screen and (min-width: 1201px) {
+  .security-help { width: 75% }
+}
+
+@media only screen and (min-width: 1359px) {
+  .security-help { width: 70% }
+}
+
+@media only screen and (min-width: 1800px) {
+  .security-help { width: 75% }
+}

@@ -9,6 +9,7 @@ import {LoginService} from '@services/login/login.service';
 import {MixpanelService} from '@services/mixpanel/mixpanel.service';
 import {User} from '@app/interfaces/user.interface';
 import {GTMService} from '@services/google-tag-manager/gtm.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-signup',
@@ -18,6 +19,7 @@ import {GTMService} from '@services/google-tag-manager/gtm.service';
 export class SignupComponent {
   passwordValidate: boolean = true;
   termsAccepted: boolean = true;
+  isButtonAvailable: boolean;
   signupData: FormGroup = new FormGroup({
     email: new FormControl(),
     password: new FormControl(),
@@ -35,11 +37,14 @@ export class SignupComponent {
     private loginService: LoginService,
     private mixpanelService: MixpanelService,
     private gtmService: GTMService
-  ) {}
+  ) {
+    this.isButtonAvailable = false;
+  }
 
   signup() {
     this.passwordMatch();
     if (this.passwordValidate && this.termsAccepted) {
+      this.isButtonAvailable = true;
       this.showSpinner = true;
       this.signupService.signup(this.signupData.value).subscribe(
         (res) => {
@@ -48,9 +53,15 @@ export class SignupComponent {
           this.toastService.setCode = res.status;
         },
         (error) => {
+          this.isButtonAvailable = false;
           this.toastService.setCode = error.status;
-          this.toastService.setMessage = error.error.message;
+          if (isNullOrUndefined(error.error.message)) {
+            this.toastService.setMessage = 'Ocurrió un error al crear tu cuenta';
+          } else {
+            this.toastService.setMessage = error.error.message;
+          }
           this.toastService.toastGeneral();
+          return this.router.navigate(['/access', 'signup']);
         },
         () => {
           this.toastService.setMessage = '¡Se creó tu cuenta!';

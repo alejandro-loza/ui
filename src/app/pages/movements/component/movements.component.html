@@ -26,7 +26,7 @@
     <div class="containerMovement firstContainer">
       <div class="row valign-wrapper">
         <div class="col s6">
-          <app-back-button [styleClass]="'noMargin'" *ngIf="dashboardStatesService.getLoadListFromDashboard()"></app-back-button>
+          <app-back-button [url]="'/app/dashboard'" [styleClass]="'noMargin'" *ngIf="dashboardStatesService.getLoadListFromDashboard()"></app-back-button>
         </div>
         <div class="col s6 right-align">
           <a class="btn finerio-main-outline-color" [routerLink]="['new-movement']">
