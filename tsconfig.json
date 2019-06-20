@@ -30,7 +30,7 @@
       "@shared/*": ["app/shared/*"],
       "@security/*": ["app/security/*"],
       "@services/*": ["app/services/*"],
-      "@services/stateful/*": ["app/services/stateful/*"],
+      "@stateful/*": ["app/services/stateful/*"],
       "@interfaces/*": ["app/interfaces/*"],
       "@animations/*": ["app/animations/*"]
     }

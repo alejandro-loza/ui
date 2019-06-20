@@ -1,26 +1,23 @@
 import { Injectable } from '@angular/core';
-import {StatefulCredentialsService} from '@services/stateful/credentials/stateful-credentials.service';
+import {HttpResponse} from '@angular/common/http';
+import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 import {CredentialInterface} from '@interfaces/credential.interface';
 import {CredentialService} from '@services/credentials/credential.service';
 import {DateApiService} from '@services/date-api/date-api.service';
-import {asapScheduler, BehaviorSubject, concat, Observable, of, scheduled} from 'rxjs';
+import {asapScheduler, BehaviorSubject, concat, of, scheduled} from 'rxjs';
 import {concatMap, delay, map, skip, tap} from 'rxjs/operators';
-import {HttpResponse} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProcessingCredentialsService {
   private credentials: CredentialInterface[];
-  private auxCredentialList: CredentialInterface[];
   private load = new BehaviorSubject('');
   constructor(
     private credentialsService: CredentialService,
     private dateApiService: DateApiService,
     private statefulCredentialsService: StatefulCredentialsService
-  ) {
-    this.auxCredentialList = [];
-  }
+  ) { }
 
   checkCredentials() {
     if (this.statefulCredentialsService.getCredentials) {
@@ -43,15 +40,15 @@ export class ProcessingCredentialsService {
   }
 
   updateCredentials(credential_list: CredentialInterface[]) {
-    this.auxCredentialList = credential_list.map(credential => {
+    this.credentials = credential_list.map(credential => {
         if ( this.isMoreThanEightHours(credential.lastUpdated) ) {
-          console.log(`Tiene más de ocho horas`);
-          // this.credentialsService.updateCredential(credential).subscribe();
+          this.credentialsService.updateCredential(credential).subscribe();
         }
         this.checkCredentialStatus(credential);
         return credential;
       }
     );
+    console.log(this.credentials);
   }
 
   checkCredentialStatus(credential: CredentialInterface) {
@@ -62,7 +59,7 @@ export class ProcessingCredentialsService {
       skip(1),
     );
     const poll = concat(getCredential, whenToRefresh);
-    const polledCredential$ = this.load.pipe(
+    const polledCredential = this.load.pipe(
       concatMap(() => poll),
       map( (res: HttpResponse<CredentialInterface>) => {
         if (res.body.status === 'ACTIVE') {
@@ -70,7 +67,7 @@ export class ProcessingCredentialsService {
         }
       })
     );
-    polledCredential$.subscribe();
+    polledCredential.subscribe();
   }
 
   isMoreThanEightHours(credential_lastUpdated: string): boolean {
