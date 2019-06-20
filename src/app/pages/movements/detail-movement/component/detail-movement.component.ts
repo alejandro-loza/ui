@@ -38,9 +38,9 @@ import {DateApiService} from '@services/date-api/date-api.service';
   styleUrls: ['./detail-movement.component.css']
 })
 export class DetailMovementComponent implements OnInit, AfterViewInit {
-  @ViewChild('datepicker') elDatePickker: ElementRef;
-  @ViewChild('manualAccountsModal') manualAccountsModal: ElementRef;
-  @ViewChild('modalDelete') modalDeleteElement: ElementRef;
+  @ViewChild('datepicker', {static: false}) elDatePickker: ElementRef;
+  @ViewChild('manualAccountsModal', {static: false}) manualAccountsModal: ElementRef;
+  @ViewChild('modalDelete', {static: false}) modalDeleteElement: ElementRef;
 
   manualAccount: AccountInterface;
   manualAccountName: string;

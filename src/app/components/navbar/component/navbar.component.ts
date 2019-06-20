@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, ContentChild, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {ActivationEnd, Router} from '@angular/router';
 import {CleanerService} from '@services/cleaner/cleaner.service';
 import {ConfigService} from '@services/config/config.service';
@@ -14,9 +14,9 @@ import * as M from 'materialize-css/dist/js/materialize';
   styleUrls: [ './navbar.component.css' ]
 })
 export class NavbarComponent implements OnInit, AfterContentInit {
-  @ViewChild('sidenav') elemSidenav: ElementRef;
-  @ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
-  @ViewChild('chevronRight') elemIcon: ElementRef;
+  @ViewChild('sidenav', {static: false}) elemSidenav: ElementRef;
+  @ViewChild('sidenavTrigger', {static: false}) elemSidenavtrigger: ElementRef;
+  @ViewChild('chevronRight', {static: false}) elemIcon: ElementRef;
   private sideNavInit: M.Sidenav;
   private sideNavInstance: M.Sidenav;
   value: boolean;

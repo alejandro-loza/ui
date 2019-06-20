@@ -7,7 +7,7 @@ import LottieView from 'lottie-web';
   styleUrls: ['./security-help-animation.component.css']
 })
 export class SecurityHelpAnimationComponent implements OnInit, AfterViewInit {
-  @ViewChild('lottieElement') lottieElement: ElementRef;
+  @ViewChild('lottieElement', {static: false}) lottieElement: ElementRef;
   constructor(private renderer: Renderer2) { }
 
   ngOnInit() { }

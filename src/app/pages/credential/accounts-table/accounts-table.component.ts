@@ -1,3 +1,4 @@
+//@ts-ignore
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import * as M from 'materialize-css/dist/js/materialize';
 import { AccountInterface } from '@app/interfaces/account.interfaces';
@@ -23,7 +24,7 @@ export class AccountsTableComponent implements OnInit {
 	creditAccounts: AccountInterface[] = [];
 
 	@Input() accounts: AccountInterface[] = [];
-	@ViewChild('collapsible') elementCollapsible: ElementRef;
+	@ViewChild('collapsible', {static: false}) elementCollapsible: ElementRef;
 
 	constructor() {}
 
