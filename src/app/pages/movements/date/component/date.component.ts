@@ -32,7 +32,7 @@ export class DateComponent implements OnInit, OnChanges, AfterContentInit {
 
   @Output() dateChange: EventEmitter<Date>;
 
-  @ViewChild('datepicker') elementDatePicker: ElementRef;
+  @ViewChild('datepicker', {static: false}) elementDatePicker: ElementRef;
 
   constructor(
     private dateApiService: DateApiService,

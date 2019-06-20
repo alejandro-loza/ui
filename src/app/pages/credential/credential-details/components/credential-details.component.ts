@@ -33,9 +33,9 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 	institutions: InstitutionInterface[] = [];
 	credentialId: string;
 
-	@ViewChild('modal') elModal: ElementRef;
-	@ViewChild('modal2') elModal2: ElementRef;
-	@ViewChild('modal3') elModal3: ElementRef;
+	@ViewChild('modal', {static: false}) elModal: ElementRef;
+	@ViewChild('modal2', {static: false}) elModal2: ElementRef;
+	@ViewChild('modal3', {static: false}) elModal3: ElementRef;
 
 	constructor(
 		private activated: ActivatedRoute,

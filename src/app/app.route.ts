@@ -4,25 +4,25 @@ import { AuthGuard } from './guards/auth/auth.guard';
 const AppRouting: Routes = [
   {
     path: 'access',
-    loadChildren: './access/access.module#AccessModule'
+    loadChildren: () => import('./access/access.module').then(module => module.AccessModule)
   },
   {
     path: 'app',
     canActivate: [ AuthGuard ],
-    loadChildren: './pages/pages.module#PagesModule'
+    loadChildren: () => import('./pages/pages.module').then(module => module.PagesModule)
   },
   {
     path: 'first-step',
    canActivate: [ AuthGuard ],
-    loadChildren: './first-step/first-step.module#FirstStepModule'
+    loadChildren: () => import('./first-step/first-step.module').then(module => module.FirstStepModule)
   },
   {
     path: 'invitation/:code',
-    loadChildren: './referals/referals.module#ReferalsModule'
+    loadChildren: () => import('./referals/referals.module').then( module => module.ReferalsModule)
   },
   {
     path: 'invitation-success',
-    loadChildren: './referals/success/success.module#SuccessModule'
+    loadChildren: () => import('./referals/success/success.module').then(module => module.SuccessModule)
   },
   {
     path: '',

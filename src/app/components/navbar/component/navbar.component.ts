@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {ActivationEnd, Router} from '@angular/router';
 import {CleanerService} from '@services/cleaner/cleaner.service';
 import {ConfigService} from '@services/config/config.service';
@@ -13,12 +13,10 @@ import * as M from 'materialize-css/dist/js/materialize';
   templateUrl: './navbar.component.html',
   styleUrls: [ './navbar.component.css' ]
 })
-export class NavbarComponent implements OnInit, AfterContentInit {
-  @ViewChild('sidenav') elemSidenav: ElementRef;
-  @ViewChild('sidenavTrigger') elemSidenavtrigger: ElementRef;
-  @ViewChild('chevronRight') elemIcon: ElementRef;
+export class NavbarComponent implements OnInit, AfterViewInit {
+  @ViewChild('sidenav', {static: false}) elemSidenav: ElementRef;
+  @ViewChild('chevronRight', {static: false}) elemIcon: ElementRef;
   private sideNavInit: M.Sidenav;
-  private sideNavInstance: M.Sidenav;
   value: boolean;
   titlePage: string;
 
@@ -42,16 +40,14 @@ export class NavbarComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {}
 
-  ngAfterContentInit() {
-    this.sideNavInit = new M.Sidenav(this.elemSidenav.nativeElement, {});
-    this.sideNavInstance = M.Sidenav.getInstance(this.elemSidenav.nativeElement);
+  ngAfterViewInit() {
+    this.sideNavInit = new M.Sidenav(this.elemSidenav.nativeElement);
   }
 
   logout() {
     this.cleanerService.cleanAllVariables();
     this.configService.resetVariable();
-    this.sideNavInstance.close();
-    return this.router.navigate([ '/access/login' ]);
+    return this.router.navigate([ '/access', 'login' ]);
   }
 
   getDataRoute() {

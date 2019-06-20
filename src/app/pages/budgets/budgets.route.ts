@@ -8,21 +8,21 @@ const BUDGETS_ROUTING: Routes = [
 	},
 	{
 		path: 'new-budget',
-		loadChildren: './new-budget/new-budget.module#NewBudgetModule',
+		loadChildren: () => import('./new-budget/new-budget.module').then(module => module.NewBudgetModule),
 		data: {
 			title: 'Nuevo Presupuesto'
 		}
 	},
 	{
 		path: 'shared-budget/:action',
-		loadChildren: './shared-budget-component/shared-budget-component.module#SharedBudgetComponentModule',
+		loadChildren: () => import('./shared-budget-component/shared-budget-component.module').then(module => module.SharedBudgetComponentModule),
 		data: {
 			title: 'Edita tu Presupuesto'
 		}
 	},
 	{
 		path: ':name',
-		loadChildren: './budget-detail/budget-detail.module#BudgetDetailModule',
+		loadChildren: () => import('./budget-detail/budget-detail.module').then(module=> module.BudgetDetailModule),
 		data: {
 			title: 'Detalles del Presupuesto'
 		}
