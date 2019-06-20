@@ -6,6 +6,7 @@ import { ToastService } from '@services/toast/toast.service';
 import { AccountService } from '@services/account/account.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { SignupService } from '@services/signup/signup.service';
+import {ConfigService} from '@services/config/config.service';
 import {CredentialService} from '@services/credentials/credential.service';
 import {ProcessingCredentialsService} from '@services/credentials/background-process/processing-credentials.service';
 import {Subscription} from 'rxjs';
@@ -24,11 +25,12 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private credentialService: CredentialService,
     private processingCredentials: ProcessingCredentialsService,
-    private mixpanelService: MixpanelService,
     private router: Router,
     private renderer: Renderer2,
-    private signupService: SignupService,
     private toastService: ToastService,
+    private configService: ConfigService,
+    private mixpanelService: MixpanelService,
+    private signupService: SignupService
   ) {}
 
   ngOnInit() {
@@ -77,10 +79,12 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   getAccount() {
     this.accountSubscription = this.accountService.getAccounts().subscribe((res) => {
       setTimeout(() => {
-        if (res.body.size > 1) {
-          return this.router.navigate([ '/app/dashboard' ]);
+        if (this.configService.getUser.name && res.body.size > 1) {
+          return this.router.navigate([ '/app', 'dashboard' ]);
+        } else if (!this.configService.getUser.name) {
+          return this.router.navigate([ '/first-step', 'username' ]);
         } else {
-          return this.router.navigate([ '/access/security' ]);
+          return this.router.navigate([ '/app', 'banks' ]);
         }
       }, 2000);
     });

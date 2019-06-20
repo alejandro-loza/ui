@@ -5,6 +5,7 @@ export interface User {
   accountLocked?:              boolean;
   customerId?:                 number;
   dateCreated?:                Date;
+  name?:                       string;
   email?:                      string;
   enabled?:                    boolean;
   id?:                        string;

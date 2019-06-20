@@ -1,0 +1,27 @@
+<div class="first-container finerio-main-color">
+  <div class="container">
+    <div class="row center-align">
+      <app-finerio-icon
+        [svgClasses]="'width-5'"
+        [fillMainClasses]="'fill-accent-color'"
+        [fillAccentClasses]="'fill-White-color'">
+      </app-finerio-icon>
+      <h6 class="white-text text-subtitle title-adviser">¡Hola, {{ username }}!</h6>
+    </div>
+  </div>
+</div>
+<div class="second-container">
+  <div class="container">
+    <div class="center-align">
+      <h6 class="text-subtitle subtitle-adviser">
+        Finerio será tu nuevo
+        <br>
+        asesor financiero
+      </h6>
+      <div>
+        <app-finni></app-finni>
+      </div>
+      <a [routerLink]="['/first-step', 'security']" class="btn btn-large finerio-main-color">Siguiente</a>
+    </div>
+  </div>
+</div>
