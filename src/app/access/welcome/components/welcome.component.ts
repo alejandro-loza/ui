@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '@services/auth/auth.service';
@@ -6,29 +6,43 @@ import { ToastService } from '@services/toast/toast.service';
 import { AccountService } from '@services/account/account.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { SignupService } from '@services/signup/signup.service';
+import {CredentialService} from '@services/credentials/credential.service';
+import {ProcessingCredentialsService} from '@services/credentials/background-process/processing-credentials.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: [ './welcome.component.css' ]
 })
-export class WelcomeComponent implements OnInit {
+export class WelcomeComponent implements OnInit, OnDestroy {
+  personalInfoUserSubscription: Subscription;
+  credentialSubscription: Subscription;
+  accountSubscription: Subscription;
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
+    private credentialService: CredentialService,
+    private processingCredentials: ProcessingCredentialsService,
+    private mixpanelService: MixpanelService,
     private router: Router,
     private renderer: Renderer2,
+    private signupService: SignupService,
     private toastService: ToastService,
-    private mixpanelService: MixpanelService,
-    private signupService: SignupService
   ) {}
 
   ngOnInit() {
     this.personalInfoUser();
   }
 
+  ngOnDestroy(): void {
+    this.credentialSubscription.unsubscribe();
+    this.accountSubscription.unsubscribe();
+    this.personalInfoUserSubscription.unsubscribe();
+  }
+
   personalInfoUser() {
-    this.authService.personalInfo().subscribe(
+    this.personalInfoUserSubscription = this.authService.personalInfo().subscribe(
       (res) => {
         if (res.body.accountLocked === true) {
           this.toastService.setCode = 401;
@@ -46,13 +60,22 @@ export class WelcomeComponent implements OnInit {
       },
       () => {
         this.mixpanelEvent();
+        this.getCredentials();
         this.getAccount();
       }
     );
   }
 
+  getCredentials() {
+    this.credentialSubscription = this.credentialService.getAllCredentials().subscribe(
+      res => res,
+      err => err,
+      () => this.processingCredentials.checkCredentials()
+    );
+  }
+
   getAccount() {
-    this.accountService.getAccounts().subscribe((res) => {
+    this.accountSubscription = this.accountService.getAccounts().subscribe((res) => {
       setTimeout(() => {
         if (res.body.size > 1) {
           return this.router.navigate([ '/app/dashboard' ]);
