@@ -1,5 +1,5 @@
 //@ts-ignore
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 //@ts-ignore
 import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
@@ -16,7 +16,7 @@ import { isNullOrUndefined } from 'util';
 	templateUrl: './budget-detail.component.html',
 	styleUrls: [ './budget-detail.component.css' ]
 })
-export class BudgetDetailComponent implements OnInit {
+export class BudgetDetailComponent implements OnInit, AfterViewInit {
 	categoryName: string = '';
 	budget: Budget = null;
 	subBudgets: Budget[] = [];
