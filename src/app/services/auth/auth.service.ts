@@ -13,38 +13,38 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-	constructor(private httpClient: HttpClient, private configService: ConfigService, private router: Router) {}
+  constructor(private httpClient: HttpClient, private configService: ConfigService, private router: Router) {}
 
-	isAuth() {
-		if (this.configService.getJWT) {
-			const accessToken = this.configService.getJWT.access_token;
-			if (accessToken.length > 0) {
-				return true;
-			}
-		} else {
-			return this.router.navigate([ '/access/login' ]);
-		}
-	}
+  isAuth() {
+    if (this.configService.getJWT) {
+      const accessToken = this.configService.getJWT.access_token;
+      if (accessToken.length > 0) {
+        return true;
+      }
+    } else {
+      return this.router.navigate([ '/access/login' ]);
+    }
+  }
 
-	personalInfo(): Observable<HttpResponse<User>> {
-		return this.httpClient
-			.get<User>(`${environment.backendUrl}/me`, {
-				observe: 'response',
-				headers: this.configService.getHeaders
-			})
-			.pipe(
-				map((res) => {
-					this.configService.setUser = res.body;
-					return res;
-				})
-			);
-	}
+  personalInfo(): Observable<HttpResponse<User>> {
+    return this.httpClient
+      .get<User>(`${environment.backendUrl}/me`, {
+        observe: 'response',
+        headers: this.configService.getHeaders
+      })
+      .pipe(
+        map((res) => {
+          this.configService.setUser = res.body;
+          return res;
+        })
+      );
+  }
 
-	relateInviter(finerioCode): Observable<HttpResponse<User>> {
-		const URL = `${environment.backendUrl}/relateInviter`;
-		return this.httpClient.post<User>(URL, finerioCode, {
-			observe: 'response',
-			headers: this.configService.getHeaders
-		});
-	}
+  relateInviter(finerioCode): Observable<HttpResponse<User>> {
+    const URL = `${environment.backendUrl}/relateInviter`;
+    return this.httpClient.post<User>(URL, finerioCode, {
+      observe: 'response',
+      headers: this.configService.getHeaders
+    });
+  }
 }

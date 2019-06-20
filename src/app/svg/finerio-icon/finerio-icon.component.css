@@ -26,6 +26,16 @@
   width: var(--widthImage);
 }
 
+.width-10 {
+  width: 10%;
+  height: auto;
+}
+
+.width-5 {
+  width: 5%;
+  height: auto;
+}
+
 .width-100 {
   width: 100%;
   height: auto;
@@ -41,30 +51,8 @@
   fill: whitesmoke;
 }
 
-.welcomeClass path, .welcomeClass polygon {
-    animation: fill 500ms alternate infinite ease-in-out;
-}
-
 .fill-accent-white-color {
   fill: var(--light-color);
-}
-
-@-webkit-keyframes fill {
-  0% {
-    fill: transparent;
-  }
-  100% {
-    fill: #335479;
-  }
-}
-
-@keyframes fill {
-  0% {
-    fill: transparent;
-  }
-  100% {
-    width: 100%;
-  }
 }
 
 @media only screen and (max-width: 600px) {

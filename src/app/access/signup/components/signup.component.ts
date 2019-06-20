@@ -9,6 +9,7 @@ import {LoginService} from '@services/login/login.service';
 import {MixpanelService} from '@services/mixpanel/mixpanel.service';
 import {User} from '@app/interfaces/user.interface';
 import {GTMService} from '@services/google-tag-manager/gtm.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'app-signup',
@@ -54,12 +55,13 @@ export class SignupComponent {
         (error) => {
           this.isButtonAvailable = false;
           this.toastService.setCode = error.status;
-          if (error.error.message) {
-            this.toastService.setMessage = error.error.message;
-          } else {
+          if (isNullOrUndefined(error.error.message)) {
             this.toastService.setMessage = 'Ocurrió un error al crear tu cuenta';
+          } else {
+            this.toastService.setMessage = error.error.message;
           }
           this.toastService.toastGeneral();
+          return this.router.navigate(['/access', 'signup']);
         },
         () => {
           this.toastService.setMessage = '¡Se creó tu cuenta!';
