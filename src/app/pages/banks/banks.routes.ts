@@ -8,7 +8,7 @@ const BanksRouting: Routes = [
   },
   {
     path: ':bankCode',
-    loadChildren: './bank-form/bank-form.module#BankFormModule'
+    loadChildren: () => import('./bank-form/bank-form.module').then(module => module.BankFormModule)
   },
   {
     path: '**',

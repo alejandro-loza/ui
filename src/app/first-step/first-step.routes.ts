@@ -8,21 +8,21 @@ const FirstStepRouting: Routes = [
     children: [
       {
         path: 'username',
-        loadChildren: './user-name/user-name.module#UserNameModule',
+        loadChildren: () => import('./user-name/user-name.module').then(module => module.UserNameModule),
         data: {
           title: 'Nombre de Usuario'
         }
       },
       {
         path: 'adviser',
-        loadChildren: './adviser/adviser.module#AdviserModule',
+        loadChildren: () => import('./adviser/adviser.module').then(module => module.AdviserModule),
         data: {
           title: 'Asesor Financiero'
         }
       },
       {
         path: 'security',
-        loadChildren: './security-help/security-help.module#SecurityHelpModule',
+        loadChildren: () => import('./security-help/security-help.module').then(module => module.SecurityHelpModule),
         data: {
           title: 'Seguridad para ti'
         }
