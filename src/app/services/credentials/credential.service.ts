@@ -10,6 +10,9 @@ import {CreateCredentialInterface} from '@interfaces/createCredential.interface'
 import {Response} from '@interfaces/response.interface';
 
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {CredentialBeanService} from '@services/credentials/credential-bean.service';
+import {StatefulCredentialsService} from '@services/stateful/credentials/stateful-credentials.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +22,8 @@ export class CredentialService {
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService,
-    private configParams: ConfigParamsService
+    private configParams: ConfigParamsService,
+    private statefulCredentialService: StatefulCredentialsService
   ) { }
 
   getCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
@@ -41,7 +45,12 @@ export class CredentialService {
         headers: this.configService.getHeaders,
         params: this.configParams.getConfigParams
       }
-    );
+    ).pipe(
+      map( res => {
+          this.statefulCredentialService.setCredentials = res.body.data;
+          return res;
+        }
+      ));
   }
 
   createCredential( credential: CreateCredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
