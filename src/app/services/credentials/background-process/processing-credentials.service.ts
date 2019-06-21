@@ -71,8 +71,8 @@ export class ProcessingCredentialsService {
       concatMap(() => poll),
       map( (res: HttpResponse<CredentialInterface>) => {
         if (res.body.status === 'ACTIVE' || res.body.status === 'INVALID') {
-          this.showToast(res.body);
           unpolledCredential.unsubscribe();
+          this.showToast(res.body);
           return res;
         }
       })
