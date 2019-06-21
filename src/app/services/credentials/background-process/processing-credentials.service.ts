@@ -5,7 +5,7 @@ import {CredentialInterface} from '@interfaces/credential.interface';
 import {CredentialService} from '@services/credentials/credential.service';
 import {DateApiService} from '@services/date-api/date-api.service';
 import {asyncScheduler, BehaviorSubject, concat, of, scheduled} from 'rxjs';
-import {concatMap, delay, map, skip, tap} from 'rxjs/operators';
+import {concatMap, delay, map, share, skip, tap} from 'rxjs/operators';
 import {ToastService} from '@services/toast/toast.service';
 
 @Injectable({
@@ -31,7 +31,6 @@ export class ProcessingCredentialsService {
         credential.institution.code.toLowerCase() !== 'bbva'
       );
       this.updateCredentials(this.credentials);
-      this.lastMessage();
     } else {
       this.getAllCredential();
     }
@@ -44,7 +43,7 @@ export class ProcessingCredentialsService {
   }
 
   updateCredentials(credential_list: CredentialInterface[]) {
-    this.credentials = credential_list.map(credential => {
+    this.statefulCredentialsService.setCredentials = credential_list.map(credential => {
         if ( this.isMoreThanEightHours(credential.lastUpdated) ) {
           this.credentialsService.updateCredential(credential).subscribe(
             res => res,
@@ -57,6 +56,7 @@ export class ProcessingCredentialsService {
         return credential;
       }
     );
+    this.lastMessage();
   }
 
   checkCredentialStatus(credential: CredentialInterface) {
@@ -68,6 +68,7 @@ export class ProcessingCredentialsService {
     );
     const poll = concat(getCredential, whenToRefresh);
     const polledCredential = this.load.pipe(
+      share(),
       concatMap(() => poll),
       map( (res: HttpResponse<CredentialInterface>) => {
         if (res.body.status === 'ACTIVE' || res.body.status === 'INVALID') {
