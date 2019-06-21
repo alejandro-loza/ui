@@ -1,4 +1,6 @@
+//@ts-ignore
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+//@ts-ignore
 import {NgForm} from '@angular/forms';
 // SERVICES
 import {AccountService} from '@services/account/account.service';
@@ -53,7 +55,7 @@ export class CredentialComponent implements OnInit {
   buttonUrl: string;
   showEmptyState: boolean = false;
 
-  @ViewChild('modal') interactiveModal: ElementRef;
+  @ViewChild('modal', {static: false}) interactiveModal: ElementRef;
   constructor(
     private accountService: AccountService,
     private credentialService: CredentialService,

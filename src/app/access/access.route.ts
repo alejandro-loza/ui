@@ -8,30 +8,27 @@ const AcessRouting: Routes = [
     children: [
       {
         path: 'login',
-        loadChildren: './login/login.module#LoginModule'
+        loadChildren: () => import('./login/login.module').then(module => module.LoginModule)
       },
       {
         path: 'signup',
-        loadChildren: './signup/signup.module#SignupModule'
+        loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule)
       },
       {
         path: 'recovery',
-        loadChildren:
-          './recoverypassword/recoverypassword.module#RecoverypasswordModule'
+        loadChildren: () => import('./recoverypassword/recoverypassword.module').then(module => module.RecoverypasswordModule)
       },
       {
         path: 'forgot',
-        loadChildren:
-          './forgotpassword/forgotpassword.module#ForgotpasswordModule'
+        loadChildren: () => import('./forgotpassword/forgotpassword.module').then(module => module.ForgotpasswordModule)
       },
       {
         path: 'welcome',
-        loadChildren: './welcome/welcome.module#WelcomeModule'
+        loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule)
       },
       {
         path: 'socialNetworks',
-        loadChildren:
-          './social-networks/social-networks.module#SocialNetworksModule'
+        loadChildren: () => import('./social-networks/social-networks.module').then( module => module.SocialNetworksModule )
       },
       {
         path: '',

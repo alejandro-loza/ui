@@ -37,9 +37,9 @@ export class ManualAccountComponent implements OnInit, AfterViewInit {
 	cashDefault: boolean;
 	atmDefault: boolean;
 
-	@ViewChild('modal') elModal: ElementRef;
-	@ViewChild('deleteModal') elModal2: ElementRef;
-	@ViewChild('generateMovementModal') elModal3: ElementRef;
+	@ViewChild('modal', {static: false}) elModal: ElementRef;
+	@ViewChild('deleteModal', {static: false}) elModal2: ElementRef;
+	@ViewChild('generateMovementModal', {static: false}) elModal3: ElementRef;
 
 	constructor(
 		private activatedRoute: ActivatedRoute,

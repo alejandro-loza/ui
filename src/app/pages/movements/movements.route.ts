@@ -8,7 +8,7 @@ const MovementsRouting: Routes = [
   },
   {
     path: ':id',
-    loadChildren: './detail-movement/detail-movement.module#DetailMovementModule',
+    loadChildren: () => import('./detail-movement/detail-movement.module').then(module => module.DetailMovementModule),
     data: {
       title: 'Movimiento'
     }

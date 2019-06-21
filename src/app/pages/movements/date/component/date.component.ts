@@ -7,7 +7,7 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnChanges
+  OnChanges, AfterViewInit
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
@@ -20,7 +20,7 @@ import {StatefulMovementsService} from '@services/stateful/movements/stateful-mo
   templateUrl: './date.component.html',
   styleUrls: [ './date.component.css' ]
 })
-export class DateComponent implements OnInit, OnChanges, AfterContentInit {
+export class DateComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() date: Date;
   @Input() name: string;
   @Input() classes: string;
@@ -32,7 +32,7 @@ export class DateComponent implements OnInit, OnChanges, AfterContentInit {
 
   @Output() dateChange: EventEmitter<Date>;
 
-  @ViewChild('datepicker') elementDatePicker: ElementRef;
+  @ViewChild('datepicker', {static: false}) elementDatePicker: ElementRef;
 
   constructor(
     private dateApiService: DateApiService,
@@ -59,7 +59,7 @@ export class DateComponent implements OnInit, OnChanges, AfterContentInit {
     }
   }
 
-  ngAfterContentInit() {
+  ngAfterViewInit() {
     const initDatepicker = new M.Datepicker(this.elementDatePicker.nativeElement, {
       autoClose: true,
       container: 'body',

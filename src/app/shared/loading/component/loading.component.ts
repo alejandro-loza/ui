@@ -7,7 +7,7 @@ import LottieView from 'lottie-web';
   styleUrls: ['./loading.component.css']
 })
 export class LoadingComponent implements OnInit, AfterViewInit {
-  @ViewChild('lottieElement') lottieElement: ElementRef;
+  @ViewChild('lottieElement', {static: false}) lottieElement: ElementRef;
   constructor(private renderer: Renderer2) { }
 
   ngOnInit() { }

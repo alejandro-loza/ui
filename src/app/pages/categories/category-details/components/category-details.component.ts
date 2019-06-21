@@ -1,4 +1,6 @@
+//@ts-ignore
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+//@ts-ignore
 import { Router } from '@angular/router';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
 import { CategoriesService } from '@services/categories/categories.service';
@@ -16,7 +18,7 @@ export class CategoryDetailsComponent implements OnInit {
 	categoryToShow: Category;
 	setHeightToCol: string = '';
 	showSpinner: boolean = false;
-	@ViewChild('deleteModal') elModal: ElementRef;
+	@ViewChild('deleteModal', {static: false}) elModal: ElementRef;
 
 	constructor(
 		private categoriesBeanService: CategoriesBeanService,

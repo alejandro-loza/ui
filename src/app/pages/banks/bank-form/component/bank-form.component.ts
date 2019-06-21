@@ -1,5 +1,8 @@
+// @ts-ignore
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+// @ts-ignore
 import { NgForm } from '@angular/forms';
+// @ts-ignore
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { HelpTexts } from '../../../../services/banks/help-texts';
 
@@ -32,7 +35,7 @@ export class BankFormComponent implements OnInit {
   usernameErrorMessage: string;
   passwordErrorMessage: string;
 
-  @ViewChild('modal') elModal: ElementRef;
+  @ViewChild('modal', {static: false}) elModal: ElementRef;
 
   constructor(
     private field: FieldService,
