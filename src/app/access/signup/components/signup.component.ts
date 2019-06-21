@@ -54,7 +54,9 @@ export class SignupComponent {
         },
         (error) => {
           this.isButtonAvailable = false;
-          this.toastService.setCode = error.status;
+          if (error.status === 401) {
+            this.toastService.setCode = 4011;
+          }
           if (isNullOrUndefined(error.error.message)) {
             this.toastService.setMessage = 'Ocurrió un error al crear tu cuenta';
           } else {

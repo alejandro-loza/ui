@@ -12,7 +12,7 @@ export class ToastService {
   private readonly button: string;
   private displayLength: number;
 
-  constructor(private configService: ConfigService) {
+  constructor() {
     this.toast = {};
     this.button = `<button
 			class="btn-flat toast-action"

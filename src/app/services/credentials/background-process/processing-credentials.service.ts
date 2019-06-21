@@ -4,8 +4,9 @@ import {StatefulCredentialsService} from '@stateful/credentials/stateful-credent
 import {CredentialInterface} from '@interfaces/credential.interface';
 import {CredentialService} from '@services/credentials/credential.service';
 import {DateApiService} from '@services/date-api/date-api.service';
-import {asapScheduler, BehaviorSubject, concat, of, scheduled} from 'rxjs';
+import {asyncScheduler, BehaviorSubject, concat, of, scheduled} from 'rxjs';
 import {concatMap, delay, map, skip, tap} from 'rxjs/operators';
+import {ToastService} from '@services/toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,13 @@ export class ProcessingCredentialsService {
   constructor(
     private credentialsService: CredentialService,
     private dateApiService: DateApiService,
-    private statefulCredentialsService: StatefulCredentialsService
+    private statefulCredentialsService: StatefulCredentialsService,
+    private toastService: ToastService
   ) { }
 
   checkCredentials() {
-    if (this.statefulCredentialsService.getCredentials) {
+    if (this.statefulCredentialsService.getCredentials && this.statefulCredentialsService.getCredentials.length > 0) {
+      this.firstMessage();
       this.credentials = this.statefulCredentialsService.getCredentials;
       this.credentials = this.credentials.filter( credential =>
         credential.status === 'VALIDATE' ||
@@ -28,6 +31,7 @@ export class ProcessingCredentialsService {
         credential.institution.code.toLowerCase() !== 'bbva'
       );
       this.updateCredentials(this.credentials);
+      this.lastMessage();
     } else {
       this.getAllCredential();
     }
@@ -42,32 +46,38 @@ export class ProcessingCredentialsService {
   updateCredentials(credential_list: CredentialInterface[]) {
     this.credentials = credential_list.map(credential => {
         if ( this.isMoreThanEightHours(credential.lastUpdated) ) {
-          this.credentialsService.updateCredential(credential).subscribe();
+          this.credentialsService.updateCredential(credential).subscribe(
+            res => res,
+            err => err,
+            () => {
+              this.checkCredentialStatus(credential);
+            }
+          );
         }
-        this.checkCredentialStatus(credential);
         return credential;
       }
     );
-    console.log(this.credentials);
   }
 
   checkCredentialStatus(credential: CredentialInterface) {
     const getCredential = this.credentialsService.getCredential(credential.id);
-    const whenToRefresh = scheduled(of(''), asapScheduler).pipe(
+    const whenToRefresh = scheduled(of(''), asyncScheduler).pipe(
       delay(4000),
       tap(() => this.load.next('')),
-      skip(1),
+      skip(4),
     );
     const poll = concat(getCredential, whenToRefresh);
     const polledCredential = this.load.pipe(
       concatMap(() => poll),
       map( (res: HttpResponse<CredentialInterface>) => {
-        if (res.body.status === 'ACTIVE') {
+        if (res.body.status === 'ACTIVE' || res.body.status === 'INVALID') {
+          this.showToast(res.body);
+          unpolledCredential.unsubscribe();
           return res;
         }
       })
     );
-    polledCredential.subscribe();
+    const unpolledCredential = polledCredential.subscribe();
   }
 
   isMoreThanEightHours(credential_lastUpdated: string): boolean {
@@ -77,4 +87,26 @@ export class ProcessingCredentialsService {
     return timeline >= 8;
   }
 
+  showToast(credential: CredentialInterface) {
+    this.toastService.setCode = 200;
+    this.toastService.setMessage =
+      credential.status === 'ACTIVE' ?
+        `Tu cuenta de ${credential.institution.name},<br>ha sido sincronizada` :
+        `¡Hubo un problema con tu cuenta de ${credential.institution.name}, revísala!`;
+    this.toastService.toastGeneral();
+  }
+
+  firstMessage() {
+    this.toastService.setCode = 200;
+    this.toastService.setMessage = 'Estamos sincronizando con tu banca en línea,<br>esto puede tardar unos minutos.';
+    this.toastService.toastGeneral();
+  }
+
+  lastMessage() {
+    setTimeout(() => {
+      this.toastService.setCode = 200;
+      this.toastService.setMessage = 'Hemos sincronizado tus cuentas exitosamente';
+      this.toastService.toastGeneral();
+    }, 3000);
+  }
 }
