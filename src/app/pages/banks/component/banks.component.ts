@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { InstitutionInterface } from '@interfaces/institution.interface';
@@ -9,9 +9,9 @@ import * as M from 'materialize-css/dist/js/materialize';
   templateUrl: './banks.component.html',
   styleUrls: [ './banks.component.css' ]
 })
-export class BanksComponent implements OnInit {
+export class BanksComponent implements OnInit, AfterViewInit {
   institutions: InstitutionInterface[];
-  @ViewChild('modal') elModal: ElementRef;
+  @ViewChild('modal', {static: false}) elModal: ElementRef;
 
   constructor(private intitutionService: InstitutionService, private credentialBeanService: CredentialBeanService) {
     this.institutions = [];
