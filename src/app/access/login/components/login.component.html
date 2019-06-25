@@ -7,7 +7,7 @@
       <h4 class="center">Iniciar Sesión</h4>
       <div class="row" id="rowForm">
         <div class="col s12 m6 section center">
-          <app-social-media [facebookText]="'Continuar con Facebook'" [googleText]="'Continuar con Google'"></app-social-media>
+          <app-social-media [facebookText]="'Continuar con Facebook'" [googleText]="'Continuar con Google'" (onLoginEvent)="onFacebookLogin($event)"></app-social-media>
           <div class="createAccount hide-on-small-only">
             <app-register-login [textBtn]="'Registrate'" [link]="'/access/signup'"></app-register-login>
           </div>

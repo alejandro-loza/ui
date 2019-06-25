@@ -4,62 +4,73 @@ import { CredentialService } from '@services/credentials/credential.service';
 declare var mixpanel: any;
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class MixpanelService {
-  // super
-  hasCredentials: boolean;
-  linkedCredentials: number;
+	// super
+	hasCredentials: boolean;
+	linkedCredentials: number;
 
-  //people
-  invalidCredentials: boolean;
-  lastLoggedIn: Date;
-  validCredentials: boolean;
+	//people
+	invalidCredentials: boolean;
+	lastLoggedIn: Date;
+	validCredentials: boolean;
 
-  constructor(private configService: ConfigService, private credentialService: CredentialService) {
-    this.linkedCredentials = 0;
-    this.hasCredentials = false;
-    this.invalidCredentials = false;
-    this.lastLoggedIn = new Date();
-    this.validCredentials = false;
-  }
+	facebookSuccess: boolean;
 
-  setIdentify(id?: string) {
-    id ? mixpanel.identify(id) : mixpanel.identify(this.configService.getUser.id);
-  }
+	constructor(private configService: ConfigService, private credentialService: CredentialService) {
+		this.linkedCredentials = 0;
+		this.hasCredentials = false;
+		this.invalidCredentials = false;
+		this.lastLoggedIn = new Date();
+		this.validCredentials = false;
+		this.facebookSuccess = false;
+	}
 
-  setTrackEvent(event: any, property?: any) {
-    property ? mixpanel.track(event, property) : mixpanel.track(event);
-  }
+	setIdentify(id?: string) {
+		id ? mixpanel.identify(id) : mixpanel.identify(this.configService.getUser.id);
+	}
 
-  setSignupPeopleProperties(email: string, created: Date) {
-    mixpanel.people.set({ $email: email });
-    mixpanel.people.set({ $created: created });
-  }
+	setTrackEvent(event: any, property?: any) {
+		property ? mixpanel.track(event, property) : mixpanel.track(event);
+	}
 
-  setSuperProperties() {
-    this.credentialService.getAllCredentials().subscribe((res) => {
-      this.hasCredentials = res.body.size !== 0;
-      this.linkedCredentials = res.body.size;
-      mixpanel.people.set({
-        'Has credentials': this.hasCredentials,
-        'Linked credentials': this.linkedCredentials
-      });
-    });
-  }
+	setSignupPeopleProperties(email: string, created: Date) {
+		mixpanel.people.set({ $email: email });
+		mixpanel.people.set({ $created: created });
+	}
 
-  setPeopleProperties() {
-    this.credentialService.getAllCredentials().subscribe((res) => {
-      res.body.data.forEach((credential) => {
-        if (credential.status != 'ACTIVE') {
-          this.invalidCredentials = true;
-        } else {
-          this.validCredentials = true;
-        }
-      });
-      mixpanel.people.set('Invalid credentials', this.invalidCredentials);
-      mixpanel.people.set('Valid credentials', this.validCredentials);
-      mixpanel.people.set('Last logged in', this.lastLoggedIn);
-    });
-  }
+	setSuperProperties() {
+		this.credentialService.getAllCredentials().subscribe((res) => {
+			this.hasCredentials = res.body.size !== 0;
+			this.linkedCredentials = res.body.size;
+			mixpanel.people.set({
+				'Has credentials': this.hasCredentials,
+				'Linked credentials': this.linkedCredentials
+			});
+		});
+	}
+
+	setPeopleProperties() {
+		this.credentialService.getAllCredentials().subscribe((res) => {
+			res.body.data.forEach((credential) => {
+				if (credential.status != 'ACTIVE') {
+					this.invalidCredentials = true;
+				} else {
+					this.validCredentials = true;
+				}
+			});
+			mixpanel.people.set('Invalid credentials', this.invalidCredentials);
+			mixpanel.people.set('Valid credentials', this.validCredentials);
+			mixpanel.people.set('Last logged in', this.lastLoggedIn);
+		});
+	}
+
+	set setFacebookSuccess(data: boolean) {
+		this.facebookSuccess = data;
+	}
+
+	get getFacebookSuccess(): boolean {
+		return this.facebookSuccess;
+	}
 }

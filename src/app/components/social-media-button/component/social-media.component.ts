@@ -1,26 +1,37 @@
-import { Component, OnInit, Input, isDevMode } from '@angular/core';
-
+import { Component, OnInit, Input, isDevMode, Output, EventEmitter } from '@angular/core';
+declare const FB: any;
 
 @Component({
-  selector: 'app-social-media',
-  templateUrl: './social-media.component.html',
-  styleUrls: ['./social-media.component.css']
+	selector: 'app-social-media',
+	templateUrl: './social-media.component.html',
+	styleUrls: [ './social-media.component.css' ]
 })
 export class SocialMediaComponent implements OnInit {
+	@Input() facebookText: string;
+	@Input() googleText: string;
+	url: string;
 
-  @Input() facebookText: string;
-  @Input() googleText: string;
+	@Output() onLoginEvent: EventEmitter<boolean> = new EventEmitter();
 
-  url: string;
+	constructor() {}
 
-  constructor( ) { }
+	ngOnInit() {
+		if (isDevMode() === true) {
+			this.url = 'http://localhost:4200';
+		} else {
+			this.url = 'https://app.finerio.mx';
+		}
+	}
 
-  ngOnInit() {
-    if ( isDevMode() === true ) {
-      this.url = 'http://localhost:4200';
-    } else {
-      this.url = 'https://app.finerio.mx';
-    }
-  }
+	ngAfterViewInit(): void {
+		this.getLoginStatus();
+	}
 
+	getLoginStatus() {
+		FB.getLoginStatus((response) => {
+			if (response.status === 'connected') {
+				this.onLoginEvent.emit(true);
+			}
+		});
+	}
 }

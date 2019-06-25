@@ -1,9 +1,13 @@
 <div class="containerButtons">
     <div class="row">
         <div class="col s12">
-            <a class="btn facebook-color valign-wrapper btn-socialMedia" href="https://api.finerio.mx/oauth/authenticate/facebook?callback={{url}}/access/socialNetworks%3Ftype%3Dlogin%26from%3DFacebook%26accessToken%3D">
-                <span class="mdi mdi-facebook-box mdi-24px left-align"></span>{{ facebookText }}
-            </a>
+            <div class="fb-login-button" 
+            data-scope="public_profile,email" 
+            data-width="" 
+            data-size="large" 
+            data-button-type="login_with" 
+            data-auto-logout-link="false" 
+            data-use-continue-as="false"></div>
         </div>
         <div class="col s12">
             <a class="btn google-color valign-wrapper btn-socialMedia" href="https://api.finerio.mx/oauth/authenticate/google?callback={{url}}/access/socialNetworks%3Ftype%3Dlogin%26from%3DGoogle%26accessToken%3D">
