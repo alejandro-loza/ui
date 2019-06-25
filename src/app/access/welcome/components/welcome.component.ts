@@ -28,6 +28,7 @@ export class WelcomeComponent implements OnInit {
 	}
 
 	personalInfoUser() {
+		console.log('GET ME INFO USER');
 		this.authService.personalInfo().subscribe(
 			(res) => {
 				if (res.body.accountLocked === true) {
@@ -52,6 +53,7 @@ export class WelcomeComponent implements OnInit {
 	}
 
 	getAccount() {
+		console.log('REDIRECCION A WEBAPP');
 		this.accountService.getAccounts().subscribe((res) => {
 			setTimeout(() => {
 				if (this.configService.getUser.name && res.body.size > 1) {
@@ -66,13 +68,14 @@ export class WelcomeComponent implements OnInit {
 	}
 
 	mixpanelEvent() {
+		console.log('MIXPANEL EVENT DE WELCOME');
 		// En signup ya mando evento
 		this.mixpanelService.setIdentify();
 		this.mixpanelService.setSuperProperties();
 		this.mixpanelService.setPeopleProperties();
 
 		// Facebook Process
-		console.log(this.mixpanelService.getFacebookSuccess);
+		console.log('FACEBOOK SUCCESS: ', this.mixpanelService.getFacebookSuccess);
 		if (this.mixpanelService.getFacebookSuccess) {
 			if (this.signupService.getFacebookSignup) {
 				this.mixpanelService.setTrackEvent('Sign up', { from: 'Facebook' });

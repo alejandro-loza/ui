@@ -25,15 +25,19 @@ export class LoginComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		console.log('OnInitLogin con Subscripcion al evento');
 		FB.Event.subscribe('auth.login', (response) => {
+			console.log('Dentro de la respuesta en la subscripcion del login');
 			this.getMeInfo(response.authResponse.accessToken);
 		});
 	}
 
 	getMeInfo(token: String) {
+		console.log('GET ME INFO FACEBOOK');
 		FB.api('/me', { fields: 'email' }, (response) => {
 			this.loginService.facebookLogin(response.email, token).subscribe(
 				(res) => {
+					console.log('dentro de respuesta de ME de Facebook');
 					this.signupService.setFacebookSignup = res.signup;
 					this.signupService.setFacebookLogin = !res.signup;
 					this.mixpanelService.setFacebookSuccess = true;
