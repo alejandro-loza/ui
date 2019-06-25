@@ -24,12 +24,10 @@ export class WelcomeComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		console.log('ONINIT DE WELCOMEEEEE');
 		this.personalInfoUser();
 	}
 
 	personalInfoUser() {
-		console.log('GET ME INFO USER');
 		this.authService.personalInfo().subscribe(
 			(res) => {
 				if (res.body.accountLocked === true) {
@@ -54,7 +52,6 @@ export class WelcomeComponent implements OnInit {
 	}
 
 	getAccount() {
-		console.log('REDIRECCION A WEBAPP');
 		this.accountService.getAccounts().subscribe((res) => {
 			setTimeout(() => {
 				if (this.configService.getUser.name && res.body.size > 1) {
@@ -69,24 +66,19 @@ export class WelcomeComponent implements OnInit {
 	}
 
 	mixpanelEvent() {
-		console.log('MIXPANEL EVENT DE WELCOME');
 		// En signup ya mando evento
 		this.mixpanelService.setIdentify();
 		this.mixpanelService.setSuperProperties();
 		this.mixpanelService.setPeopleProperties();
 
 		// Facebook Process
-		console.log('FACEBOOK SUCCESS: ', this.mixpanelService.getFacebookSuccess);
 		if (this.mixpanelService.getFacebookSuccess) {
 			if (this.signupService.getFacebookSignup) {
 				this.mixpanelService.setTrackEvent('Sign up', { from: 'Facebook' });
 			} else if (this.signupService.getFacebookLogin) {
 				this.mixpanelService.setTrackEvent('Log in', { from: 'Facebook' });
 			}
-		}
-
-		// Execute only for Login
-		if (!this.signupService.getComesFromSignup) {
+		} else if (!this.mixpanelService.getFacebookSuccess && !this.signupService.getComesFromSignup) {
 			this.mixpanelService.setTrackEvent('Log in', { from: 'Web' });
 		}
 	}

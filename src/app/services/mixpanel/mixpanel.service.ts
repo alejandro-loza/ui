@@ -32,7 +32,6 @@ export class MixpanelService {
 	}
 
 	setTrackEvent(event: any, property?: any) {
-		console.log(event, property);
 		property ? mixpanel.track(event, property) : mixpanel.track(event);
 	}
 

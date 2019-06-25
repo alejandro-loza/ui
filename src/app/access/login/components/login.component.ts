@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
 			});
 			FB.AppEvents.logPageView();
 			FB.Event.subscribe('auth.statusChange', (response) => {
-				console.log(response);
 				if (response.status === 'connected') {
 					this.getMeInfo(response.authResponse.accessToken);
 				}
@@ -63,11 +62,9 @@ export class LoginComponent implements OnInit {
 	}
 
 	getMeInfo(token: String) {
-		console.log('GET ME INFO FACEBOOK');
 		FB.api('/me', { fields: 'email' }, (response) => {
 			this.loginService.facebookLogin(response.email, token).subscribe(
 				(res) => {
-					console.log('dentro de respuesta de ME de Facebook');
 					this.signupService.setFacebookSignup = res.signup;
 					this.signupService.setFacebookLogin = !res.signup;
 					this.mixpanelService.setFacebookSuccess = true;
@@ -76,7 +73,6 @@ export class LoginComponent implements OnInit {
 					console.log(error);
 				},
 				() => {
-					console.log('Antes de la redirección a welcome');
 					return this.zone.run(() => {
 						this.router.navigate([ '/access/welcome' ]);
 					});

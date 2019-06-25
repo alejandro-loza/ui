@@ -40,7 +40,6 @@ export class SocialNetworksComponent implements OnInit {
 				if (res.finerioCode) {
 					this.code = res.finerioCode;
 				} else {
-					console.log('else');
 					this.loadUser();
 				}
 				this.mixpanelEvent(res.from, res.type, res.finerioCode);
@@ -55,9 +54,7 @@ export class SocialNetworksComponent implements OnInit {
 	}
 
 	mixpanelEvent(from: string, type: string, referralCode: string) {
-		console.log(from, ' ºº ', type);
 		this.authService.personalInfo().subscribe((res) => {
-			console.log(res);
 			this.mixpanelService.setIdentify(res.body.id);
 			type == 'login'
 				? this.mixpanelService.setTrackEvent('Log in', { from: from })
