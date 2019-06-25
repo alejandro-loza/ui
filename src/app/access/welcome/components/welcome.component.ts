@@ -24,6 +24,7 @@ export class WelcomeComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
+		console.log('ONINIT DE WELCOMEEEEE');
 		this.personalInfoUser();
 	}
 

@@ -38,8 +38,6 @@ export class LoginComponent implements OnInit {
 		})(document, 'script', 'facebook-jssdk');
 
 		window.fbAsyncInit = () => {
-			console.log('fbasyncinit');
-
 			FB.init({
 				appId: '2029195763988128',
 				autoLogAppEvents: true,
@@ -71,18 +69,16 @@ export class LoginComponent implements OnInit {
 					this.signupService.setFacebookSignup = res.signup;
 					this.signupService.setFacebookLogin = !res.signup;
 					this.mixpanelService.setFacebookSuccess = true;
-
-					return this.router.navigate([ '/access/welcome' ]);
 				},
 				(error) => {
 					console.log(error);
+				},
+				() => {
+					console.log('Antes de la redirección a welcome');
+					return this.router.navigate([ '/access/welcome' ]);
 				}
 			);
 		});
-	}
-
-	onFacebookLogin(event: boolean) {
-		console.log('YA ESTÁ LOGEADO CON ANTERIORIDAD:', event);
 	}
 
 	login(loginForm: NgForm) {
