@@ -32,13 +32,18 @@ export class LoginComponent implements OnInit {
 
 	getMeInfo(token: String) {
 		FB.api('/me', { fields: 'email' }, (response) => {
-			this.loginService.facebookLogin(response.email, token).subscribe((res) => {
-				this.signupService.setFacebookSignup = res.signup;
-				this.signupService.setFacebookLogin = !res.signup;
+			this.loginService.facebookLogin(response.email, token).subscribe(
+				(res) => {
+					this.signupService.setFacebookSignup = res.signup;
+					this.signupService.setFacebookLogin = !res.signup;
+					this.mixpanelService.setFacebookSuccess = true;
 
-				this.mixpanelService.setFacebookSuccess = true;
-				return this.router.navigate([ '/access/welcome' ]);
-			});
+					return this.router.navigate([ '/access/welcome' ]);
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
 		});
 	}
 
