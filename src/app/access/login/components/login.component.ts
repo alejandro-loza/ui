@@ -25,6 +25,9 @@ export class LoginComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		FB.Event.subscribe('xfbml.render', () => {
+			FB.XFBML.parse();
+		});
 		FB.Event.subscribe('auth.login', (response) => {
 			this.getMeInfo(response.authResponse.accessToken);
 		});
