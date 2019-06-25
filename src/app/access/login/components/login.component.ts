@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 			console.log('fbasyncinit');
 
 			FB.init({
-				appId: '791979464320546',
+				appId: '2029195763988128',
 				autoLogAppEvents: true,
 				xfbml: true,
 				version: 'v3.3'
