@@ -1,11 +1,13 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, AfterViewChecked } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '@services/login/login.service';
 import { SignupService } from '@services/signup/signup.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { User } from '@interfaces/user.interface';
-declare const FB: any;
+//imports above
+declare var window: any;
+declare var FB: any;
 
 @Component({
 	selector: 'app-login',
@@ -22,14 +24,42 @@ export class LoginComponent implements OnInit {
 		private mixpanelService: MixpanelService
 	) {
 		this.user = {};
+		// This function initializes the FB variable
+		(function(d, s, id) {
+			var js,
+				fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {
+				return;
+			}
+			js = d.createElement(s);
+			js.id = id;
+			js.src = '//connect.facebook.net/en_US/sdk.js';
+			fjs.parentNode.insertBefore(js, fjs);
+		})(document, 'script', 'facebook-jssdk');
+
+		window.fbAsyncInit = () => {
+			console.log('fbasyncinit');
+
+			FB.init({
+				appId: '791979464320546',
+				autoLogAppEvents: true,
+				xfbml: true,
+				version: 'v3.3'
+			});
+			FB.AppEvents.logPageView();
+			FB.Event.subscribe('auth.statusChange', (response) => {
+				console.log(response);
+				if (response.status === 'connected') {
+					this.getMeInfo(response.authResponse.accessToken);
+				}
+			});
+		};
 	}
 
 	ngOnInit() {
-		console.log('OnInitLogin con Subscripcion al evento');
-		FB.Event.subscribe('auth.login', (response) => {
-			console.log('Dentro de la respuesta en la subscripcion del login');
-			this.getMeInfo(response.authResponse.accessToken);
-		});
+		if (window.FB) {
+			window.FB.XFBML.parse();
+		}
 	}
 
 	getMeInfo(token: String) {
@@ -52,7 +82,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	onFacebookLogin(event: boolean) {
-		console.log('event', event);
+		console.log('YA ESTÁ LOGEADO CON ANTERIORIDAD:', event);
 	}
 
 	login(loginForm: NgForm) {

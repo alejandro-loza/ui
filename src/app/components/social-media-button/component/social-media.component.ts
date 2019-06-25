@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, isDevMode, Output, EventEmitter } from '@angular/core';
-declare const FB: any;
 
 @Component({
 	selector: 'app-social-media',
@@ -11,8 +10,6 @@ export class SocialMediaComponent implements OnInit {
 	@Input() googleText: string;
 	url: string;
 
-	@Output() onLoginEvent: EventEmitter<boolean> = new EventEmitter();
-
 	constructor() {}
 
 	ngOnInit() {
@@ -21,17 +18,5 @@ export class SocialMediaComponent implements OnInit {
 		} else {
 			this.url = 'https://app.finerio.mx';
 		}
-	}
-
-	ngAfterViewInit(): void {
-		this.getLoginStatus();
-	}
-
-	getLoginStatus() {
-		FB.getLoginStatus((response) => {
-			if (response.status === 'connected') {
-				this.onLoginEvent.emit(true);
-			}
-		});
 	}
 }
