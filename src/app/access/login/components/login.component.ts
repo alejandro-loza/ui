@@ -1,4 +1,5 @@
-import { Component, OnInit, Renderer2, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { NgZone } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '@services/login/login.service';
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
 		private renderer: Renderer2,
 		private loginService: LoginService,
 		private signupService: SignupService,
-		private mixpanelService: MixpanelService
+		private mixpanelService: MixpanelService,
+		private zone: NgZone
 	) {
 		this.user = {};
 		// This function initializes the FB variable
@@ -75,7 +77,9 @@ export class LoginComponent implements OnInit {
 				},
 				() => {
 					console.log('Antes de la redirección a welcome');
-					return this.router.navigate([ '/access/welcome' ]);
+					return this.zone.run(() => {
+						this.router.navigate([ '/access/welcome' ]);
+					});
 				}
 			);
 		});
