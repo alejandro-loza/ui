@@ -66,16 +66,8 @@ export class WelcomeComponent implements OnInit {
 	}
 
 	mixpanelEvent(email: string) {
-		// En signup ya mando evento
-		this.mixpanelService.setIdentify();
-		this.mixpanelService.setSuperProperties();
-		this.mixpanelService.setPeopleProperties();
-
 		// Facebook Process
-		console.log('FACEBOOK SUCCESS:', this.mixpanelService.getFacebookSuccess);
 		if (this.mixpanelService.getFacebookSuccess) {
-			console.log('FacebookSingup', this.signupService.getFacebookSignup);
-			console.log('FacebookLogin', this.signupService.getFacebookLogin);
 			if (this.signupService.getFacebookSignup) {
 				this.mixpanelService.setSignupPeopleProperties(email, new Date());
 				this.mixpanelService.setTrackEvent('Sign up', { from: 'Facebook' });
@@ -85,5 +77,10 @@ export class WelcomeComponent implements OnInit {
 		} else if (!this.mixpanelService.getFacebookSuccess && !this.signupService.getComesFromSignup) {
 			this.mixpanelService.setTrackEvent('Log in', { from: 'Web' });
 		}
+
+		// En signup ya mando evento
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setSuperProperties();
+		this.mixpanelService.setPeopleProperties();
 	}
 }

@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
 			}
 			js = d.createElement(s);
 			js.id = id;
-			js.src = '//connect.facebook.net/en_US/sdk.js';
+			js.src = '//connect.facebook.net/es_LA/sdk.js';
 			fjs.parentNode.insertBefore(js, fjs);
 		})(document, 'script', 'facebook-jssdk');
 
@@ -65,7 +65,6 @@ export class LoginComponent implements OnInit {
 		FB.api('/me', { fields: 'email' }, (response) => {
 			this.loginService.facebookLogin(response.email, token).subscribe(
 				(res) => {
-					console.log(res);
 					this.signupService.setFacebookSignup = res.sign_up;
 					this.signupService.setFacebookLogin = !res.sign_up;
 					this.mixpanelService.setFacebookSuccess = true;
