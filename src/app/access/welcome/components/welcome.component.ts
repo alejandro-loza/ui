@@ -35,7 +35,7 @@ export class WelcomeComponent implements OnInit {
 					this.toastService.setMessage =
 						'Tu cuenta fue bloqueada, por favor <br> ponte en contacto con nosotros';
 					this.toastService.toastGeneral();
-					return this.router.navigate([ 'access/login' ]);
+					this.mixpanelEvent(res.body.email);
 				}
 			},
 			(err) => {
@@ -45,8 +45,8 @@ export class WelcomeComponent implements OnInit {
 				return this.router.navigate([ 'access/login' ]);
 			},
 			() => {
-				this.mixpanelEvent();
 				this.getAccount();
+				return this.router.navigate([ 'access/login' ]);
 			}
 		);
 	}
@@ -65,7 +65,7 @@ export class WelcomeComponent implements OnInit {
 		});
 	}
 
-	mixpanelEvent() {
+	mixpanelEvent(email: string) {
 		// En signup ya mando evento
 		this.mixpanelService.setIdentify();
 		this.mixpanelService.setSuperProperties();
@@ -77,6 +77,7 @@ export class WelcomeComponent implements OnInit {
 			console.log('FacebookSingup', this.signupService.getFacebookSignup);
 			console.log('FacebookLogin', this.signupService.getFacebookLogin);
 			if (this.signupService.getFacebookSignup) {
+				this.mixpanelService.setSignupPeopleProperties(email, new Date());
 				this.mixpanelService.setTrackEvent('Sign up', { from: 'Facebook' });
 			} else if (this.signupService.getFacebookLogin) {
 				this.mixpanelService.setTrackEvent('Log in', { from: 'Facebook' });
