@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit {
 		FB.api('/me', { fields: 'email' }, (response) => {
 			this.loginService.facebookLogin(response.email, token).subscribe(
 				(res) => {
+					console.log(res);
 					this.signupService.setFacebookSignup = res.signup;
 					this.signupService.setFacebookLogin = !res.signup;
 					this.mixpanelService.setFacebookSuccess = true;

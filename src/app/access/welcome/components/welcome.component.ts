@@ -72,7 +72,10 @@ export class WelcomeComponent implements OnInit {
 		this.mixpanelService.setPeopleProperties();
 
 		// Facebook Process
+		console.log('FACEBOOK SUCCESS:', this.mixpanelService.getFacebookSuccess);
 		if (this.mixpanelService.getFacebookSuccess) {
+			console.log('FacebookSingup', this.signupService.getFacebookSignup);
+			console.log('FacebookLogin', this.signupService.getFacebookLogin);
 			if (this.signupService.getFacebookSignup) {
 				this.mixpanelService.setTrackEvent('Sign up', { from: 'Facebook' });
 			} else if (this.signupService.getFacebookLogin) {
