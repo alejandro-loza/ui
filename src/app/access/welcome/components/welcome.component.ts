@@ -30,12 +30,12 @@ export class WelcomeComponent implements OnInit {
 	personalInfoUser() {
 		this.authService.personalInfo().subscribe(
 			(res) => {
+				this.mixpanelEvent(res.body.email);
 				if (res.body.accountLocked === true) {
 					this.toastService.setCode = 401;
 					this.toastService.setMessage =
 						'Tu cuenta fue bloqueada, por favor <br> ponte en contacto con nosotros';
 					this.toastService.toastGeneral();
-					this.mixpanelEvent(res.body.email);
 				}
 			},
 			(err) => {
