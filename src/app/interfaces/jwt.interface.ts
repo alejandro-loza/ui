@@ -5,5 +5,5 @@ export interface JWT {
 	roles?: string[];
 	token_type?: string;
 	username?: string;
-	signup?: boolean;
+	sign_up?: boolean;
 }
