@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '@services/login/login.service';
 import { SignupService } from '@services/signup/signup.service';
+import { FacebookService } from '@services/facebook/facebook.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { User } from '@interfaces/user.interface';
 //imports above
@@ -23,21 +24,12 @@ export class LoginComponent implements OnInit {
 		private loginService: LoginService,
 		private signupService: SignupService,
 		private mixpanelService: MixpanelService,
-		private zone: NgZone
+		private zone: NgZone,
+		private facebookService: FacebookService
 	) {
 		this.user = {};
 		// This function initializes the FB variable
-		(function(d, s, id) {
-			var js,
-				fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) {
-				return;
-			}
-			js = d.createElement(s);
-			js.id = id;
-			js.src = '//connect.facebook.net/es_LA/sdk.js';
-			fjs.parentNode.insertBefore(js, fjs);
-		})(document, 'script', 'facebook-jssdk');
+		this.facebookService.callSDK();
 
 		window.fbAsyncInit = () => {
 			FB.init({

@@ -8,6 +8,7 @@ import { ToastService } from '@services/toast/toast.service';
 import { SignupService } from '@services/signup/signup.service';
 import { LoginService } from '@services/login/login.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
+import { FacebookService } from '@services/facebook/facebook.service';
 import { User } from '@app/interfaces/user.interface';
 import { GTMService } from '@services/google-tag-manager/gtm.service';
 import { isNullOrUndefined } from 'util';
@@ -40,21 +41,11 @@ export class SignupComponent implements OnInit {
 		private loginService: LoginService,
 		private mixpanelService: MixpanelService,
 		private gtmService: GTMService,
-		private zone: NgZone
+		private zone: NgZone,
+		private facebookService: FacebookService
 	) {
 		this.isButtonAvailable = false;
-		// This function initializes the FB variable
-		(function(d, s, id) {
-			var js,
-				fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) {
-				return;
-			}
-			js = d.createElement(s);
-			js.id = id;
-			js.src = '//connect.facebook.net/es_LA/sdk.js';
-			fjs.parentNode.insertBefore(js, fjs);
-		})(document, 'script', 'facebook-jssdk');
+		this.facebookService.callSDK();
 
 		window.fbAsyncInit = () => {
 			FB.init({
