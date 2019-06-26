@@ -8,7 +8,7 @@ const CREDENTIAL_ROUTING: Routes = [
 	},
 	{
 		path: ':credencialId',
-		loadChildren: './credential-details/credential-details.module#CredentialDetailsModule',
+		loadChildren: () => import('./credential-details/credential-details.module').then(module => module.CredentialDetailsModule),
 		data: {
 			title: 'Detalle de la cuenta bancaria'
 		}

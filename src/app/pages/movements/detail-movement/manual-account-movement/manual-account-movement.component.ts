@@ -11,7 +11,7 @@ import * as M from 'materialize-css/dist/js/materialize';
   styleUrls: ['./manual-account-movement.component.css']
 })
 export class ManualAccountMovementComponent implements OnInit, AfterViewInit {
-  @ViewChild('modal') modalElement: ElementRef;
+  @ViewChild('modal', {static: false}) modalElement: ElementRef;
   @Input() account: AccountInterface;
 
   @Input() hasManualAccount: boolean;

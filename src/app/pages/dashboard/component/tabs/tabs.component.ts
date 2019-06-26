@@ -9,7 +9,7 @@ import * as M from 'materialize-css/dist/js/materialize';
 })
 export class TabsComponent implements OnInit, AfterViewInit {
 	@Output() tabClicked: EventEmitter<number> = new EventEmitter();
-	@ViewChild('tabs') elementTabs: ElementRef;
+	@ViewChild('tabs', {static: false}) elementTabs: ElementRef;
 	titlePage: String;
 
 	constructor(private dashboardStatesService: DashboardStatesService) {}

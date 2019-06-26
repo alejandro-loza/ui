@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+//@ts-ignore
+import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+//@ts-ignore
 import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
@@ -14,7 +16,7 @@ import { isNullOrUndefined } from 'util';
 	templateUrl: './budget-detail.component.html',
 	styleUrls: [ './budget-detail.component.css' ]
 })
-export class BudgetDetailComponent implements OnInit {
+export class BudgetDetailComponent implements OnInit, AfterViewInit {
 	categoryName: string = '';
 	budget: Budget = null;
 	subBudgets: Budget[] = [];
@@ -23,7 +25,7 @@ export class BudgetDetailComponent implements OnInit {
 	porEjecutarAmountTotal: number = 0;
 	showScreen: boolean = false;
 	showSpinner: boolean = false;
-	@ViewChild('deleteModal') elModal: ElementRef;
+	@ViewChild('deleteModal', {static: false}) elModal: ElementRef;
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
