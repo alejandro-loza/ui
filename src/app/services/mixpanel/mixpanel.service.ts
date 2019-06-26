@@ -17,6 +17,7 @@ export class MixpanelService {
 	validCredentials: boolean;
 
 	facebookSuccess: boolean;
+	userId: string;
 
 	constructor(private configService: ConfigService, private credentialService: CredentialService) {
 		this.linkedCredentials = 0;
@@ -25,10 +26,12 @@ export class MixpanelService {
 		this.lastLoggedIn = new Date();
 		this.validCredentials = false;
 		this.facebookSuccess = false;
+
+		this.userId = this.configService.getUser.id;
 	}
 
 	setIdentify(id?: string) {
-		id ? mixpanel.identify(id) : mixpanel.identify(this.configService.getUser.id);
+		id ? mixpanel.identify(id) : mixpanel.identify(this.userId);
 	}
 
 	setTrackEvent(event: any, property?: any) {
@@ -36,6 +39,7 @@ export class MixpanelService {
 	}
 
 	setSignupPeopleProperties(email: string, created: Date) {
+		mixpanel.alias(this.userId);
 		mixpanel.people.set({ $email: email });
 		mixpanel.people.set({ $created: created });
 	}
