@@ -17,153 +17,153 @@ import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import {GTMService} from '@services/google-tag-manager/gtm.service';
-import {ConfigService} from '@services/config/config.service';
+import { GTMService } from '@services/google-tag-manager/gtm.service';
+import { ConfigService } from '@services/config/config.service';
 
 @Component({
-  selector: 'app-bank-form',
-  templateUrl: './bank-form.component.html',
-  styleUrls: [ './bank-form.component.css' ]
+	selector: 'app-bank-form',
+	templateUrl: './bank-form.component.html',
+	styleUrls: [ './bank-form.component.css' ]
 })
 export class BankFormComponent implements OnInit {
-  institutionCode: string;
-  credential: CreateCredentialInterface;
-  institutionField: InstitutionFieldInterface[];
-  showSpinner: boolean;
-  showVideos: boolean = false;
-  helpText: string = '';
-  usernameErrorMessage: string;
-  passwordErrorMessage: string;
+	institutionCode: string;
+	credential: CreateCredentialInterface;
+	institutionField: InstitutionFieldInterface[];
+	showSpinner: boolean;
+	showVideos: boolean = false;
+	helpText: string = '';
+	usernameErrorMessage: string;
+	passwordErrorMessage: string;
 
-  @ViewChild('modal', {static: false}) elModal: ElementRef;
+	@ViewChild('modal', { static: false })
+	elModal: ElementRef;
 
-  constructor(
-    private field: FieldService,
-    private activated: ActivatedRoute,
-    private credentialService: CredentialService,
-    private router: Router,
-    private helpTexts: HelpTexts,
-    private patterns: Patterns,
-    private credentialBeanService: CredentialBeanService,
-    private mixpanelService: MixpanelService,
-    private gtmService: GTMService,
-    private configService: ConfigService
-  ) {
-    this.institutionCode = '';
-    this.institutionField = [];
-    this.showSpinner = true;
-    this.credential = {
-      institution: null,
-      password: null,
-      securityCode: null,
-      username: null
-    };
-    this.usernameErrorMessage = '';
-    this.passwordErrorMessage = '';
-  }
+	constructor(
+		private field: FieldService,
+		private activated: ActivatedRoute,
+		private credentialService: CredentialService,
+		private router: Router,
+		private helpTexts: HelpTexts,
+		private patterns: Patterns,
+		private credentialBeanService: CredentialBeanService,
+		private mixpanelService: MixpanelService,
+		private gtmService: GTMService,
+		private configService: ConfigService
+	) {
+		this.institutionCode = '';
+		this.institutionField = [];
+		this.showSpinner = true;
+		this.credential = {
+			institution: null,
+			password: null,
+			securityCode: null,
+			username: null
+		};
+		this.usernameErrorMessage = '';
+		this.passwordErrorMessage = '';
+	}
 
-  ngOnInit() {
-    this.activated.params.subscribe((params: Params) => {
-      this.institutionCode = params['bankCode'];
-      this.settingTexts();
-      this.showvideoBBVA();
-    });
-    this.initProcess();
-  }
+	ngOnInit() {
+		this.activated.params.subscribe((params: Params) => {
+			this.institutionCode = params['bankCode'];
+			this.settingTexts();
+			this.showvideoBBVA();
+		});
+	}
 
-  initProcess() {
-    const modal = new M.Modal(this.elModal.nativeElement);
-    if (this.credentialBeanService.getInstitutions().length > 0) {
-      this.getFields();
-    } else {
-      this.router.navigateByUrl('/app/banks');
-    }
-  }
+	ngAfterViewInit() {
+		const modal = new M.Modal(this.elModal.nativeElement);
+		if (this.credentialBeanService.getInstitutions().length > 0) {
+			this.getFields();
+		} else {
+			this.router.navigateByUrl('/app/banks');
+		}
+	}
 
-  getFields() {
-    this.field.findAllFieldsByInstitution(this.institutionCode).subscribe((res) => {
-      res.body.forEach((fieldBank: InstitutionFieldInterface) => {
-        if (fieldBank.name !== 'sec_code') {
-          this.getErrorMessage(fieldBank);
-          this.institutionField.push(fieldBank);
-        }
-      });
-      res.body.length > 0 ? (this.showSpinner = false) : null;
-      this.openBBVAModal();
-    });
-  }
+	getFields() {
+		this.field.findAllFieldsByInstitution(this.institutionCode).subscribe((res) => {
+			res.body.forEach((fieldBank: InstitutionFieldInterface) => {
+				if (fieldBank.name !== 'sec_code') {
+					this.getErrorMessage(fieldBank);
+					this.institutionField.push(fieldBank);
+				}
+			});
+			res.body.length > 0 ? (this.showSpinner = false) : null;
+			this.openBBVAModal();
+		});
+	}
 
-  submit(form: NgForm) {
-    this.showSpinner = true;
-    this.credential.username = form.value.username;
-    this.credential.password = form.value.password;
-    this.credential.securityCode = form.value.sec_code;
-    this.credential.institution = this.findCurrentInstitution();
-    this.credentialService.createCredential(this.credential).subscribe((res) => {
-      this.credentialBeanService.setLoadInformation(true);
-      this.mixpanelEvent();
-      this.gtmEvent(res.body.institution.code);
-      this.router.navigateByUrl('/app/credentials');
-      M.toast({
-        html: 'Recuperando información...',
-        displayLength: 3000
-      });
-    });
-  }
+	submit(form: NgForm) {
+		this.showSpinner = true;
+		this.credential.username = form.value.username;
+		this.credential.password = form.value.password;
+		this.credential.securityCode = form.value.sec_code;
+		this.credential.institution = this.findCurrentInstitution();
+		this.credentialService.createCredential(this.credential).subscribe((res) => {
+			this.credentialBeanService.setLoadInformation(true);
+			this.mixpanelEvent();
+			this.gtmEvent(res.body.institution.code);
+			this.router.navigateByUrl('/app/credentials');
+			M.toast({
+				html: 'Recuperando información...',
+				displayLength: 3000
+			});
+		});
+	}
 
-  mixpanelEvent() {
-    this.mixpanelService.setIdentify();
-    this.mixpanelService.setSuperProperties();
-    this.mixpanelService.setPeopleProperties();
-    this.mixpanelService.setTrackEvent('Create credential', { bank: this.institutionCode });
-  }
+	mixpanelEvent() {
+		this.mixpanelService.setIdentify();
+		this.mixpanelService.setSuperProperties();
+		this.mixpanelService.setPeopleProperties();
+		this.mixpanelService.setTrackEvent('Create credential', { bank: this.institutionCode });
+	}
 
-  gtmEvent(code: string) {
-    const id = this.configService.getUser.id;
-    this.gtmService.gtmData = {
-      event: 'Create Credential',
-      id: id.toString(),
-      institution: code
-    };
-    this.gtmService.trigger();
-  }
+	gtmEvent(code: string) {
+		const id = this.configService.getUser.id;
+		this.gtmService.gtmData = {
+			event: 'Create Credential',
+			id: id.toString(),
+			institution: code
+		};
+		this.gtmService.trigger();
+	}
 
-  findCurrentInstitution() {
-    let currentInstitution: InstitutionInterface;
-    const institutions = this.credentialBeanService.getInstitutions();
-    institutions.forEach((element: InstitutionInterface) => {
-      if (element.code == this.institutionCode) {
-        currentInstitution = element;
-      }
-    });
-    return currentInstitution;
-  }
+	findCurrentInstitution() {
+		let currentInstitution: InstitutionInterface;
+		const institutions = this.credentialBeanService.getInstitutions();
+		institutions.forEach((element: InstitutionInterface) => {
+			if (element.code == this.institutionCode) {
+				currentInstitution = element;
+			}
+		});
+		return currentInstitution;
+	}
 
-  getPattern(field: InstitutionFieldInterface): string {
-    let pattern = this.patterns.getPattern(field, this.institutionCode);
-    return pattern;
-  }
+	getPattern(field: InstitutionFieldInterface): string {
+		let pattern = this.patterns.getPattern(field, this.institutionCode);
+		return pattern;
+	}
 
-  getErrorMessage(field: InstitutionFieldInterface) {
-    field.name == 'username'
-      ? (this.usernameErrorMessage = this.patterns.getErrorMessage(field, this.institutionCode))
-      : (this.passwordErrorMessage = this.patterns.getErrorMessage(field, this.institutionCode));
-  }
+	getErrorMessage(field: InstitutionFieldInterface) {
+		field.name == 'username'
+			? (this.usernameErrorMessage = this.patterns.getErrorMessage(field, this.institutionCode))
+			: (this.passwordErrorMessage = this.patterns.getErrorMessage(field, this.institutionCode));
+	}
 
-  settingTexts() {
-    this.helpText = this.helpTexts.getText(this.institutionCode);
-  }
+	settingTexts() {
+		this.helpText = this.helpTexts.getText(this.institutionCode);
+	}
 
-  showvideoBBVA() {
-    if (this.institutionCode === 'BBVA') {
-      this.showVideos = true;
-    }
-  }
+	showvideoBBVA() {
+		if (this.institutionCode === 'BBVA') {
+			this.showVideos = true;
+		}
+	}
 
-  openBBVAModal() {
-    const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
-    if (this.institutionCode === 'BBVA') {
-      instanceModal.open();
-    }
-  }
+	openBBVAModal() {
+		const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
+		if (this.institutionCode === 'BBVA') {
+			instanceModal.open();
+		}
+	}
 }
