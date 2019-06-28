@@ -46,23 +46,27 @@ export class WelcomeComponent implements OnInit {
 			},
 			() => {
 				this.getAccount();
-				return this.router.navigate([ 'access/login' ]);
 			}
 		);
 	}
 
 	getAccount() {
-		this.accountService.getAccounts().subscribe((res) => {
-			setTimeout(() => {
-				if (this.configService.getUser.name && res.body.size > 1) {
-					return this.router.navigate([ '/app', 'dashboard' ]);
-				} else if (!this.configService.getUser.name) {
-					return this.router.navigate([ '/first-step', 'username' ]);
-				} else {
-					return this.router.navigate([ '/app', 'banks' ]);
-				}
-			}, 2000);
-		});
+		this.accountService.getAccounts().subscribe(
+			(res) => {
+				setTimeout(() => {
+					if (this.configService.getUser.name && res.body.size > 1) {
+						return this.router.navigate([ '/app', 'dashboard' ]);
+					} else if (!this.configService.getUser.name) {
+						return this.router.navigate([ '/first-step', 'username' ]);
+					} else {
+						return this.router.navigate([ '/app', 'banks' ]);
+					}
+				}, 2000);
+			},
+			(error) => {
+				return this.router.navigate([ 'access/login' ]);
+			}
+		);
 	}
 
 	mixpanelEvent(email: string) {
