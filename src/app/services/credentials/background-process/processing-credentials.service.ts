@@ -22,9 +22,9 @@ export class ProcessingCredentialsService {
   ) { }
 
   checkCredentials() {
-    if (this.statefulCredentialsService.getCredentials && this.statefulCredentialsService.getCredentials.length > 0) {
+    if (this.statefulCredentialsService.credentials && this.statefulCredentialsService.credentials.length > 0) {
       this.firstMessage();
-      this.credentials = this.statefulCredentialsService.getCredentials;
+      this.credentials = this.statefulCredentialsService.credentials;
       this.credentials = this.credentials.filter( credential =>
         credential.status === 'VALIDATE' ||
         credential.status === 'ACTIVE' &&
@@ -43,7 +43,7 @@ export class ProcessingCredentialsService {
   }
 
   updateCredentials(credential_list: CredentialInterface[]) {
-    this.statefulCredentialsService.setCredentials = credential_list.map(credential => {
+    this.statefulCredentialsService.credentials = credential_list.map(credential => {
         if ( this.isMoreThanEightHours(credential.lastUpdated) ) {
           this.credentialsService.updateCredential(credential).subscribe(
             res => res,
