@@ -8,6 +8,7 @@ export class DateApiService {
     day: '2-digit',
     month: 'short'
   };
+
   constructor() {}
 
   dateApi(date: Date) {
@@ -49,7 +50,7 @@ export class DateApiService {
   }
 
   formatDateForAllBrowsers(date: string): Date {
-    let splitDate: any[] = date.split(/[^0-9]/);
+    const splitDate: any[] = date.split(/[^0-9]/);
 
     // splitDate de una fecha de movimiento original queda:
     // splitDate = ["año", "mes", "dia", "hora", "minutos", "segundos", "offset"];
@@ -62,10 +63,22 @@ export class DateApiService {
       splitDate[4],
       splitDate[5]
     );
-    let offset: number = validDate.getTimezoneOffset() * -1;
+    const offset: number = validDate.getTimezoneOffset() * -1;
     validDate.setTime(validDate.getTime() + offset * 60 * 1000);
 
     // Condicion para no formatear una fecha ya formateada anteriormente
     return splitDate.length <= 7 ? validDate : new Date(date);
+  }
+
+  hasMoreThanEightHours(last_update: string): boolean {
+
+    const currentDate = new Date();
+
+    const auxCredentialDate = this.formatDateForAllBrowsers( last_update );
+
+    const timeline = (currentDate.getTime() - auxCredentialDate.getTime()) / (1000 * 60 * 60);
+
+    return timeline >= 8;
+
   }
 }
