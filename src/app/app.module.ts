@@ -19,6 +19,7 @@ import { AppRoutes } from '@app/app.route';
 
 import { AppComponent } from '@app/app.component';
 import { ConfigParamsService } from '@params/config/config-params.service';
+import {InstitutionService} from '@services/institution/institution.service';
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -31,12 +32,13 @@ import { ConfigParamsService } from '@params/config/config-params.service';
     AppRoutes
   ],
   providers: [
-    ConfigService,
     AuthGuard,
     AuthService,
-    ToastService,
-    ConfigParamsService,
     AccountService,
+    ConfigService,
+    ConfigParamsService,
+    InstitutionService,
+    ToastService,
     InterceptorProvider
   ],
   bootstrap: [ AppComponent ]

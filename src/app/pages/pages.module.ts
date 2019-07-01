@@ -26,7 +26,6 @@ import { PagesComponent } from '@pages/pages.component';
     CategoriesService,
     CredentialService,
     MovementsService,
-    InstitutionService,
     FieldService
   ]
 })
