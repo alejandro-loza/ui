@@ -21,6 +21,7 @@ import * as M from 'materialize-css/dist/js/materialize';
 import {isNullOrUndefined} from 'util';
 import {ConfigService} from '@services/config/config.service';
 import {GTMService} from '@services/google-tag-manager/gtm.service';
+import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 
 @Component({
   selector: 'app-credential',
@@ -57,18 +58,19 @@ export class CredentialComponent implements OnInit {
 
   @ViewChild('modal', {static: false}) interactiveModal: ElementRef;
   constructor(
-    private accountService: AccountService,
-    private credentialService: CredentialService,
-    private institutionService: InstitutionService,
-    private interactiveService: InteractiveFieldService,
-    private cleanerService: CleanerService,
-    private credentialBean: CredentialBeanService,
-    private dateApiService: DateApiService,
-    private toastService: ToastService,
     private accountsBeanService: AccountsBeanService,
+    private accountService: AccountService,
+    private cleanerService: CleanerService,
     private configService: ConfigService,
+    private credentialBean: CredentialBeanService,
+    private credentialService: CredentialService,
+    private dateApiService: DateApiService,
+    private gtmService: GTMService,
+    private interactiveService: InteractiveFieldService,
+    private institutionService: InstitutionService,
+    private statefulInstitutions: StatefulInstitutionsService,
     private mixpanelService: MixpanelService,
-    private gtmService: GTMService
+    private toastService: ToastService,
   ) {
     this.credentials = [];
     this.showSpinner = true;
@@ -93,7 +95,7 @@ export class CredentialComponent implements OnInit {
   loadInformationFromRam() {
     this.credentials = this.credentialBean.getCredentials();
     this.accounts = this.credentialBean.getAccounts();
-    this.institutions = this.credentialBean.getInstitutions();
+    this.institutions = this.statefulInstitutions.institutions;
     this.manualAccounts = this.accountsBeanService.getManualAccounts;
     this.credentials.forEach((credential) => {
       this.checkStatusOfCredential(credential);

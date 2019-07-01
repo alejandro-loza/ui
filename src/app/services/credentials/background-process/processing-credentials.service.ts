@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import {HttpResponse} from '@angular/common/http';
-import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
-import {CredentialInterface} from '@interfaces/credential.interface';
+
 import {CredentialService} from '@services/credentials/credential.service';
 import {DateApiService} from '@services/date-api/date-api.service';
+import {ToastService} from '@services/toast/toast.service';
+import {CleanerService} from '@services/cleaner/cleaner.service';
+
+import {CredentialInterface} from '@interfaces/credential.interface';
+
+import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
+
 import {asyncScheduler, BehaviorSubject, concat, of, scheduled} from 'rxjs';
 import {concatMap, delay, map, share, skip, tap} from 'rxjs/operators';
-import {ToastService} from '@services/toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +21,7 @@ export class ProcessingCredentialsService {
   private load = new BehaviorSubject('');
   constructor(
     private credentialsService: CredentialService,
+    private cleanerService: CleanerService,
     private dateApiService: DateApiService,
     private statefulCredentialsService: StatefulCredentialsService,
     private toastService: ToastService
@@ -28,18 +34,10 @@ export class ProcessingCredentialsService {
       this.credentials = this.credentials.filter( credential =>
         credential.status === 'VALIDATE' ||
         credential.status === 'ACTIVE' &&
-        credential.institution.code.toLowerCase() !== 'bbva'
+        credential.institution.code !== 'BBVA'
       );
       this.updateCredentials(this.credentials);
-    } else {
-      this.getAllCredential();
     }
-  }
-
-  getAllCredential() {
-    this.credentialsService.getAllCredentials().subscribe(
-      () => {}, err => err, () => this.checkCredentials()
-    );
   }
 
   updateCredentials(credential_list: CredentialInterface[]) {
@@ -71,6 +69,8 @@ export class ProcessingCredentialsService {
       share(),
       concatMap(() => poll),
       map( (res: HttpResponse<CredentialInterface>) => {
+        this.cleanerService.cleanDashboardVariables();
+        this.cleanerService.cleanBudgetsVariables();
         if (res.body.status === 'ACTIVE' || res.body.status === 'INVALID') {
           unpolledCredential.unsubscribe();
           this.showToast(res.body);
@@ -82,19 +82,34 @@ export class ProcessingCredentialsService {
   }
 
   isMoreThanEightHours(credential_lastUpdated: string): boolean {
+
     const currentDate = new Date();
     const auxCredentialDate = this.dateApiService.formatDateForAllBrowsers(credential_lastUpdated);
     const timeline = (currentDate.getTime() - auxCredentialDate.getTime()) / (1000 * 60 * 60);
+
     return timeline >= 8;
+
   }
 
   showToast(credential: CredentialInterface) {
+
     this.toastService.setCode = 200;
-    this.toastService.setMessage =
-      credential.status === 'ACTIVE' ?
-        `Tu cuenta de ${credential.institution.name},<br>ha sido sincronizada` :
-        `¡Hubo un problema con tu cuenta de ${credential.institution.name}, revísala!`;
+
+    if (credential.status === 'ACTIVE') {
+
+      this.cleanerService.cleanBudgetsVariables();
+      this.cleanerService.cleanDashboardVariables();
+      this.cleanerService.cleanMovements();
+
+      this.toastService.setMessage = `Tu cuenta de ${credential.institution.name},<br>ha sido sincronizada`;
+    } else {
+
+      this.toastService.setMessage = `¡Hubo un problema con tu cuenta de ${credential.institution.name}, revísala!`;
+
+    }
+
     this.toastService.toastGeneral();
+
   }
 
   firstMessage() {
