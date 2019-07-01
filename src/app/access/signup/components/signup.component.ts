@@ -137,7 +137,7 @@ export class SignupComponent implements OnInit {
 	mixpanelEvent(id: string) {
 		this.signupService.setComesFromSignup = true;
 		this.mixpanelService.setIdentify(id);
-		this.mixpanelService.setSignupPeopleProperties(this.signupData.value.email, new Date());
+		this.mixpanelService.setSignupPeopleProperties(this.signupData.value.email, new Date(), id);
 		this.mixpanelService.setTrackEvent('Sign up', { from: 'Email', referred: false });
 	}
 
