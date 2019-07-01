@@ -12,14 +12,14 @@ import {Observable} from 'rxjs';
 
 @Injectable()
 export class InstitutionService {
-  constructor(private http: HttpClient, private finerio: ConfigService) {}
+  constructor(private http: HttpClient, private configService: ConfigService) {}
 
   getAllInstitutions(): Observable<HttpResponse<Response<InstitutionInterface>>> {
     return this.http.get<Response<InstitutionInterface>>(
       `${environment.backendUrl}/institutions`,
       {
         observe: 'response',
-        headers: this.finerio.getHeaders
+        headers: this.configService.getHeaders
       }
     );
   }
