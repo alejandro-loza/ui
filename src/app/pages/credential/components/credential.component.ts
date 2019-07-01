@@ -251,7 +251,7 @@ export class CredentialComponent implements OnInit {
   }
 
   emptyStateProcess() {
-    if (this.credentialBean.getCredentials().length == 0 && this.credentialBean.getAccounts().length <= 1) {
+    if (this.credentialBean.getCredentials().length === 0 && this.credentialBean.getAccounts().length <= 1) {
       this.credentialBean.setShowEmptyState(true);
     } else {
       this.credentialBean.setShowEmptyState(false);
@@ -271,11 +271,7 @@ export class CredentialComponent implements OnInit {
     let currentMoment: Date = new Date();
     let dateObj: Date = this.dateApiService.formatDateForAllBrowsers(credential.lastUpdated);
     let diff: number = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
-    if (diff >= 8) {
-      return true;
-    } else {
-      return false;
-    }
+    return diff >= 8;
   }
 
   // SyncButton process
