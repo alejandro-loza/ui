@@ -5,15 +5,15 @@ import {CredentialInterface} from '@interfaces/credential.interface';
   providedIn: 'root'
 })
 export class StatefulCredentialsService {
-  private credentialList: CredentialInterface[];
+  private credential_list: CredentialInterface[];
 
   constructor() { }
 
-  set setCredentials(credentials: CredentialInterface[]) {
-    this.credentialList = credentials;
+  set credentials(credential_list: CredentialInterface[]) {
+    this.credential_list = credential_list;
   }
 
-  get getCredentials(): CredentialInterface[] {
-    return this.credentialList;
+  get credentials(): CredentialInterface[] {
+    return this.credential_list;
   }
 }
