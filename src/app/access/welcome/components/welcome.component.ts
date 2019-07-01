@@ -10,6 +10,8 @@ import {CredentialService} from '@services/credentials/credential.service';
 import {ProcessingCredentialsService} from '@services/credentials/background-process/processing-credentials.service';
 import {Subscription} from 'rxjs';
 import {isNullOrUndefined} from 'util';
+import {InstitutionService} from '@services/institution/institution.service';
+import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 
 @Component({
   selector: 'app-welcome',
@@ -17,11 +19,16 @@ import {isNullOrUndefined} from 'util';
   styleUrls: [ './welcome.component.css' ]
 })
 export class WelcomeComponent implements OnInit, OnDestroy {
+  accountSubscription: Subscription;
   credentialSubscription: Subscription;
+  institutionSubscription: Subscription;
+  personalInfoUserSubscription: Subscription;
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
     private credentialService: CredentialService,
+    private institutionsService: InstitutionService,
+    private statefulInstitutions: StatefulInstitutionsService,
     private processingCredentials: ProcessingCredentialsService,
     private router: Router,
     private renderer: Renderer2,
@@ -35,19 +42,26 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     this.personalInfoUser();
   }
 
-  ngOnDestroy(): void { }
-
+  ngOnDestroy(): void {
+    this.accountSubscription.unsubscribe();
+    this.credentialSubscription.unsubscribe();
+    this.personalInfoUserSubscription.unsubscribe();
+  }
   personalInfoUser() {
-    this.authService.personalInfo().subscribe(
+    this.personalInfoUserSubscription = this.authService.personalInfo().subscribe(
       (res) => {
         this.mixpanelEvent(res.body.email);
+
         if (res.body.accountLocked === true) {
+
           this.toastService.setCode = 401;
           this.toastService.setMessage =
             'Tu cuenta fue bloqueada, por favor <br> ponte en contacto con nosotros';
           this.toastService.toastGeneral();
+
           return this.router.navigate([ 'access/login' ]);
         }
+
       },
       (err) => {
         this.toastService.setCode = err.status;
@@ -56,10 +70,15 @@ export class WelcomeComponent implements OnInit, OnDestroy {
         return this.router.navigate([ '/access', 'login' ]);
       },
       () => {
+        this.getInstitutions();
         this.getCredentials();
         this.getAccount();
       }
     );
+  }
+
+  getInstitutions() {
+    this.institutionSubscription = this.institutionsService.getAllInstitutions().subscribe();
   }
 
   getCredentials() {
@@ -71,7 +90,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   }
 
   getAccount() {
-    this.accountService.getAccounts().subscribe(
+    this.accountSubscription = this.accountService.getAccounts().subscribe(
       (res) => {
         setTimeout(() => {
           if (this.configService.getUser.name && res.body.size > 1) {
