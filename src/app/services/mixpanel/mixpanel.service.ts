@@ -36,8 +36,8 @@ export class MixpanelService {
 		property ? mixpanel.track(event, property) : mixpanel.track(event);
 	}
 
-	setSignupPeopleProperties(email: string, created: Date) {
-		mixpanel.alias(this.configService.getUser.id);
+	setSignupPeopleProperties(email: string, created: Date, userId?: string) {
+		mixpanel.alias(userId ? userId : this.configService.getUser.id);
 		mixpanel.people.set({ $email: email });
 		mixpanel.people.set({ $created: created });
 	}
