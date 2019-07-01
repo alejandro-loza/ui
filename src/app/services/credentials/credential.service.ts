@@ -4,6 +4,7 @@ import {environment} from '@env/environment';
 
 import {ConfigService} from '@services/config/config.service';
 import {ConfigParamsService} from '@params/config/config-params.service';
+import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 
 import {CredentialInterface} from '@interfaces/credential.interface';
 import {CreateCredentialInterface} from '@interfaces/createCredential.interface';
@@ -11,8 +12,6 @@ import {Response} from '@interfaces/response.interface';
 
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {CredentialBeanService} from '@services/credentials/credential-bean.service';
-import {StatefulCredentialsService} from '@services/stateful/credentials/stateful-credentials.service';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +46,7 @@ export class CredentialService {
       }
     ).pipe(
       map( res => {
-          this.statefulCredentialService.setCredentials = res.body.data;
+          this.statefulCredentialService.credentials = res.body.data;
           return res;
         }
       ));
