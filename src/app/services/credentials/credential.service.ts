@@ -25,8 +25,8 @@ export class CredentialService {
     private statefulCredentialService: StatefulCredentialsService
   ) { }
 
-  getCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
-    const url = `${environment.backendUrl}/credentials/${credentialId}`;
+  getCredential( credential_id: string ): Observable<HttpResponse<CredentialInterface>> {
+    const url = `${environment.backendUrl}/credentials/${credential_id}`;
     return this.httpClient.get<CredentialInterface>( url, {
       observe: 'response',
       headers: this.configService.getHeaders,
