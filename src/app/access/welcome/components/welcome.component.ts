@@ -9,9 +9,10 @@ import {ConfigService} from '@services/config/config.service';
 import {CredentialService} from '@services/credentials/credential.service';
 import {ProcessingCredentialsService} from '@services/credentials/background-process/processing-credentials.service';
 import {Subscription} from 'rxjs';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined, isUndefined} from 'util';
 import {InstitutionService} from '@services/institution/institution.service';
 import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
+import {AccountInterface} from '@interfaces/account.interfaces';
 
 @Component({
   selector: 'app-welcome',
@@ -43,32 +44,30 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.accountSubscription.unsubscribe();
-    this.credentialSubscription.unsubscribe();
-    this.personalInfoUserSubscription.unsubscribe();
+    if (!isUndefined(this.institutionSubscription)) {
+      this.accountSubscription.unsubscribe();
+      this.credentialSubscription.unsubscribe();
+      this.personalInfoUserSubscription.unsubscribe();
+      this.institutionSubscription.unsubscribe();
+    }
   }
   personalInfoUser() {
     this.personalInfoUserSubscription = this.authService.personalInfo().subscribe(
-      (res) => {
+      res => {
         this.mixpanelEvent(res.body.email);
 
         if (res.body.accountLocked === true) {
 
-          this.toastService.setCode = 401;
+          this.toastService.setCode = 400;
           this.toastService.setMessage =
             'Tu cuenta fue bloqueada, por favor <br> ponte en contacto con nosotros';
           this.toastService.toastGeneral();
 
-          return this.router.navigate([ 'access/login' ]);
+          return this.router.navigate(['access', 'login']);
         }
 
       },
-      (err) => {
-        this.toastService.setCode = err.status;
-        this.toastService.setMessage = 'Ocurrió un error al obtener tus datos';
-        this.toastService.toastGeneral();
-        return this.router.navigate([ '/access', 'login' ]);
-      },
+      () => this.router.navigate(['access', 'login']),
       () => {
         this.getInstitutions();
         this.getCredentials();
@@ -82,27 +81,30 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   }
 
   getCredentials() {
-    this.credentialSubscription = this.credentialService.getAllCredentials().subscribe(
-      res => res,
-      err => err,
-      () => this.processingCredentials.checkCredentials()
-    );
+    this.credentialSubscription = this.credentialService.getAllCredentials().subscribe();
+    this.processingCredentials.checkCredentials();
   }
 
   getAccount() {
-    this.accountSubscription = this.accountService.getAccounts().subscribe(
-      (res) => {
-        setTimeout(() => {
-          if (this.configService.getUser.name && res.body.size > 1) {
-            return this.router.navigate([ '/app', 'dashboard' ]);
-          } else if (!this.configService.getUser.name) {
-            return this.router.navigate([ '/first-step', 'username' ]);
-          } else {
-            return this.router.navigate([ '/app', 'banks' ]);
-          }
-        }, 2000);
+    let auxAccount: AccountInterface[];
+    this.accountSubscription = this.accountService.getAccounts()
+      .subscribe(
+        res => auxAccount = res.body.data,
+        err => err,
+        () => this.goToPage(auxAccount)
+      );
+  }
+
+  goToPage(accounts: AccountInterface[]) {
+    setTimeout(() => {
+      if (this.configService.getUser.name && accounts.length > 1) {
+        return this.router.navigate([ '/app', 'dashboard' ]);
+      } else if (!this.configService.getUser.name) {
+        return this.router.navigate([ '/first-step', 'username' ]);
+      } else {
+        return this.router.navigate([ '/app', 'banks' ]);
       }
-    );
+    }, 3000);
   }
 
   mixpanelEvent(email: string) {
