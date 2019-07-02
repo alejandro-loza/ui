@@ -68,7 +68,8 @@ export class CredentialService {
     const url = `${environment.backendUrl}/credentials/${credential.id}`;
     return this.httpClient.put<CredentialInterface>(url, postBody, {
       observe: 'response',
-      headers: this.configService.getHeaders
+      headers: this.configService.getHeaders,
+      params: this.configParams.getConfigParams
     });
   }
 
@@ -76,7 +77,8 @@ export class CredentialService {
     const url = `${environment.backendUrl}/credentials/${credentialId}`;
     return this.httpClient.delete<CredentialInterface>(url, {
       observe: 'response',
-      headers: this.configService.getHeaders
+      headers: this.configService.getHeaders,
+      params: this.configParams.getConfigParams
     });
   }
 }
