@@ -21,8 +21,8 @@ export class PollingCredentialService {
   constructor(
     private cleanerService: CleanerService,
     private credentialService: CredentialService,
-    private toastService: ToastService,
     private statefulCredential: StatefulCredentialService,
+    private toastService: ToastService,
   ) { }
 
   checkCredentialStatus(): Observable<HttpResponse<CredentialInterface>> {
