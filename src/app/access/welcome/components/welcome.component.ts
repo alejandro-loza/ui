@@ -7,13 +7,13 @@ import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { SignupService } from '@services/signup/signup.service';
 import {ConfigService} from '@services/config/config.service';
 import {CredentialService} from '@services/credentials/credential.service';
-import {ProcessingCredentialsService} from '@services/credentials/background-process/processing-credentials.service';
 import {Subscription} from 'rxjs';
-import {isNullOrUndefined, isUndefined} from 'util';
+import {isUndefined} from 'util';
 import {InstitutionService} from '@services/institution/institution.service';
 import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 import {AccountInterface} from '@interfaces/account.interfaces';
-import {CredentialInterface} from '@interfaces/credential.interface';
+import {FilterCredentialService} from '@services/credentials/filter-credential/filter-credential.service';
+import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
 
 @Component({
   selector: 'app-welcome',
@@ -29,9 +29,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private authService: AuthService,
     private credentialService: CredentialService,
+    private filterCredentialService: FilterCredentialService,
     private institutionsService: InstitutionService,
     private statefulInstitutions: StatefulInstitutionsService,
-    private processingCredentials: ProcessingCredentialsService,
+    private methodCredential: MethodCredentialService,
     private router: Router,
     private renderer: Renderer2,
     private toastService: ToastService,
@@ -83,22 +84,17 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   getCredentials() {
     this.credentialSubscription = this.credentialService.getAllCredentials()
       .subscribe(
-        res => res,
-        err => err,
         () => {
-          const credentials = this.processingCredentials.filterCredentials;
-          credentials.forEach( credential => this.processingCredentials.updateCredential(credential));
+          const credentials = this.filterCredentialService.filterCredentials;
+          credentials.forEach( credential => this.methodCredential.updateCredential(credential));
         }
       );
   }
 
   getAccount() {
-    let auxAccount: AccountInterface[];
     this.accountSubscription = this.accountService.getAccounts()
       .subscribe(
-        res => auxAccount = res.body.data,
-        err => err,
-        () => this.goToPage(auxAccount)
+        res => this.goToPage(res.body.data)
       );
   }
 
