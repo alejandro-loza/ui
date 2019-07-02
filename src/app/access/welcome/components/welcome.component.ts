@@ -13,6 +13,7 @@ import {isNullOrUndefined, isUndefined} from 'util';
 import {InstitutionService} from '@services/institution/institution.service';
 import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 import {AccountInterface} from '@interfaces/account.interfaces';
+import {CredentialInterface} from '@interfaces/credential.interface';
 
 @Component({
   selector: 'app-welcome',
@@ -65,7 +66,6 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
           return this.router.navigate(['access', 'login']);
         }
-
       },
       () => this.router.navigate(['access', 'login']),
       () => {
@@ -81,8 +81,15 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   }
 
   getCredentials() {
-    this.credentialSubscription = this.credentialService.getAllCredentials().subscribe();
-    this.processingCredentials.checkCredentials();
+    this.credentialSubscription = this.credentialService.getAllCredentials()
+      .subscribe(
+        res => res,
+        err => err,
+        () => {
+          const credentials = this.processingCredentials.filterCredentials;
+          credentials.forEach( credential => this.processingCredentials.updateCredential(credential));
+        }
+      );
   }
 
   getAccount() {
