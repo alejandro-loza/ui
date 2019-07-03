@@ -61,7 +61,6 @@ export class SocialMediaComponent implements OnInit {
 
 	getMeInfo(token: String) {
 		FB.api('/me', { fields: 'email' }, (response) => {
-			console.log(response);
 			if (!isNullOrUndefined(response.email)) {
 				this.loginService.facebookLogin(response.email, token).subscribe(
 					(res) => {
@@ -80,7 +79,7 @@ export class SocialMediaComponent implements OnInit {
 				);
 			} else {
 				this.toast.setCode = 500;
-				this.toast.setMessage = 'Necesitamos tu email de Facebook para continuar.';
+				this.toast.setMessage = 'Necesitamos tu correo electrónico para ingresar a Finerio.';
 				this.toast.toastGeneral();
 			}
 		});
