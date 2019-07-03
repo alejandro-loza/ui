@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgZone } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -8,12 +7,9 @@ import { ToastService } from '@services/toast/toast.service';
 import { SignupService } from '@services/signup/signup.service';
 import { LoginService } from '@services/login/login.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
-import { FacebookService } from '@services/facebook/facebook.service';
 import { User } from '@app/interfaces/user.interface';
 import { GTMService } from '@services/google-tag-manager/gtm.service';
 import { isNullOrUndefined } from 'util';
-declare var window: any;
-declare var FB: any;
 
 @Component({
 	selector: 'app-signup',
@@ -40,54 +36,12 @@ export class SignupComponent implements OnInit {
 		private toastService: ToastService,
 		private loginService: LoginService,
 		private mixpanelService: MixpanelService,
-		private gtmService: GTMService,
-		private zone: NgZone,
-		private facebookService: FacebookService
+		private gtmService: GTMService
 	) {
 		this.isButtonAvailable = false;
-		this.facebookService.callSDK();
-
-		window.fbAsyncInit = () => {
-			FB.init({
-				appId: '2029195763988128',
-				autoLogAppEvents: true,
-				xfbml: true,
-				version: 'v3.3'
-			});
-			FB.AppEvents.logPageView();
-			FB.Event.subscribe('auth.statusChange', (response) => {
-				if (response.status === 'connected') {
-					this.getMeInfo(response.authResponse.accessToken);
-				}
-			});
-		};
 	}
 
-	ngOnInit() {
-		if (window.FB) {
-			window.FB.XFBML.parse();
-		}
-	}
-
-	getMeInfo(token: String) {
-		FB.api('/me', { fields: 'email' }, (response) => {
-			this.loginService.facebookLogin(response.email, token).subscribe(
-				(res) => {
-					this.signupService.setFacebookSignup = res.sign_up;
-					this.signupService.setFacebookLogin = !res.sign_up;
-					this.mixpanelService.setFacebookSuccess = true;
-				},
-				(error) => {
-					console.log(error);
-				},
-				() => {
-					return this.zone.run(() => {
-						this.router.navigate([ '/access/welcome' ]);
-					});
-				}
-			);
-		});
-	}
+	ngOnInit() {}
 
 	signup() {
 		this.passwordMatch();
