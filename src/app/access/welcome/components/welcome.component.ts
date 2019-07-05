@@ -14,6 +14,10 @@ import {StatefulInstitutionsService} from '@stateful/institutions/stateful-insti
 import {AccountInterface} from '@interfaces/account.interfaces';
 import {FilterCredentialService} from '@services/credentials/filter-credential/filter-credential.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
+import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
+import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
+import {CredentialInterface} from '@interfaces/credential.interface';
+import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 
 @Component({
   selector: 'app-welcome',
@@ -28,17 +32,19 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
+    private configService: ConfigService,
     private credentialService: CredentialService,
     private filterCredentialService: FilterCredentialService,
     private institutionsService: InstitutionService,
-    private statefulInstitutions: StatefulInstitutionsService,
     private methodCredential: MethodCredentialService,
-    private router: Router,
-    private renderer: Renderer2,
-    private toastService: ToastService,
-    private configService: ConfigService,
     private mixpanelService: MixpanelService,
-    private signupService: SignupService
+    private router: Router,
+    private pollingCredentialService: PollingCredentialService,
+    private signupService: SignupService,
+    private statefulAccounts: StatefulAccountsService,
+    private statefulInstitutions: StatefulInstitutionsService,
+    private statefulCredentials: StatefulCredentialsService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit() {
@@ -78,7 +84,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   }
 
   getInstitutions() {
-    this.institutionSubscription = this.institutionsService.getAllInstitutions().subscribe();
+    this.institutionSubscription = this.institutionsService.getAllInstitutions()
+      .subscribe(
+        res => this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO')
+      );
   }
 
   getCredentials() {
@@ -86,7 +95,11 @@ export class WelcomeComponent implements OnInit, OnDestroy {
       .subscribe(
         () => {
           const credentials = this.filterCredentialService.filterCredentials;
-          credentials.forEach( credential => this.methodCredential.updateCredential(credential));
+          if ( !isUndefined(credentials) ) {
+            credentials.forEach( credential => {
+              this.methodCredential.updateCredential(credential);
+            });
+          }
         }
       );
   }
@@ -94,7 +107,13 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   getAccount() {
     this.accountSubscription = this.accountService.getAccounts()
       .subscribe(
-        res => this.goToPage(res.body.data)
+        res => {
+          const auxAccounts = res.body.data.filter(account => !isUndefined(account.nature));
+          this.statefulAccounts.manualAccounts = auxAccounts.filter(account => account.nature.includes('ma_'));
+          this.statefulAccounts.accounts = auxAccounts.filter(account => !account.nature.includes('ma_'));
+          this.goToPage(res.body.data);
+
+        }
       );
   }
 
