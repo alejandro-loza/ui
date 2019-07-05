@@ -1,14 +1,17 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
+
 import {environment} from '@env/environment';
-import {ConfigService} from '@services/config/config.service';
+
 import {CredentialInterface} from '@interfaces/credential.interface';
+
+import {ConfigService} from '@services/config/config.service';
 
 @Injectable()
 export class InteractiveFieldService {
   constructor(
-    private http: HttpClient,
-    private finerioService: ConfigService
+    private httpClient: HttpClient,
+    private configService: ConfigService
   ) {}
 
   findAllFields(credential: CredentialInterface) {
@@ -16,8 +19,8 @@ export class InteractiveFieldService {
     let params: HttpParams = new HttpParams();
     params = params.append('credentialId', `${credential.id}`);
 
-    return this.http.get(url, {
-      headers: this.finerioService.getHeaders,
+    return this.httpClient.get(url, {
+      headers: this.configService.getHeaders,
       params: params
     });
   }
@@ -30,8 +33,8 @@ export class InteractiveFieldService {
     };
     const postBody = JSON.stringify(body);
 
-    return this.http.post(url, postBody, {
-      headers: this.finerioService.getHeaders
+    return this.httpClient.post(url, postBody, {
+      headers: this.configService.getHeaders
     });
   }
 }
