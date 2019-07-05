@@ -7,7 +7,7 @@ import {StatefulCredentialService} from '@stateful/credential/stateful-credentia
 
 import {CreateCredentialInterface} from '@interfaces/createCredential.interface';
 import {CredentialInterface} from '@interfaces/credential.interface';
-import {Subscription} from 'rxjs';
+import {TrackingCredentialService} from '@services/credentials/tracking-credential/tracking-credential.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,7 @@ export class MethodCredentialService {
     private dateApiService: DateApiService,
     private pollingCredential: PollingCredentialService,
     private statefulCredential: StatefulCredentialService,
+    private trackingCredential: TrackingCredentialService,
   ) { }
 
   updateCredential( credential: CredentialInterface ) {
@@ -35,14 +36,18 @@ export class MethodCredentialService {
   createCredential(credential: CreateCredentialInterface) {
 
     this.credentialsService.createCredential(credential).subscribe(
-      res => this.createSubscription(res.body),
+      res => {
+
+        this.trackingCredential.createCredential(res.body);
+        this.createSubscription(res.body);
+
+      },
     );
 
   }
 
   private createSubscription( credential: CredentialInterface ) {
-    this.statefulCredential.credential = credential;
-    const unpolledCredential = this.pollingCredential.checkCredentialStatus().subscribe(
+    const unpolledCredential = this.pollingCredential.checkCredentialStatus( credential ).subscribe(
       res => this.pollingCredential.unsubscribeFromProcessing(res.body, unpolledCredential)
     );
   }
