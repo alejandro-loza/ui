@@ -6,9 +6,9 @@ import { AccountService } from '@services/account/account.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { FieldService } from '@services/field/field.service';
 import { ToastService } from '@services/toast/toast.service';
-import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
+import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { CredentialInterface } from '@interfaces/credential.interface';
@@ -30,7 +30,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   accounts: AccountInterface[];
   institutionDetails: CredentialInterface;
   accountAuxForDelete: AccountInterface;
-  institutions: InstitutionInterface[] = [];
+  institutions: InstitutionInterface[];
   credentialId: string;
 
   @ViewChild('modal', {static: false}) elModal: ElementRef;
@@ -39,15 +39,14 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private activated: ActivatedRoute,
-    private router: Router,
+    private accountService: AccountService,
+    private cleanerService: CleanerService,
     private credentialService: CredentialService,
     private fieldService: FieldService,
-    private accountService: AccountService,
+    private mixpanelService: MixpanelService,
+    private router: Router,
+    private statefulInstitutions: StatefulInstitutionsService,
     private toastService: ToastService,
-    private credentialBeanService: CredentialBeanService,
-    private cleanerService: CleanerService,
-    private institutionService: InstitutionService,
-    private mixpanelService: MixpanelService
   ) {
     this.fields = [];
     this.accounts = [];
@@ -58,29 +57,14 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     this.activated.params.subscribe((params: Params) => {
       this.credentialId = params['credencialId'];
     });
-    if (this.credentialBeanService.getInstitutions().length == 0) {
-      this.loadInstitutions();
-    } else {
-      this.getDetails();
-    }
+    this.institutions = this.statefulInstitutions.institutions;
+    this.getDetails();
   }
 
   ngAfterViewInit() {
     const modal = new M.Modal(this.elModal.nativeElement);
     const modal2 = new M.Modal(this.elModal2.nativeElement);
     const modal3 = new M.Modal(this.elModal3.nativeElement);
-  }
-
-  loadInstitutions() {
-    this.institutionService.getAllInstitutions().subscribe((res) => {
-      res.body.data.forEach((institution) => {
-        if (institution.code !== 'DINERIO') {
-          this.institutions.push(institution);
-        }
-      });
-      this.credentialBeanService.setInstitutions(this.institutions);
-      this.getDetails();
-    });
   }
 
   getDetails() {
@@ -120,7 +104,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
         this.toastService.setCode = err.status;
         this.toastService.setMessage = 'Ocurrió un error, intentalo de nuevo';
         this.toastService.toastGeneral();
-        this.credentialBeanService.setLoadInformation(true);
+
         this.router.navigateByUrl('/app/credentials');
       }
     );
@@ -153,7 +137,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       () => {
         this.toastService.setMessage = 'Sincronización en proceso...';
         this.toastService.toastGeneral();
-        this.credentialBeanService.setLoadInformation(true);
+
         this.cleanerService.cleanDashboardVariables();
         this.cleanerService.cleanBudgetsVariables();
         this.mixpanelEvent();
@@ -176,7 +160,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       () => {
         this.toastService.setMessage = 'Sincronización en proceso...';
         this.toastService.toastGeneral();
-        this.credentialBeanService.setLoadInformation(true);
+
         this.cleanerService.cleanDashboardVariables();
         this.cleanerService.cleanBudgetsVariables();
         this.mixpanelEvent();
@@ -219,7 +203,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       () => {
         this.toastService.setMessage = 'Credencial elminada correctamente';
         this.toastService.toastGeneral();
-        this.credentialBeanService.setLoadInformation(true);
+
         this.cleanerService.cleanDashboardVariables();
         this.cleanerService.cleanBudgetsVariables();
         this.closeLoaderModal();
@@ -259,7 +243,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       () => {
         this.toastService.setMessage = 'Cuenta elminada correctamente';
         this.toastService.toastGeneral();
-        this.credentialBeanService.setLoadInformation(true);
+
         this.cleanerService.cleanDashboardVariables();
         this.cleanerService.cleanBudgetsVariables();
         this.closeLoaderModal();
