@@ -1,23 +1,19 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 
-import {CredentialService} from '@services/credentials/credential.service';
+import {AccountInterface} from '@interfaces/account.interfaces';
+import {CredentialInterface} from '@interfaces/credential.interface';
+
 import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
-import {CleanerService} from '@services/cleaner/cleaner.service';
-import {ToastService} from '@services/toast/toast.service';
-import {MixpanelService} from '@services/mixpanel/mixpanel.service';
-import {ConfigService} from '@services/config/config.service';
-import {GTMService} from '@services/google-tag-manager/gtm.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
 import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
-import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
 import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
+import {AccountService} from '@services/account/account.service';
 
-import {AccountInterface} from '@interfaces/account.interfaces';
-import {CredentialInterface} from '@interfaces/credential.interface';
-import * as M from 'materialize-css/dist/js/materialize';
 import {Subscription} from 'rxjs';
+
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
   selector: 'app-credential',
@@ -54,18 +50,12 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   @ViewChild('modal', {static: false}) interactiveModal: ElementRef;
 
   constructor(
-    private cleanerService: CleanerService,
-    private configService: ConfigService,
-    private credentialService: CredentialService,
-    private gtmService: GTMService,
+    private accountService: AccountService,
     private interactiveService: InteractiveFieldService,
     private methodCredential: MethodCredentialService,
     private pollingCredentialService: PollingCredentialService,
     private statefulAccounts: StatefulAccountsService,
-    private statefulCredential: StatefulCredentialService,
     private statefulCredentials: StatefulCredentialsService,
-    private mixpanelService: MixpanelService,
-    private toastService: ToastService,
   ) {
     this.credentials = [];
     this.showSpinner = true;
@@ -94,6 +84,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
     if (this.statefulCredentials.credentials) {
 
       this.credentials = this.statefulCredentials.credentials;
+
       this.credentials.forEach( credential => {
 
         if (credential.status === 'VALIDATE') {
@@ -104,15 +95,15 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
     }
 
-    if (this.statefulAccounts.manualAccounts) {
-
-      this.manualAccounts = this.statefulAccounts.manualAccounts;
-
-    }
-
     if (this.statefulAccounts.accounts) {
 
       this.accounts = this.statefulAccounts.accounts;
+
+    }
+
+    if (this.statefulAccounts.manualAccounts) {
+
+      this.manualAccounts = this.statefulAccounts.manualAccounts;
 
     }
 
@@ -134,37 +125,28 @@ export class CredentialComponent implements OnInit, AfterViewInit {
           auxCredential = {...credential};
         }
 
+        this.accountService.getAccounts().subscribe();
         return auxCredential;
 
       });
 
-      this.credentials = this.statefulCredentials.credentials;
+      this.validateStatusFinished = true;
+
+      this.showGoMovementsButton = true;
+
+    } else {
+
+      this.validateStatusFinished = false;
+
+
     }
-  }
 
-  messageForNewInvalidStatus() {
-    this.toastService.setMessage = '¡Revisa tu cuenta de  ' + this.credentialInProcess.institution.name + '!';
-    this.toastService.setCode = 200;
-    this.toastService.setDisplayLength = 3000;
-    this.validateStatusFinished = true;
-    this.toastService.toastGeneral();
-  }
+    this.credentials = this.statefulCredentials.credentials;
 
-  messageForNewActiveStatus() {
-
-    this.toastService.setMessage =
-      'Tu cuenta de ' + this.credentialInProcess.institution.name + ' ha sido sincronizada';
-    this.toastService.setCode = 200;
-    this.toastService.setDisplayLength = 3000;
-    this.toastService.toastGeneral();
-
-    this.successMessage = '¡Tus datos han sido sincronizados';
-    this.validateStatusFinished = true;
-    this.showGoMovementsButton = true;
-  }
+}
 
   emptyStateProcess() {
-    this.showEmptyState = this.credentials.length === 0 && this.accounts.length <= 1;
+    this.showEmptyState = this.credentials.length === 0 && this.accounts.length <= 1 && this.manualAccounts.length >= 0;
     this.showSpinner = false;
   }
 
@@ -178,8 +160,9 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   // SyncButton process
   syncButton(credential: CredentialInterface) {
-    this.validateStatusFinished = false;
     this.methodCredential.updateCredential(credential);
+    this.checkData();
+    this.validateStatusFinished = false;
   }
 
   // InteractiveFields Process
@@ -194,9 +177,8 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   interactiveSubmit(form: NgForm) {
     this.interactiveService.sendToken(this.credentialInProcess, form.value).subscribe((res) => {
-      /* toDO
-       * Recrear la sincronización de una cuenta con Token y ver como será para el polling
-       * con el uso del nuevo servicio
+      /*
+       * toDO Recrear la sincronización de una cuenta con Token y ver como será para el polling con el uso del nuevo servicio
        */
       // this.checkStatusOfCredential(this.credentialInProcess);
     });
