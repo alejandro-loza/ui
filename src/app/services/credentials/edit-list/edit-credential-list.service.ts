@@ -16,25 +16,51 @@ export class EditCredentialListService {
     private statefulCredential: StatefulCredentialService,
     private statefulCredentials: StatefulCredentialsService,
     private cleaner: CleanerService,
-  ) {
-    this.credentials = this.statefulCredentials.credentials;
-  }
+  ) { }
 
   addCredential() {
 
-    this.credential = this.statefulCredential.credential;
+    this.getData();
 
     this.credentials = [...this.credentials, this.credential];
 
-    this.statefulCredentials.credentials = this.credentials;
+    this.cleanData();
 
   }
 
   deleteCredential() {
 
-    this.credential = this.statefulCredential.credential;
+    this.getData();
 
     this.credentials = this.credentials.filter(credential => credential.id !== this.credential.id );
+
+    this.cleanData();
+
+  }
+
+  updateCredential() {
+    this.getData();
+    this.credentials = this.credentials.map( credential => {
+      if ( credential.id === this.credential.id ) {
+        credential = {...this.credential};
+      }
+
+      return credential;
+    });
+
+    this.cleanData();
+
+  }
+
+  private getData() {
+
+    this.credential = this.statefulCredential.credential;
+
+    this.credentials = this.statefulCredentials.credentials;
+
+  }
+
+  private cleanData() {
 
     this.statefulCredentials.credentials = this.credentials;
 
