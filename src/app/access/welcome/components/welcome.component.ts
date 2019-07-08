@@ -18,6 +18,7 @@ import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.serv
 import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
 import {CredentialInterface} from '@interfaces/credential.interface';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
+import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
 
 @Component({
   selector: 'app-welcome',
@@ -35,6 +36,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private credentialService: CredentialService,
     private filterCredentialService: FilterCredentialService,
+    private filterAccounts: FilterAccountsService,
     private institutionsService: InstitutionService,
     private methodCredential: MethodCredentialService,
     private mixpanelService: MixpanelService,
@@ -107,13 +109,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   getAccount() {
     this.accountSubscription = this.accountService.getAccounts()
       .subscribe(
-        res => {
-          const auxAccounts = res.body.data.filter(account => !isUndefined(account.nature));
-          this.statefulAccounts.manualAccounts = auxAccounts.filter(account => account.nature.includes('ma_'));
-          this.statefulAccounts.accounts = auxAccounts.filter(account => !account.nature.includes('ma_'));
-          this.goToPage(res.body.data);
-
-        }
+        res => this.goToPage(res.body.data)
       );
   }
 
