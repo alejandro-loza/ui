@@ -54,11 +54,13 @@ export class PollingCredentialService {
 
   unsubscribeFromProcessing( credential: CredentialInterface, subscription: Subscription): boolean {
 
-    if ( credential.status === 'ACTIVE' || credential.status === 'INVALID' ) {
+    if ( credential.status === 'ACTIVE' || credential.status === 'INVALID') {
 
       this.showToast(credential);
       subscription.unsubscribe();
 
+    } else if ( credential.status === 'TOKEN' ) {
+      this.showToast(credential);
     }
 
     this.trackingCredential.syncingCredential(credential);
@@ -78,6 +80,8 @@ export class PollingCredentialService {
 
       this.toastService.setMessage = `Tu cuenta de ${ credential.institution.name },<br>ha sido sincronizada`;
 
+    } else if ( credential.status === 'TOKEN' ) {
+      this.toastService.setMessage = `¡Necesitamos información extra de tu cuenta bancaria<br>para sincronizarla`;
     } else {
 
       this.toastService.setMessage = `¡Hubo un problema con tu cuenta de ${ credential.institution.name }, revísala!`;
