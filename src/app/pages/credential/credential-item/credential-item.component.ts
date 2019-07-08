@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CredentialInterface } from '@app/interfaces/credential.interface';
 import { DateApiService } from '@services/date-api/date-api.service';
+import {Router} from '@angular/router';
+import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
 
 @Component({
   selector: 'app-credential-item',
@@ -13,7 +15,11 @@ export class CredentialItemComponent implements OnInit {
 
   iconText: string = '';
   showButton: boolean = false;
-  constructor(private dateApiService: DateApiService) {}
+  constructor(
+    private dateApiService: DateApiService,
+    private statefulCredential: StatefulCredentialService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     this.selectIconToShow();
@@ -21,25 +27,15 @@ export class CredentialItemComponent implements OnInit {
   }
 
   showSyncButton() {
-    if (this.credential.status == 'INVALID' || this.moreThanEightHours(this.credential)) {
+    if (this.credential.status === 'INVALID' || this.dateApiService.hasMoreThanEightHours(this.credential.lastUpdated)) {
       this.showButton = true;
     }
   }
 
-  syncButton() {
+  syncButton(event: Event) {
+    event.stopPropagation();
     this.showButton = false;
     this.syncButtonClicked.emit(this.credential);
-  }
-
-  moreThanEightHours(credential: CredentialInterface): boolean {
-    let currentMoment = new Date();
-    let dateObj = this.dateApiService.formatDateForAllBrowsers(this.credential.lastUpdated);
-    let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
-    if (diff >= 8) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   selectIconToShow() {
@@ -50,5 +46,10 @@ export class CredentialItemComponent implements OnInit {
     } else {
       this.iconText = 'sync';
     }
+  }
+
+  goToDetail( credential: CredentialInterface ) {
+    this.statefulCredential.credential = credential;
+    this.router.navigate(['/app', 'credentials', credential.id]);
   }
 }
