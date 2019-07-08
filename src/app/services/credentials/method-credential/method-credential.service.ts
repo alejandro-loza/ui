@@ -26,7 +26,12 @@ export class MethodCredentialService {
     if ( this.dateApiService.hasMoreThanEightHours(credential.lastUpdated) ) {
 
       this.credentialsService.updateCredential(credential).subscribe(
-        res => this.createSubscription(res.body)
+        res => {
+          if (credential.password) {
+            this.trackingCredential.editCredential(res.body);
+          }
+          this.createSubscription(res.body);
+        }
       );
 
     }
@@ -37,7 +42,6 @@ export class MethodCredentialService {
 
     this.credentialsService.createCredential(credential).subscribe(
       res => {
-
         this.trackingCredential.createCredential(res.body);
         this.createSubscription(res.body);
 
