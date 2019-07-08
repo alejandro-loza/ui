@@ -12,6 +12,8 @@ import {Response} from '@interfaces/response.interface';
 
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {EditCredentialListService} from '@services/credentials/edit-list/edit-credential-list.service';
+import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,9 @@ export class CredentialService {
     private httpClient: HttpClient,
     private configService: ConfigService,
     private configParams: ConfigParamsService,
-    private statefulCredentialService: StatefulCredentialsService
+    private statefulCredentials: StatefulCredentialsService,
+    private statefulCredential: StatefulCredentialService,
+    private editCredentialsService: EditCredentialListService,
   ) { }
 
   getCredential( credential_id: string ): Observable<HttpResponse<CredentialInterface>> {
@@ -46,7 +50,7 @@ export class CredentialService {
       }
     ).pipe(
       map( res => {
-          this.statefulCredentialService.credentials = res.body.data;
+          this.statefulCredentials.credentials = res.body.data;
           return res;
         }
       ));
@@ -60,7 +64,13 @@ export class CredentialService {
       observe: 'response',
       headers: this.configService.getHeaders,
       params: this.configParams.getConfigParams
-    });
+    }).pipe(
+      map( res => {
+        this.statefulCredential.credential = res.body;
+        this.editCredentialsService.addCredential();
+        return res;
+      })
+    );
   }
 
   updateCredential( credential: CredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
@@ -70,7 +80,13 @@ export class CredentialService {
       observe: 'response',
       headers: this.configService.getHeaders,
       params: this.configParams.getConfigParams
-    });
+    }).pipe(
+      map( res => {
+        this.statefulCredential.credential = res.body;
+        this.editCredentialsService.updateCredential();
+        return res;
+      })
+    );
   }
 
   deleteCredential( credentialId: string ): Observable<HttpResponse<CredentialInterface>> {
@@ -79,6 +95,12 @@ export class CredentialService {
       observe: 'response',
       headers: this.configService.getHeaders,
       params: this.configParams.getConfigParams
-    });
+    }).pipe(
+      map( res => {
+        this.statefulCredential.credential = res.body;
+        this.editCredentialsService.deleteCredential();
+        return res;
+      })
+    );
   }
 }
