@@ -1,140 +1,74 @@
-//@ts-ignore
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import * as M from 'materialize-css/dist/js/materialize';
+import {Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit} from '@angular/core';
+
 import { AccountInterface } from '@app/interfaces/account.interfaces';
-import { isNullOrUndefined } from 'util';
+
+import {StatefulBalanceAccountService} from '@stateful/balance/account/stateful-balance-account.service';
+
+import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
-	selector: 'app-accounts-table',
-	templateUrl: './accounts-table.component.html',
-	styleUrls: [ './accounts-table.component.css' ]
+  selector: 'app-accounts-table',
+  templateUrl: './accounts-table.component.html',
+  styleUrls: [ './accounts-table.component.css' ]
 })
-export class AccountsTableComponent implements OnInit {
-	debitAndCashBalance: number = 0;
-	creditAndDebtBalance: number = 0;
-	totalShortTerm: number = 0;
-	investmentsBalance: number = 0;
-	creditBalance: number = 0;
-	totalLargeTerms: number = 0;
-	totalBalance: number = 0;
+export class AccountsTableComponent implements OnInit, AfterViewInit {
+  actives: number;
+  passives: number;
+  investments: number;
+  credits: number;
 
-	debitAndCashAccounts: AccountInterface[] = [];
-	creditAndDebtAccounts: AccountInterface[] = [];
-	investmentsAccounts: AccountInterface[] = [];
-	creditAccounts: AccountInterface[] = [];
+  shortTerm: number;
+  longTerm: number;
+  balance: number;
 
-	@Input() accounts: AccountInterface[] = [];
-	@ViewChild('collapsible', {static: false}) elementCollapsible: ElementRef;
+  activeList: AccountInterface[];
+  passiveList: AccountInterface[];
+  investmentList: AccountInterface[];
+  creditList: AccountInterface[];
 
-	constructor() {}
+  @ViewChild('collapsible', {static: false}) elementCollapsible: ElementRef;
 
-	ngOnInit() {
-		this.reloadDataOnChanges();
-		this.balanceForFirstSection();
-		this.balanceForSecondSection();
-		this.getTotalBalance();
-		this.sortAccounts();
-	}
+  constructor(
+    private statefulBalanceAccount: StatefulBalanceAccountService
+  ) {}
 
-	ngAfterViewInit(): void {
-		const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
-	}
+  ngOnInit() {
+    this.getNumbers();
+    this.getLists();
+  }
 
-	ngOnChanges(): void {
-		this.reloadDataOnChanges();
-		this.balanceForFirstSection();
-		this.balanceForSecondSection();
-		this.getTotalBalance();
-		this.sortAccounts();
-	}
+  ngAfterViewInit(): void {
+    const initCollapsible = new M.Collapsible(this.elementCollapsible.nativeElement);
+  }
 
-	balanceForSecondSection() {
-		this.accounts.forEach((element) => {
-			if (!isNullOrUndefined(element.nature)) {
-				if (
-					element.nature.includes('Inversión') ||
-					element.nature.includes('ma_investment') ||
-					element.nature.includes('ma_lifeInsurance') ||
-					element.nature.includes('ma_goods')
-				) {
-					this.investmentsBalance += element.balance;
-					this.fillAccountsArray(element, 'investment');
-				} else if (element.nature.includes('ma_mortgage') || element.nature.includes('ma_personalCredit')) {
-					this.creditBalance += element.balance;
-					this.fillAccountsArray(element, 'credit');
-				}
-			}
-		});
-		this.totalLargeTerms = this.investmentsBalance + this.creditBalance;
-	}
+  getNumbers() {
 
-	// Amount for each type of credential
-	balanceForFirstSection() {
-		this.accounts.forEach((element) => {
-			if (!isNullOrUndefined(element.nature)) {
-				if (
-					element.nature.includes('Cheques') ||
-					element.nature.includes('ma_cash') ||
-					element.nature.includes('ma_debitCard')
-				) {
-					this.debitAndCashBalance += element.balance;
-					this.fillAccountsArray(element, 'debitAndCash');
-				} else if (
-					element.nature.includes('Crédito') ||
-					element.nature.includes('ma_debt') ||
-					element.nature.includes('ma_creditCard')
-				) {
-					this.creditAndDebtBalance += element.balance;
-					this.fillAccountsArray(element, 'creditAndDebt');
-				}
-			}
-		});
-		this.totalShortTerm = this.debitAndCashBalance + this.creditAndDebtBalance;
-	}
+    this.actives = this.statefulBalanceAccount.active;
 
-	getTotalBalance() {
-		this.totalBalance = this.totalShortTerm + this.totalLargeTerms;
-	}
+    this.passives = this.statefulBalanceAccount.passive;
 
-	fillAccountsArray(account: AccountInterface, nature: string) {
-		if (nature == 'debitAndCash') {
-			this.debitAndCashAccounts.push(account);
-		} else if (nature == 'creditAndDebt') {
-			this.creditAndDebtAccounts.push(account);
-		} else if (nature == 'investment') {
-			this.investmentsAccounts.push(account);
-		} else if (nature == 'credit') {
-			this.creditAccounts.push(account);
-		}
-	}
+    this.investments = this.statefulBalanceAccount.investments;
 
-	// Information for the accounts collapsible
-	sortAccounts() {
-		this.debitAndCashAccounts.sort((a, b) => {
-			return b.balance - a.balance;
-		});
-		this.creditAndDebtAccounts.sort((a, b) => {
-			return a.balance - b.balance;
-		});
-		this.investmentsAccounts.sort((a, b) => {
-			return b.balance - a.balance;
-		});
-		this.creditAccounts.sort((a, b) => {
-			return a.balance - b.balance;
-		});
-	}
+    this.credits = this.statefulBalanceAccount.credit;
 
-	reloadDataOnChanges() {
-		this.debitAndCashBalance = 0;
-		this.creditAndDebtBalance = 0;
-		this.totalShortTerm = 0;
-		this.investmentsBalance = 0;
-		this.creditBalance = 0;
-		this.totalLargeTerms = 0;
-		this.totalBalance = 0;
-		this.debitAndCashAccounts = [];
-		this.creditAndDebtAccounts = [];
-		this.investmentsAccounts = [];
-		this.creditAccounts = [];
-	}
+    this.shortTerm = this.statefulBalanceAccount.shortTerm;
+
+    this.longTerm = this.statefulBalanceAccount.longTerm;
+
+    this.balance = this.statefulBalanceAccount.balance;
+
+  }
+
+ getLists() {
+
+    this.activeList = this.statefulBalanceAccount.activeList;
+
+    this.passiveList = this.statefulBalanceAccount.passiveList;
+
+    this.investmentList = this.statefulBalanceAccount.investmentList;
+
+    this.creditList = this.statefulBalanceAccount.creditList;
+
+  }
+
 }
