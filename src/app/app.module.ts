@@ -13,13 +13,13 @@ import { ConfigService } from '@services/config/config.service';
 import { AuthService } from '@services/auth/auth.service';
 import { ToastService } from '@services/toast/toast.service';
 import { AccountService } from '@services/account/account.service';
+import { ConfigParamsService } from '@params/config/config-params.service';
+import { InstitutionService } from '@services/institution/institution.service';
 
 import { SharedModule } from '@shared/shared.module';
 import { AppRoutes } from '@app/app.route';
 
 import { AppComponent } from '@app/app.component';
-import { ConfigParamsService } from '@params/config/config-params.service';
-import {InstitutionService} from '@services/institution/institution.service';
 
 @NgModule({
   declarations: [ AppComponent ],
