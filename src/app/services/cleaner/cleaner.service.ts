@@ -125,7 +125,7 @@ export class CleanerService {
   cleanAccounts() {
     this.statefulAccounts.accounts = undefined;
     this.statefulAccounts.manualAccounts = undefined;
-    this.statefulAccount.accounts = undefined;
+    this.statefulAccount.account = undefined;
     this.statefulAccount.manualAccount = undefined;
   }
 }
