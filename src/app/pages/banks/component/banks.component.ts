@@ -17,12 +17,10 @@ export class BanksComponent implements OnInit, AfterViewInit {
 
   constructor(
     private statefulInstitution: StatefulInstitutionsService
-  ) {
-    this.institutions = [];
-  }
+  ) { }
 
   ngOnInit() {
-    this.getInstitutions();
+    this.institutions = this.statefulInstitution.institutions;
   }
 
   ngAfterViewInit() {
@@ -34,7 +32,4 @@ export class BanksComponent implements OnInit, AfterViewInit {
     instanceModal.open();
   }
 
-  getInstitutions() {
-    this.institutions = this.statefulInstitution.institutions;
-  }
 }
