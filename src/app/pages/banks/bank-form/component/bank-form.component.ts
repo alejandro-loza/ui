@@ -21,6 +21,7 @@ import { ConfigService } from '@services/config/config.service';
 import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
 import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
+import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
 
 @Component({
   selector: 'app-bank-form',
@@ -28,12 +29,12 @@ import {PollingCredentialService} from '@services/credentials/polling-credential
   styleUrls: [ './bank-form.component.css' ]
 })
 export class BankFormComponent implements OnInit, AfterViewInit {
-  institutionCode: string;
   credential: CreateCredentialInterface;
   institutionField: InstitutionFieldInterface[];
+  institution: InstitutionInterface;
   showSpinner: boolean;
-  showVideos: boolean = false;
-  helpText: string = '';
+  showVideos: boolean
+  helpText: string;
   usernameErrorMessage: string;
   passwordErrorMessage: string;
 
@@ -45,16 +46,16 @@ export class BankFormComponent implements OnInit, AfterViewInit {
     private configService: ConfigService,
     private credentialService: CredentialService,
     private field: FieldService,
-    private helpTexts: HelpTexts,
     private methodCredential: MethodCredentialService,
     private patterns: Patterns,
     private pollingCredentialService: PollingCredentialService,
     private router: Router,
-    private statefulInstitution: StatefulInstitutionsService,
+    private statefulInstitutions: StatefulInstitutionsService,
+    private statefulInstitution: StatefulInstitutionService,
+    private helpTexts: HelpTexts,
   ) {
-    this.institutionCode = '';
-    this.institutionField = [];
     this.showSpinner = true;
+    this.showVideos  = false;
     this.credential = {
       institution: null,
       password: null,
@@ -66,74 +67,98 @@ export class BankFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.activated.params.subscribe((params: Params) => {
-      this.institutionCode = params['bankCode'];
-      this.settingTexts();
-      this.showvideoBBVA();
-    });
+
+    this.institution = this.statefulInstitution.institution;
+
+    this.settingTexts();
+
+    this.showvideoBBVA();
+
+    this.getFields();
+
   }
 
   ngAfterViewInit() {
     const modal = new M.Modal(this.elModal.nativeElement);
-    (this.statefulInstitution.institutions.length > 0) ? this.getFields() : this.router.navigateByUrl('/app/banks');
   }
 
   getFields() {
-    this.field.findAllFieldsByInstitution(this.institutionCode).subscribe((res) => {
-      res.body.forEach((fieldBank: InstitutionFieldInterface) => {
-        if (fieldBank.name !== 'sec_code') {
-          this.getErrorMessage(fieldBank);
-          this.institutionField.push(fieldBank);
-        }
-      });
-      res.body.length > 0 ? (this.showSpinner = false) : null;
-      this.openBBVAModal();
-    });
+
+    this.field.findAllFieldsByInstitution(this.institution.code)
+      .subscribe(res => {
+
+        this.institutionField = res.body;
+        this.institutionField = this.institutionField.filter(field => field.name !== 'sec_code');
+        this.institutionField.forEach(field => this.getErrorMessage(field));
+
+        this.showSpinner = !(this.institutionField.length > 0);
+
+        this.openBBVAModal();
+
+      }
+    );
   }
 
   submit(form: NgForm) {
+
     this.showSpinner = true;
+
     this.credential.username = form.value.username;
+
     this.credential.password = form.value.password;
+
     this.credential.securityCode = form.value.sec_code;
+
     this.credential.institution = this.findCurrentInstitution();
+
     this.methodCredential.createCredential(this.credential);
+
     M.toast({
       html: 'Recuperando información...',
       displayLength: 3000
     });
-    return this.router.navigate(['/app', 'credentials']);
+
+    setTimeout(() => {
+      return this.router.navigate(['/app', 'credentials']);
+    }, 1000);
+
   }
 
 
   findCurrentInstitution(): InstitutionInterface {
-    const institutions = this.statefulInstitution.institutions;
-    return institutions.find(institution => institution.code === this.institutionCode);
+    const institutions = this.statefulInstitutions.institutions;
+    return institutions.find(institution => institution.code === this.institution.code);
   }
 
   getPattern(field: InstitutionFieldInterface): string {
-    return this.patterns.getPattern(field, this.institutionCode);
+    return this.patterns.getPattern(field, this.institution.code);
   }
 
   getErrorMessage(field: InstitutionFieldInterface) {
-    field.name == 'username'
-      ? (this.usernameErrorMessage = this.patterns.getErrorMessage(field, this.institutionCode))
-      : (this.passwordErrorMessage = this.patterns.getErrorMessage(field, this.institutionCode));
+    field.name === 'username'
+      ? (this.usernameErrorMessage = this.patterns.getErrorMessage(field, this.institution.code))
+      : (this.passwordErrorMessage = this.patterns.getErrorMessage(field, this.institution.code));
   }
 
   settingTexts() {
-    this.helpText = this.helpTexts.getText(this.institutionCode);
+
+    this.helpText = this.helpTexts.getText(this.institution.code);
+
   }
 
   showvideoBBVA() {
-    if (this.institutionCode === 'BBVA') {
+
+    if (this.institution.code === 'BBVA') {
+
       this.showVideos = true;
+
     }
+
   }
 
   openBBVAModal() {
     const instanceModal = M.Modal.getInstance(this.elModal.nativeElement);
-    if (this.institutionCode === 'BBVA') {
+    if (this.institution.code === 'BBVA') {
       instanceModal.open();
     }
   }
