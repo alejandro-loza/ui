@@ -19,11 +19,11 @@ export class StatefulAccountService {
     return this._manualAccount;
   }
 
-  set accounts(account: AccountInterface) {
+  set account(account: AccountInterface) {
     this._account = account;
   }
 
-  get accounts(): AccountInterface {
+  get account(): AccountInterface {
     return this._account;
   }
 }
