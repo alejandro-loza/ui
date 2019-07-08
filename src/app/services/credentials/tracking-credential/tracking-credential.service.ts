@@ -22,6 +22,12 @@ export class TrackingCredentialService {
     this.gtmEvent(credential, create);
   }
 
+  editCredential( credential: CredentialInterface ) {
+    const update = 'Edit Credential';
+    this.mixpanel.setIdentify();
+    this.mixpanel.setTrackEvent(update, { bank: credential.institution.code });
+  }
+
   syncingCredential( credential: CredentialInterface ) {
 
     let event: string;
