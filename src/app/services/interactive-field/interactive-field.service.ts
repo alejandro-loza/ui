@@ -1,41 +1,57 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 
-import {environment} from '@env/environment';
+import {ConfigService} from '@services/config/config.service';
 
 import {CredentialInterface} from '@interfaces/credentials/credential.interface';
+import {CredentialTokenRequest} from '@interfaces/credentials/credential-token-request';
 
-import {ConfigService} from '@services/config/config.service';
+import {environment} from '@env/environment';
 import {Observable} from 'rxjs';
 
 @Injectable()
-export class InteractiveFieldService {
+export class InteractiveFieldService implements CredentialTokenRequest {
   constructor(
+    private configService: ConfigService,
     private httpClient: HttpClient,
-    private configService: ConfigService
-  ) {}
+    private readonly httpParams: HttpParams,
+  ) {
+    this.httpParams = new HttpParams();
+  }
 
-  findAllFields(credential: CredentialInterface): Observable<HttpResponse<any>> {
+  getInteractiveField(credential: CredentialInterface): Observable<HttpResponse<any>> {
+
     const url = `${environment.backendUrl}/interactiveField`;
-    let params: HttpParams = new HttpParams();
-    params = params.append('credentialId', `${credential.id}`);
+
+    this.httpParams.append('credentialId', `${credential.id}`);
 
     return this.httpClient.get<any>(url, {
+
       headers: this.configService.getHeaders,
-      params: params
+
+      observe: 'response',
+
+      params: this.httpParams
+
     });
+
   }
 
   sendToken(credential: CredentialInterface, data: any): Observable<HttpResponse<any>> {
+
     const url = `${environment.backendUrl}/interactiveField/send`;
-    const body = {
+
+    const body = JSON.stringify({
       credentialId: credential.id,
       interactiveFields: data
-    };
-    const postBody = JSON.stringify(body);
+    });
 
-    return this.httpClient.post<any>(url, postBody, {
-      headers: this.configService.getHeaders
+    return this.httpClient.post<any>(url, body, {
+
+      headers: this.configService.getHeaders,
+
+      observe: 'response'
+
     });
   }
 }
