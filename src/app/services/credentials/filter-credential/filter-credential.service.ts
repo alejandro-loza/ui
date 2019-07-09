@@ -18,8 +18,6 @@ export class FilterCredentialService {
 
     if (this.statefulCredentials.credentials && this.statefulCredentials.credentials.length > 0) {
 
-      this.firstMessage();
-
       const credentials = this.statefulCredentials.credentials;
 
       return credentials.filter( credential =>
@@ -32,12 +30,5 @@ export class FilterCredentialService {
     }
 
   }
-
-  firstMessage() {
-    this.toastService.setCode = 200;
-    this.toastService.setMessage = 'Estamos sincronizando con tu banca en línea,<br>esto puede tardar unos minutos.';
-    this.toastService.toastGeneral();
-  }
-
 
 }

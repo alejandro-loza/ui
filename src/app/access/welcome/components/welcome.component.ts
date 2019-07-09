@@ -16,7 +16,6 @@ import {FilterCredentialService} from '@services/credentials/filter-credential/f
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
 import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
 import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
-import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
 
@@ -26,10 +25,12 @@ import {FilterAccountsService} from '@services/account/filter-accounts/filter-ac
   styleUrls: [ './welcome.component.css' ]
 })
 export class WelcomeComponent implements OnInit, OnDestroy {
+
   accountSubscription: Subscription;
   credentialSubscription: Subscription;
   institutionSubscription: Subscription;
   personalInfoUserSubscription: Subscription;
+
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
@@ -64,6 +65,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   personalInfoUser() {
     this.personalInfoUserSubscription = this.authService.personalInfo().subscribe(
       res => {
+
         this.mixpanelEvent(res.body.email);
 
         if (res.body.accountLocked === true) {
@@ -74,21 +76,22 @@ export class WelcomeComponent implements OnInit, OnDestroy {
           this.toastService.toastGeneral();
 
           return this.router.navigate(['access', 'login']);
+
         }
-      },
-      () => this.router.navigate(['access', 'login']),
-      () => {
+
         this.getInstitutions();
         this.getCredentials();
         this.getAccount();
-      }
+
+      },
+      () => this.router.navigate(['access', 'login'])
     );
   }
 
   getInstitutions() {
     this.institutionSubscription = this.institutionsService.getAllInstitutions()
-      .subscribe(
-        res => this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO')
+      .subscribe(res =>
+          this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO')
       );
   }
 
@@ -107,10 +110,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   }
 
   getAccount() {
-    this.accountSubscription = this.accountService.getAccounts()
-      .subscribe(
-        res => this.goToPage(res.body.data)
-      );
+    this.accountSubscription = this.accountService.getAccounts().subscribe(res => this.goToPage(res.body.data));
   }
 
   goToPage(accounts: AccountInterface[]) {

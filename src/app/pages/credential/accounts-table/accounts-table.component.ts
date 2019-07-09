@@ -82,9 +82,13 @@ export class AccountsTableComponent implements OnInit, AfterViewInit, Credential
   }
 
   checkCredentialSyncing(credential: CredentialInterface, subscription: Subscription) {
+
     if ( this.pollingCredentialService.unsubscribeFromProcessing( credential, subscription) ) {
+
       this.getLists();
+
       this.getNumbers();
+
     }
   }
 }

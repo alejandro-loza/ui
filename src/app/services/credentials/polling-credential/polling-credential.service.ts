@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpResponse} from '@angular/common/http';
 
 import {CredentialService} from '@services/credentials/credential.service';
-import {ToastPollingService} from '@services/toast/toast-polling/toast-polling.service';
+import {ToastPollingService} from '@services/toast/credential/toast-polling/toast-polling.service';
 
 import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 

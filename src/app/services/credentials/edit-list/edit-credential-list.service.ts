@@ -39,13 +39,19 @@ export class EditCredentialListService {
   }
 
   updateCredential() {
+
     this.getData();
+
     this.credentials = this.credentials.map( credential => {
+
       if ( credential.id === this.credential.id ) {
+
         credential = {...this.credential};
+
       }
 
       return credential;
+
     });
 
     this.cleanData();

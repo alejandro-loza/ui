@@ -15,12 +15,19 @@ import {InteractiveFieldService} from '@services/interactive-field/interactive-f
 export class ToastPollingService {
 
   constructor(
-    private accountService: AccountService,
-    private cleanerService: CleanerService,
-    private interactiveFieldsService: InteractiveFieldService,
-    private matDialog: MatDialog,
-    private trackingCredentialService: TrackingCredentialService,
-    private toastService: ToastService,
+
+    private accountService:                 AccountService,
+
+    private cleanerService:                 CleanerService,
+
+    private interactiveFieldsService:       InteractiveFieldService,
+
+    private matDialog:                      MatDialog,
+
+    private toastService:                   ToastService,
+
+    private trackingCredentialService:      TrackingCredentialService,
+
   ) { }
 
   showToast( credential: CredentialInterface, subscription: Subscription ): boolean {
@@ -28,10 +35,6 @@ export class ToastPollingService {
     this.toastService.setCode = 200;
 
     if ( credential.status === 'ACTIVE' ) {
-
-      this.cleanerService.cleanBudgetsVariables();
-      this.cleanerService.cleanDashboardVariables();
-      this.cleanerService.cleanMovements();
 
       this.accountService.getAccounts().subscribe();
 
@@ -59,7 +62,7 @@ export class ToastPollingService {
 
     this.trackingCredentialService.syncingCredential(credential);
 
-    setTimeout(() => this.toastService.toastGeneral(), 2000);
+    this.toastService.toastGeneral();
 
     return subscription.closed;
 

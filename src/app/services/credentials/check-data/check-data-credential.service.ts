@@ -21,7 +21,9 @@ export class CheckDataCredentialService {
       this.statefulCredentialsService.credentials.forEach( credential => {
 
         if (credential.status === 'VALIDATE') {
+
           this.checkSubscription(credential, credentialUpdateResponse);
+
         }
 
       });

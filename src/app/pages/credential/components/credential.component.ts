@@ -71,6 +71,7 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
     this.manualAccounts = this.statefulAccountsService.manualAccounts;
 
     this.checkDataCredentialService.checkData(this);
+
     this.emptyStateProcess();
     this.windowPosition();
     this.fillInformationForEmptyState();

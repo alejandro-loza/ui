@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
 import {ConfigService} from '@services/config/config.service';
 
@@ -7,14 +7,17 @@ import {CredentialInterface} from '@interfaces/credentials/credential.interface'
 import {CredentialTokenRequest} from '@interfaces/credentials/credential-token-request';
 
 import {environment} from '@env/environment';
+
 import {Observable} from 'rxjs';
 
 @Injectable()
 export class InteractiveFieldService implements CredentialTokenRequest {
   constructor(
+
     private configService: ConfigService,
     private httpClient: HttpClient,
     private readonly httpParams: HttpParams,
+
   ) {
     this.httpParams = new HttpParams();
   }

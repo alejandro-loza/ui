@@ -30,14 +30,18 @@ export class MethodCredentialService implements CredentialUpdateResponse{
     if ( this.dateApiService.hasMoreThanEightHours(credential.lastUpdated) ) {
 
       this.credentialsService.updateCredential(credential).subscribe(
-        res => {
-          if (credential.password) {
-            this.trackingCredentialService.editCredential(res.body);
-          }
-          this.checkDataCredentialService.checkData(this);
-        }
-      );
 
+        res => {
+
+          if (credential.password) {
+
+            this.trackingCredentialService.editCredential(res.body);
+
+          }
+
+          this.checkDataCredentialService.checkData(this);
+
+        });
     }
 
   }
