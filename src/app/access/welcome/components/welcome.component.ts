@@ -18,6 +18,7 @@ import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.serv
 import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
+import {ToastCredentialService} from '@services/toast/credential/toast-credential/toast-credential.service';
 
 @Component({
   selector: 'app-welcome',
@@ -48,6 +49,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     private statefulInstitutions: StatefulInstitutionsService,
     private statefulCredentials: StatefulCredentialsService,
     private toastService: ToastService,
+    private toastCredentialService: ToastCredentialService
   ) {}
 
   ngOnInit() {
@@ -96,14 +98,20 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   }
 
   getCredentials() {
-    this.credentialSubscription = this.credentialService.getAllCredentials()
-      .subscribe(
+    this.credentialSubscription = this.credentialService.getAllCredentials().subscribe(
+
         () => {
+
           const credentials = this.filterCredentialService.filterCredentials;
+
           if ( !isUndefined(credentials) ) {
+
+            this.toastCredentialService.firstMessage();
+
             credentials.forEach( credential => {
               this.methodCredential.updateCredential(credential);
             });
+
           }
         }
       );

@@ -40,6 +40,8 @@ export class ToastPollingService {
 
       this.toastService.setMessage = `Tu cuenta de ${ credential.institution.name },<br>ha sido sincronizada`;
 
+      this.toastService.toastGeneral();
+
       subscription.unsubscribe();
 
     } else if ( credential.status === 'TOKEN' ) {
@@ -52,17 +54,19 @@ export class ToastPollingService {
 
       this.toastService.setMessage = `¡Necesitamos información extra de tu cuenta bancaria<br>para sincronizarla`;
 
+      this.toastService.toastGeneral();
+
     } else if ( credential.status === 'INVALID' ) {
 
       this.toastService.setMessage = `¡Hubo un problema con tu cuenta de ${ credential.institution.name }, revísala!`;
+
+      this.toastService.toastGeneral();
 
       subscription.unsubscribe();
 
     }
 
     this.trackingCredentialService.syncingCredential(credential);
-
-    this.toastService.toastGeneral();
 
     return subscription.closed;
 
