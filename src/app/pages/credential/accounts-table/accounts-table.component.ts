@@ -5,13 +5,19 @@ import { AccountInterface } from '@app/interfaces/account.interfaces';
 import {StatefulBalanceAccountService} from '@stateful/balance/account/stateful-balance-account.service';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
+import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
+import {Subscription} from 'rxjs';
+import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
+import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
 
 @Component({
   selector: 'app-accounts-table',
   templateUrl: './accounts-table.component.html',
   styleUrls: [ './accounts-table.component.css' ]
 })
-export class AccountsTableComponent implements OnInit, AfterViewInit {
+export class AccountsTableComponent implements OnInit, AfterViewInit, CredentialUpdateResponse {
   actives: number;
   passives: number;
   investments: number;
@@ -29,10 +35,14 @@ export class AccountsTableComponent implements OnInit, AfterViewInit {
   @ViewChild('collapsible', {static: false}) elementCollapsible: ElementRef;
 
   constructor(
-    private statefulBalanceAccount: StatefulBalanceAccountService
+    private statefulBalanceAccountService: StatefulBalanceAccountService,
+    private statefulCredentialsService: StatefulCredentialsService,
+    private pollingCredentialService: PollingCredentialService,
+    private checkDataCredentialService: CheckDataCredentialService
   ) {}
 
   ngOnInit() {
+    this.checkDataCredentialService.checkData(this);
     this.getNumbers();
     this.getLists();
   }
@@ -43,32 +53,38 @@ export class AccountsTableComponent implements OnInit, AfterViewInit {
 
   getNumbers() {
 
-    this.actives = this.statefulBalanceAccount.active;
+    this.actives = this.statefulBalanceAccountService.active;
 
-    this.passives = this.statefulBalanceAccount.passive;
+    this.passives = this.statefulBalanceAccountService.passive;
 
-    this.investments = this.statefulBalanceAccount.investments;
+    this.investments = this.statefulBalanceAccountService.investments;
 
-    this.credits = this.statefulBalanceAccount.credit;
+    this.credits = this.statefulBalanceAccountService.credit;
 
-    this.shortTerm = this.statefulBalanceAccount.shortTerm;
+    this.shortTerm = this.statefulBalanceAccountService.shortTerm;
 
-    this.longTerm = this.statefulBalanceAccount.longTerm;
+    this.longTerm = this.statefulBalanceAccountService.longTerm;
 
-    this.balance = this.statefulBalanceAccount.balance;
+    this.balance = this.statefulBalanceAccountService.balance;
 
   }
 
  getLists() {
 
-    this.activeList = this.statefulBalanceAccount.activeList;
+    this.activeList = this.statefulBalanceAccountService.activeList;
 
-    this.passiveList = this.statefulBalanceAccount.passiveList;
+    this.passiveList = this.statefulBalanceAccountService.passiveList;
 
-    this.investmentList = this.statefulBalanceAccount.investmentList;
+    this.investmentList = this.statefulBalanceAccountService.investmentList;
 
-    this.creditList = this.statefulBalanceAccount.creditList;
+    this.creditList = this.statefulBalanceAccountService.creditList;
 
   }
 
+  checkCredentialSyncing(credential: CredentialInterface, subscription: Subscription) {
+    if ( this.pollingCredentialService.unsubscribeFromProcessing( credential, subscription) ) {
+      this.getLists();
+      this.getNumbers();
+    }
+  }
 }

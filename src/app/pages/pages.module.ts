@@ -4,6 +4,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { NavbarModule } from '@components/navbar/navbar.module';
 import { ModalTokenModule } from '@components/modal-token/modal-token.module';
+import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
 
 import { CategoriesService } from '@services/categories/categories.service';
 import { CredentialService } from '@services/credentials/credential.service';
@@ -20,8 +21,8 @@ import { PagesComponent } from '@pages/pages.component';
   ],
   imports: [
     SharedModule,
-    ModalTokenModule,
     NavbarModule,
+    ModalTokenModule,
     PagesRoutes
   ],
   exports: [],
@@ -30,6 +31,9 @@ import { PagesComponent } from '@pages/pages.component';
     CredentialService,
     MovementsService,
     FieldService
+  ],
+  entryComponents: [
+    ModalTokenComponent
   ]
 })
 export class PagesModule {}

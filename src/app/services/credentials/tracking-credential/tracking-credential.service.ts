@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {MixpanelService} from '@services/mixpanel/mixpanel.service';
 import {GTMService} from '@services/google-tag-manager/gtm.service';
 import {ConfigService} from '@services/config/config.service';
-import {CredentialInterface} from '@interfaces/credential.interface';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 import {isUndefined} from 'util';
 
 @Injectable({

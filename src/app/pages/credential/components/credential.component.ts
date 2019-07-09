@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {NgForm} from '@angular/forms';
 
 import {AccountInterface} from '@interfaces/account.interfaces';
-import {CredentialInterface} from '@interfaces/credential.interface';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 
 import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
@@ -14,6 +14,8 @@ import {AccountService} from '@services/account/account.service';
 import {Subscription} from 'rxjs';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
+import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
 
 @Component({
   selector: 'app-credential',
@@ -21,10 +23,11 @@ import * as M from 'materialize-css/dist/js/materialize';
   styleUrls: [ './credential.component.css' ]
 })
 
-export class CredentialComponent implements OnInit, AfterViewInit {
+export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpdateResponse {
   accounts: AccountInterface[];
   manualAccounts: AccountInterface[];
   credentials: CredentialInterface[];
+
   interactiveFields = [];
 
   // Aux properties
@@ -48,14 +51,16 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   showEmptyState: boolean;
 
   @ViewChild('modal', {static: false}) interactiveModal: ElementRef;
+  modal: M.Modal;
 
   constructor(
     private accountService: AccountService,
+    private checkDataCredentialService: CheckDataCredentialService,
     private interactiveService: InteractiveFieldService,
-    private methodCredential: MethodCredentialService,
+    private methodCredentialService: MethodCredentialService,
     private pollingCredentialService: PollingCredentialService,
-    private statefulAccounts: StatefulAccountsService,
-    private statefulCredentials: StatefulCredentialsService,
+    private statefulAccountsService: StatefulAccountsService,
+    private statefulCredentialsService: StatefulCredentialsService,
   ) {
     this.credentials = [];
     this.showSpinner = true;
@@ -68,64 +73,33 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.checkData();
+    this.credentials = this.statefulCredentialsService.credentials;
+    this.accounts = this.statefulAccountsService.accounts;
+    this.manualAccounts = this.statefulAccountsService.manualAccounts;
+
+    this.checkDataCredentialService.checkData(this);
+    // this.checkData();
     this.emptyStateProcess();
     this.windowPosition();
     this.fillInformationForEmptyState();
   }
 
   ngAfterViewInit(): void {
-    const initModal = new M.Modal(this.interactiveModal.nativeElement);
-    initModal.options = { dismissible: false };
+    this.modal = new M.Modal(this.interactiveModal.nativeElement);
+    this.modal.options = { dismissible: false };
   }
 
-  checkData() {
-
-    if (this.statefulCredentials.credentials) {
-
-      this.credentials = this.statefulCredentials.credentials;
-
-      this.credentials.forEach( credential => {
-
-        if (credential.status === 'VALIDATE') {
-          this.checkSubscription(credential);
-        }
-
-      });
-
-    }
-
-    if (this.statefulAccounts.accounts) {
-
-      this.accounts = this.statefulAccounts.accounts;
-
-    }
-
-    if (this.statefulAccounts.manualAccounts) {
-
-      this.manualAccounts = this.statefulAccounts.manualAccounts;
-
-    }
-
-  }
-
-  checkSubscription(credential: CredentialInterface) {
-    const unpolledCredential = this.pollingCredentialService.checkCredentialStatus(credential).subscribe(
-      res => this.checkCredentialSyncing(res.body, unpolledCredential)
-    );
-  }
 
   checkCredentialSyncing ( credential: CredentialInterface, subscription: Subscription ) {
 
     if ( this.pollingCredentialService.unsubscribeFromProcessing( credential, subscription) ) {
 
-      this.statefulCredentials.credentials = this.statefulCredentials.credentials.map( auxCredential => {
+      this.statefulCredentialsService.credentials = this.statefulCredentialsService.credentials.map( auxCredential => {
 
         if ( credential.id === auxCredential.id ) {
           auxCredential = {...credential};
         }
 
-        this.accountService.getAccounts().subscribe();
         return auxCredential;
 
       });
@@ -138,12 +112,11 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
       this.validateStatusFinished = false;
 
-
     }
 
-    this.credentials = this.statefulCredentials.credentials;
+    this.credentials = this.statefulCredentialsService.credentials;
 
-}
+  }
 
   emptyStateProcess() {
     this.showEmptyState = this.credentials.length === 0 && this.accounts.length <= 1 && this.manualAccounts.length >= 0;
@@ -160,19 +133,30 @@ export class CredentialComponent implements OnInit, AfterViewInit {
 
   // SyncButton process
   syncButton(credential: CredentialInterface) {
-    this.methodCredential.updateCredential(credential);
-    this.checkData();
+
+    this.methodCredentialService.updateCredential(credential);
+
     this.validateStatusFinished = false;
+
+    setTimeout(() => this.checkDataCredentialService.checkData(this), 0);
+
   }
 
   // InteractiveFields Process
   getInteractiveFields(credential: CredentialInterface) {
+
     this.interactiveFields = [];
+
     this.interactiveService.findAllFields(credential).subscribe((data: any) => {
+
       data.forEach((element) => {
+
         this.interactiveFields.push(element);
+
       });
+
     });
+
   }
 
   interactiveSubmit(form: NgForm) {
@@ -185,10 +169,7 @@ export class CredentialComponent implements OnInit, AfterViewInit {
   }
 
   modalProcessForInteractive(credential: CredentialInterface) {
-    const instanceModal = M.Modal.getInstance(this.interactiveModal.nativeElement, {
-      dismissible: false
-    });
-    instanceModal.open();
+    this.modal.open();
     this.getInteractiveFields(credential);
   }
 

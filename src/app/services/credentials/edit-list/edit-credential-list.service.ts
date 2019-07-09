@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 
-import {CredentialInterface} from '@interfaces/credential.interface';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 import {CleanerService} from '@services/cleaner/cleaner.service';
 
 @Injectable({

@@ -11,7 +11,7 @@ import { CredentialService } from '@services/credentials/credential.service';
 import { Patterns } from '@services/banks/patterns.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
-import { CreateCredentialInterface } from '@interfaces/createCredential.interface';
+import { CreateCredentialInterface } from '@interfaces/credentials/createCredential.interface';
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 

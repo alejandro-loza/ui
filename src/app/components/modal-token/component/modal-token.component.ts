@@ -12,7 +12,7 @@ export class ModalTokenComponent implements OnInit {
   constructor(
     private statefulFields: StatefulFieldsService,
     public dialogRef: MatDialogRef<ModalTokenComponent>,
-    @Inject(MAT_DIALOG_DATA) data,
+    @Inject(MAT_DIALOG_DATA) public data,
   ) { }
 
   ngOnInit() { }

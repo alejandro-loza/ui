@@ -11,7 +11,7 @@ import { CleanerService } from '@services/cleaner/cleaner.service';
 import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
-import { CredentialInterface } from '@interfaces/credential.interface';
+import { CredentialInterface } from '@interfaces/credentials/credential.interface';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';

@@ -16,7 +16,7 @@ import {FilterCredentialService} from '@services/credentials/filter-credential/f
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
 import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
 import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
-import {CredentialInterface} from '@interfaces/credential.interface';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
 

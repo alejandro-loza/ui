@@ -26,8 +26,6 @@ import {InteractiveFieldService} from '@services/interactive-field/interactive-f
     AccountsTableComponent,
     ManualAccountItemComponent
   ],
-  providers: [
-    InteractiveFieldService
-  ]
+  providers: [ ]
 })
 export class CredentialModule {}

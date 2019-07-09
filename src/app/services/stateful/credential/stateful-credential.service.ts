@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {CredentialInterface} from '@interfaces/credential.interface';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 
 @Injectable({
   providedIn: 'root'

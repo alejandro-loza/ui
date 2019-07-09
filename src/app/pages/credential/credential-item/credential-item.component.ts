@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CredentialInterface } from '@app/interfaces/credential.interface';
+import { CredentialInterface } from '@interfaces/credentials/credential.interface';
 import { DateApiService } from '@services/date-api/date-api.service';
 import {Router} from '@angular/router';
 import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';

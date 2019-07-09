@@ -3,15 +3,18 @@ import {HttpResponse} from '@angular/common/http';
 
 import {CredentialService} from '@services/credentials/credential.service';
 import {ToastService} from '@services/toast/toast.service';
-import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
 import {CleanerService} from '@services/cleaner/cleaner.service';
+import {TrackingCredentialService} from '@services/credentials/tracking-credential/tracking-credential.service';
+import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
 
-import {CredentialInterface} from '@interfaces/credential.interface';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 
 import {asyncScheduler, BehaviorSubject, concat, Observable, of, scheduled, Subscription} from 'rxjs';
 import {concatMap, delay, map, share, skip, tap} from 'rxjs/operators';
-import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
-import {TrackingCredentialService} from '@services/credentials/tracking-credential/tracking-credential.service';
+
+import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
+import {MatDialog} from '@angular/material';
+import {AccountService} from '@services/account/account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +24,13 @@ export class PollingCredentialService {
   private load = new BehaviorSubject('');
 
   constructor(
+    private accountService: AccountService,
     private cleanerService: CleanerService,
     private credentialService: CredentialService,
-    private statefulCredential: StatefulCredentialService,
-    private statefulCredentials: StatefulCredentialsService,
-    private trackingCredential: TrackingCredentialService,
+    private interactiveFieldsService: InteractiveFieldService,
+    private trackingCredentialService: TrackingCredentialService,
     private toastService: ToastService,
+    private matDialog: MatDialog,
   ) { }
 
   checkCredentialStatus(credential: CredentialInterface): Observable<HttpResponse<CredentialInterface>> {
@@ -59,11 +63,19 @@ export class PollingCredentialService {
       this.showToast(credential);
       subscription.unsubscribe();
 
+      this.accountService.getAccounts().subscribe();
+
     } else if ( credential.status === 'TOKEN' ) {
+
       this.showToast(credential);
+      this.interactiveFieldsService.findAllFields(credential).subscribe(res => console.log(res));
+      this.matDialog.open(ModalTokenComponent, {
+        width: '750px'
+      });
+
     }
 
-    this.trackingCredential.syncingCredential(credential);
+    this.trackingCredentialService.syncingCredential(credential);
 
     return subscription.closed;
   }

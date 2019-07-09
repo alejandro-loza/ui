@@ -5,20 +5,24 @@ import {DateApiService} from '@services/date-api/date-api.service';
 import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
 import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
 
-import {CreateCredentialInterface} from '@interfaces/createCredential.interface';
-import {CredentialInterface} from '@interfaces/credential.interface';
+import {CreateCredentialInterface} from '@interfaces/credentials/createCredential.interface';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 import {TrackingCredentialService} from '@services/credentials/tracking-credential/tracking-credential.service';
+import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
+import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
+import {Subscription} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MethodCredentialService {
+export class MethodCredentialService implements CredentialUpdateResponse{
   constructor(
     private credentialsService: CredentialService,
     private dateApiService: DateApiService,
-    private pollingCredential: PollingCredentialService,
-    private statefulCredential: StatefulCredentialService,
-    private trackingCredential: TrackingCredentialService,
+    private checkDataCredentialService: CheckDataCredentialService,
+    private pollingCredentialService: PollingCredentialService,
+    private statefulCredentialService: StatefulCredentialService,
+    private trackingCredentialService: TrackingCredentialService,
   ) { }
 
   updateCredential( credential: CredentialInterface ) {
@@ -28,9 +32,9 @@ export class MethodCredentialService {
       this.credentialsService.updateCredential(credential).subscribe(
         res => {
           if (credential.password) {
-            this.trackingCredential.editCredential(res.body);
+            this.trackingCredentialService.editCredential(res.body);
           }
-          this.createSubscription(res.body);
+          this.checkDataCredentialService.checkData(this);
         }
       );
 
@@ -42,17 +46,14 @@ export class MethodCredentialService {
 
     this.credentialsService.createCredential(credential).subscribe(
       res => {
-        this.trackingCredential.createCredential(res.body);
-        this.createSubscription(res.body);
-
+        this.trackingCredentialService.createCredential(res.body);
+        this.checkDataCredentialService.checkData(this);
       },
     );
 
   }
 
-  private createSubscription( credential: CredentialInterface ) {
-    const unpolledCredential = this.pollingCredential.checkCredentialStatus( credential ).subscribe(
-      res => this.pollingCredential.unsubscribeFromProcessing(res.body, unpolledCredential)
-    );
+  checkCredentialSyncing(credential: CredentialInterface, subscription: Subscription) {
+    this.pollingCredentialService.unsubscribeFromProcessing(credential, subscription);
   }
 }
