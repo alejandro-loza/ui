@@ -13,7 +13,6 @@ import {AccountService} from '@services/account/account.service';
 
 import {Subscription} from 'rxjs';
 
-import * as M from 'materialize-css/dist/js/materialize';
 import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
 import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
 
@@ -28,11 +27,8 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   manualAccounts: AccountInterface[];
   credentials: CredentialInterface[];
 
-  interactiveFields = [];
-
   // Aux properties
   showSpinner: boolean;
-  credentialInProcess: CredentialInterface;
   errorWithCredentials: boolean;
   showGoMovementsButton: boolean;
 
@@ -49,9 +45,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   buttonText: string;
   buttonUrl: string;
   showEmptyState: boolean;
-
-  @ViewChild('modal', {static: false}) interactiveModal: ElementRef;
-  modal: M.Modal;
 
   constructor(
     private accountService: AccountService,
@@ -78,16 +71,12 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
     this.manualAccounts = this.statefulAccountsService.manualAccounts;
 
     this.checkDataCredentialService.checkData(this);
-    // this.checkData();
     this.emptyStateProcess();
     this.windowPosition();
     this.fillInformationForEmptyState();
   }
 
-  ngAfterViewInit(): void {
-    this.modal = new M.Modal(this.interactiveModal.nativeElement);
-    this.modal.options = { dismissible: false };
-  }
+  ngAfterViewInit(): void { }
 
 
   checkCredentialSyncing ( credential: CredentialInterface, subscription: Subscription ) {
@@ -140,37 +129,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
     setTimeout(() => this.checkDataCredentialService.checkData(this), 0);
 
-  }
-
-  // InteractiveFields Process
-  getInteractiveFields(credential: CredentialInterface) {
-
-    this.interactiveFields = [];
-
-    this.interactiveService.findAllFields(credential).subscribe((data: any) => {
-
-      data.forEach((element) => {
-
-        this.interactiveFields.push(element);
-
-      });
-
-    });
-
-  }
-
-  interactiveSubmit(form: NgForm) {
-    this.interactiveService.sendToken(this.credentialInProcess, form.value).subscribe((res) => {
-      /*
-       * toDO Recrear la sincronización de una cuenta con Token y ver como será para el polling con el uso del nuevo servicio
-       */
-      // this.checkStatusOfCredential(this.credentialInProcess);
-    });
-  }
-
-  modalProcessForInteractive(credential: CredentialInterface) {
-    this.modal.open();
-    this.getInteractiveFields(credential);
   }
 
   windowPosition() {
