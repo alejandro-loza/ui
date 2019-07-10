@@ -32,38 +32,17 @@ export class CleanerService {
   ) {}
 
   cleanAllVariables() {
-    // Dashboard Memory
-    this.dashboardBean.setDataStackedBar([]);
-    this.dashboardBean.setDataBalancePieChart([]);
-    this.dashboardBean.setLoadInformation(true);
-    this.dashboardBean.setDataIsReady(false);
-    this.dashboardBean.setDataExpensesTab([]);
-    this.dashboardBean.setDataIncomesBarChart([]);
-    this.dashboardBean.setDataIncomesTab([]);
-    this.dashboardBean.setShowEmptyState(false);
-    // Dashboard States
-    this.dashboardStatesService.setListOfMovementsFromDashboard([]);
-    this.dashboardStatesService.setLoadListFromDashboard(false);
-    this.dashboardStatesService.setIndexOfMonthToShow(0);
-    this.dashboardStatesService.setLoadClickedScreen(false);
-    this.dashboardStatesService.setElementToShowOnClickedScreen({});
-    this.dashboardStatesService.setNumberOfTabToReturn(1);
+    this.cleanDashboardVariables();
 
-    // Budgets Memory
-    this.budgetsBeanService.setBudgetToViewDetails(null);
-    this.budgetsBeanService.setBudgets([]);
-    this.budgetsBeanService.setLoadInformation(true);
-    this.budgetsBeanService.setShowEmptyStates(false);
-    this.budgetsBeanService.setCategoryToSharedComponent(null);
+    this.cleanBudgetsVariables();
     // Categories memory
     this.categoriesBeanService.setCategories([]);
     this.categoriesBeanService.setCategoryToViewDetails(null);
     this.categoriesBeanService.setSubcategoryToViewDetails(null);
     // Movements memeory
     this.emptyStateService.setShowEmptyState(false);
-    // Manual Accounts memory
-    this.accountsBeanService.setManualAccounts = null;
-    this.accountsBeanService.setManualAccountToEdit = null;
+
+    this.cleanCredentialsVariables();
 
     this.cleanMovements();
 
@@ -76,6 +55,9 @@ export class CleanerService {
   }
 
   cleanCredentialsVariables() {
+    // Manual Accounts memory
+    this.accountsBeanService.setManualAccounts = null;
+    this.accountsBeanService.setManualAccountToEdit = null;
   }
 
   cleanDashboardVariables() {
@@ -107,7 +89,7 @@ export class CleanerService {
 
   // Cleans movements data service
   cleanMovements() {
-    this.statefulMovements.setMovements = null;
+    this.statefulMovements.setMovements = undefined;
     this.statefulMovements.setMovement = undefined;
   }
 

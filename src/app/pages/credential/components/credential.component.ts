@@ -1,5 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {NgForm} from '@angular/forms';
+import {AfterViewInit, Component, OnInit } from '@angular/core';
 
 import {AccountInterface} from '@interfaces/account.interfaces';
 import {CredentialInterface} from '@interfaces/credentials/credential.interface';
@@ -49,7 +48,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   constructor(
     private accountService: AccountService,
     private checkDataCredentialService: CheckDataCredentialService,
-    private interactiveService: InteractiveFieldService,
     private methodCredentialService: MethodCredentialService,
     private pollingCredentialService: PollingCredentialService,
     private statefulAccountsService: StatefulAccountsService,
@@ -66,19 +64,24 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   }
 
   ngOnInit() {
+
     this.credentials = this.statefulCredentialsService.credentials;
+
     this.accounts = this.statefulAccountsService.accounts;
+
     this.manualAccounts = this.statefulAccountsService.manualAccounts;
 
-    this.checkDataCredentialService.checkData(this);
+    this.credentials.forEach( credential => this.checkDataCredentialService.checkData( credential, this ));
 
     this.emptyStateProcess();
+
     this.windowPosition();
+
     this.fillInformationForEmptyState();
+
   }
 
   ngAfterViewInit(): void { }
-
 
   checkCredentialSyncing ( credential: CredentialInterface, subscription: Subscription ) {
 
@@ -87,7 +90,9 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
       this.statefulCredentialsService.credentials = this.statefulCredentialsService.credentials.map( auxCredential => {
 
         if ( credential.id === auxCredential.id ) {
+
           auxCredential = {...credential};
+
         }
 
         return auxCredential;
@@ -109,7 +114,7 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   }
 
   emptyStateProcess() {
-    this.showEmptyState = this.credentials.length === 0 && this.accounts.length <= 1 && this.manualAccounts.length >= 0;
+    this.showEmptyState = this.credentials.length === 0 && this.accounts.length === 0 && this.manualAccounts.length === 0;
     this.showSpinner = false;
   }
 
@@ -128,7 +133,7 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
     this.validateStatusFinished = false;
 
-    setTimeout(() => this.checkDataCredentialService.checkData(this), 0);
+    setTimeout(() => this.checkDataCredentialService.checkData(credential, this), 0);
 
   }
 

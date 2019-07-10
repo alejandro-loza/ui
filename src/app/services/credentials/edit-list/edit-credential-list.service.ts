@@ -5,6 +5,7 @@ import {StatefulCredentialsService} from '@stateful/credentials/stateful-credent
 
 import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 import {CleanerService} from '@services/cleaner/cleaner.service';
+import {AccountService} from '@services/account/account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +14,16 @@ export class EditCredentialListService {
   private credentials: CredentialInterface[];
   private credential: CredentialInterface;
   constructor(
+    private accountService: AccountService,
+    private cleaner: CleanerService,
     private statefulCredential: StatefulCredentialService,
     private statefulCredentials: StatefulCredentialsService,
-    private cleaner: CleanerService,
   ) { }
 
   addCredential() {
 
     this.getData();
+
 
     this.credentials = [...this.credentials, this.credential];
 
@@ -60,6 +63,8 @@ export class EditCredentialListService {
 
   private getData() {
 
+    this.accountService.getAccounts().subscribe();
+
     this.credential = this.statefulCredential.credential;
 
     this.credentials = this.statefulCredentials.credentials;
@@ -70,11 +75,6 @@ export class EditCredentialListService {
 
     this.statefulCredentials.credentials = this.credentials;
 
-    this.cleaner.cleanMovements();
-
-    this.cleaner.cleanBudgetsVariables();
-
-    this.cleaner.cleanDashboardVariables();
-
   }
+
 }

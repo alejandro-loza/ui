@@ -1,3 +1,23 @@
-<p>
-  modal-token works!
-</p>
+<div class="center-align container">
+  <div mat-dialog-title>
+    <h4>Ingresa tu token:</h4>
+    <h6>Tienes {{ secondsTimer }} segundos</h6>
+  </div>
+  <div mat-dialog-content>
+    <div class="row">
+      <form #token="ngForm" (ngSubmit)="sentToken(token)">
+        <div class="input-field">
+          <label for="token"></label>
+          <input ngModel placeholder="Token" id="token" type="text" class="validate" name="token">
+        </div>
+        <button class="btn finerio-main-outline-color">
+          Enviar
+          <i class="material-icons right">send</i>
+        </button>
+      </form>
+    </div>
+  </div>
+  <div mat-dialog-actions class="row btn-actions-modal">
+
+  </div>
+</div>

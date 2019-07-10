@@ -15,19 +15,12 @@ import {InteractiveFieldService} from '@services/interactive-field/interactive-f
 export class ToastPollingService {
 
   constructor(
-
     private accountService:                 AccountService,
-
     private cleanerService:                 CleanerService,
-
     private interactiveFieldsService:       InteractiveFieldService,
-
     private matDialog:                      MatDialog,
-
     private toastService:                   ToastService,
-
     private trackingCredentialService:      TrackingCredentialService,
-
   ) { }
 
   showToast( credential: CredentialInterface, subscription: Subscription ): boolean {
@@ -46,10 +39,11 @@ export class ToastPollingService {
 
     } else if ( credential.status === 'TOKEN' ) {
 
-      this.interactiveFieldsService.getInteractiveField(credential).subscribe();
-
       this.matDialog.open(ModalTokenComponent, {
-        width: '750px'
+        autoFocus: true,
+        disableClose: true,
+        width: '750px',
+        data: credential
       });
 
       this.toastService.setMessage = `¡Necesitamos información extra de tu cuenta bancaria<br>para sincronizarla`;

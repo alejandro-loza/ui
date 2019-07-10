@@ -1,6 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {StatefulFieldsService} from '@stateful/fields/stateful-fields.service';
+import {NgForm} from '@angular/forms';
+import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 
 @Component({
   selector: 'app-modal-token',
@@ -9,12 +11,20 @@ import {StatefulFieldsService} from '@stateful/fields/stateful-fields.service';
 })
 export class ModalTokenComponent implements OnInit {
 
+  private readonly credential: CredentialInterface;
+
   constructor(
-    private statefulFields: StatefulFieldsService,
-    public dialogRef: MatDialogRef<ModalTokenComponent>,
-    @Inject(MAT_DIALOG_DATA) public data,
-  ) { }
+    public matDialogRef: MatDialogRef<ModalTokenComponent>,
+    private interactiveFieldService: InteractiveFieldService,
+    @Inject(MAT_DIALOG_DATA) public data: CredentialInterface,
+  ) {
+    this.credential = data;
+  }
 
   ngOnInit() { }
 
+  sentToken(ngForm: NgForm) {
+    this.interactiveFieldService.postToken(this.credential, ngForm.form.value).subscribe();
+    this.matDialogRef.close();
+  }
 }

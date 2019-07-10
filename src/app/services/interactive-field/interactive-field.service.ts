@@ -16,37 +16,19 @@ export class InteractiveFieldService implements CredentialTokenRequest {
 
     private configService: ConfigService,
     private httpClient: HttpClient,
-    private readonly httpParams: HttpParams,
+    private httpParams: HttpParams,
 
   ) {
     this.httpParams = new HttpParams();
   }
 
-  getInteractiveField(credential: CredentialInterface): Observable<HttpResponse<any>> {
-
-    const url = `${environment.backendUrl}/interactiveField`;
-
-    this.httpParams.append('credentialId', `${credential.id}`);
-
-    return this.httpClient.get<any>(url, {
-
-      headers: this.configService.getHeaders,
-
-      observe: 'response',
-
-      params: this.httpParams
-
-    });
-
-  }
-
-  sendToken(credential: CredentialInterface, data: any): Observable<HttpResponse<any>> {
+  postToken(credential: CredentialInterface, token: string): Observable<HttpResponse<any>> {
 
     const url = `${environment.backendUrl}/interactiveField/send`;
 
     const body = JSON.stringify({
       credentialId: credential.id,
-      interactiveFields: data
+      interactiveFields : { token: token }
     });
 
     return this.httpClient.post<any>(url, body, {
@@ -56,5 +38,6 @@ export class InteractiveFieldService implements CredentialTokenRequest {
       observe: 'response'
 
     });
+
   }
 }

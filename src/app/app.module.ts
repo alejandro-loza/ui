@@ -23,6 +23,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AppRoutes } from '@app/app.route';
 
 import { AppComponent } from '@app/app.component';
+import {StatefulModule} from '@stateful/stateful.module';
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -30,20 +31,21 @@ import { AppComponent } from '@app/app.component';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    NgIdleKeepaliveModule.forRoot(),
     MatDialogModule,
+    NgIdleKeepaliveModule.forRoot(),
     SharedModule,
+    StatefulModule,
     AppRoutes
   ],
   providers: [
     AuthGuard,
     AuthService,
     AccountService,
+    ConfigParamsService,
+    ConfigService,
+    InstitutionService,
     InteractiveFieldService,
     HttpParams,
-    ConfigService,
-    ConfigParamsService,
-    InstitutionService,
     ToastService,
     InterceptorProvider
   ],

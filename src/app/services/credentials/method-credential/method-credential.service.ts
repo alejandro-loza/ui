@@ -39,7 +39,7 @@ export class MethodCredentialService implements CredentialUpdateResponse{
 
           }
 
-          this.checkDataCredentialService.checkData(this);
+          this.checkDataCredentialService.checkData(res.body, this);
 
         });
     }
@@ -51,7 +51,7 @@ export class MethodCredentialService implements CredentialUpdateResponse{
     this.credentialsService.createCredential(credential).subscribe(
       res => {
         this.trackingCredentialService.createCredential(res.body);
-        this.checkDataCredentialService.checkData(this);
+        this.checkDataCredentialService.checkData(res.body, this);
       },
     );
 

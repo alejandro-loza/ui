@@ -32,6 +32,8 @@ export class AccountsTableComponent implements OnInit, AfterViewInit, Credential
   investmentList: AccountInterface[];
   creditList: AccountInterface[];
 
+  credentials: CredentialInterface[];
+
   @ViewChild('collapsible', {static: false}) elementCollapsible: ElementRef;
 
   constructor(
@@ -42,9 +44,14 @@ export class AccountsTableComponent implements OnInit, AfterViewInit, Credential
   ) {}
 
   ngOnInit() {
-    this.checkDataCredentialService.checkData(this);
+    this.credentials = this.statefulCredentialsService.credentials;
+
+    this.credentials.forEach( credential => this.checkDataCredentialService.checkData(credential, this));
+
     this.getNumbers();
+
     this.getLists();
+
   }
 
   ngAfterViewInit(): void {

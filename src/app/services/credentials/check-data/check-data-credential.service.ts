@@ -14,19 +14,11 @@ export class CheckDataCredentialService {
     private pollingCredentialService: PollingCredentialService
   ) { }
 
-  checkData( credentialUpdateResponse: CredentialUpdateResponse ) {
+  checkData( credential: CredentialInterface, credentialUpdateResponse: CredentialUpdateResponse ) {
 
-    if (this.statefulCredentialsService.credentials) {
+    if (credential.status === 'VALIDATE') {
 
-      this.statefulCredentialsService.credentials.forEach( credential => {
-
-        if (credential.status === 'VALIDATE') {
-
-          this.checkSubscription(credential, credentialUpdateResponse);
-
-        }
-
-      });
+      this.checkSubscription(credential, credentialUpdateResponse);
 
     }
 
@@ -34,9 +26,7 @@ export class CheckDataCredentialService {
 
   checkSubscription(credential: CredentialInterface, credentialUpdateResponse: CredentialUpdateResponse) {
     const unpolledCredential = this.pollingCredentialService.checkCredentialStatus(credential).subscribe(
-      res => {
-        credentialUpdateResponse.checkCredentialSyncing(res.body, unpolledCredential);
-      }
+      res => credentialUpdateResponse.checkCredentialSyncing(res.body, unpolledCredential)
     );
   }
 

@@ -36,7 +36,9 @@ export class FieldService {
         this.institutionParams.setInstitutionID = element.id.toString();
       }
     });
+
     this.paramsInstitution = this.institutionParams.getInstitutionParams;
+
     return this.httpClient
       .get<InstitutionFieldInterface[]>(url, {
         observe: 'response',
