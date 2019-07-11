@@ -31,6 +31,10 @@ export class ToastPollingService {
 
       this.accountService.getAccounts().subscribe();
 
+      this.cleanerService.cleanBudgetsVariables();
+      this.cleanerService.cleanDashboardVariables();
+      this.cleanerService.cleanMovements();
+
       this.toastService.setMessage = `Tu cuenta de ${ credential.institution.name },<br>ha sido sincronizada`;
 
       this.toastService.toastGeneral();
