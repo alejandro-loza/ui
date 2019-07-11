@@ -14,6 +14,9 @@ import { Response } from '@interfaces/response.interface';
 import { catchError, distinctUntilChanged, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { isNull, isNullOrUndefined } from 'util';
+import {ConfigParamsService} from '@params/config/config-params.service';
+import {StatefulMovementsService} from '@stateful/movements/stateful-movements.service';
+import {EditMovementListService} from '@services/movements/edit-list/edit-movement-list.service';
 
 @Injectable()
 export class MovementsService {
@@ -22,12 +25,15 @@ export class MovementsService {
   private movementsList: Movement[];
 
   constructor(
-    private httpClient: HttpClient,
+    private configParamsService: ConfigParamsService,
     private configService: ConfigService,
-    private dateService: DateApiService,
-    private toastService: ToastService,
     private dateApiService: DateApiService,
-    private mixpanelService: MixpanelService
+    private dateService: DateApiService,
+    private editMovementListService: EditMovementListService,
+    private httpClient: HttpClient,
+    private mixpanelService: MixpanelService,
+    private statefulMovementService: StatefulMovementsService,
+    private toastService: ToastService,
   ) {
     this.movementsList = [];
   }
@@ -229,10 +235,15 @@ export class MovementsService {
     if (movement.account) {
       body.account = { ...body.account, id: movement.account.id };
     }
-    return this.httpClient.put<Movement>(`${environment.backendUrl}/movements/${movement.id}`, body, {
-      observe: 'response',
-      headers: this.configService.getHeaders
-    });
+    return this.httpClient.put<Movement>(
+      `${environment.backendUrl}/movements/${movement.id}`,
+      body,
+      {
+        observe: 'response',
+        headers: this.configService.getHeaders,
+        params: this.configParamsService.getConfigParams
+      }
+    );
   }
 
   deleteMovement(idMovement: string): Observable<HttpResponse<Movement>> {
