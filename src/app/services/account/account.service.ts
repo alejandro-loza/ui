@@ -64,10 +64,6 @@ export class AccountService {
 
           this.filterBalance.filterBalance();
 
-          this.cleaner.cleanDashboardVariables();
-          this.cleaner.cleanBudgetsVariables();
-          this.cleaner.cleanMovements();
-
           return res;
         })
       );
