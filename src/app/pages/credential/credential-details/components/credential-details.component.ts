@@ -170,6 +170,11 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     this.accountService.deleteAccount(this.account).subscribe(
       (res) => {
         this.getAccounts();
+
+        this.cleanerService.cleanDashboardVariables();
+        this.cleanerService.cleanBudgetsVariables();
+        this.cleanerService.cleanMovements();
+
         this.toastService.setCode = res.status;
       },
       (error) => {
@@ -180,11 +185,6 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       () => {
         this.toastService.setMessage = 'Cuenta elminada correctamente';
         this.toastService.toastGeneral();
-
-        this.cleanerService.cleanDashboardVariables();
-        this.cleanerService.cleanBudgetsVariables();
-        this.cleanerService.cleanMovements();
-
         this.closeLoaderModal();
       }
     );
