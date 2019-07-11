@@ -15,7 +15,7 @@ export class EditCredentialListService {
   private credential: CredentialInterface;
   constructor(
     private accountService: AccountService,
-    private cleaner: CleanerService,
+    private cleanerService: CleanerService,
     private statefulCredential: StatefulCredentialService,
     private statefulCredentials: StatefulCredentialsService,
   ) { }
@@ -72,6 +72,10 @@ export class EditCredentialListService {
   }
 
   private cleanData() {
+
+    this.cleanerService.cleanDashboardVariables();
+    this.cleanerService.cleanBudgetsVariables();
+    this.cleanerService.cleanMovements();
 
     this.statefulCredentials.credentials = this.credentials;
 
