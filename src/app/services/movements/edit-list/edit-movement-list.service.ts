@@ -24,63 +24,42 @@ export class EditMovementListService {
     this.movement = this.statefulMovementsService.getMovement;
     this.movementList = this.statefulMovementsService.getMovements;
 
-    const auxMovementList = this.movementList.map((movement) => {
+    this.movementList = this.movementList.map((movement) => {
+
       if (movement.id === this.movement.id) {
-        // toDO Se debe validar que el valor de la propiedad haya cambiado, en tal caso se crea una nueva instancia de esa propiedad.
+
+        const currentDate = this.dateApiService.formatDateForAllBrowsers(movement.customDate.toString());
 
         const newDate = this.dateApiService.formatDateForAllBrowsers(this.movement.customDate.toString());
 
-        const currentDateString = `${movement.customDate.getDate()}-${movement.customDate.getMonth()}-${movement.customDate.getFullYear()}`;
-        const newDateString = `${this.movement.customDate.getDate()}-${this.movement.customDate.getMonth()}-${this.movement.customDate.getFullYear()}`;
+        const currentDateString = `${currentDate.getDate()}-${currentDate.getMonth()}-${currentDate.getFullYear()}`;
 
-        if (movement.amount !== this.movement.amount && !isNull(this.movement.amount)) {
-          movement = { ...movement, amount: this.movement.amount };
-        }
+        const newDateString = `${newDate.getDate()}-${newDate.getMonth()}-${newDate.getFullYear()}`;
 
         if (currentDateString !== newDateString) {
-          movement = { ...movement, customDate: newDate };
+
           this.dateChanged = true;
+
+          return movement;
+
         }
 
-        if (
-          movement.customDescription !== this.movement.customDescription &&
-          this.movement.customDescription !== ''
-        ) {
-          movement = { ...movement, customDescription: this.movement.customDescription };
-        }
+        movement = {...this.movement};
 
-        if (movement.duplicated !== this.movement.duplicated) {
-          movement = { ...movement, duplicated: this.movement.duplicated };
-        }
-
-        if (movement.inBalance && movement.inBalance !== this.movement.inBalance) {
-          movement = { ...movement, inBalance: this.movement.inBalance };
-        }
-
-        if (movement.type.toUpperCase() !== this.movement.type.toUpperCase()) {
-          movement = { ...movement, type: this.movement.type.toUpperCase() };
-        }
-
-        if (
-          !movement.concepts[0].category ||
-          movement.concepts[0].category.id !== this.movement.concepts[0].category.id
-        ) {
-          movement.concepts[0] = { ...movement.concepts[0], category: this.movement.concepts[0].category };
-        }
-
-        if (movement.account.id !== this.movement.account.id) {
-          movement = { ...movement, account: this.movement.account };
-        }
       }
       return movement;
     });
-    this.dateChanged
-      ? (this.statefulMovementsService.setMovements = undefined)
-      : (this.statefulMovementsService.setMovements = auxMovementList);
+
+    (this.dateChanged) ? this.statefulMovementsService.setMovements = undefined : this.statefulMovementsService.setMovements = this.movementList;
+
     this.cleanerService.cleanDashboardVariables();
+
     this.cleanerService.cleanBudgetsVariables();
+
     this.cleanerService.cleanCredentialsVariables();
+
     this.dateChanged = false;
+
   }
 
   deleteMovement() {
