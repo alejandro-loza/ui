@@ -12,7 +12,11 @@ import {Observable} from 'rxjs';
 import {InstitutionParamsService} from '@params/instiution/institution-params.service';
 import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root'
+})
+
 export class FieldService {
   endpoint = environment.backendUrl;
   institutions: InstitutionInterface[] = [];

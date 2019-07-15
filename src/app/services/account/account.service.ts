@@ -20,7 +20,7 @@ import { MAResponse } from '@app/interfaces/manual-accounts/manual-account-respo
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import {isNullOrUndefined, isUndefined} from 'util';
+import {isNullOrUndefined} from 'util';
 import {EditAccountListService} from '@services/account/edit-account-list/edit-account-list.service';
 import {CleanerService} from '@services/cleaner/cleaner.service';
 import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
@@ -29,6 +29,7 @@ import {FilterBalanceService} from '@services/balance/filters-balance-account/fi
 @Injectable({
   providedIn: 'root'
 })
+
 export class AccountService {
   url: String = `${environment.backendUrl}/users`;
 

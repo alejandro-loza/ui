@@ -12,7 +12,11 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {ToastService} from '@services/toast/toast.service';
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root'
+})
+
 export class AuthService {
   constructor(
     private httpClient: HttpClient,
