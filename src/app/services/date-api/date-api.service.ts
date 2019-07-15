@@ -1,71 +1,84 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class DateApiService {
-	private options = {
-		day: '2-digit',
-		month: 'short'
-	};
-	constructor() {}
+  private options = {
+    day: '2-digit',
+    month: 'short'
+  };
 
-	dateApi(date: Date) {
-		const newdate = new Date(date).getDate();
-		const datevalue = (Array(2 + 1).join('0') + newdate).slice(-2);
+  constructor() {}
 
-		const dateAPI =
-			`${date.getFullYear()}-${date.getMonth() + 1}-${datevalue}T` +
-			`${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}` +
-			this.timezone();
+  dateApi(date: Date) {
+    const newdate = new Date(date).getDate();
+    const datevalue = (Array(2 + 1).join('0') + newdate).slice(-2);
 
-		return dateAPI;
-	}
+    const dateAPI =
+      `${date.getFullYear()}-${date.getMonth() + 1}-${datevalue}T` +
+      `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}` +
+      this.timezone();
 
-	timezone() {
-		const tmzOffset = new Date().getTimezoneOffset() / 60;
-		const str = '' + tmzOffset;
-		const hour = (Array(2 + 1).join('0') + str).slice(-2);
-		const tmz = (tmzOffset > 0 ? '-' : '+') + hour + '00';
+    return dateAPI;
+  }
 
-		return tmz;
-	}
+  timezone() {
+    const tmzOffset = new Date().getTimezoneOffset() / 60;
+    const str = '' + tmzOffset;
+    const hour = (Array(2 + 1).join('0') + str).slice(-2);
+    const tmz = (tmzOffset > 0 ? '-' : '+') + hour + '00';
 
-	dateWithFormat(date: Date) {
-		const newdate = new Date(date).getDate();
-		const datevalue = (Array(2 + 1).join('0') + newdate).slice(-2);
-		const dateAPI = `${date.getFullYear()}-${date.getMonth() + 1}-${datevalue}`;
+    return tmz;
+  }
 
-		return dateAPI;
-	}
+  dateWithFormat(date: Date) {
+    const newdate = new Date(date).getDate();
+    const datevalue = (Array(2 + 1).join('0') + newdate).slice(-2);
+    const dateAPI = `${date.getFullYear()}-${date.getMonth() + 1}-${datevalue}`;
 
-	dateFormatMovement(date: Date) {
-		const dateFormat = date;
-		const format = new Date(dateFormat)
-			.toLocaleDateString(window.navigator.language, this.options)
-			.toString()
-			.toUpperCase();
-		return format;
-	}
+    return dateAPI;
+  }
 
-	formatDateForAllBrowsers(date: string): Date {
-		let splitDate: any[] = date.split(/[^0-9]/);
+  dateFormatMovement(date: Date) {
+    const dateFormat = date;
+    const format = new Date(dateFormat)
+      .toLocaleDateString(window.navigator.language, this.options)
+      .toString()
+      .toUpperCase();
+    return format;
+  }
 
-		// splitDate de una fecha de movimiento original queda:
-		// splitDate = ["año", "mes", "dia", "hora", "minutos", "segundos", "offset"];
+  formatDateForAllBrowsers(date: string): Date {
+    const splitDate: any[] = date.split(/[^0-9]/);
 
-		let validDate: Date = new Date(
-			splitDate[0],
-			splitDate[1] - 1,
-			splitDate[2],
-			splitDate[3],
-			splitDate[4],
-			splitDate[5]
-		);
-		let offset: number = validDate.getTimezoneOffset() * -1;
-		validDate.setTime(validDate.getTime() + offset * 60 * 1000);
+    // splitDate de una fecha de movimiento original queda:
+    // splitDate = ["año", "mes", "dia", "hora", "minutos", "segundos", "offset"];
 
-		// Condicion para no formatear una fecha ya formateada anteriormente
-		return splitDate.length <= 7 ? validDate : new Date(date);
-	}
+    let validDate: Date = new Date(
+      splitDate[0],
+      splitDate[1] - 1,
+      splitDate[2],
+      splitDate[3],
+      splitDate[4],
+      splitDate[5]
+    );
+    const offset: number = validDate.getTimezoneOffset() * -1;
+    validDate.setTime(validDate.getTime() + offset * 60 * 1000);
+
+    // Condicion para no formatear una fecha ya formateada anteriormente
+    return splitDate.length <= 7 ? validDate : new Date(date);
+  }
+
+  hasMoreThanEightHours(last_update: string): boolean {
+
+    const currentDate = new Date();
+
+    const auxCredentialDate = this.formatDateForAllBrowsers( last_update );
+
+    const timeline = (currentDate.getTime() - auxCredentialDate.getTime()) / (1000 * 60 * 60);
+
+    return timeline >= 8;
+
+  }
 }

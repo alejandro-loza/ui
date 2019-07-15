@@ -1,8 +1,7 @@
-// @ts-ignore
 import {Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
-// @ts-ignore
 import { Router } from '@angular/router';
 import { InstitutionInterface } from '@interfaces/institution.interface';
+import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
 import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
@@ -16,7 +15,10 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
   @ViewChild('tooltip', {static: false}) elementTooltip: ElementRef;
 
-  constructor(private route: Router) {}
+  constructor(
+    private route: Router,
+    private statefulInstitution: StatefulInstitutionService
+  ) {}
 
   ngOnInit() {}
 
@@ -29,14 +31,20 @@ export class BankItemComponent implements OnInit, AfterViewInit {
     });
   }
 
-  institutionClick(institution: InstitutionInterface) {
+  institutionClick( institution: InstitutionInterface ) {
+
     const initTooltip = new M.Tooltip(this.elementTooltip.nativeElement);
     initTooltip.destroy();
 
     if (institution.status === 'ACTIVE') {
-      this.route.navigateByUrl('/app/banks/' + institution.code);
+
+      this.statefulInstitution.institution = institution;
+      return this.route.navigate(['/app', 'banks', institution.code]);
+
     } else {
+
       this.bankOutOfService.emit(true);
+
     }
   }
 }

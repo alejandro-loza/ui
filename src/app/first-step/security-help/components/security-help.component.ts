@@ -16,7 +16,7 @@ export class SecurityHelpComponent implements OnInit {
   ngOnInit() { }
 
   goToApp() {
-    if (this.accountsBeanService.getAccounts.length > 1) {
+    if (this.accountsBeanService.getAccounts && this.accountsBeanService.getAccounts.length > 1) {
       return this.router.navigate([ '/app', 'dashboard' ]);
     } else {
       return this.router.navigate([ '/app', 'banks' ]);

@@ -11,9 +11,21 @@ import { CREDENTIAL_ROUTES } from './credential.route';
 import { BackButtonModule } from '@components/back-button/back-button.module';
 import { AccountsTableComponent } from './accounts-table/accounts-table.component';
 import { ManualAccountItemComponent } from './manual-account-item/manual-account-item.component';
+import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
 
 @NgModule({
-	imports: [ SharedModule, BackButtonModule, EmptyStateModule, CREDENTIAL_ROUTES ],
-	declarations: [ CredentialComponent, CredentialItemComponent, AccountsTableComponent, ManualAccountItemComponent ]
+  imports: [
+    SharedModule,
+    BackButtonModule,
+    EmptyStateModule,
+    CREDENTIAL_ROUTES
+  ],
+  declarations: [
+    CredentialComponent,
+    CredentialItemComponent,
+    AccountsTableComponent,
+    ManualAccountItemComponent
+  ],
+  providers: [ ]
 })
 export class CredentialModule {}

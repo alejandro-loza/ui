@@ -5,8 +5,8 @@
  * @property {string} classes - Las clases que debe tener el toast.
  */
 export interface ToastInterface {
-	code?: number;
-	message?: string;
-	classes?: string;
-	displayLenght?: number;
+  code?: number;
+  message?: string;
+  classes?: string;
+  displayLenght?: number;
 }

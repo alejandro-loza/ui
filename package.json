@@ -1,6 +1,6 @@
 {
   "name": "finerio-ui",
-  "version": "2.1.6",
+  "version": "2.2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -34,6 +34,7 @@
     "materialize-css": "^1.0.0",
     "rxjs": "^6.5.2",
     "tslib": "^1.10.0",
+    "tslint": "^5.18.0",
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
