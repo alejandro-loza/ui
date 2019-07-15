@@ -64,6 +64,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
       this.institutionSubscription.unsubscribe();
     }
   }
+
   personalInfoUser() {
     this.personalInfoUserSubscription = this.authService.personalInfo().subscribe(
       res => {

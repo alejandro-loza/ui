@@ -22,9 +22,7 @@ export class FilterCredentialService {
 
       return credentials.filter( credential =>
 
-        credential.status === 'VALIDATE' || credential.status === 'ACTIVE' &&
-
-        credential.institution.code !== 'BBVA'
+        credential.status === 'VALIDATE' || credential.status === 'ACTIVE'
 
       );
     }
