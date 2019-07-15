@@ -11,7 +11,10 @@ import { ConfigService } from '@services/config/config.service';
 import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root'
+})
 export class SignupService {
 	url: string = environment.backendUrl;
 	data: Signup;

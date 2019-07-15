@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared/shared.module';
+
 import { NavbarModule } from '@components/navbar/navbar.module';
-import {StatefulModule} from '@services/stateful/stateful.module';
+import { ModalTokenModule } from '@components/modal-token/modal-token.module';
+import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
 
 import { CategoriesService } from '@services/categories/categories.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { FieldService } from '@services/field/field.service';
-import { InstitutionService } from '@services/institution/institution.service';
 import { MovementsService } from '@services/movements/movements.service';
 
 import { PagesRoutes } from './pages.route';
@@ -15,10 +16,13 @@ import { PagesRoutes } from './pages.route';
 import { PagesComponent } from '@pages/pages.component';
 
 @NgModule({
-  declarations: [ PagesComponent ],
+  declarations: [
+    PagesComponent
+  ],
   imports: [
     SharedModule,
     NavbarModule,
+    ModalTokenModule,
     PagesRoutes
   ],
   exports: [],
@@ -26,8 +30,10 @@ import { PagesComponent } from '@pages/pages.component';
     CategoriesService,
     CredentialService,
     MovementsService,
-    InstitutionService,
     FieldService
+  ],
+  entryComponents: [
+    ModalTokenComponent
   ]
 })
 export class PagesModule {}

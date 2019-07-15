@@ -10,26 +10,41 @@ import { ConfigService } from '@services/config/config.service';
 import { ConfigParamsService } from '@params/config/config-params.service';
 import {AccountsBeanService} from '@services/account/accounts-bean.service';
 
-// MA
+import {StatefulAccountService} from '@stateful/account/stateful-account.service';
+import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
+import {EditManualAccountListService} from '@services/account/edit-manualAccount-list/edit-manual-account-list.service';
+
 import { ManualAccountHttp } from '@app/interfaces/manual-accounts/manual-account-http.interface';
 import { MAResponse } from '@app/interfaces/manual-accounts/manual-account-response.interface';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { isNullOrUndefined } from 'util';
+import {isNullOrUndefined} from 'util';
+import {EditAccountListService} from '@services/account/edit-account-list/edit-account-list.service';
+import {CleanerService} from '@services/cleaner/cleaner.service';
+import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
+import {FilterBalanceService} from '@services/balance/filters-balance-account/filter-balance.service';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AccountService {
   url: String = `${environment.backendUrl}/users`;
 
   constructor(
-    private httpClient: HttpClient,
+    private accountsBeanService: AccountsBeanService,
+    private filterBalance: FilterBalanceService,
+    private cleaner: CleanerService,
     private configService: ConfigService,
     private configParamsService: ConfigParamsService,
-    private accountsBeanService: AccountsBeanService
+    private editAccountsService: EditAccountListService,
+    private editManualAccountsService: EditManualAccountListService,
+    private filterAccounts: FilterAccountsService,
+    private httpClient: HttpClient,
+    private statefulAccount: StatefulAccountService,
+    private statefulAccounts: StatefulAccountsService,
   ) {}
 
   getAccounts(): Observable<HttpResponse<Response<AccountInterface>>> {
@@ -41,8 +56,15 @@ export class AccountService {
         params: this.configParamsService.getConfigParams
       })
       .pipe(
-        map((res) => {
-          this.accountsBeanService.setAccounts = res.body.data;
+        map(res => {
+
+          this.filterAccounts.filterAccounts(res.body.data);
+
+          this.statefulAccounts.manualAccounts = this.filterAccounts.manualAccounts;
+          this.statefulAccounts.accounts = this.filterAccounts.accounts;
+
+          this.filterBalance.filterBalance();
+
           return res;
         })
       );
@@ -56,17 +78,17 @@ export class AccountService {
     });
   }
 
-  deleteAccount(accountId: string): Observable<HttpResponse<Response<AccountInterface>>> {
-    const url = `${environment.backendUrl}/accounts/` + accountId;
+  deleteAccount(account: AccountInterface): Observable<HttpResponse<Response<AccountInterface>>> {
+    const url = `${environment.backendUrl}/accounts/` + account.id;
     return this.httpClient.delete<Response<AccountInterface>>(url, {
       observe: 'response',
       headers: this.configService.getHeaders
     });
   }
 
-  createManualAccount(body: ManualAccountHttp): Observable<HttpResponse<Response<MAResponse>>> {
+  createManualAccount(body: ManualAccountHttp): Observable<HttpResponse<MAResponse>> {
     const url = `${environment.apiUrl}/apiv2/manualAccount`;
-    return this.httpClient.post<Response<MAResponse>>(url, body, {
+    return this.httpClient.post<MAResponse>(url, body, {
       observe: 'response',
       headers: this.configService.getHeaders
     });

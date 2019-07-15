@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { environment } from '@env/environment';
@@ -8,12 +8,22 @@ import { ConfigService } from '@services/config/config.service';
 
 import { User } from '@interfaces/user.interface';
 
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {ToastService} from '@services/toast/toast.service';
 
-@Injectable()
+
+@Injectable({
+  providedIn: 'root'
+})
+
 export class AuthService {
-  constructor(private httpClient: HttpClient, private configService: ConfigService, private router: Router) {}
+  constructor(
+    private httpClient: HttpClient,
+    private configService: ConfigService,
+    private router: Router,
+    private toastService: ToastService
+  ) {}
 
   isAuth() {
     if (this.configService.getJWT) {
@@ -36,6 +46,13 @@ export class AuthService {
         map((res) => {
           this.configService.setUser = res.body;
           return res;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.toastService.setCode = 4011;
+            this.toastService.toastGeneral();
+          }
+          return throwError(error);
         })
       );
   }

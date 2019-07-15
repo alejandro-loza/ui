@@ -6,265 +6,187 @@ import { AccountService } from '@services/account/account.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { FieldService } from '@services/field/field.service';
 import { ToastService } from '@services/toast/toast.service';
-import { CredentialBeanService } from '@services/credentials/credential-bean.service';
 import { InstitutionService } from '@services/institution/institution.service';
 import { CleanerService } from '@services/cleaner/cleaner.service';
+import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
-import { CredentialInterface } from '@interfaces/credential.interface';
+import { CredentialInterface } from '@interfaces/credentials/credential.interface';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
+import {DateApiService} from '@services/date-api/date-api.service';
+import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
+import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
+import {StatefulAccountService} from '@stateful/account/stateful-account.service';
 
 @Component({
-	selector: 'app-credential-details',
-	templateUrl: './credential-details.component.html',
-	styleUrls: [ './credential-details.component.css' ],
-	providers: [ FieldService, InstitutionService ]
+  selector: 'app-credential-details',
+  templateUrl: './credential-details.component.html',
+  styleUrls: [ './credential-details.component.css' ],
+  providers: [ FieldService, InstitutionService ]
 })
 export class CredentialDetailsComponent implements OnInit, AfterViewInit {
-	showSpinner: boolean = false;
-	fields: InstitutionFieldInterface[];
-	accounts: AccountInterface[];
-	institutionDetails: CredentialInterface;
-	accountAuxForDelete: AccountInterface;
-	institutions: InstitutionInterface[] = [];
-	credentialId: string;
+  showSpinner: boolean;
+  fields: InstitutionFieldInterface[];
+  accounts: AccountInterface[];
+  account: AccountInterface;
+  institutions: InstitutionInterface[];
+  credential: CredentialInterface;
 
-	@ViewChild('modal', {static: false}) elModal: ElementRef;
-	@ViewChild('modal2', {static: false}) elModal2: ElementRef;
-	@ViewChild('modal3', {static: false}) elModal3: ElementRef;
+  @ViewChild('modal', {static: false}) elModal: ElementRef;
+  @ViewChild('modal2', {static: false}) elModal2: ElementRef;
+  @ViewChild('modal3', {static: false}) elModal3: ElementRef;
 
-	constructor(
-		private activated: ActivatedRoute,
-		private router: Router,
-		private credentialService: CredentialService,
-		private fieldService: FieldService,
-		private accountService: AccountService,
-		private toastService: ToastService,
-		private credentialBeanService: CredentialBeanService,
-		private cleanerService: CleanerService,
-		private institutionService: InstitutionService,
-		private mixpanelService: MixpanelService
-	) {
-		this.fields = [];
-		this.accounts = [];
-	}
+  constructor(
+    private activated: ActivatedRoute,
+    private accountService: AccountService,
+    private cleanerService: CleanerService,
+    private credentialService: CredentialService,
+    private dateApi: DateApiService,
+    private fieldService: FieldService,
+    private methodCredential: MethodCredentialService,
+    private mixpanelService: MixpanelService,
+    private router: Router,
+    private statefulAccounts: StatefulAccountsService,
+    private statefulCredential: StatefulCredentialService,
+    private statefulInstitutions: StatefulInstitutionsService,
+    private toastService: ToastService,
+  ) {
+    this.showSpinner = true;
+  }
 
-	ngOnInit() {
-		this.showSpinner = true;
-		this.activated.params.subscribe((params: Params) => {
-			this.credentialId = params['credencialId'];
-		});
-		if (this.credentialBeanService.getInstitutions().length == 0) {
-			this.loadInstitutions();
-		} else {
-			this.getDetails();
-		}
-	}
+  ngOnInit() {
+    this.getData();
+    this.showSpinner = false;
+  }
 
-	ngAfterViewInit() {
-		const modal = new M.Modal(this.elModal.nativeElement);
-		const modal2 = new M.Modal(this.elModal2.nativeElement);
-		const modal3 = new M.Modal(this.elModal3.nativeElement);
-	}
+  ngAfterViewInit() {
+    const modal = new M.Modal(this.elModal.nativeElement);
+    const modal2 = new M.Modal(this.elModal2.nativeElement);
+    const modal3 = new M.Modal(this.elModal3.nativeElement);
+  }
 
-	loadInstitutions() {
-		this.institutionService.getAllInstitutions().subscribe((res) => {
-			res.body.data.forEach((institution) => {
-				if (institution.code !== 'DINERIO') {
-					this.institutions.push(institution);
-				}
-			});
-			this.credentialBeanService.setInstitutions(this.institutions);
-			this.getDetails();
-		});
-	}
+  getData() {
+    this.credential = this.statefulCredential.credential;
+    this.institutions = this.statefulInstitutions.institutions;
+    this.getFields();
+    this.accounts = this.statefulAccounts.accounts.filter(account => account.institution.code === this.credential.institution.code);
+  }
 
-	getDetails() {
-		// Obtenemos un JSON con los detalles de la institution mostrada.
-		this.credentialService.getCredential(this.credentialId).subscribe((res) => {
-			this.institutionDetails = res.body;
-			this.getFields(res.body.institution.code);
-		});
-	}
+  getFields() {
+    // Obtenemos los campos a mostrar de la institución mostrada y borramos el primer campo
+    // que en todos los casos es el username.
+    this.fieldService.findAllFieldsByInstitution(this.credential.institution.code).subscribe(
+      res => {
+        this.fields = res.body.filter(field => field.name !== 'sec_code');
+        this.fields.shift();
+      },
+      (err) => {
+        this.toastService.setCode = err.status;
+        this.toastService.setMessage = 'Ocurrió un error, intentalo de nuevo';
+        this.toastService.toastGeneral();
 
-	getAccounts() {
-		// Obtenemos las cuentas del usuario pero sólo gurdamos las de la institución mostrada.
-		this.accountService.getAccounts().subscribe((res) => {
-			res.body.data.forEach((element) => {
-				if (element.institution.code === this.institutionDetails.institution.code) {
-					this.accounts.push(element);
-				}
-			});
-			this.showSpinner = false;
-		});
-	}
+        return this.router.navigate(['/app', 'credentials']);
+      }
+    );
+  }
 
-	getFields(code: string) {
-		// Obtenemos los campos a mostrar de la institución mostrada y borramos el primer campo
-		// que en todos los casos es el username.
-		this.fieldService.findAllFieldsByInstitution(code).subscribe(
-			(res) => {
-				res.body.forEach((fieldBank) => {
-					if (fieldBank.name !== 'sec_code') {
-						this.fields.push(fieldBank);
-					}
-				});
-				this.fields.shift();
-				this.getAccounts();
-			},
-			(err) => {
-				this.toastService.setCode = err.status;
-				this.toastService.setMessage = 'Ocurrió un error, intentalo de nuevo';
-				this.toastService.toastGeneral();
-				this.credentialBeanService.setLoadInformation(true);
-				this.router.navigateByUrl('/app/credentials');
-			}
-		);
-	}
+  updateCredential(credential: CredentialInterface, data: NgForm) {
+    this.dateApi.hasMoreThanEightHours(credential.lastUpdated) ?
+      ( (credential.status === 'ACTIVE') ?
+          this.activeCredential(credential) :
+          this.invalidCredential(credential, data)
+      ) :
+      this.cantUpdateToast();
+  }
 
-	updateCredential(credential: CredentialInterface, data: NgForm) {
-		if (this.syncPossible(credential)) {
-			credential.status == 'ACTIVE'
-				? this.activeCredential(credential)
-				: this.invalidCredential(credential, data);
-		} else {
-			this.toastService.setCode = 200;
-			this.toastService.setMessage = 'Debes esperar 8 horas antes de volver a sincronizar tu credencial';
-			this.toastService.toastGeneral();
-		}
-	}
+  invalidCredential(credential: CredentialInterface, data: NgForm) {
+    this.openLoaderModal();
+    const auxCredential = {...credential, password: data.value.password};
+    this.methodCredential.updateCredential(auxCredential);
+    this.closeLoaderModal();
+  }
 
-	invalidCredential(credential: CredentialInterface, data: NgForm) {
-		this.openLoaderModal();
-		credential.password = data.value.password;
-		this.credentialService.updateCredential(credential).subscribe(
-			(res) => {
-				this.toastService.setCode = res.status;
-			},
-			(error) => {
-				this.toastService.setCode = error.status;
-				this.toastService.setMessage = 'Ocurrió un error al actualizar tu credencial';
-				this.toastService.toastGeneral();
-			},
-			() => {
-				this.toastService.setMessage = 'Sincronización en proceso...';
-				this.toastService.toastGeneral();
-				this.credentialBeanService.setLoadInformation(true);
-				this.cleanerService.cleanDashboardVariables();
-				this.cleanerService.cleanBudgetsVariables();
-				this.mixpanelEvent();
-				return this.router.navigateByUrl('/app/credentials');
-			}
-		);
-	}
+  activeCredential(credential: CredentialInterface) {
+    this.openLoaderModal();
+    this.methodCredential.updateCredential(credential);
+  }
 
-	activeCredential(credential: CredentialInterface) {
-		this.openLoaderModal();
-		this.credentialService.updateCredential(credential).subscribe(
-			(res) => {
-				this.toastService.setCode = res.status;
-			},
-			(error) => {
-				this.toastService.setCode = error.status;
-				this.toastService.setMessage = 'Ocurrió un error al actualizar tu credencial';
-				this.toastService.toastGeneral();
-			},
-			() => {
-				this.toastService.setMessage = 'Sincronización en proceso...';
-				this.toastService.toastGeneral();
-				this.credentialBeanService.setLoadInformation(true);
-				this.cleanerService.cleanDashboardVariables();
-				this.cleanerService.cleanBudgetsVariables();
-				this.mixpanelEvent();
-				return this.router.navigateByUrl('/app/credentials');
-			}
-		);
-	}
+  deleteCredential() {
+    this.openLoaderModal();
+    this.credentialService.deleteCredential(this.credential.id).subscribe(
+      (res) => {
+        this.toastService.setCode = res.status;
+      },
+      (error) => {
+        this.toastService.setCode = error.status;
+        this.toastService.setMessage = 'Ocurrió un error al elminar la credencial, inténtalo mas tarde';
+        this.toastService.toastGeneral();
+      },
+      () => {
+        this.toastService.setMessage = 'Credencial elminada correctamente';
+        this.toastService.toastGeneral();
+        this.closeLoaderModal();
+      }
+    );
+  }
 
-	mixpanelEvent() {
-		this.mixpanelService.setIdentify();
-		this.mixpanelService.setTrackEvent('Edit Credential', { bank: this.institutionDetails.institution.code });
-	}
+  openLoaderModal() {
+    const instanceModal = M.Modal.getInstance(this.elModal3.nativeElement);
+    instanceModal.open();
+  }
 
-	syncPossible(credential: CredentialInterface): boolean {
-		let isPossible: boolean = false;
-		let currentMoment = new Date();
-		let dateObj = new Date(credential.lastUpdated);
-		let diff = (currentMoment.getTime() - dateObj.getTime()) / (1000 * 60 * 60);
+  closeLoaderModal() {
+    const instanceModal = M.Modal.getInstance(this.elModal3.nativeElement);
+    instanceModal.close();
+    this.router.navigateByUrl('/app/credentials');
+  }
 
-		if (credential.status == 'ACTIVE') {
-			isPossible = diff >= 8 ? true : false;
-		} else {
-			isPossible = true;
-		}
+  // Delete Account's process
+  deleteAccount(account) {
+    this.account = JSON.parse(JSON.stringify(account));
+    const instanceModal = M.Modal.getInstance(this.elModal2.nativeElement);
+    instanceModal.open();
+  }
 
-		return isPossible;
-	}
+  getAccounts() {
+    this.accountService.getAccounts().subscribe(
+      () => this.router.navigate(['/app', 'credentials'])
+    );
+  }
 
-	deleteCredential() {
-		this.openLoaderModal();
-		this.credentialService.deleteCredential(this.credentialId).subscribe(
-			(res) => {
-				this.toastService.setCode = res.status;
-			},
-			(error) => {
-				this.toastService.setCode = error.status;
-				this.toastService.setMessage = 'Ocurrió un error al elminar la credencial, inténtalo mas tarde';
-				this.toastService.toastGeneral();
-			},
-			() => {
-				this.toastService.setMessage = 'Credencial elminada correctamente';
-				this.toastService.toastGeneral();
-				this.credentialBeanService.setLoadInformation(true);
-				this.cleanerService.cleanDashboardVariables();
-				this.cleanerService.cleanBudgetsVariables();
-				this.closeLoaderModal();
-				return this.router.navigateByUrl('/app/credentials');
-			}
-		);
-	}
+  cantUpdateToast() {
+    this.toastService.setCode = 200;
+    this.toastService.setMessage = 'Debes esperar 8 horas antes de volver a sincronizar tu credencial';
+    this.toastService.toastGeneral();
+  }
 
-	openLoaderModal() {
-		const instanceModal = M.Modal.getInstance(this.elModal3.nativeElement);
-		instanceModal.open();
-	}
+  deleteAccountConfirmed() {
+    this.openLoaderModal();
+    this.accountService.deleteAccount(this.account).subscribe(
+      (res) => {
+        this.getAccounts();
 
-	closeLoaderModal() {
-		const instanceModal = M.Modal.getInstance(this.elModal3.nativeElement);
-		instanceModal.close();
-	}
+        this.cleanerService.cleanDashboardVariables();
+        this.cleanerService.cleanBudgetsVariables();
+        this.cleanerService.cleanMovements();
 
-	// Delete Account's process
-	deleteAccount(account) {
-		this.accountAuxForDelete = account;
-		const instanceModal = M.Modal.getInstance(this.elModal2.nativeElement);
-		instanceModal.open();
-	}
-
-	deleteAccountConfirmed() {
-		this.openLoaderModal();
-		this.accountService.deleteAccount(this.accountAuxForDelete.id).subscribe(
-			(res) => {
-				this.toastService.setCode = res.status;
-			},
-			(error) => {
-				this.toastService.setCode = error.status;
-				this.toastService.setMessage = 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde';
-				this.toastService.toastGeneral();
-			},
-			() => {
-				this.toastService.setMessage = 'Cuenta elminada correctamente';
-				this.toastService.toastGeneral();
-				this.credentialBeanService.setLoadInformation(true);
-				this.cleanerService.cleanDashboardVariables();
-				this.cleanerService.cleanBudgetsVariables();
-				this.closeLoaderModal();
-				return this.router.navigateByUrl('/app/credentials');
-			}
-		);
-	}
+        this.toastService.setCode = res.status;
+      },
+      (error) => {
+        this.toastService.setCode = error.status;
+        this.toastService.setMessage = 'Ocurrió un error al elminar la cuenta, inténtalo mas tarde';
+        this.toastService.toastGeneral();
+      },
+      () => {
+        this.toastService.setMessage = 'Cuenta elminada correctamente';
+        this.toastService.toastGeneral();
+        this.closeLoaderModal();
+      }
+    );
+  }
 }

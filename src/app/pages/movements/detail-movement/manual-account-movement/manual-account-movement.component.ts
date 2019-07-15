@@ -4,6 +4,7 @@ import {AccountsBeanService} from '@services/account/accounts-bean.service';
 import {AccountService} from '@services/account/account.service';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
 
 @Component({
   selector: 'app-manual-account-movement',
@@ -23,7 +24,8 @@ export class ManualAccountMovementComponent implements OnInit, AfterViewInit {
 
   constructor(
     private accountsBeanService: AccountsBeanService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private statefulAccountsService: StatefulAccountsService,
   ) {
     this.accountsNatureDefault = [];
     this.hasManualAccountChange = new EventEmitter();
@@ -39,21 +41,7 @@ export class ManualAccountMovementComponent implements OnInit, AfterViewInit {
   }
 
   getUserAccounts() {
-    if ( this.accountsBeanService.getAccounts ) {
-     this.filterByManualAccounts();
-    } else {
-      this.accountService.getAccounts().subscribe(
-        res => res,
-        err => err,
-        () => this.getUserAccounts()
-      );
-    }
-  }
-
-  filterByManualAccounts() {
-    this.accounts = this.accountsBeanService.getAccounts;
-    this.accounts = this.accounts.filter(account => account.nature);
-    this.accounts = this.accounts.filter(account =>  account.nature.includes('ma_'));
+    this.accounts = this.statefulAccountsService.manualAccounts;
     this.accounts = this.accounts.map( account => {
       account.nature = this.accountService.getManualAccountNatureWithOutDefaults(account.nature);
       return account;

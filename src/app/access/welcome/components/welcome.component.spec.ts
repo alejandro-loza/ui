@@ -13,7 +13,7 @@ describe('WelcomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ 
+      imports: [
         RouterTestingModule,
         HttpClientTestingModule,
         MaterializeModule.forRoot()

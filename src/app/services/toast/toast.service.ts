@@ -12,7 +12,7 @@ export class ToastService {
   private readonly button: string;
   private displayLength: number;
 
-  constructor(private configService: ConfigService) {
+  constructor() {
     this.toast = {};
     this.button = `<button
 			class="btn-flat toast-action"
@@ -54,8 +54,8 @@ export class ToastService {
         break;
       case 4011:
         this.toast = {
-          message: 'Tus datos son incorrectos, por favor verifica <br> que los hayas escrito bien',
-          classes: 'light-blue darken-4'
+          message: 'Tus datos son incorrectos, verifica<br>que los hayas escrito bien.',
+          classes: 'grey darken-2 grey-text text-lighten-5'
         };
         break;
       case 422:
