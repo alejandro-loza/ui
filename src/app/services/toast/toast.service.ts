@@ -72,7 +72,7 @@ export class ToastService {
     } else {
       this.displayLength = 2500;
     }
-
+    M.Toast.dismissAll();
     M.toast({
       html: `<span>${this.toast.message}</span>` + this.button,
       classes: this.toast.classes,

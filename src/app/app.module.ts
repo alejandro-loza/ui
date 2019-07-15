@@ -44,8 +44,6 @@ import {StatefulModule} from '@stateful/stateful.module';
     ConfigParamsService,
     ConfigService,
     InstitutionService,
-    InteractiveFieldService,
-    HttpParams,
     ToastService,
     InterceptorProvider
   ],
