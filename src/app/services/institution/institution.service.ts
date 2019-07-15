@@ -12,7 +12,10 @@ import {Response} from '@interfaces/response.interface';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
+
 export class InstitutionService {
   constructor(
     private httpClient: HttpClient,

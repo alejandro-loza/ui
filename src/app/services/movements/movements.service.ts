@@ -18,7 +18,9 @@ import {ConfigParamsService} from '@params/config/config-params.service';
 import {StatefulMovementsService} from '@stateful/movements/stateful-movements.service';
 import {EditMovementListService} from '@services/movements/edit-list/edit-movement-list.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MovementsService {
   private url = `${environment.backendUrl}/users`;
   private id: string;

@@ -10,7 +10,10 @@ import {environment} from '@env/environment';
 
 import {Observable} from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
+
 export class InteractiveFieldService implements CredentialTokenRequest {
   constructor(
 

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Movement } from '@interfaces/movement.interface';
 import { StatefulMovementsService } from '@services/stateful/movements/stateful-movements.service';
 import { DateApiService } from '@services/date-api/date-api.service';
-import { isNull } from 'util';
 import { CleanerService } from '@services/cleaner/cleaner.service';
 
 @Injectable({
