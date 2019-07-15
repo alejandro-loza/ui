@@ -18,12 +18,9 @@ export class InteractiveFieldService implements CredentialTokenRequest {
   constructor(
 
     private configService: ConfigService,
-    private httpClient: HttpClient,
-    private httpParams: HttpParams,
+    private httpClient: HttpClient
 
-  ) {
-    this.httpParams = new HttpParams();
-  }
+  ) { }
 
   postToken(credential: CredentialInterface, token: string): Observable<HttpResponse<any>> {
 
