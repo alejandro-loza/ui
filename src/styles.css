@@ -2,10 +2,10 @@
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 body,
 html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: 'Open Sans', sans-serif;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
 }
 
 /**
@@ -13,12 +13,12 @@ html {
  */
 
 :root {
-  --main-color: #17307b;
-  --accent-color: #2bc2fd;
-  --light-color: #F9F7FF;
-  --red-color: #c62828;
+	--main-color: #17307b;
+	--accent-color: #2bc2fd;
+	--light-color: #f9f7ff;
+	--red-color: #c62828;
 
-  /**
+	/**
     * Custom colors
     * if you need to overwrite the colors, please use custom-color vars.
     *
@@ -29,85 +29,91 @@ html {
     * https://www.w3.org/TR/css-variables-1/#using-variables
     * https://medium.freecodecamp.org/everything-you-need-to-know-about-css-variables-c74d922ea855
     */
-  --main-custom-color: #17307b;
-  --accent-custom-color: #4392c7;
-  --light-custom-color: #F9F7FF;
+	--main-custom-color: #17307b;
+	--accent-custom-color: #4392c7;
+	--light-custom-color: #f9f7ff;
 
-  --paddingPages: 128px;
-  --widthAmout: 50%;
-  --widthImage: 100%;
-  font-family: 'Open Sans', sans-serif;
+	--paddingPages: 128px;
+	--widthAmout: 50%;
+	--widthImage: 100%;
+	font-family: 'Open Sans', sans-serif;
 }
 
-h1,h2,h3,h4,h5 {
-  font-family: 'Ubuntu', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: 'Ubuntu', sans-serif;
 }
-
 
 /**
  * Main color & accent color
  */
 
 .finerio-main-color {
-  background-color: var(--main-color);
-  color: var(--light-color);
+	background-color: var(--main-color);
+	color: var(--light-color);
 }
 
 .finerio-accent-color {
-  background-color: var(--accent-color);
-  color: var(--light-color);
+	background-color: var(--accent-color);
+	color: var(--light-color);
 }
 
 .finerio-main-text-color {
-  color: var(--main-color);
+	color: var(--main-color);
 }
 
 .finerio-accent-text-color {
-  color: var(--accent-color);
+	color: var(--accent-color);
 }
 
-.finerio-main-outline-color{
-  background-color: transparent;
-  color: var(--main-color);
+.finerio-main-outline-color {
+	background-color: transparent;
+	color: var(--main-color);
 }
 
 .finerio-main-outline-color:hover {
-  background-color: var(--main-color);
-  color: var(--light-color);
+	background-color: var(--main-color);
+	color: var(--light-color);
 }
 
 .finerio-accent-outline-color {
-  background-color: transparent;
-  color: var(--accent-color);
-  border: 1px solid var(--accent-color);
+	background-color: transparent;
+	color: var(--accent-color);
+	border: 1px solid var(--accent-color);
 }
 
 .finerio-accent-outline-color:hover {
-  background-color: var(--accent-color);
-  color: var(--light-color);
+	background-color: var(--accent-color);
+	color: var(--light-color);
 }
 
 /**
  * Buttons
  */
 
-a.btn, button.btn, input.btn, .btn {
-  transition: background-color 200ms, color 200ms;
-  transition-timing-function: ease-in-out;
-  border-radius: 20px;
+a.btn,
+button.btn,
+input.btn,
+.btn {
+	transition: background-color 200ms, color 200ms;
+	transition-timing-function: ease-in-out;
+	border-radius: 20px;
 }
 
 /**
  * Buttons w/ main-color
  */
 .btn.finerio-main-color {
-  background-color: var(--main-color);
-  color: var(--light-color);
+	background-color: var(--main-color);
+	color: var(--light-color);
 }
 
 .btn.finerio-main-color:hover {
-  --main-custom-color: #152a5d;
-  background-color: var(--main-custom-color);
+	--main-custom-color: #152a5d;
+	background-color: var(--main-custom-color);
 }
 
 /**
@@ -115,12 +121,12 @@ a.btn, button.btn, input.btn, .btn {
  */
 
 .btn.finerio-accent-color {
-  background-color: var(--accent-color);
-  color: var(--light-color);
+	background-color: var(--accent-color);
+	color: var(--light-color);
 }
 
 .btn.finerio-accent-color:hover {
-  background-color: var(--accent-custom-color);
+	background-color: var(--accent-custom-color);
 }
 
 /**
@@ -128,14 +134,14 @@ a.btn, button.btn, input.btn, .btn {
  */
 
 .btn.finerio-main-outline-color {
-  background-color: transparent;
-  color: var(--main-color);
-  border: 1px solid var(--main-color);
+	background-color: transparent;
+	color: var(--main-color);
+	border: 1px solid var(--main-color);
 }
 
 .btn.finerio-main-outline-color:hover {
-  background-color: var(--main-color);
-  color: var(--light-color);
+	background-color: var(--main-color);
+	color: var(--light-color);
 }
 
 /**
@@ -143,14 +149,14 @@ a.btn, button.btn, input.btn, .btn {
  */
 
 .btn.finerio-accent-outline-color {
-  background-color: transparent;
-  color: black;
-  border: 1px solid var(--accent-color);
+	background-color: transparent;
+	color: black;
+	border: 1px solid var(--accent-color);
 }
 
 .btn.finerio-accent-outline-color:hover {
-  background-color: var(--accent-color);
-  color: var(--light-color);
+	background-color: var(--accent-color);
+	color: var(--light-color);
 }
 /**
  * Button for delete something
@@ -159,48 +165,47 @@ a.btn, button.btn, input.btn, .btn {
  */
 
 .btn.btn-delete {
-  border: 1px solid var(--red-color);
-  color: var(--red-color);
-  background-color: var(--light-color);
-  transition: background-color 200ms, color 200ms;
-  transition-timing-function: ease-in-out;
+	border: 1px solid var(--red-color);
+	color: var(--red-color);
+	background-color: var(--light-color);
+	transition: background-color 200ms, color 200ms;
+	transition-timing-function: ease-in-out;
 }
 
 .btn.btn-delete:hover {
-  color: var(--light-color);
-  background-color: var(--red-color);
-  box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+	color: var(--light-color);
+	background-color: var(--red-color);
+	box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
 }
-
 
 /**
  * Waves
  */
 
 .waves-effect.waves-blue .waves-ripple {
-  /* The alpha value allows the text and background color
+	/* The alpha value allows the text and background color
     of the button to still show through. */
-  background-color: var(--main-color);
-  opacity: 0.65%;
+	background-color: var(--main-color);
+	opacity: 0.65%;
 }
 
 /**
  * Material Icons
  */
 .material-icons.md-18 {
-  font-size: 18px;
+	font-size: 18px;
 }
 
 .material-icons.md-24 {
-  font-size: 24px;
+	font-size: 24px;
 }
 
 .material-icons.md-36 {
-  font-size: 36px;
+	font-size: 36px;
 }
 
 .material-icons.md-48 {
-  font-size: 48px;
+	font-size: 48px;
 }
 
 /**
@@ -208,54 +213,53 @@ a.btn, button.btn, input.btn, .btn {
  */
 
 .card {
-  top: 0;
-  left: 0;
-  transform: translate(0, 10%);
+	top: 0;
+	left: 0;
+	transform: translate(0, 10%);
 }
 
 .light-background {
-  background-color: rgb(255, 255, 255) !important;
+	background-color: rgb(255, 255, 255) !important;
 }
 
 /**
  * Background for access and first-step pages routes
  */
 .background {
-  min-height: 100%;
-  background-color: var(--main-color);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+	min-height: 100%;
+	background-color: var(--main-color);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
-
 .inputMovement {
-  border-bottom: none !important;
-  height: 100% !important;
+	border-bottom: none !important;
+	height: 100% !important;
 }
 
 .tabs .indicator {
-  background-color: #2bc2fd !important;
-  height: 5px;
+	background-color: #2bc2fd !important;
+	height: 5px;
 }
 
 .collection {
-  border: 0px solid #e0e0e0 !important;
+	border: 0px solid #e0e0e0 !important;
 }
 
 .showPassword {
-  margin-top: 3%;
-  color: black;
+	margin-top: 3%;
+	color: black;
 }
 
-[type="checkbox"].filled-in:checked+span.showPassword:not(.lever):after{
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
+[type="checkbox"].filled-in:checked + span.showPassword:not(.lever):after {
+	background-color: var(--accent-color);
+	border-color: var(--accent-color);
 }
 
 .spinnerPosition {
-  position: relative;
-  top: 15rem;
+	position: relative;
+	top: 15rem;
 }
 
 input:not([type]):focus:not([readonly]),
@@ -268,8 +272,8 @@ input[type=tel]:not(.browser-default):focus:not([readonly]),
 input[type=number]:not(.browser-default):focus:not([readonly]),
 input[type=search]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid var(--accent-color);
-  box-shadow: 0 1px 0 0 var(--accent-color);
+	border-bottom: 1px solid var(--accent-color);
+	box-shadow: 0 1px 0 0 var(--accent-color);
 }
 
 input:not([type]):focus:not([readonly]) + label,
@@ -282,67 +286,90 @@ input[type=tel]:not(.browser-default):focus:not([readonly]) + label,
 input[type=number]:not(.browser-default):focus:not([readonly]) + label,
 input[type=search]:not(.browser-default):focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
-  color: var(--accent-color);
+	color: var(--accent-color);
 }
 
-[type="checkbox"].filled-in:checked+span:not(.lever):after {
-  border-color: var(--accent-color);
-  background-color: var(--accent-color);
+[type="checkbox"].filled-in:checked + span:not(.lever):after {
+	border-color: var(--accent-color);
+	background-color: var(--accent-color);
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  /* display: none; <- Crashes Chrome on hover */
-  -webkit-appearance: none;
-  margin: 0;
-  /* <-- Apparently some margin are still there even though it's hidden */
+	/* display: none; <- Crashes Chrome on hover */
+	-webkit-appearance: none;
+	margin: 0;
+	/* <-- Apparently some margin are still there even though it's hidden */
 }
 
 .datepicker-modal {
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
+	left: 50% !important;
+	top: 50% !important;
+	transform: translate(-50%, -50%) !important;
 }
 
 .mat-expansion-indicator {
-  margin-right: 1%;
-  margin-left: -3%;
-  padding: 10px;
-  cursor: pointer;
+	margin-right: 1%;
+	margin-left: -3%;
+	padding: 10px;
+	cursor: pointer;
 }
 
-.mat-expansion-indicator::after{
-  padding: 6px;
+.mat-expansion-indicator::after {
+	padding: 6px;
 }
 
 .main-svg {
-  width: 3.1333em;
+	width: 3.1333em;
 }
 
 .slider .indicators .indicator-item.active {
-  background-color: var(--accent-color) !important;
+	background-color: var(--accent-color) !important;
 }
 
 @media only screen and (min-width: 601px) {
-  .main-svg { width: 55px; margin-top: 8px; }
+	.main-svg {
+		width: 55px;
+		margin-top: 8px;
+	}
 }
 
-@media only screen and (min-width: 1201px ) and (max-width: 1299px) {
-  .card { transform: translate(0); }
-  .row { margin: auto;}
-  .main-svg { width: 4.1333em; margin-top: 0; }
+@media only screen and (min-width: 1201px) and (max-width: 1299px) {
+	.card {
+		transform: translate(0);
+	}
+	.row {
+		margin: auto;
+	}
+	.main-svg {
+		width: 4.1333em;
+		margin-top: 0;
+	}
 }
 
 @media only screen and (min-width: 1300px) and (max-width: 1499px) {
-  .card { transform: translate(0, 5%); }
-  .main { width: 4.1333em; margin-top: 0; }
+	.card {
+		transform: translate(0, 5%);
+	}
+	.main-svg {
+		width: 4.1333em;
+		margin-top: 0;
+	}
 }
 
 @media only screen and (min-width: 1600px) {
-  .datepicker-modal { left: 40% !important; }
-  .main-svg { width: 4.1333em; margin-top: 0; }
+	.datepicker-modal {
+		left: 40% !important;
+	}
+	.main-svg {
+		width: 4.1333em;
+		margin-top: 0;
+	}
 }
 
 @media only screen and (min-width: 1800px) {
-  .main-svg { width: 5.3333em; margin-top: 0; }
+	.main-svg {
+		width: 5.3333em;
+		margin-top: 0;
+	}
 }

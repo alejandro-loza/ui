@@ -52,16 +52,15 @@ export class CategoriesHelperService {
 	getCategoryById(categoryId: String, categories: Category[]): Category {
 		let categoryToReturn: Category;
 		categories.forEach((category) => {
-			if (!isNullOrUndefined(category.subCategories)) {
+			if (category.subCategories.length > 0) {
 				category.subCategories.forEach((subcategory) => {
 					if (categoryId == subcategory.id) {
 						categoryToReturn = subcategory;
 					}
 				});
-			} else {
-				if (category.id == categoryId) {
-					categoryToReturn = category;
-				}
+			}
+			if (category.id == categoryId) {
+				categoryToReturn = category;
 			}
 		});
 		return categoryToReturn;

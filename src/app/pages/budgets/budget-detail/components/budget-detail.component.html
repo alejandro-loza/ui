@@ -13,13 +13,7 @@
           <div class="card-content">
             <div class="row borderB-o">
               <div class="col s8 valign-wrapper">
-                <img *ngIf="!budget.category.user"
-                     src="https://cdn.finerio.mx/categories/web/color/{{ budget.category.id }}.svg"
-                     onerror="this.src='/assets/media/img/categories/color/000000.svg'" alt="{{ budget.category.name }}">
-
-                <img *ngIf="budget.category.user"
-                  src="/assets/media/img/categories/color/userCategory.svg" alt="{{ budget.category.name }}">
-
+                <img [src]="getIconImage()">
                 <p class="paddingL" id="mainName">{{ categoryName }}</p>
               </div>
               <div class="col s4 right-align">

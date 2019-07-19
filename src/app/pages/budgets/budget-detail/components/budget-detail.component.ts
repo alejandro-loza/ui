@@ -1,15 +1,17 @@
 //@ts-ignore
-import {Component, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 //@ts-ignore
 import { ActivatedRoute, Router } from '@angular/router';
 import { BudgetsBeanService } from '@services/budgets/budgets-bean.service';
 import { CategoriesBeanService } from '@services/categories/categories-bean.service';
+import { CategoriesHelperService } from '@services/categories/categories-helper.service';
 import { ToastService } from '@services/toast/toast.service';
 import { BudgetsService } from '@services/budgets/budgets.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
 import * as M from 'materialize-css/dist/js/materialize';
 import { isNullOrUndefined } from 'util';
+import { SubBudget } from '@app/interfaces/budgets/new-budget.interface';
 
 @Component({
 	selector: 'app-budget-detail',
@@ -19,13 +21,14 @@ import { isNullOrUndefined } from 'util';
 export class BudgetDetailComponent implements OnInit, AfterViewInit {
 	categoryName: string = '';
 	budget: Budget = null;
-	subBudgets: Budget[] = [];
+	subBudgets: SubBudget[] = [];
 	percentageAmountTotal: number = 0;
 	percentageBudgets: number = 0;
 	porEjecutarAmountTotal: number = 0;
 	showScreen: boolean = false;
 	showSpinner: boolean = false;
-	@ViewChild('deleteModal', {static: false}) elModal: ElementRef;
+	@ViewChild('deleteModal', { static: false })
+	elModal: ElementRef;
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
@@ -34,7 +37,8 @@ export class BudgetDetailComponent implements OnInit, AfterViewInit {
 		private categoriesBeanService: CategoriesBeanService,
 		private router: Router,
 		private toastService: ToastService,
-		private mixpanelService: MixpanelService
+		private mixpanelService: MixpanelService,
+		private categoriesHelperService: CategoriesHelperService
 	) {}
 
 	ngOnInit() {
@@ -42,7 +46,7 @@ export class BudgetDetailComponent implements OnInit, AfterViewInit {
 		if (!isNullOrUndefined(this.budgetsBeanService.getBudgetToViewDetails())) {
 			this.budget = this.budgetsBeanService.getBudgetToViewDetails();
 			this.budgetsBeanService.setBudgetToEdit(this.budget);
-			this.budgetsBeanService.setCategoryToSharedComponent(this.budget.category);
+			this.settingCategory();
 			this.getSubBudgets();
 			this.showScreen = true;
 		} else {
@@ -52,6 +56,13 @@ export class BudgetDetailComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit() {
 		const ELMODAL = new M.Modal(this.elModal.nativeElement);
+	}
+
+	settingCategory() {
+		let categories = this.categoriesBeanService.getCategories();
+		this.budgetsBeanService.setCategoryToSharedComponent(
+			this.categoriesHelperService.getCategoryById(this.budget.categoryId, categories)
+		);
 	}
 
 	getSubBudgets() {
@@ -114,13 +125,17 @@ export class BudgetDetailComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	getIconImage(): String {
+	getIconImage(): string {
 		let url: string = 'https://cdn.finerio.mx/categories/web/color/';
-		if (isNullOrUndefined(this.budget.category.user)) {
-			let id = this.budget.category.id;
-			url = url + id + '.svg';
-		} else {
-			url = '/assets/media/img/categories/color/userCategory.svg';
+		let categories = this.categoriesBeanService.getCategories();
+		if (categories.length > 0) {
+			let category = this.categoriesHelperService.getCategoryById(this.budget.categoryId, categories);
+			if (isNullOrUndefined(category.userId)) {
+				let id = category.id;
+				url = url + id + '.svg';
+			} else {
+				url = '/assets/media/img/categories/color/userCategory.svg';
+			}
 		}
 		return url;
 	}
