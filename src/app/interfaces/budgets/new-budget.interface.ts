@@ -1,4 +1,5 @@
 import { Category } from '../category.interface';
+import { Budget } from './budget.interface';
 
 export interface NewBudget {
 	amount: number;
