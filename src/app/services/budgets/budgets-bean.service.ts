@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Budget } from '@app/interfaces/budgets/budget.interface';
+import { BudgetsResponse } from '@interfaces/budgets/budgetsResponse.interface';
 import { Category } from '@app/interfaces/category.interface';
 
 @Injectable({
@@ -7,6 +8,7 @@ import { Category } from '@app/interfaces/category.interface';
 })
 export class BudgetsBeanService {
 	private budgets: Budget[] = [];
+	private budgetResponse: BudgetsResponse = null;
 	private budgetToViewDetails: Budget = null;
 	private budgetToEdit: Budget = null;
 	private categoryToSharedComponent: Category = null;
@@ -21,6 +23,14 @@ export class BudgetsBeanService {
 
 	public getBudgets(): Budget[] {
 		return this.budgets;
+	}
+
+	public setBudgetResponse(data: BudgetsResponse) {
+		this.budgetResponse = data;
+	}
+
+	public getBudgetResponse(): BudgetsResponse {
+		return this.budgetResponse;
 	}
 
 	public setBudgetToViewDetails(data: Budget) {

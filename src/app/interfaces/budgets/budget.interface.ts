@@ -1,15 +1,12 @@
-import { Category } from '../category.interface';
+import { SubBudget } from './new-budget.interface';
 
 export interface Budget {
-	amount: number;
-	category: Category;
 	id: string;
+	amount: number;
 	name: string;
+	userId: string;
 	spentAmount: number;
 	spentPercentage: number;
-	subBudgets?: Budget[];
-	parent?: string;
-	user: {
-		id: string;
-	};
+	categoryId: string;
+	subBudgets?: SubBudget[];
 }
