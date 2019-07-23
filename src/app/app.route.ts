@@ -12,6 +12,10 @@ const AppRouting: Routes = [
     loadChildren: () => import('./pages/pages.module').then(module => module.PagesModule)
   },
   {
+    path: 'mobile',
+    loadChildren: () => import('./mobile/mobile.module').then(module => module.MobileModule)
+  },
+  {
     path: 'first-step',
    canActivate: [ AuthGuard ],
     loadChildren: () => import('./first-step/first-step.module').then(module => module.FirstStepModule)
