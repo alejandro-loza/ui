@@ -17,22 +17,55 @@ h3 {
 }
 
 .container-text {
-  margin-bottom: 10vw;
+  margin-bottom: 8vw;
 }
 
-.finni-img {
+.finni-img, .finni-large-devices {
   position: fixed;
   margin-left: 8vw;
-  margin-top: 5vw;
   z-index: 1;
 }
 
-@media only screen and (max-width: 600px) {
-  .width-access { width: 50vw; }
-  .finni-img { width: 95vw; }
+.container-QR {
+  width: 20vw;
 }
 
-@media only screen and (min-width: 601px) and ( max-width: 992px ) {
-  .width-access { width: 30vw; }
+@media only screen and (max-width: 360px) {
+  .finni-img { width: 80vw; margin-left: 10vw; }
+}
+
+@media only screen and (min-width: 361px) and (max-width: 374px) {
+  .finni-img { width: 60vw; margin-left: 20vw; }
+}
+
+@media only screen and (min-width: 375px) and (max-width: 400px) {
+  .finni-img { width: 80vw; margin-left: 10vw; margin-top: 10vw; }
+}
+
+@media only screen and (min-width: 401px) and (max-width: 480px) {
+  .finni-img { width: 80vw; margin-left: 10vw; margin-top: 20vw; }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 600px) {
+  .finni-img { width: 80vw; margin-left: 10vw; margin-top: 20vw; }
+}
+
+@media only screen and (min-width: 601px) and ( max-width: 760px ) {
   .container-logo { margin: 8vw 0; }
+  .finni-img { width: 50vw; margin-left: 23vw; margin-top: 10vw; }
+}
+
+@media only screen and (min-width: 761px) and ( max-width: 992px ) {
+  .container-logo { margin: 7vw 0; }
+  .finni-img { width: 50vw; margin-left: 23vw; margin-top: 10vw; }
+}
+
+
+@media only screen and (min-width: 992px) and ( max-width: 1200px ) {
+  h3 { font-size: 2vw; line-height: 4vw; margin-bottom: 0 }
+  .container-logo { margin: 3vw 0; }
+  .container-text { margin-bottom: 0; }
+  .finni-img { width: 50vw; margin-left: 23vw; margin-top: 10vw; }
+  .container-QR { width: 15vw; }
+  .finni-large-devices { width: 30vw; margin-left: 20vw; margin-top: 20vw;}
 }

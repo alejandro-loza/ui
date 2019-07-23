@@ -16,7 +16,7 @@ export class MobileComponent implements OnInit {
   ) {
     this.mobileOperatingSystem = this.mobileService.mobileOperatingSystem;
     if ( !this.mobileService.mobilecheck() ) {
-      this.router.navigate(['/access', 'login']);
+      // this.router.navigate(['/access', 'login']);
     }
   }
 

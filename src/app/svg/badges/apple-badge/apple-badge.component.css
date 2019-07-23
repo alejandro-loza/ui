@@ -2,10 +2,14 @@
   width: 45vw;
 }
 
-@media only screen and (max-width: 600px) {
-  #appleBadge{ width: 60vw; }
+@media only screen and ( max-width: 320px ) {
+  #appleBadge{ width: 40vw; }
 }
 
-@media only screen and (min-width: 601px) and ( max-width: 992px ) {
-  #appleBadge{ width: 25vw; }
+@media only screen and (min-width: 321px) and (max-width: 480px) {
+  #appleBadge{ width: 50vw; }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 600px) {
+  #appleBadge{ width: 50vw; }
 }
