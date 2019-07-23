@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   ) {
     this.user = {};
     if ( this.mobileService.mobilecheck() ) {
-      this.router.navigate(['access', 'forgot']);
+      this.router.navigate(['mobile']);
     }
   }
 

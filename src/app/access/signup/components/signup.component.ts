@@ -42,7 +42,7 @@ export class SignupComponent implements OnInit {
   ) {
     this.isButtonAvailable = false;
     if ( this.mobileService.mobilecheck() ) {
-      this.router.navigate(['access', 'forgot']);
+      this.router.navigate(['mobile']);
     }
   }
 
