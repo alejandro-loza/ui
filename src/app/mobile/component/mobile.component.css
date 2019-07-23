@@ -13,19 +13,26 @@ h3 {
 }
 
 .container-logo {
-  margin: 15vw 0;
+  margin: 10vw 0;
 }
 
 .container-text {
-  margin-bottom: 15vw;
+  margin-bottom: 10vw;
+}
+
+.finni-img {
+  position: fixed;
+  margin-left: 8vw;
+  margin-top: 5vw;
+  z-index: 1;
 }
 
 @media only screen and (max-width: 600px) {
   .width-access { width: 50vw; }
+  .finni-img { width: 95vw; }
 }
 
 @media only screen and (min-width: 601px) and ( max-width: 992px ) {
   .width-access { width: 30vw; }
   .container-logo { margin: 8vw 0; }
-
 }
