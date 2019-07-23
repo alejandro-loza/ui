@@ -1,0 +1,31 @@
+h3 {
+  font-size: 6vw;
+  line-height: 10vw;
+}
+
+.background {
+  min-height: 100%;
+  background-color: transparent;
+  background-image: linear-gradient(to top, #23328c, #213992, #1f4097, #1d469d, #1b4da2, #1656aa, #105fb2, #0a68b9, #0076c4, #0083cf, #0091d9, #099fe2);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.container-logo {
+  margin: 15vw 0;
+}
+
+.container-text {
+  margin-bottom: 15vw;
+}
+
+@media only screen and (max-width: 600px) {
+  .width-access { width: 50vw; }
+}
+
+@media only screen and (min-width: 601px) and ( max-width: 992px ) {
+  .width-access { width: 30vw; }
+  .container-logo { margin: 8vw 0; }
+
+}

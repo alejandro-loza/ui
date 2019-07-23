@@ -1,0 +1,36 @@
+<div class="background">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 center-align">
+        <div class="container-logo">
+          <app-finerio-logo
+            [svgClass]="'width-access animated fadeIn fast'"
+            [fillMainColor]="'fill-light-color'"
+            [fillAccentColor]="'fill-accent-color'">
+          </app-finerio-logo>
+        </div>
+        <div class="container-text animated fadeIn fast">
+          <h3 class="white-text">
+            <span class="finerio-accent-text-color">¡</span>
+            Disfruta la mejor
+            <br>
+            experiencia en
+            <br>
+            nuestra app móvil
+            <span class="finerio-accent-text-color">!</span>
+          </h3>
+        </div>
+        <div *ngIf="mobileOperatingSystem === 'android'">
+          <a href="https://play.google.com/store/apps/details?id=mx.finerio&referrer=utm_source%3DLandingPage" target="_blank">
+            <app-google-badge></app-google-badge>
+          </a>
+        </div>
+        <div *ngIf="mobileOperatingSystem === 'iOS'">
+          <a href="https://itunes.apple.com/app/apple-store/id1323885804?pt=118775036&ct=LandingPage&mt=8" target="_blank">
+            <app-apple-badge></app-apple-badge>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
