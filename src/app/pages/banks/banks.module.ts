@@ -9,8 +9,15 @@ import { BanksRoutes } from './banks.routes';
 import { BackButtonModule } from '@components/back-button/back-button.module';
 
 @NgModule({
-	imports: [ SharedModule, BackButtonModule, BanksRoutes ],
-	declarations: [ BanksComponent, BankItemComponent ],
-	providers: []
+  imports: [
+    SharedModule,
+    BackButtonModule,
+    BanksRoutes
+  ],
+  declarations: [
+    BanksComponent,
+    BankItemComponent
+  ],
+  providers: [],
 })
 export class BanksModule {}

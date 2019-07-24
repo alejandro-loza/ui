@@ -14,6 +14,8 @@ import {Subscription} from 'rxjs';
 import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
 import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
 import {CredentialService} from '@services/credentials/credential.service';
+import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-credential',
@@ -49,6 +51,7 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
     private accountService: AccountService,
     private credentialService: CredentialService,
     private checkDataCredentialService: CheckDataCredentialService,
+    public matDialog:                       MatDialog,
     private methodCredentialService: MethodCredentialService,
     private pollingCredentialService: PollingCredentialService,
     private statefulAccountsService: StatefulAccountsService,
@@ -77,7 +80,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
     this.windowPosition();
 
     this.fillInformationForEmptyState();
-
   }
 
   ngAfterViewInit(): void { }
@@ -145,7 +147,12 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   }
 
   getAccounts() {
-    this.accountService.getAccounts().subscribe( () => this.getAccounts());
+    if ( this.statefulAccountsService.accounts && this.statefulAccountsService.manualAccounts ) {
+      this.accounts = this.statefulAccountsService.accounts;
+      this.manualAccounts = this.statefulAccountsService.manualAccounts;
+    } else {
+      this.accountService.getAccounts().subscribe( () => this.getAccounts());
+    }
   }
 
   windowPosition() {

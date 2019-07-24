@@ -6,24 +6,28 @@ import {TrackingCredentialService} from '@services/credentials/tracking-credenti
 import {ToastService} from '@services/toast/toast.service';
 import {CleanerService} from '@services/cleaner/cleaner.service';
 import {AccountService} from '@services/account/account.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material';
 import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
+import {finalize} from 'rxjs/operators';
+import {isUndefined} from 'util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToastPollingService {
+  dialogRef: MatDialogRef<ModalTokenComponent>;
 
   constructor(
     private accountService:                 AccountService,
     private cleanerService:                 CleanerService,
     private interactiveFieldsService:       InteractiveFieldService,
-    private matDialog:                      MatDialog,
+    public matDialog:                       MatDialog,
     private toastService:                   ToastService,
     private trackingCredentialService:      TrackingCredentialService,
   ) { }
 
   showToast( credential: CredentialInterface, subscription: Subscription ): boolean {
+    const auxCredential = credential;
 
     this.toastService.setCode = 200;
 
@@ -43,12 +47,18 @@ export class ToastPollingService {
 
     } else if ( credential.status === 'TOKEN' ) {
 
-      this.matDialog.open(ModalTokenComponent, {
+      if ( !isUndefined(this.dialogRef) ) { return ; }
+
+      this.dialogRef = this.matDialog.open(ModalTokenComponent, {
         autoFocus: true,
         disableClose: true,
         width: '750px',
         data: credential
       });
+
+      this.dialogRef.afterClosed().pipe(
+        finalize( () => this.dialogRef = undefined )
+      );
 
       this.toastService.setMessage = `¡Necesitamos información extra de tu cuenta bancaria<br>para sincronizarla`;
 
