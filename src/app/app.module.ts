@@ -23,6 +23,8 @@ import { AppRoutes } from '@app/app.route';
 
 import { AppComponent } from '@app/app.component';
 import {StatefulModule} from '@stateful/stateful.module';
+import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
+import {ModalTokenModule} from '@components/modal-token/modal-token.module';
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -31,6 +33,7 @@ import {StatefulModule} from '@stateful/stateful.module';
     BrowserAnimationsModule,
     HttpClientModule,
     MatDialogModule,
+    ModalTokenModule,
     NgIdleKeepaliveModule.forRoot(),
     SharedModule,
     StatefulModule,
@@ -45,6 +48,9 @@ import {StatefulModule} from '@stateful/stateful.module';
     InstitutionService,
     ToastService,
     InterceptorProvider
+  ],
+  entryComponents: [
+    ModalTokenComponent
   ],
   bootstrap: [ AppComponent ]
 })

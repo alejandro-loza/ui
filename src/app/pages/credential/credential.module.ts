@@ -12,6 +12,7 @@ import { BackButtonModule } from '@components/back-button/back-button.module';
 import { AccountsTableComponent } from './accounts-table/accounts-table.component';
 import { ManualAccountItemComponent } from './manual-account-item/manual-account-item.component';
 import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
+import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
 
 @NgModule({
   imports: [

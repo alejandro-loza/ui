@@ -22,18 +22,14 @@ import { PagesComponent } from '@pages/pages.component';
   imports: [
     SharedModule,
     NavbarModule,
-    ModalTokenModule,
     PagesRoutes
   ],
-  exports: [],
   providers: [
     CategoriesService,
     CredentialService,
     MovementsService,
     FieldService
   ],
-  entryComponents: [
-    ModalTokenComponent
-  ]
+  exports: [],
 })
 export class PagesModule {}
