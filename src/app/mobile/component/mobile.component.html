@@ -1,0 +1,59 @@
+<div class="background">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 l6 center-align">
+        <div class="container-logo">
+          <app-finerio-logo
+            [svgClass]="'width-access animated fadeIn fast'"
+            [fillMainColor]="'fill-light-color'"
+            [fillAccentColor]="'fill-accent-color'">
+          </app-finerio-logo>
+        </div>
+        <div class="container-text animated fadeIn fast">
+          <h3 class="white-text hide-on-large-only hide-on-extra-large-only">
+            <span class="finerio-accent-text-color">¡</span>
+            Disfruta la mejor
+            <br>
+            experiencia en
+            <br>
+            nuestra app móvil
+            <span class="finerio-accent-text-color">!</span>
+          </h3>
+          <h3 class="white-text hide-on-med-and-down">
+            <span class="finerio-accent-text-color">¡</span>
+            Disfruta la mejor experiencia en nuestra app móvil
+            <span class="finerio-accent-text-color">!</span>
+          </h3>
+        </div>
+        <div *ngIf="mobileOperatingSystem === 'android'">
+          <a href="https://play.google.com/store/apps/details?id=mx.finerio&referrer=utm_source%3DLandingPage" target="_blank">
+            <app-google-badge></app-google-badge>
+          </a>
+        </div>
+        <div *ngIf="mobileOperatingSystem === 'iOS'">
+          <a href="https://itunes.apple.com/app/apple-store/id1323885804?pt=118775036&ct=LandingPage&mt=8" target="_blank">
+            <app-apple-badge></app-apple-badge>
+          </a>
+        </div>
+        <div *ngIf="mobileOperatingSystem !== 'iOS' && mobileOperatingSystem !== 'android'">
+          <div class="row">
+            <div class="col s6">
+              <h3 class="white-text">Google</h3>
+              <img  class="container-QR" src="http://www.codigos-qr.com/qr/php/qr_img.php?d=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dmx.finerio%26referrer%3Dutm_source%253DLandingPage&s=4&e=h" alt="Visita Google Play"/>
+            </div>
+            <div class="col s6">
+              <h3 class="white-text">Apple</h3>
+              <img class="container-QR" src="http://www.codigos-qr.com/qr/php/qr_img.php?d=https%3A%2F%2Fitunes.apple.com%2Fapp%2Fapple-store%2Fid1323885804%3Fpt%3D118775036%26ct%3DLandingPage%26mt%3D8&s=4&e=h" alt="Generador de Códigos QR Codes"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col m6 container-finni hide-on-med-and-down">
+        <img src="/assets/media/img/mobile/finni_app.png" alt="Finni Mobile" class="finni-large-devices">
+      </div>
+    </div>
+  </div>
+  <div class="container-finni hide-on-large-only hide-on-extra-large-only">
+    <img src="/assets/media/img/mobile/finni_app.png" alt="Finni Mobile" class="finni-img">
+  </div>
+</div>

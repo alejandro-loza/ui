@@ -3,7 +3,6 @@ import {AfterViewInit, Component, OnInit } from '@angular/core';
 import {AccountInterface} from '@interfaces/account.interfaces';
 import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 
-import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
 import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
@@ -14,6 +13,7 @@ import {Subscription} from 'rxjs';
 
 import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
 import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
+import {CredentialService} from '@services/credentials/credential.service';
 
 @Component({
   selector: 'app-credential',
@@ -47,6 +47,7 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
   constructor(
     private accountService: AccountService,
+    private credentialService: CredentialService,
     private checkDataCredentialService: CheckDataCredentialService,
     private methodCredentialService: MethodCredentialService,
     private pollingCredentialService: PollingCredentialService,
@@ -65,11 +66,9 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
   ngOnInit() {
 
-    this.credentials = this.statefulCredentialsService.credentials;
+    this.getAccounts();
 
-    this.accounts = this.statefulAccountsService.accounts;
-
-    this.manualAccounts = this.statefulAccountsService.manualAccounts;
+    this.getCredentials();
 
     this.credentials.forEach( credential => this.checkDataCredentialService.checkData( credential, this ));
 
@@ -135,6 +134,18 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
     setTimeout(() => this.checkDataCredentialService.checkData(credential, this), 0);
 
+  }
+
+  getCredentials() {
+    if (this.statefulCredentialsService.credentials) {
+      this.credentials = this.statefulCredentialsService.credentials;
+    } else {
+      this.credentialService.getAllCredentials().subscribe( ()  => this.getCredentials());
+    }
+  }
+
+  getAccounts() {
+    this.accountService.getAccounts().subscribe( () => this.getAccounts());
   }
 
   windowPosition() {
