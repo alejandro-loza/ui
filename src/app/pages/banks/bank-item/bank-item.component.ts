@@ -1,7 +1,14 @@
 import {Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { InstitutionInterface } from '@interfaces/institution.interface';
+
 import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
+import {OauthService} from '@services/oauth/oauth.service';
+
+import { InstitutionInterface } from '@interfaces/institution.interface';
+
+import {ModalAccountSyncComponent} from '@components/modal-account-sync/component/modal-account-sync.component';
+
 import * as M from 'materialize-css/dist/js/materialize';
 
 @Component({
@@ -17,7 +24,9 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: Router,
-    private statefulInstitution: StatefulInstitutionService
+    private statefulInstitution: StatefulInstitutionService,
+    private matDialog: MatDialog,
+    private oauthService: OauthService,
   ) {}
 
   ngOnInit() {}
@@ -39,6 +48,11 @@ export class BankItemComponent implements OnInit, AfterViewInit {
     if (institution.status === 'ACTIVE') {
 
       this.statefulInstitution.institution = institution;
+      if ( institution.id === 17 ) {
+        // this.oauthService.createCredential( institution );
+        this.openDialog();
+        return;
+      }
       return this.route.navigate(['/app', 'banks', institution.code]);
 
     } else {
@@ -46,5 +60,17 @@ export class BankItemComponent implements OnInit, AfterViewInit {
       this.bankOutOfService.emit(true);
 
     }
+  }
+  openDialog(event?: Event) {
+    let matDialogConfig: MatDialogConfig<any>;
+    matDialogConfig = {
+      autoFocus: true,
+      disableClose: false,
+      closeOnNavigation: false,
+      restoreFocus: true,
+      width: '20%',
+      panelClass: 'custom-dialog'
+    };
+    const matDialogRef = this.matDialog.open(ModalAccountSyncComponent, matDialogConfig);
   }
 }

@@ -86,7 +86,6 @@ export class BankFormComponent implements OnInit, AfterViewInit {
 
     this.field.findAllFieldsByInstitution(this.institution.code)
       .subscribe(res => {
-
         this.institutionField = res.body;
         this.institutionField = this.institutionField.filter(field => field.name !== 'sec_code');
         this.institutionField.forEach(field => this.getErrorMessage(field));

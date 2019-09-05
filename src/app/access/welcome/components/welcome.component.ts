@@ -19,6 +19,7 @@ import {PollingCredentialService} from '@services/credentials/polling-credential
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
 import {ToastCredentialService} from '@services/toast/credential/toast-credential/toast-credential.service';
+import {InstitutionInterface} from '@interfaces/institution.interface';
 
 @Component({
   selector: 'app-welcome',
@@ -93,8 +94,18 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   getInstitutions() {
     this.institutionSubscription = this.institutionsService.getAllInstitutions()
-      .subscribe(res =>
-          this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO')
+      .subscribe(res => {
+        const banRegioMock: InstitutionInterface = {
+          id: 17,
+          code: 'BANREGIO',
+          name: 'BanRegio',
+          status: 'ACTIVE',
+        };
+        const mockInstitution = [ ...res.body.data, banRegioMock ];
+
+        this.statefulInstitutions.institutions = mockInstitution.filter(institution => institution.code !== 'DINERIO');
+
+        }
       );
   }
 

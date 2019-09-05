@@ -14,6 +14,7 @@ import {Response} from '@interfaces/response.interface';
 
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {CredentialCreateModel} from '@app/model/credential/credential.create.model';
 
 @Injectable({
   providedIn: 'root'
@@ -56,7 +57,7 @@ export class CredentialService {
       ));
   }
 
-  createCredential( credential: CreateCredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
+  createCredential( credential: CreateCredentialInterface | CredentialCreateModel ): Observable<HttpResponse<CredentialInterface>> {
     const id = this.configService.getUser.id;
     const url = `${environment.backendUrl}/users/${ id }/credentials`;
     const postBody = JSON.stringify(credential);
