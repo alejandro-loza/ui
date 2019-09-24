@@ -12,5 +12,4 @@ export interface CredentialInterface {
   user: User;
   username: string;
   password?: string;
-  redirectUri?: string;
 }

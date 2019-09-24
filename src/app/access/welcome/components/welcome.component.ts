@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@services/auth/auth.service';
 import { ToastService } from '@services/toast/toast.service';
@@ -21,6 +21,7 @@ import {FilterAccountsService} from '@services/account/filter-accounts/filter-ac
 import {ToastCredentialService} from '@services/toast/credential/toast-credential/toast-credential.service';
 import {InstitutionInterface} from '@interfaces/institution.interface';
 import {FirebaseRequestService} from '@services/firebase/request/firebase-request.service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-welcome',
@@ -36,6 +37,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private accountService: AccountService,
+    private angularFireAuth: AngularFireAuth,
     private authService: AuthService,
     private configService: ConfigService,
     private credentialService: CredentialService,
@@ -98,18 +100,8 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   getInstitutions() {
     this.institutionSubscription = this.institutionsService.getAllInstitutions()
       .subscribe(res => {
-        const banRegioMock: InstitutionInterface = {
-          id: 17,
-          code: 'BANREGIO',
-          name: 'BanRegio',
-          status: 'ACTIVE',
-        };
-        const mockInstitution = [ ...res.body.data, banRegioMock ];
-
-        this.statefulInstitutions.institutions = mockInstitution.filter(institution => institution.code !== 'DINERIO');
-
-        }
-      );
+        this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO');
+      });
   }
 
   getCredentials() {
@@ -137,7 +129,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   }
 
   getFirebaseToken() {
-    this.firebaseRequestService.getFirebaseToken().subscribe();
+    this.firebaseRequestService.getFirebaseToken().subscribe( );
   }
 
   goToPage(accounts: AccountInterface[]) {

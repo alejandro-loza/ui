@@ -11,7 +11,7 @@ import {environment} from '@env/environment.prod';
 
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {FirebaseConfigService} from '@services/firebase/config/firebase-config.service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,8 @@ import {FirebaseConfigService} from '@services/firebase/config/firebase-config.s
 export class FirebaseRequestService implements FirebaseRequestInterface {
 
   constructor(
+    private angularFireAuth: AngularFireAuth,
     private configService: ConfigService,
-    private firebaseConfigService: FirebaseConfigService,
     private httpClient: HttpClient,
     private statefulFirebaseService: StatefulFirebaseService,
   ) {
@@ -39,8 +39,7 @@ export class FirebaseRequestService implements FirebaseRequestInterface {
     ).pipe(
       map( res => {
         this.statefulFirebaseService.token = res.body.customToken;
-        const auth = this.firebaseConfigService.auth.signInWithCustomToken( res.body.customToken );
-        auth.then( firebase_res => console.log(firebase_res)).catch( error => console.error( 'Ocurrió un error', error ));
+        this.angularFireAuth.auth.signInWithCustomToken( res.body.customToken ).then();
         return res;
       })
     );

@@ -10,6 +10,10 @@ import { InstitutionInterface } from '@interfaces/institution.interface';
 import {ModalAccountSyncComponent} from '@components/modal-account-sync/component/modal-account-sync.component';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import {Observable} from 'rxjs';
+import {OAuthOptionsModel} from '@model/oAuth/oAuth.options.model';
+import {CredentialStatusEnum} from '@interfaces/credentials/oAuth/credential-status.enum';
+import {isNull} from "util";
 
 @Component({
   selector: 'app-bank-item',
@@ -48,10 +52,31 @@ export class BankItemComponent implements OnInit, AfterViewInit {
     if (institution.status === 'ACTIVE') {
 
       this.statefulInstitution.institution = institution;
-      if ( institution.id === 17 ) {
-        // this.oauthService.createCredential( institution );
-        this.openDialog();
+
+      if ( institution.code === 'BANREGIO' ) {
+
+        const unsubscribeCreateCredential = this.oauthService.validateCredential( institution ).subscribe(
+
+          res => {
+
+            const oAuthOption = new OAuthOptionsModel(res.body.authorizationUri, 'Finerio_/_Connect_With_BanRegio', 'location=0,status=0,centerscreen=1,width=1000,height=1000', res.body);
+
+            const window = this.createOAuth( oAuthOption );
+
+            const checkOauth = this.checkOauth( res.body );
+
+            const credentialStatus = CredentialStatusEnum;
+
+            const unsubscribeCheckOauth = checkOauth.subscribe( auxRes => {
+              if ( credentialStatus[auxRes.status] && !isNull(auxRes.status) ) {
+                window.close();
+              }
+              console.log(auxRes);
+            });
+
+          });
         return;
+
       }
       return this.route.navigate(['/app', 'banks', institution.code]);
 
@@ -61,6 +86,7 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
     }
   }
+
   openDialog(event?: Event) {
     let matDialogConfig: MatDialogConfig<any>;
     matDialogConfig = {
@@ -73,4 +99,5 @@ export class BankItemComponent implements OnInit, AfterViewInit {
     };
     const matDialogRef = this.matDialog.open(ModalAccountSyncComponent, matDialogConfig);
   }
+
 }

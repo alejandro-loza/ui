@@ -1,53 +1,58 @@
-import { Injectable } from '@angular/core';
-import {CreateCredentialInterface} from '@interfaces/credentials/createCredential.interface';
-import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
-import {CredentialService} from '@services/credentials/credential.service';
+import {Injectable} from '@angular/core';
+import {AngularFireDatabase} from '@angular/fire/database';
+import {AngularFirestore} from '@angular/fire/firestore';
+
 import {InstitutionInterface} from '@interfaces/institution.interface';
-import {CredentialCreateModel} from '@app/model/credential/credential.create.model';
-import {OAuthOptionsModel} from '@app/model/oAuth/oAuth.options.model';
-import {isUndefined} from 'util';
+
+import {CredentialInterface} from '@interfaces/credentials/credential.interface';
+
+import {CredentialCreateModel} from '@model/credential/credential.create.model';
+import {OAuthOptionsModel} from '@model/oAuth/oAuth.options.model';
+
+import {Observable} from 'rxjs';
+import {CredentialService} from '@services/credentials/credential.service';
+import {CredentialOauthResponse} from '@interfaces/credentials/oAuth/credential-oauth-response';
+import {CredentialStatusEnum} from '@interfaces/credentials/oAuth/credential-status.enum';
+import {isNull} from 'util';
+import {HttpResponse} from '@angular/common/http';
+import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OauthService {
-  private window: Window;
-  private loopCount: number;Z
+  private credential: CredentialInterface;
+  private intervalID: any;
+
   constructor(
-    private statefulInstitution: StatefulInstitutionService,
+    private angularFirestore: AngularFirestore,
+    private angularFireDatabase: AngularFireDatabase,
     private credentialService: CredentialService,
   ) { }
 
-  createCredential( institution: InstitutionInterface ) {
-    let oAuthOptions: OAuthOptionsModel;
+  validateCredential( institution: InstitutionInterface ): Observable<HttpResponse<CredentialOauth>> {
+
     const oAuthCredential: CredentialCreateModel = new CredentialCreateModel( institution );
-    const url = 'https://sandbox.banregio.com/oauth/authorize?response_type=code&client_id=aZfySrNbI40Ezf5pCxAAcp7YtuZo3' +
-      '0VKWVDlp4ln&redirect_uri=http://40.87.6.75/api/banregio/oauth2/authorize&state=eyJBcHBsaWNhdGlvbklkIjoiMSIsIkNyZW' +
-      'RlbnRpYWxJZCI6ImUxZGNjNDUwLTI2NzctNDM3ZS1iMTNkLWJiODU1YmIwZWZhNyIsIlJlZGlyZWN0VXJpIjoiaHR0cDovL2Fyb25wdW5hbC5jb20iLCJTdGF0ZSI6bnVsbH0=';
-    oAuthOptions = new OAuthOptionsModel(url, 'Finerio_/_Connect_With_BanRegio', 'location=0,status=0,centerscreen=1,width=1000,height=1000');
-    this.createOAuth( oAuthOptions );
-    this.doAuthorization();
-    // this.credentialService.createCredential(oAuthCredential).subscribe(
-    //   res => {
-    //     if ( res.body.redirectUri ) {
-    //       oAuthOptions = new OAuthOptionsModel(res.body.redirectUri, 'Finerio_/_Connect_With_BanRegio', 'location=0,status=0,centerscreen=1,width=1000,height=1000');
-    //        this.createOAuth( this.oAuthOptions );
-    //     }
-    //   }
-    // );
-  }
 
-  private createOAuth( oAuthOptions: OAuthOptionsModel ) {
-    // todo Aquí se va a crear el oAuth, por medio de un popup
-    let oAuthWindow: Window;
-
-    ( !isUndefined(oAuthWindow) && oAuthWindow.closed ) ? oAuthWindow.focus() : oAuthWindow = window.open( oAuthOptions.url, oAuthOptions.windowsName, oAuthOptions.options );
+    return this.credentialService.createCredential(oAuthCredential);
 
   }
 
-  private doAuthorization() {
+  private createOAuth( oAuthOptions: OAuthOptionsModel ): Window {
+
+    return window.open( oAuthOptions.url, oAuthOptions.windowsName, oAuthOptions.options );
 
   }
 
+  closeOauth(window: Window) {
+    window.clearInterval(this.intervalID);
+    window.close();
+  }
+
+  checkOauth( credential: CredentialInterface ): Observable<CredentialOauthResponse> {
+
+    return this.angularFireDatabase.object<CredentialOauthResponse>(`/credentials/${credential.id}`).valueChanges();
+
+  }
 
 }

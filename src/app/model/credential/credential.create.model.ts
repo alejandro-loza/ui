@@ -1,7 +1,7 @@
 import {CreateCredentialInterface} from '@interfaces/credentials/createCredential.interface';
 import {InstitutionInterface} from '@interfaces/institution.interface';
 
-export class CredentialCreateModel implements  CreateCredentialInterface {
+export class CredentialCreateModel implements CreateCredentialInterface {
   institution: InstitutionInterface;
   password: string;
   securityCode: string;
