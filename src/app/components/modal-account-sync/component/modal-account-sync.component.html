@@ -3,8 +3,8 @@
 </div>
 <div class="row center-align">
   <div class="col s8">
-    <p class="finerio-main-text-color nameAccount">
-      <b>{{ nameAccount }}</b>
+    <p class="finerio-main-text-color nameAccount" *ngIf="credentialOauth">
+      <b>{{ credentialOauth | json }}</b>
     </p>
   </div>
   <div class="col s2 offset-s1">

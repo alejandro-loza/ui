@@ -38,15 +38,10 @@ export class OauthService {
 
   }
 
-  private createOAuth( oAuthOptions: OAuthOptionsModel ): Window {
+  createOAuth( oAuthOptions: OAuthOptionsModel ): Window {
 
     return window.open( oAuthOptions.url, oAuthOptions.windowsName, oAuthOptions.options );
 
-  }
-
-  closeOauth(window: Window) {
-    window.clearInterval(this.intervalID);
-    window.close();
   }
 
   checkOauth( credential: CredentialInterface ): Observable<CredentialOauthResponse> {
