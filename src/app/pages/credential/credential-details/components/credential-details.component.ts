@@ -21,7 +21,6 @@ import {StatefulCredentialService} from '@stateful/credential/stateful-credentia
 import {DateApiService} from '@services/date-api/date-api.service';
 import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
-import {StatefulAccountService} from '@stateful/account/stateful-account.service';
 
 @Component({
   selector: 'app-credential-details',
@@ -71,10 +70,15 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   getData() {
+
     this.credential = this.statefulCredential.credential;
+
     this.institutions = this.statefulInstitutions.institutions;
+
     this.getFields();
+
     this.accounts = this.statefulAccounts.accounts.filter(account => account.institution.code === this.credential.institution.code);
+
   }
 
   getFields() {

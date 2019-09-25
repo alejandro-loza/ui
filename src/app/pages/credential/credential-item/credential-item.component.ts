@@ -50,6 +50,6 @@ export class CredentialItemComponent implements OnInit {
 
   goToDetail( credential: CredentialInterface ) {
     this.statefulCredential.credential = credential;
-    this.router.navigate(['/app', 'credentials', credential.id]);
+    this.router.navigate(['/app', 'credentials', credential.id]).then();
   }
 }
