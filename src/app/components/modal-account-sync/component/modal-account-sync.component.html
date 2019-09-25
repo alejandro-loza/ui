@@ -1,11 +1,11 @@
 <div class="container center-align">
   <img class="bankLogo" [alt]="institution.code" [src]="'assets/media/img/banks/'+institution.code+'.png'" />
 </div>
-<div class="row center-align">
+<div class="row center-align" *ngIf="credentialOauth && credentialOauth.account">
   <div class="col s8">
-    <p class="finerio-main-text-color nameAccount" *ngIf="credentialOauth">
-      <b>{{ credentialOauth | json }}</b>
-    </p>
+    <small class="finerio-main-text-color">
+      <b>No. de Cuenta: {{ credentialOauth.account.name | json }}</b>
+    </small>
   </div>
   <div class="col s2 offset-s1">
     <div *ngIf="isLoading; then thenLoadingAnimation else elseFinishedAnimation"></div>
