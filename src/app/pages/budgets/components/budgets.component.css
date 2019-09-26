@@ -72,3 +72,7 @@ img {
 .collection-item {
 	cursor: pointer;
 }
+
+.card {
+  transform: translate(0, 0);
+}

@@ -182,6 +182,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
   }
 
   saveData(ngForm: NgForm) {
+    this.canShowSpinner = true;
     this.id === 'new-movement' ?
       (
         (this.manualAccount === undefined) ?
@@ -219,7 +220,6 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
   }
 
   editMovement() {
-    this.canShowSpinner = true;
     this.movement.concepts[0] = {...this.movement.concepts[0], category: this.category};
     this.movementService.updateMovement(this.movement).subscribe(
       res => {

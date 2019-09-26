@@ -27,7 +27,7 @@ export class MethodCredentialService implements CredentialUpdateResponse{
 
   updateCredential( credential: CredentialInterface ) {
 
-    if ( this.dateApiService.hasMoreThanEightHours(credential.lastUpdated) ) {
+    if ( this.dateApiService.hasMoreThanEightHours(credential.lastUpdated) || credential.status === 'INVALID' ) {
 
       this.credentialsService.updateCredential(credential).subscribe(
 

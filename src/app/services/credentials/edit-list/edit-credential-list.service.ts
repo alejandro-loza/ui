@@ -57,7 +57,6 @@ export class EditCredentialListService {
 
     });
 
-    this.cleanData();
 
   }
 
@@ -73,11 +72,7 @@ export class EditCredentialListService {
 
   private cleanData() {
 
-    this.cleanerService.cleanDashboardVariables();
-    this.cleanerService.cleanBudgetsVariables();
-    this.cleanerService.cleanMovements();
-
-    this.statefulCredentials.credentials = this.credentials;
+    this.cleanerService.cleanAllVariables();
 
   }
 

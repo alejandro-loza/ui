@@ -32,6 +32,7 @@ export class CleanerService {
   ) {}
 
   cleanAllVariables() {
+
     this.cleanDashboardVariables();
 
     this.cleanBudgetsVariables();
@@ -49,8 +50,6 @@ export class CleanerService {
     this.cleanAccounts();
 
     this.cleanCredentials();
-
-    this.cleanInstitutions();
 
   }
 

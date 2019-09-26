@@ -100,9 +100,11 @@
           <div class="col s12 center-align">
             <div *ngIf="id === 'new-movement'; then newMovementButton else editMovementButton"></div>
             <ng-template #newMovementButton>
-              <button class="btn btn-large btn-submit" id="submitButton" [disabled]="forma.invalid" type="submit">Crear Movimiento
-                <i class="material-icons right">send</i>
-              </button>
+              <div *ngIf="!canShowSpinner; else finishEdit" class="buttons-edit-container">
+                <button class="btn btn-large btn-submit" id="submitButton" [disabled]="forma.invalid" type="submit">Crear Movimiento
+                  <i class="material-icons right">send</i>
+                </button>
+              </div>
             </ng-template>
             <ng-template #editMovementButton>
               <div *ngIf="!canShowSpinner; else finishEdit" class="buttons-edit-container">
@@ -114,9 +116,6 @@
                   <i class="material-icons right">send</i>
                 </button>
               </div>
-              <ng-template #finishEdit>
-                <app-spinner></app-spinner>
-              </ng-template>
             </ng-template>
           </div>
         </div>
@@ -166,3 +165,8 @@
     </div>
   </div>
 </div>
+
+
+<ng-template #finishEdit>
+  <app-spinner></app-spinner>
+</ng-template>

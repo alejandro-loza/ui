@@ -1,20 +1,15 @@
-<ng-container *ngIf="concepts?.length > 1; then multicategorias; else simplecategoria"></ng-container>
-<!-- Si el movimiento tiene más de un concepto se mandan los parametros de tipo Multicategoría. -->
-<ng-template #multicategorias>
-    <div class="multicategory-margin">
-        <app-category-movement [category]="multiCategory"></app-category-movement>
-    </div>
-</ng-template>
+<div class="multicategory-margin" *ngIf="concepts?.length > 1 else simplecategoria">
+  <app-category-movement [category]="multiCategory"></app-category-movement>
+</div>
 
 <ng-template #simplecategoria>
-    <ng-container *ngIf="concepts[0].category; then conCategoria; else sinCategoria"></ng-container>
-    <!-- Si tiene una categoría se pinta con sus respectivos parametros -->
-    <ng-template #conCategoria>
-        <app-category-movement [category]="concepts[0].category"></app-category-movement>
-    </ng-template>
-    ￼
-    <ng-template #sinCategoria>
-        <!-- Caso contrario se mandan los parametros definidos para los movimientos sin categoria -->
-        <app-category-movement [category]="noCategory"></app-category-movement>
-    </ng-template>
+
+  <div *ngIf="concepts[0].category else sinCategoria">
+    <app-category-movement [category]="concepts[0].category"></app-category-movement>
+  </div>
+
+  <ng-template #sinCategoria>
+    <app-category-movement [category]="noCategory"></app-category-movement>
+  </ng-template>
+
 </ng-template>
