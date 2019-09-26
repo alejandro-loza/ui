@@ -131,14 +131,8 @@ export class MovementsComponent implements OnInit, OnDestroy {
     this.movementList = this.statefulMovementsService.getMovements;
     this.showEmptyState = this.movementList.length <= 0;
     this.isLoading = false;
+    this.spinnerBoolean = false;
     this.paramsMovements.offset = this.movementList.length;
-  }
-
-  refreshMovement() {
-    this.paramsMovements = this.paramsMovementsService.getParamsMovements;
-    this.paramsMovements.offset = 0;
-    this.movementList = [];
-    this.getMovements();
   }
 
   fillInformationForEmptyState() {

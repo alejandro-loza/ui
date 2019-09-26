@@ -14,7 +14,6 @@ import {Subscription} from 'rxjs';
 import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
 import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
 import {CredentialService} from '@services/credentials/credential.service';
-import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
 import {MatDialog} from '@angular/material';
 
 @Component({
@@ -73,13 +72,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
     this.getCredentials();
 
-    this.credentials.forEach( credential => this.checkDataCredentialService.checkData( credential, this ));
-
-    this.emptyStateProcess();
-
-    this.windowPosition();
-
-    this.fillInformationForEmptyState();
   }
 
   ngAfterViewInit(): void { }
@@ -115,8 +107,17 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   }
 
   emptyStateProcess() {
-    this.showEmptyState = this.credentials.length === 0 && this.accounts.length === 0 && this.manualAccounts.length === 0;
+
+    if ( this.accounts && this.manualAccounts ) {
+      this.showEmptyState = this.credentials.length === 0 && ( this.accounts.length === 0 && this.manualAccounts.length === 0 );
+    } else if ( this.accounts || this.manualAccounts ) {
+      this.showEmptyState = this.credentials.length === 0 && ( this.accounts.length === 0 || this.manualAccounts.length === 0 );
+    } else {
+      this.showEmptyState = this.credentials.length === 0;
+    }
+
     this.showSpinner = false;
+
   }
 
   fillInformationForEmptyState() {
@@ -141,15 +142,29 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   getCredentials() {
     if (this.statefulCredentialsService.credentials) {
       this.credentials = this.statefulCredentialsService.credentials;
+
+      this.credentials.forEach( credential => this.checkDataCredentialService.checkData( credential, this ));
+
+      this.emptyStateProcess();
+
+      this.windowPosition();
+
+      this.fillInformationForEmptyState();
+
     } else {
-      this.credentialService.getAllCredentials().subscribe( ()  => this.getCredentials());
+      this.credentialService.getAllCredentials().subscribe( res => {
+        this.getCredentials();
+      });
     }
   }
 
   getAccounts() {
+
     if ( this.statefulAccountsService.accounts && this.statefulAccountsService.manualAccounts ) {
+
       this.accounts = this.statefulAccountsService.accounts;
       this.manualAccounts = this.statefulAccountsService.manualAccounts;
+
     } else {
       this.accountService.getAccounts().subscribe( () => this.getAccounts());
     }

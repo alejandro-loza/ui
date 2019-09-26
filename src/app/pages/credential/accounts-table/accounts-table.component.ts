@@ -11,6 +11,7 @@ import {PollingCredentialService} from '@services/credentials/polling-credential
 import {Subscription} from 'rxjs';
 import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
 import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
+import {CredentialService} from '@services/credentials/credential.service';
 
 @Component({
   selector: 'app-accounts-table',
@@ -40,17 +41,13 @@ export class AccountsTableComponent implements OnInit, AfterViewInit, Credential
     private statefulBalanceAccountService: StatefulBalanceAccountService,
     private statefulCredentialsService: StatefulCredentialsService,
     private pollingCredentialService: PollingCredentialService,
-    private checkDataCredentialService: CheckDataCredentialService
+    private checkDataCredentialService: CheckDataCredentialService,
+    private credentialService: CredentialService
   ) {}
 
   ngOnInit() {
-    this.credentials = this.statefulCredentialsService.credentials;
 
-    this.credentials.forEach( credential => this.checkDataCredentialService.checkData(credential, this));
-
-    this.getNumbers();
-
-    this.getLists();
+    this.getCredentials();
 
   }
 
@@ -96,6 +93,23 @@ export class AccountsTableComponent implements OnInit, AfterViewInit, Credential
 
       this.getNumbers();
 
+    }
+
+  }
+
+  getCredentials() {
+    if ( this.statefulCredentialsService.credentials ) {
+
+      this.credentials = this.statefulCredentialsService.credentials;
+
+      this.credentials.forEach( credential => this.checkDataCredentialService.checkData(credential, this));
+
+      this.getNumbers();
+
+      this.getLists();
+
+    } else {
+      this.credentialService.getAllCredentials().subscribe( () => this.getCredentials());
     }
   }
 }

@@ -21,7 +21,6 @@ import {StatefulCredentialService} from '@stateful/credential/stateful-credentia
 import {DateApiService} from '@services/date-api/date-api.service';
 import {StatefulAccountsService} from '@stateful/accounts/stateful-accounts.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
-import {StatefulAccountService} from '@stateful/account/stateful-account.service';
 
 @Component({
   selector: 'app-credential-details',
@@ -71,10 +70,15 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   getData() {
+
     this.credential = this.statefulCredential.credential;
+
     this.institutions = this.statefulInstitutions.institutions;
+
     this.getFields();
+
     this.accounts = this.statefulAccounts.accounts.filter(account => account.institution.code === this.credential.institution.code);
+
   }
 
   getFields() {
@@ -96,7 +100,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   updateCredential(credential: CredentialInterface, data: NgForm) {
-    this.dateApi.hasMoreThanEightHours(credential.lastUpdated) ?
+    this.dateApi.hasMoreThanEightHours(credential.lastUpdated) || credential.status === 'INVALID' ?
       ( (credential.status === 'ACTIVE') ?
           this.activeCredential(credential) :
           this.invalidCredential(credential, data)
@@ -171,9 +175,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       (res) => {
         this.getAccounts();
 
-        this.cleanerService.cleanDashboardVariables();
-        this.cleanerService.cleanBudgetsVariables();
-        this.cleanerService.cleanMovements();
+        this.cleanerService.cleanAllVariables();
 
         this.toastService.setCode = res.status;
       },
