@@ -51,8 +51,7 @@ export class CategoryWorkshopComponent implements OnInit {
   }
 
   submitCategory() {
-    this.cleanerService.cleanBudgetsVariables();
-    this.cleanerService.cleanDashboardVariables();
+    this.cleanerService.cleanAllVariables();
     this.editMode ? this.updateCategory() : this.createCategory();
   }
 

@@ -51,11 +51,7 @@ export class EditMovementListService {
 
     (this.dateChanged) ? this.statefulMovementsService.setMovements = undefined : this.statefulMovementsService.setMovements = this.movementList;
 
-    this.cleanerService.cleanDashboardVariables();
-
-    this.cleanerService.cleanBudgetsVariables();
-
-    this.cleanerService.cleanCredentialsVariables();
+    this.cleanerService.cleanAllVariables();
 
     this.dateChanged = false;
 

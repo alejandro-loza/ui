@@ -100,7 +100,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   updateCredential(credential: CredentialInterface, data: NgForm) {
-    this.dateApi.hasMoreThanEightHours(credential.lastUpdated) ?
+    this.dateApi.hasMoreThanEightHours(credential.lastUpdated) || credential.status === 'INVALID' ?
       ( (credential.status === 'ACTIVE') ?
           this.activeCredential(credential) :
           this.invalidCredential(credential, data)
@@ -175,9 +175,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
       (res) => {
         this.getAccounts();
 
-        this.cleanerService.cleanDashboardVariables();
-        this.cleanerService.cleanBudgetsVariables();
-        this.cleanerService.cleanMovements();
+        this.cleanerService.cleanAllVariables();
 
         this.toastService.setCode = res.status;
       },

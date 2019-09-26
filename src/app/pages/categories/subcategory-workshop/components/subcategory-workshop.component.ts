@@ -53,8 +53,7 @@ export class SubcategoryWorkshopComponent implements OnInit {
 
 	submitFunction() {
 		this.showSpinner = true;
-		this.cleanerService.cleanBudgetsVariables();
-		this.cleanerService.cleanDashboardVariables();
+		this.cleanerService.cleanAllVariables();
 		this.editMode ? this.updateSubcategory() : this.createSubcategory();
 	}
 
