@@ -19,8 +19,9 @@ import { ConfigParamsService } from '@params/config/config-params.service';
 import { InstitutionService } from '@services/institution/institution.service';
 
 import { SharedModule } from '@shared/shared.module';
-import { AppRoutes } from '@app/app.route';
+import { FirebaseModule } from './firebase/firebase.module';
 
+import { AppRoutes } from '@app/app.route';
 import { AppComponent } from '@app/app.component';
 import {StatefulModule} from '@stateful/stateful.module';
 import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
@@ -31,6 +32,7 @@ import {ModalTokenModule} from '@components/modal-token/modal-token.module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FirebaseModule,
     HttpClientModule,
     MatDialogModule,
     ModalTokenModule,

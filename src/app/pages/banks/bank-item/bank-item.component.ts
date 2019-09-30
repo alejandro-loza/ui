@@ -1,8 +1,18 @@
-import {Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
-import { Router } from '@angular/router';
-import { InstitutionInterface } from '@interfaces/institution.interface';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+
 import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
+import {OauthService} from '@services/oauth/oauth.service';
+
+import {InstitutionInterface} from '@interfaces/institution.interface';
+
+import {ModalAccountSyncComponent} from '@components/modal-account-sync/component/modal-account-sync.component';
+
 import * as M from 'materialize-css/dist/js/materialize';
+import {OAuthOptionsModel} from '@model/oAuth/oAuth.options.model';
+import {CredentialStatusEnum} from '@interfaces/credentials/oAuth/credential-status.enum';
+import {isNull} from 'util';
 
 @Component({
   selector: 'app-bank-item',
@@ -15,9 +25,13 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
   @ViewChild('tooltip', {static: false}) elementTooltip: ElementRef;
 
+  private matDialogRef: MatDialogRef<any>;
+
   constructor(
     private route: Router,
-    private statefulInstitution: StatefulInstitutionService
+    private statefulInstitution: StatefulInstitutionService,
+    private matDialog: MatDialog,
+    private oauthService: OauthService,
   ) {}
 
   ngOnInit() {}
@@ -39,6 +53,14 @@ export class BankItemComponent implements OnInit, AfterViewInit {
     if (institution.status === 'ACTIVE') {
 
       this.statefulInstitution.institution = institution;
+
+      if ( institution.code === 'BANREGIO' ) {
+
+        this.validateCredential( institution );
+
+        return;
+
+      }
       return this.route.navigate(['/app', 'banks', institution.code]);
 
     } else {
@@ -47,4 +69,64 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
     }
   }
+
+  private validateCredential( institution: InstitutionInterface ) {
+
+    this.oauthService.validateCredential( institution ).subscribe(
+
+      res => {
+
+        const oAuthOption = new OAuthOptionsModel(res.body.authorizationUri, 'Finerio_/_Connect_With_BanRegio', 'location=0,status=0,centerscreen=1,width=1000,height=1000', res.body);
+
+        const window = this.oauthService.createOAuth( oAuthOption );
+
+        const checkOauth = this.oauthService.checkOauth( res.body ).subscribe( auxRes => {
+
+          if ( isNull(auxRes) ) {
+            return;
+          }
+
+          if ( auxRes.status !== CredentialStatusEnum.VALIDATE ) {
+            window.close();
+          }
+
+          if ( auxRes.status === CredentialStatusEnum.CREDENTIAL_CONNECT_SUCCESS ) {
+            this.openDialog( auxRes );
+          }
+
+          if ( this.matDialogRef ) {
+            for (const key in auxRes) {
+              if (auxRes.hasOwnProperty(key)) {
+                const element = auxRes[key];
+                if ( key === 'account' ) {
+
+                }
+              }
+            }
+            this.matDialogRef.componentInstance.credentialOauth = auxRes;
+          }
+
+        });
+      });
+  }
+
+  private openDialog( data: any ) {
+    let matDialogConfig: MatDialogConfig<any>;
+
+    matDialogConfig = {
+      autoFocus: true,
+      disableClose: false,
+      closeOnNavigation: false,
+      restoreFocus: true,
+      width: '20%',
+      panelClass: 'custom-dialog',
+      data: data
+    };
+
+    if ( !this.matDialogRef ) {
+      this.matDialogRef = this.matDialog.open(ModalAccountSyncComponent, matDialogConfig);
+    }
+
+  }
+
 }

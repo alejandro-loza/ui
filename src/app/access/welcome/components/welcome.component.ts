@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@services/auth/auth.service';
 import { ToastService } from '@services/toast/toast.service';
@@ -19,6 +19,9 @@ import {PollingCredentialService} from '@services/credentials/polling-credential
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
 import {ToastCredentialService} from '@services/toast/credential/toast-credential/toast-credential.service';
+import {InstitutionInterface} from '@interfaces/institution.interface';
+import {FirebaseRequestService} from '@services/firebase/request/firebase-request.service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-welcome',
@@ -34,11 +37,13 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private accountService: AccountService,
+    private angularFireAuth: AngularFireAuth,
     private authService: AuthService,
     private configService: ConfigService,
     private credentialService: CredentialService,
     private filterCredentialService: FilterCredentialService,
     private filterAccounts: FilterAccountsService,
+    private firebaseRequestService: FirebaseRequestService,
     private institutionsService: InstitutionService,
     private methodCredential: MethodCredentialService,
     private mixpanelService: MixpanelService,
@@ -46,8 +51,8 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     private pollingCredentialService: PollingCredentialService,
     private signupService: SignupService,
     private statefulAccounts: StatefulAccountsService,
-    private statefulInstitutions: StatefulInstitutionsService,
     private statefulCredentials: StatefulCredentialsService,
+    private statefulInstitutions: StatefulInstitutionsService,
     private toastService: ToastService,
     private toastCredentialService: ToastCredentialService
   ) {}
@@ -85,6 +90,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
         this.getInstitutions();
         this.getCredentials();
         this.getAccount();
+        this.getFirebaseToken();
 
       },
       () => this.router.navigate(['access', 'login'])
@@ -93,9 +99,9 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   getInstitutions() {
     this.institutionSubscription = this.institutionsService.getAllInstitutions()
-      .subscribe(res =>
-          this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO')
-      );
+      .subscribe(res => {
+        this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO');
+      });
   }
 
   getCredentials() {
@@ -120,6 +126,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   getAccount() {
     this.accountSubscription = this.accountService.getAccounts().subscribe(res => this.goToPage(res.body.data));
+  }
+
+  getFirebaseToken() {
+    this.firebaseRequestService.getFirebaseToken().subscribe( );
   }
 
   goToPage(accounts: AccountInterface[]) {

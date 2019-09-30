@@ -326,6 +326,14 @@ input::-webkit-inner-spin-button {
 .slider .indicators .indicator-item.active {
 	background-color: var(--accent-color) !important;
 }
+.custom-dialog mat-dialog-container{
+  padding: 3vw 0;
+}
+
+.spinnerSyncBank {
+  width: 1.5vw;
+  margin-top: 0.8vw;
+}
 
 @media only screen and (min-width: 601px) {
 	.main-svg {
