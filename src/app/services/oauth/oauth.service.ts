@@ -12,8 +12,6 @@ import {OAuthOptionsModel} from '@model/oAuth/oAuth.options.model';
 import {Observable} from 'rxjs';
 import {CredentialService} from '@services/credentials/credential.service';
 import {CredentialOauthResponse} from '@interfaces/credentials/oAuth/credential-oauth-response';
-import {CredentialStatusEnum} from '@interfaces/credentials/oAuth/credential-status.enum';
-import {isNull} from 'util';
 import {HttpResponse} from '@angular/common/http';
 import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 
@@ -21,8 +19,6 @@ import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
   providedIn: 'root'
 })
 export class OauthService {
-  private credential: CredentialInterface;
-  private intervalID: any;
 
   constructor(
     private angularFirestore: AngularFirestore,

@@ -1,27 +1,22 @@
-// @ts-ignore
 import {Component, OnInit, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
-// @ts-ignore
 import { NgForm } from '@angular/forms';
-// @ts-ignore
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { HelpTexts } from '../../../../services/banks/help-texts';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HelpTexts } from '@services/banks/help-texts';
 
 import { FieldService } from '@services/field/field.service';
 import { CredentialService } from '@services/credentials/credential.service';
 import { Patterns } from '@services/banks/patterns.service';
-import { MixpanelService } from '@services/mixpanel/mixpanel.service';
+import { ConfigService } from '@services/config/config.service';
+import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
+import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
+import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
+import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
 
 import { CreateCredentialInterface } from '@interfaces/credentials/createCredential.interface';
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { GTMService } from '@services/google-tag-manager/gtm.service';
-import { ConfigService } from '@services/config/config.service';
-import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
-import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
-import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
-import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
 
 @Component({
   selector: 'app-bank-form',

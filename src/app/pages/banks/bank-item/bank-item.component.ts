@@ -80,7 +80,7 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
         const window = this.oauthService.createOAuth( oAuthOption );
 
-        const checkOauth = this.oauthService.checkOauth( res.body ).subscribe( auxRes => {
+        this.oauthService.checkOauth( res.body ).subscribe( auxRes => {
 
           if ( isNull(auxRes) ) {
             return;
@@ -95,15 +95,14 @@ export class BankItemComponent implements OnInit, AfterViewInit {
           }
 
           if ( this.matDialogRef ) {
-            for (const key in auxRes) {
-              if (auxRes.hasOwnProperty(key)) {
-                const element = auxRes[key];
-                if ( key === 'account' ) {
 
-                }
-              }
-            }
-            this.matDialogRef.componentInstance.credentialOauth = auxRes;
+            console.log(auxRes);
+
+            this.matDialogRef.componentInstance.credentialOauth = {
+              ...this.matDialogRef.componentInstance.credentialOauth,
+              auxRes
+            };
+
           }
 
         });

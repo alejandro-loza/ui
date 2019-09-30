@@ -15,7 +15,6 @@ import {Response} from '@interfaces/response.interface';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {CredentialCreateModel} from '@app/model/credential/credential.create.model';
-import {CredentialOauthResponse} from '@interfaces/credentials/oAuth/credential-oauth-response';
 import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 
 @Injectable({
