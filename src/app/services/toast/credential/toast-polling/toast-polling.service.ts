@@ -10,6 +10,7 @@ import {MatDialog, MatDialogRef} from '@angular/material';
 import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
 import {finalize} from 'rxjs/operators';
 import {isUndefined} from 'util';
+import {CredentialService} from '@services/credentials/credential.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class ToastPollingService {
 
   constructor(
     private accountService:                 AccountService,
+    private credentialService:              CredentialService,
     private cleanerService:                 CleanerService,
     private interactiveFieldsService:       InteractiveFieldService,
     public matDialog:                       MatDialog,
@@ -27,13 +29,14 @@ export class ToastPollingService {
   ) { }
 
   showToast( credential: CredentialInterface, subscription: Subscription ): boolean {
-    const auxCredential = credential;
 
     this.toastService.setCode = 200;
 
     if ( credential.status === 'ACTIVE' ) {
 
       this.accountService.getAccounts().subscribe();
+
+      this.credentialService.getAllCredentials().subscribe();
 
       this.cleanerService.cleanAllVariables();
 
