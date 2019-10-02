@@ -140,7 +140,9 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   }
 
   getCredentials() {
+
     if (this.statefulCredentialsService.credentials) {
+
       this.credentials = this.statefulCredentialsService.credentials;
 
       this.credentials.forEach( credential => this.checkDataCredentialService.checkData( credential, this ));
@@ -152,9 +154,7 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
       this.fillInformationForEmptyState();
 
     } else {
-      this.credentialService.getAllCredentials().subscribe( res => {
-        this.getCredentials();
-      });
+      this.credentialService.getAllCredentials().subscribe( () => this.getCredentials() );
     }
   }
 
