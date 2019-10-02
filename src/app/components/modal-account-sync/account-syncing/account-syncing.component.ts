@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {AccountInterface} from '@interfaces/account.interfaces';
+import {CredentialStatusEnum} from '@interfaces/credentials/oAuth/credential-status.enum';
 
 @Component({
   selector: 'app-account-syncing',
@@ -6,6 +8,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./account-syncing.component.css']
 })
 export class AccountSyncingComponent implements OnInit {
+
+  @Input() account: AccountInterface;
+
+  credentialStatusEnum = CredentialStatusEnum;
 
   constructor() { }
 

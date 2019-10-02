@@ -14,17 +14,17 @@ import {AccountInterface} from '@interfaces/account.interfaces';
 export class ModalAccountSyncComponent implements OnInit {
 
   institution: InstitutionInterface;
-  isLoading: boolean;
-  credentialOauth: AccountInterface[];
+  hasFinished: boolean;
+  accounts: AccountInterface[];
 
   constructor(
     private matDialogRef: MatDialogRef<ModalAccountSyncComponent>,
     private statefulInstitution: StatefulInstitutionService,
     @Inject(MAT_DIALOG_DATA) matDialogData: AccountInterface[]
   ) {
-    this.credentialOauth = matDialogData;
+    ( matDialogData ) ? this.accounts = matDialogData : this.accounts = [];
     this.institution = this.statefulInstitution.institution;
-    this.isLoading = true;
+    this.hasFinished = false;
   }
 
   ngOnInit() { }

@@ -1,31 +1,19 @@
 <div class="container center-align">
   <img class="bankLogo" [alt]="institution.code" [src]="'assets/media/img/banks/'+institution.code+'.png'" />
 </div>
-<div class="row center-align" *ngIf="credentialOauth && credentialOauth.account">
-  <div class="col s8">
-    <small class="finerio-main-text-color">
-      <b>No. de Cuenta: {{ credentialOauth.account.name | json }}</b>
-    </small>
-  </div>
-  <div class="col s2 offset-s1">
-    <div *ngIf="isLoading; then thenLoadingAnimation else elseFinishedAnimation"></div>
-    <ng-template #thenLoadingAnimation>
-      <app-spinner-bank-sync-animation></app-spinner-bank-sync-animation>
-    </ng-template>
-    <ng-template #elseFinishedAnimation>
-      <app-spinner-bank-finished-animation></app-spinner-bank-finished-animation>
-    </ng-template>
-  </div>
-</div>
-<div *ngIf="isLoading; then thenBankSyncAnimation else elseBankFinishedAnimation"></div>
-<ng-template #thenBankSyncAnimation>
-  <app-bank-syncing-animation></app-bank-syncing-animation>
-</ng-template>
-<ng-template #elseBankFinishedAnimation>
+<ul class="row center-align">
+  <li *ngFor="let account of accounts">
+    <app-account-syncing [account]="account"></app-account-syncing>
+  </li>
+</ul>
+<div *ngIf="hasFinished; else gettingData">
   <app-bank-finished-animation></app-bank-finished-animation>
+</div>
+<ng-template #gettingData>
+  <app-bank-syncing-animation></app-bank-syncing-animation>
 </ng-template>
 <div class="container center-align">
   <a (click)="closeModal()">
-    <small class="text-muted">Salir y continuar sincronizando en segundo plano</small>
+    <small class="black-text">Salir y continuar sincronizando en segundo plano</small>
   </a>
 </div>
