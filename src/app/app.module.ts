@@ -24,8 +24,11 @@ import { FirebaseModule } from './firebase/firebase.module';
 import { AppRoutes } from '@app/app.route';
 import { AppComponent } from '@app/app.component';
 import {StatefulModule} from '@stateful/stateful.module';
-import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
 import {ModalTokenModule} from '@components/modal-token/modal-token.module';
+import {ModalAccountSyncModule} from '@components/modal-account-sync/modal-account-sync.module';
+
+import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
+import {ModalAccountSyncComponent} from '@components/modal-account-sync/component/modal-account-sync.component';
 
 @NgModule({
   declarations: [ AppComponent ],
@@ -36,6 +39,7 @@ import {ModalTokenModule} from '@components/modal-token/modal-token.module';
     HttpClientModule,
     MatDialogModule,
     ModalTokenModule,
+    ModalAccountSyncModule,
     NgIdleKeepaliveModule.forRoot(),
     SharedModule,
     StatefulModule,
@@ -52,7 +56,8 @@ import {ModalTokenModule} from '@components/modal-token/modal-token.module';
     InterceptorProvider
   ],
   entryComponents: [
-    ModalTokenComponent
+    ModalTokenComponent,
+    ModalAccountSyncComponent
   ],
   bootstrap: [ AppComponent ]
 })
