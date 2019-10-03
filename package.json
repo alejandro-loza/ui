@@ -1,6 +1,6 @@
 {
   "name": "finerio-ui",
-  "version": "2.2.5.1",
+  "version": "2.2.6",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
