@@ -5,7 +5,7 @@
     <a (click)="institutionClick( institution )">
       <img *ngIf="institution.status === 'ACTIVE'" class="imgBanks hoverable"
             [alt]="institution.code"
-            [src]="'assets/media/img/banks/'+institution.code.toLocaleLowerCase()+'.png'" />
+            [src]="'assets/media/img/banks/'+institution.code+'.png'" />
       <!-- <img *ngIf="institution.status !== 'ACTIVE'" class="imgBanks hoverable"
             [alt]="institution.code"
             [src]="'assets/media/img/banks/'+institution.code+'_gray.png'"/> -->
