@@ -11,6 +11,10 @@
 	background-color: #1d3865;
 }
 
+#bankImage {
+	width: 30%;
+}
+
 #videosRow {
 	min-height: 300px;
 }
