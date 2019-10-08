@@ -62,6 +62,8 @@ export class OauthService {
       return;
     }
 
+    console.log( credentialOauth.status );
+
     if ( credentialOauth.status !== CredentialStatusEnum.VALIDATE ) {
       window.close();
     }

@@ -8,7 +8,7 @@ export const environment = {
   backendUrl: 'https://api.finerio.mx/api',
   newBackendUrl: 'https://api-v2.finerio.mx',
   apiUrl: 'https://api.finerio.mx',
-  xuangaUrl: 'http://10.147.18.3:8080/api',
+  xuangaUrl: 'http://ec2-18-190-47-42.us-east-2.compute.amazonaws.com:8080/api',
   firebase: {
     apiKey: 'AIzaSyC3dN2i9Sy2aSxR0Q0bW7G0238PvQPq-lI',
     authDomain: 'finerio-android.firebaseapp.com',
