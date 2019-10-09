@@ -12,9 +12,11 @@ export class FirebaseAnalyticsService {
 
 	initApplication() {
 		firebase.initializeApp(environment.firebaseConfig);
+		firebase.analytics();
 	}
 
 	trackEvent(eventName: string) {
 		firebase.analytics().logEvent(eventName);
+		console.log(eventName);
 	}
 }

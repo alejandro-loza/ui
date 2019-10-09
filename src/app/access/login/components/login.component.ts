@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { LoginService } from '@services/login/login.service';
 import { User } from '@interfaces/user.interface';
 import { MobileService } from '@services/mobile/mobile.service';
-import { FirebaseAnalyticsService } from '@services/firebase/firebase-analytics/firebase-analytics.service';
 
 @Component({
 	selector: 'app-login',
@@ -17,8 +16,7 @@ export class LoginComponent implements OnInit {
 		private router: Router,
 		private renderer: Renderer2,
 		private loginService: LoginService,
-		private mobileService: MobileService,
-		private firebaseAnalyticsService: FirebaseAnalyticsService
+		private mobileService: MobileService
 	) {
 		this.user = {};
 		if (this.mobileService.mobilecheck()) {
@@ -43,7 +41,6 @@ export class LoginComponent implements OnInit {
 			},
 			() => {
 				loginForm.reset();
-				this.firebaseTest();
 				return this.router.navigate([ '/access/welcome' ]);
 			}
 		);
@@ -53,11 +50,5 @@ export class LoginComponent implements OnInit {
 		this.renderer.removeClass(document.getElementById('Inputemail'), 'invalid');
 		this.renderer.removeClass(document.getElementById('Inputpassword'), 'invalid');
 		this.renderer.removeClass(document.getElementById('Inputpassword'), 'invalid');
-	}
-
-	firebaseTest() {
-		console.log('FIREBASE TEST');
-		this.firebaseAnalyticsService.initApplication();
-		this.firebaseAnalyticsService.trackEvent('LogIn');
 	}
 }

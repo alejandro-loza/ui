@@ -12,6 +12,6 @@ export const environment = {
 		storageBucket: 'finerio-android.appspot.com',
 		messagingSenderId: '864285526097',
 		appId: '1:864285526097:web:068e863c8ffac6a4549070',
-		measurementId: 'UA-76962835-7'
+		measurementId: 'G-D0F0HVNYWF'
 	}
 };

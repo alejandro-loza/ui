@@ -7,6 +7,7 @@ import { ToastService } from '@services/toast/toast.service';
 import { SignupService } from '@services/signup/signup.service';
 import { LoginService } from '@services/login/login.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
+import { FirebaseAnalyticsService } from '@services/firebase/firebase-analytics/firebase-analytics.service';
 import { User } from '@app/interfaces/user.interface';
 import { GTMService } from '@services/google-tag-manager/gtm.service';
 import { isNullOrUndefined } from 'util';
@@ -37,6 +38,7 @@ export class SignupComponent implements OnInit {
 		private toastService: ToastService,
 		private loginService: LoginService,
 		private mixpanelService: MixpanelService,
+		private firebaseAnalyticsService: FirebaseAnalyticsService,
 		private gtmService: GTMService,
 		private mobileService: MobileService
 	) {
@@ -56,6 +58,7 @@ export class SignupComponent implements OnInit {
 			this.signupService.signup(this.signupData.value).subscribe(
 				(res) => {
 					this.mixpanelEvent(res.body.id);
+					this.firebaseAnalyticsService.trackEvent('sign_up');
 					this.gtmEvent(res.body.id);
 					this.toastService.setCode = res.status;
 				},
