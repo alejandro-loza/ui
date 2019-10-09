@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { FirebaseModule } from './services/firebase/firebase.module';
 
-import {MatDialogModule} from '@angular/material';
+import { MatDialogModule } from '@angular/material';
 
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
@@ -22,36 +23,35 @@ import { SharedModule } from '@shared/shared.module';
 import { AppRoutes } from '@app/app.route';
 
 import { AppComponent } from '@app/app.component';
-import {StatefulModule} from '@stateful/stateful.module';
-import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
-import {ModalTokenModule} from '@components/modal-token/modal-token.module';
+import { StatefulModule } from '@stateful/stateful.module';
+import { ModalTokenComponent } from '@components/modal-token/component/modal-token.component';
+import { ModalTokenModule } from '@components/modal-token/modal-token.module';
 
 @NgModule({
-  declarations: [ AppComponent ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    MatDialogModule,
-    ModalTokenModule,
-    NgIdleKeepaliveModule.forRoot(),
-    SharedModule,
-    StatefulModule,
-    AppRoutes
-  ],
-  providers: [
-    AuthGuard,
-    AuthService,
-    AccountService,
-    ConfigParamsService,
-    ConfigService,
-    InstitutionService,
-    ToastService,
-    InterceptorProvider
-  ],
-  entryComponents: [
-    ModalTokenComponent
-  ],
-  bootstrap: [ AppComponent ]
+	declarations: [ AppComponent ],
+	imports: [
+		BrowserModule,
+		BrowserAnimationsModule,
+		FirebaseModule,
+		HttpClientModule,
+		MatDialogModule,
+		ModalTokenModule,
+		NgIdleKeepaliveModule.forRoot(),
+		SharedModule,
+		StatefulModule,
+		AppRoutes
+	],
+	providers: [
+		AuthGuard,
+		AuthService,
+		AccountService,
+		ConfigParamsService,
+		ConfigService,
+		InstitutionService,
+		ToastService,
+		InterceptorProvider
+	],
+	entryComponents: [ ModalTokenComponent ],
+	bootstrap: [ AppComponent ]
 })
 export class AppModule {}
