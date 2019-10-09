@@ -1,4 +1,4 @@
-<app-back-button [url]="urlCategories" *ngIf="!editMode"></app-back-button>
+<app-back-button [url]="urlCategories" *ngIf="!isEditMode"></app-back-button>
 <div class="container">
   <div class="row">
     <div class="col s12 center">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="card-action right-align">
-          <button *ngIf="editMode" [routerLink]="['/app/categories/details']" class="btn finerio-accent-color white-text" id="cancelButton">Cancelar</button>
+          <button *ngIf="isEditMode" [routerLink]="['/app/categories/details']" class="btn finerio-accent-color white-text" id="cancelButton">Cancelar</button>
           <button (click)="submitCategory()" id="submitButton" [disabled]="categoryName.length === 0" class="btn action-btn green">Guardar</button>
         </div>
       </div>
