@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { FirebaseAnalyticsService } from '@services/firebase/firebase-analytics/firebase-analytics.service';
-import { GTMService } from '@services/google-tag-manager/gtm.service';
-import { ConfigService } from '@services/config/config.service';
 import { CredentialInterface } from '@interfaces/credentials/credential.interface';
 import { isUndefined } from 'util';
 
@@ -10,18 +8,12 @@ import { isUndefined } from 'util';
 	providedIn: 'root'
 })
 export class TrackingCredentialService {
-	constructor(
-		private mixpanel: MixpanelService,
-		private googleTagManager: GTMService,
-		private configService: ConfigService,
-		private firebaseAnalyticsService: FirebaseAnalyticsService
-	) {}
+	constructor(private mixpanel: MixpanelService, private firebaseAnalyticsService: FirebaseAnalyticsService) {}
 
 	createCredential(credential: CredentialInterface) {
 		const create = 'Create Credential';
 		this.firebaseAnalyticsService.trackEvent('create_credential');
 		this.mixpanelEvent(credential, create);
-		this.gtmEvent(credential, create);
 	}
 
 	editCredential(credential: CredentialInterface) {
@@ -52,15 +44,5 @@ export class TrackingCredentialService {
 		this.mixpanel.setSuperProperties();
 		this.mixpanel.setPeopleProperties();
 		this.mixpanel.setTrackEvent(event, { bank: credential.institution.code });
-	}
-
-	private gtmEvent(credential: CredentialInterface, event: string) {
-		const id = this.configService.getUser.id;
-		this.googleTagManager.gtmData = {
-			event: event,
-			id: id.toString(),
-			institution: credential.institution.code
-		};
-		this.googleTagManager.trigger();
 	}
 }

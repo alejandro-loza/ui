@@ -3,24 +3,20 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angula
 // @ts-ignore
 import { NgForm } from '@angular/forms';
 // @ts-ignore
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HelpTexts } from '../../../../services/banks/help-texts';
+import { CleanerService } from '@services/cleaner/cleaner.service';
 
 import { FieldService } from '@services/field/field.service';
-import { CredentialService } from '@services/credentials/credential.service';
 import { Patterns } from '@services/banks/patterns.service';
-import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
 import { CreateCredentialInterface } from '@interfaces/credentials/createCredential.interface';
 import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import { GTMService } from '@services/google-tag-manager/gtm.service';
-import { ConfigService } from '@services/config/config.service';
 import { StatefulInstitutionsService } from '@stateful/institutions/stateful-institutions.service';
 import { MethodCredentialService } from '@services/credentials/method-credential/method-credential.service';
-import { PollingCredentialService } from '@services/credentials/polling-credential/polling-credential.service';
 import { StatefulInstitutionService } from '@stateful/institution/stateful-institution.service';
 
 @Component({
@@ -44,6 +40,7 @@ export class BankFormComponent implements OnInit, AfterViewInit {
 	constructor(
 		private field: FieldService,
 		private methodCredential: MethodCredentialService,
+		private cleanerService: CleanerService,
 		private patterns: Patterns,
 		private router: Router,
 		private statefulInstitutions: StatefulInstitutionsService,
@@ -98,6 +95,8 @@ export class BankFormComponent implements OnInit, AfterViewInit {
 		this.credential.securityCode = form.value.sec_code;
 
 		this.credential.institution = this.findCurrentInstitution();
+
+		this.cleanerService.cleanAllVariables();
 
 		this.methodCredential.createCredential(this.credential);
 

@@ -17,6 +17,5 @@ export class FirebaseAnalyticsService {
 
 	trackEvent(eventName: string) {
 		firebase.analytics().logEvent(eventName);
-		console.log(eventName);
 	}
 }

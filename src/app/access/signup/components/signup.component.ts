@@ -9,7 +9,6 @@ import { LoginService } from '@services/login/login.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { FirebaseAnalyticsService } from '@services/firebase/firebase-analytics/firebase-analytics.service';
 import { User } from '@app/interfaces/user.interface';
-import { GTMService } from '@services/google-tag-manager/gtm.service';
 import { isNullOrUndefined } from 'util';
 import { MobileService } from '@services/mobile/mobile.service';
 
@@ -39,7 +38,6 @@ export class SignupComponent implements OnInit {
 		private loginService: LoginService,
 		private mixpanelService: MixpanelService,
 		private firebaseAnalyticsService: FirebaseAnalyticsService,
-		private gtmService: GTMService,
 		private mobileService: MobileService
 	) {
 		this.isButtonAvailable = false;
@@ -59,7 +57,6 @@ export class SignupComponent implements OnInit {
 				(res) => {
 					this.mixpanelEvent(res.body.id);
 					this.firebaseAnalyticsService.trackEvent('sign_up');
-					this.gtmEvent(res.body.id);
 					this.toastService.setCode = res.status;
 				},
 				(error) => {
@@ -101,15 +98,6 @@ export class SignupComponent implements OnInit {
 		this.mixpanelService.setIdentify(id);
 		this.mixpanelService.setSignupPeopleProperties(this.signupData.value.email, new Date(), id);
 		this.mixpanelService.setTrackEvent('Sign up', { from: 'Email', referred: false });
-	}
-
-	gtmEvent(id: string) {
-		this.gtmService.gtmData = {
-			event: 'Sign Up',
-			id: id.toString(),
-			order: this.gtmService.create_UUID()
-		};
-		this.gtmService.trigger();
 	}
 
 	passwordMatch() {
