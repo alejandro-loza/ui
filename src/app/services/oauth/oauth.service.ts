@@ -9,17 +9,18 @@ import {InstitutionInterface} from '@interfaces/institution.interface';
 import {CredentialInterface} from '@interfaces/credentials/credential.interface';
 import {CredentialStatusEnum} from '@interfaces/credentials/oAuth/credential-status.enum';
 import {CredentialOauthResponse} from '@interfaces/credentials/oAuth/credential-oauth-response';
-import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 
 import {OAuthOptionsModel} from '@model/oAuth/oAuth.options.model';
 import {CredentialCreateModel} from '@model/credential/credential.create.model';
 
-import {CredentialService} from '@services/credentials/credential.service';
+import {CredentialOauthRequestService} from '@services/credentials/request/oauth/credential-oauth.request.service';
 
 import {ModalAccountSyncComponent} from '@components/modal-account-sync/component/modal-account-sync.component';
 
 import {Observable} from 'rxjs';
 import {isNull} from 'util';
+import {CredentialUpdateModel} from '@model/credential/credential-update.model';
+import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class OauthService {
   constructor(
     private angularFirestore: AngularFirestore,
     private angularFireDatabase: AngularFireDatabase,
-    private credentialService: CredentialService,
+    private credentialOauthRequestService: CredentialOauthRequestService,
     private matDialog: MatDialog,
     private router: Router
   ) { }
@@ -40,7 +41,13 @@ export class OauthService {
 
     const oAuthCredential: CredentialCreateModel = new CredentialCreateModel( institution );
 
-    return this.credentialService.createCredential(oAuthCredential);
+    return this.credentialOauthRequestService.createCredential( oAuthCredential );
+
+  }
+
+  updateCredential( oAuthCredential: CredentialUpdateModel ) {
+
+    return this.credentialOauthRequestService.updateCredential( oAuthCredential );
 
   }
 
@@ -61,8 +68,6 @@ export class OauthService {
     if ( isNull( credentialOauth ) ) {
       return;
     }
-
-    console.log( credentialOauth.status );
 
     if ( credentialOauth.status !== CredentialStatusEnum.VALIDATE ) {
       window.close();
