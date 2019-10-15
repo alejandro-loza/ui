@@ -8,6 +8,9 @@ import {InstitutionInterface} from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 import {OAuthOptionsModel} from '@model/oAuth/oAuth.options.model';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
+import {CredentialUpdateModel} from '@model/credential/credential-update.model';
 
 @Component({
   selector: 'app-bank-item',
@@ -60,24 +63,33 @@ export class BankItemComponent implements OnInit, AfterViewInit {
       this.bankOutOfService.emit(true);
 
     }
+
   }
 
   private validateCredential( institution: InstitutionInterface ) {
 
     this.oauthService.validateCredential( institution ).subscribe(
 
-      res => {
+      res => this.createOauth( res ),
+      ( error: HttpErrorResponse ) => {
 
-        const oAuthOption = new OAuthOptionsModel(res.body.authorizationUri, 'Finerio_/_Connect_With_BanRegio', 'location=0,status=0,centerscreen=1,width=1000,height=1000', res.body);
+        if ( error.status === 400 ) {
 
-        const window = this.oauthService.createOAuth( oAuthOption );
+          // const oAuthCredential: CredentialUpdateModel = new CredentialUpdateModel();
 
-        this.oauthService.checkOauth( res.body ).subscribe( auxRes => {
+        }
 
-          this.oauthService.statesOauth( auxRes, window );
-
-        });
       });
+  }
+
+  private createOauth( res: HttpResponse<CredentialOauth> ) {
+
+    const oAuthOption = new OAuthOptionsModel(res.body.authorizationUri, 'Finerio_/_Connect_With_BanRegio', 'location=0,status=0,centerscreen=1,width=1000,height=1000', res.body);
+
+    const window = this.oauthService.createOAuth( oAuthOption );
+
+    this.oauthService.checkOauth( res.body ).subscribe(
+      auxRes => this.oauthService.statesOauth( auxRes, window ) );
   }
 
 }
