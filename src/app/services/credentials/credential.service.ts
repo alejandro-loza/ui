@@ -66,11 +66,11 @@ export class CredentialService {
 
   }
 
-  createCredential( credential: CreateCredentialInterface | CredentialCreateModel ): Observable<HttpResponse<CredentialOauth>> {
+  createCredential( credential: CreateCredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
     const id = this.configService.getUser.id;
-    const url = `${environment.xuangaUrl}/users/${ id }/credentials`;
+    const url = `${environment.backendUrl}/users/${ id }/credentials`;
     const postBody = JSON.stringify(credential);
-    return this.httpClient.post<CredentialOauth>(url, postBody, {
+    return this.httpClient.post<CredentialInterface>(url, postBody, {
       observe: 'response',
       headers: this.configService.getHeaders,
       params: this.configParamsService.getConfigParams
@@ -83,10 +83,10 @@ export class CredentialService {
     );
   }
 
-  updateCredential( credential: CredentialInterface ): Observable<HttpResponse<CredentialOauth>> {
+  updateCredential( credential: CredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
     const postBody = JSON.stringify(credential);
     const url = `${environment.backendUrl}/credentials/${credential.id}`;
-    return this.httpClient.put<CredentialOauth>(url, postBody, {
+    return this.httpClient.put<CredentialInterface>(url, postBody, {
       observe: 'response',
       headers: this.configService.getHeaders,
       params: this.configParamsService.getConfigParams
