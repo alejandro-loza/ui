@@ -1,14 +1,9 @@
-import { InstitutionInterface } from '@interfaces/institution.interface';
-import { ProviderInterface } from '@interfaces/provider.interface';
+import { CredentialBaseInterface } from '@interfaces/credentials/base/credential-base.interface';
 import { User } from '@interfaces/user.interface';
 
-export interface CredentialInterface {
-  customerId: number;
-  id: string;
-  institution: InstitutionInterface;
+export interface CredentialInterface extends CredentialBaseInterface {
+  readonly customerId: number;
   lastUpdated: string;
-  provider: ProviderInterface;
-  status: string;
   user: User;
   username: string;
   password?: string;

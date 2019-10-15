@@ -3,10 +3,10 @@ import {HttpResponse} from '@angular/common/http';
 
 import {CredentialCreateModel} from '@app/model/credential/credential.create.model';
 
-import {CredentialOauthResponse} from '@interfaces/credentials/oAuth/credential-oauth-response';
-import {CredentialInterface} from '@interfaces/credentials/credential.interface';
+import {CredentialBaseInterface} from '@interfaces/credentials/base/credential-base.interface';
+import {CredentialUpdateModel} from '@model/credential/credential-update.model';
 
 export interface CredentialOauthRequest {
-  createCredential( credential: CredentialCreateModel ): Observable<HttpResponse<CredentialOauthResponse>>;
-  updateCredential( credential: CredentialInterface ): Observable<HttpResponse<CredentialOauthResponse>>;
+  createCredential( credential: CredentialCreateModel ): Observable<HttpResponse<CredentialBaseInterface>>;
+  updateCredential( credential: CredentialUpdateModel ): Observable<HttpResponse<CredentialBaseInterface>>;
 }
