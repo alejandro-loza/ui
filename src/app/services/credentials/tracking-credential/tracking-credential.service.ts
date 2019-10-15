@@ -41,8 +41,6 @@ export class TrackingCredentialService {
 
 	private mixpanelEvent(credential: CredentialInterface, event: string) {
 		this.mixpanel.setIdentify();
-		this.mixpanel.setSuperProperties();
-		this.mixpanel.setPeopleProperties();
 		this.mixpanel.setTrackEvent(event, { bank: credential.institution.code });
 	}
 }
