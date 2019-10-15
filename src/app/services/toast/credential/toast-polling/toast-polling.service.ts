@@ -1,83 +1,70 @@
 import { Injectable } from '@angular/core';
-import {CredentialInterface} from '@interfaces/credentials/credential.interface';
-import {Subscription} from 'rxjs';
-import {ModalTokenComponent} from '@components/modal-token/component/modal-token.component';
-import {TrackingCredentialService} from '@services/credentials/tracking-credential/tracking-credential.service';
-import {ToastService} from '@services/toast/toast.service';
-import {CleanerService} from '@services/cleaner/cleaner.service';
-import {AccountService} from '@services/account/account.service';
-import {MatDialog, MatDialogRef} from '@angular/material';
-import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
-import {finalize} from 'rxjs/operators';
-import {isUndefined} from 'util';
-import {CredentialService} from '@services/credentials/credential.service';
+import { CredentialInterface } from '@interfaces/credentials/credential.interface';
+import { Subscription } from 'rxjs';
+import { ModalTokenComponent } from '@components/modal-token/component/modal-token.component';
+import { TrackingCredentialService } from '@services/credentials/tracking-credential/tracking-credential.service';
+import { ToastService } from '@services/toast/toast.service';
+import { AccountService } from '@services/account/account.service';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
+import { finalize } from 'rxjs/operators';
+import { isUndefined } from 'util';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class ToastPollingService {
-  dialogRef: MatDialogRef<ModalTokenComponent>;
+	dialogRef: MatDialogRef<ModalTokenComponent>;
 
-  constructor(
-    private accountService:                 AccountService,
-    private credentialService:              CredentialService,
-    private cleanerService:                 CleanerService,
-    private interactiveFieldsService:       InteractiveFieldService,
-    public matDialog:                       MatDialog,
-    private toastService:                   ToastService,
-    private trackingCredentialService:      TrackingCredentialService,
-  ) { }
+	constructor(
+		private accountService: AccountService,
+		private interactiveFieldsService: InteractiveFieldService,
+		public matDialog: MatDialog,
+		private toastService: ToastService,
+		private trackingCredentialService: TrackingCredentialService
+	) {}
 
-  showToast( credential: CredentialInterface, subscription: Subscription ): boolean {
+	showToast(credential: CredentialInterface, subscription: Subscription): boolean {
+		const auxCredential = credential;
 
-    this.toastService.setCode = 200;
+		this.toastService.setCode = 200;
 
-    if ( credential.status === 'ACTIVE' ) {
+		if (credential.status === 'ACTIVE') {
+			this.accountService.getAccounts().subscribe();
 
-      this.accountService.getAccounts().subscribe();
+			this.toastService.setMessage = `Tu cuenta de ${credential.institution.name},<br>ha sido sincronizada`;
 
-      this.credentialService.getAllCredentials().subscribe();
+			this.toastService.toastGeneral();
 
-      this.cleanerService.cleanAllVariables();
+			subscription.unsubscribe();
+		} else if (credential.status === 'TOKEN') {
+			if (!isUndefined(this.dialogRef)) {
+				return;
+			}
 
-      this.toastService.setMessage = `Tu cuenta de ${ credential.institution.name },<br>ha sido sincronizada`;
+			this.dialogRef = this.matDialog.open(ModalTokenComponent, {
+				autoFocus: true,
+				disableClose: true,
+				width: '750px',
+				data: credential
+			});
 
-      this.toastService.toastGeneral();
+			this.dialogRef.afterClosed().pipe(finalize(() => (this.dialogRef = undefined)));
 
-      subscription.unsubscribe();
+			this.toastService.setMessage = `¡Necesitamos información extra de tu cuenta bancaria<br>para sincronizarla`;
 
-    } else if ( credential.status === 'TOKEN' ) {
+			this.toastService.toastGeneral();
+		} else if (credential.status === 'INVALID') {
+			this.toastService.setMessage = `¡Hubo un problema con tu cuenta de ${credential.institution
+				.name}, revísala!`;
 
-      if ( !isUndefined(this.dialogRef) ) { return ; }
+			this.toastService.toastGeneral();
 
-      this.dialogRef = this.matDialog.open(ModalTokenComponent, {
-        autoFocus: true,
-        disableClose: true,
-        width: '750px',
-        data: credential
-      });
+			subscription.unsubscribe();
+		}
 
-      this.dialogRef.afterClosed().pipe(
-        finalize( () => this.dialogRef = undefined )
-      );
+		this.trackingCredentialService.syncingCredential(credential);
 
-      this.toastService.setMessage = `¡Necesitamos información extra de tu cuenta bancaria<br>para sincronizarla`;
-
-      this.toastService.toastGeneral();
-
-    } else if ( credential.status === 'INVALID' ) {
-
-      this.toastService.setMessage = `¡Hubo un problema con tu cuenta de ${ credential.institution.name }, revísala!`;
-
-      this.toastService.toastGeneral();
-
-      subscription.unsubscribe();
-
-    }
-
-    this.trackingCredentialService.syncingCredential(credential);
-
-    return subscription.closed;
-
-  }
+		return subscription.closed;
+	}
 }

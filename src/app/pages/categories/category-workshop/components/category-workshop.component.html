@@ -1,4 +1,4 @@
-<app-back-button [url]="urlCategories" *ngIf="!editMode"></app-back-button>
+<app-back-button [url]="urlCategories" *ngIf="!isEditMode"></app-back-button>
 <div class="container">
   <div class="row">
     <div class="col s12 center">
@@ -21,23 +21,9 @@
                         class="btn-floating btn-small"></button>
                 </li>
               </ul>
-              <!--button (click)="generateRandomColors()"  *ngIf="colorForCategory.length < 40"
-                    classes="colorPickerUl btn-floating btn-small grey"><i classes="material-icons">add</i></button-->
-
               <button (click)="reloadColors()"
                     class="colorPickerUl btn-floating btn-small transparent"><i class="material-icons black-text">loop</i></button>
             </div>
-            <!--div classes="col s12 pt-20">
-              <span><b>Texto:</b></span>
-              <ul>
-                <li classes="colorPickerUl" *ngFor="let color of colorText">
-                  <button [ngStyle]="{'background-color': color}" (click)="selectedTextColor( color )"
-                    classes="btn-floating btn-small"></button>
-                </li>
-              </ul>
-              <button (click)="reloadTextColors()"
-                  classes="colorPickerUl btn-floating btn-small grey"><i classes="material-icons">loop</i></button>
-            </div-->
             <div class="col s8 offset-s2">
               <div class="demoChip" [ngStyle]="{'background-color': colorForDemoChip ,'color': '#ffffff'}" >
                 <p class="center pt-5 categoryNameChip"><b>{{ categoryName }}</b></p>
@@ -46,7 +32,7 @@
           </div>
         </div>
         <div class="card-action right-align">
-          <button *ngIf="editMode" [routerLink]="['/app/categories/details']" class="btn finerio-accent-color white-text" id="cancelButton">Cancelar</button>
+          <button *ngIf="isEditMode" [routerLink]="['/app/categories/details']" class="btn finerio-accent-color white-text" id="cancelButton">Cancelar</button>
           <button (click)="submitCategory()" id="submitButton" [disabled]="categoryName.length === 0" class="btn action-btn green">Guardar</button>
         </div>
       </div>

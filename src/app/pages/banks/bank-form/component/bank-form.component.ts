@@ -17,6 +17,7 @@ import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { InstitutionInterface } from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
+import {CleanerService} from '@services/cleaner/cleaner.service';
 
 @Component({
   selector: 'app-bank-form',
@@ -40,6 +41,7 @@ export class BankFormComponent implements OnInit, AfterViewInit {
     private activated: ActivatedRoute,
     private configService: ConfigService,
     private credentialService: CredentialService,
+    private cleanerService: CleanerService,
     private field: FieldService,
     private methodCredential: MethodCredentialService,
     private patterns: Patterns,
@@ -106,6 +108,8 @@ export class BankFormComponent implements OnInit, AfterViewInit {
     this.credential.institution = this.findCurrentInstitution();
 
     this.methodCredential.createCredential(this.credential);
+
+    this.cleanerService.cleanAllVariables();
 
     M.toast({
       html: 'Recuperando información...',

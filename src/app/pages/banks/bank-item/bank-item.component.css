@@ -1,13 +1,13 @@
 .intitutionCol {
-	padding-top: 10px;
+	padding: 5px;
+	height: 125px;
 }
 
 .imgBanks {
-	padding: 10px;
+	padding: 3px;
 	border: 1px solid #aaa;
-	border-radius: 5px;
-	max-height: 140px;
-	max-width: 140px;
+	border-radius: 10px;
+	max-width: 100%;
 	cursor: pointer;
 	background-color: white;
 }
@@ -18,11 +18,10 @@
 
 @media only screen and (max-width: 1400px) {
 	.imgBanks {
-		padding: 10px;
+		padding: 3px;
 		border: 1px solid #aaa;
-		border-radius: 5px;
-		max-height: 100px;
-		max-width: 100px;
+		border-radius: 10px;
+		max-width: 100%;
 		cursor: pointer;
 		background-color: white;
 	}
@@ -30,11 +29,10 @@
 
 @media only screen and (max-width: 600px) {
 	.imgBanks {
-		padding: 10px;
+		padding: 3px;
 		border: 1px solid #aaa;
-		border-radius: 5px;
-		max-height: 125px;
-		max-width: 125px;
+		border-radius: 10px;
+		max-width: 100%;
 		cursor: pointer;
 		background-color: white;
 	}

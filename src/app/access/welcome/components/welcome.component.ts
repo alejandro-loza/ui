@@ -99,9 +99,9 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   getInstitutions() {
     this.institutionSubscription = this.institutionsService.getAllInstitutions()
-      .subscribe(res => {
-        this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO');
-      });
+      .subscribe(res =>
+          this.statefulInstitutions.institutions = res.body.data.filter(institution => institution.code !== 'DINERIO')
+      );
   }
 
   getCredentials() {

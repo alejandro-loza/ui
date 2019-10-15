@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { ConfigService } from '@services/config/config.service';
 import { CredentialService } from '@services/credentials/credential.service';
 declare var mixpanel: any;
@@ -11,13 +11,16 @@ export class MixpanelService {
   hasCredentials: boolean;
   linkedCredentials: number;
 
-  //people
+  // people
   invalidCredentials: boolean;
   lastLoggedIn: Date;
   validCredentials: boolean;
 
   facebookSuccess: boolean;
   userId: string;
+
+  mixpanelProdId = 'ff78a68966249a8ff13e588119ab7df0';
+  mixpanelDevMode = 'b8a3d1b2b66ecfb4820e46dfa66ffd40';
 
   constructor(private configService: ConfigService, private credentialService: CredentialService) {
     this.linkedCredentials = 0;
@@ -26,6 +29,14 @@ export class MixpanelService {
     this.lastLoggedIn = new Date();
     this.validCredentials = false;
     this.facebookSuccess = false;
+  }
+
+  initMixpanel() {
+    if (isDevMode()) {
+      mixpanel.init(this.mixpanelDevMode);
+    } else {
+      mixpanel.init(this.mixpanelProdId);
+    }
   }
 
   setIdentify(id?: string) {
@@ -56,7 +67,7 @@ export class MixpanelService {
   setPeopleProperties() {
     this.credentialService.getAllCredentials().subscribe((res) => {
       res.body.data.forEach((credential) => {
-        if (credential.status != 'ACTIVE') {
+        if (credential.status !== 'ACTIVE') {
           this.invalidCredentials = true;
         } else {
           this.validCredentials = true;
