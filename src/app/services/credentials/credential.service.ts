@@ -5,7 +5,6 @@ import {environment} from '@env/environment';
 import {ConfigService} from '@services/config/config.service';
 import {ConfigParamsService} from '@params/config/config-params.service';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
-import {EditCredentialListService} from '@services/credentials/edit-list/edit-credential-list.service';
 import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
 
 import {CredentialInterface} from '@interfaces/credentials/credential.interface';
@@ -28,7 +27,6 @@ export class CredentialService {
     private configParamsService: ConfigParamsService,
     private statefulCredentialsService: StatefulCredentialsService,
     private statefulCredentialService: StatefulCredentialService,
-    private editCredentialsService: EditCredentialListService,
   ) { }
 
   getCredential( credential_id: string ): Observable<HttpResponse<CredentialInterface>> {
@@ -77,7 +75,6 @@ export class CredentialService {
     }).pipe(
       map( res => {
         this.statefulCredentialService.credential = res.body;
-        this.editCredentialsService.addCredential();
         return res;
       })
     );
@@ -93,7 +90,6 @@ export class CredentialService {
     }).pipe(
       map( res => {
         this.statefulCredentialService.credential = res.body;
-        this.editCredentialsService.updateCredential();
         return res;
       })
     );
@@ -108,7 +104,6 @@ export class CredentialService {
     }).pipe(
       map( res => {
         this.statefulCredentialService.credential = res.body;
-        this.editCredentialsService.deleteCredential();
         return res;
       })
     );
