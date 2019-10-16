@@ -1,7 +1,7 @@
 <div class="container center-align">
-  <img class="bankLogo" [alt]="institution.code" [src]="'assets/media/img/banks/'+institution.code+'.png'" />
+  <img class="bank-logo" [alt]="institution.code" [src]="'assets/media/img/banks/'+institution.code+'.png'" />
 </div>
-<ul class="row center-align">
+<ul class="row center-align mb-0">
   <li *ngFor="let account of accounts">
     <app-account-syncing [account]="account"></app-account-syncing>
   </li>

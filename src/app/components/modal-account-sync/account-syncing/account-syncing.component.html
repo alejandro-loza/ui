@@ -1,13 +1,15 @@
-<div class="col s8">
-  <small class="finerio-main-text-color">
-    <b>No. de Cuenta: {{ account.name }}</b>
-  </small>
-</div>
-<div class="col s2 offset-s1">
-  <div *ngIf="account.status === credentialStatusEnum.MOVEMENTS_CREATE_END; else loadingData">
-    <app-spinner-bank-finished-animation></app-spinner-bank-finished-animation>
+<div class="container-account">
+  <div class="col s8 offset-s1">
+    <small class="finerio-main-text-color">
+      <b>No. de Cuenta: {{ account.name }}</b>
+    </small>
   </div>
-  <ng-template #loadingData>
-    <app-spinner-bank-sync-animation></app-spinner-bank-sync-animation>
-  </ng-template>
+  <div class="col s2">
+    <div *ngIf="account.status === credentialStatusEnum.MOVEMENTS_CREATE_END; else loadingData">
+      <app-spinner-bank-finished-animation></app-spinner-bank-finished-animation>
+    </div>
+    <ng-template #loadingData>
+      <app-spinner-bank-sync-animation></app-spinner-bank-sync-animation>
+    </ng-template>
+  </div>
 </div>
