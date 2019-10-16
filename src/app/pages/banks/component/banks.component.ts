@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
-import { StatefulInstitutionsService } from '@stateful/institutions/stateful-institutions.service';
+import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 
-import { InstitutionInterface } from '@interfaces/institution.interface';
+import {InstitutionInterface} from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 
@@ -25,15 +25,8 @@ export class BanksComponent implements OnInit, AfterViewInit {
   }
 
   showOnlyActiveBanks(): InstitutionInterface[] {
-    let institutions = this.statefulInstitution.institutions;
-    let banksFiltered: InstitutionInterface[] = [];
-
-    institutions.forEach((bank) => {
-      if (bank.status == 'ACTIVE') {
-        banksFiltered.push(bank);
-      }
-    });
-    return banksFiltered;
+    const institutions = this.statefulInstitution.institutions;
+    return institutions.filter(institution => institution.status === 'ACTIVE');
   }
 
   ngAfterViewInit() {
