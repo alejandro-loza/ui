@@ -16,7 +16,7 @@ export class CheckDataCredentialService {
 
   checkData( credential: CredentialInterface, credentialUpdateResponse: CredentialUpdateResponse ) {
 
-    if (credential.status === 'VALIDATE') {
+    if ( credential.status === 'VALIDATE' && credential.institution.code !== 'BANREGIO') {
 
       this.checkSubscription(credential, credentialUpdateResponse);
 
