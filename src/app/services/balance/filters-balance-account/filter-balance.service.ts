@@ -42,7 +42,7 @@ export class FilterBalanceService {
   filterActive() {
 
     const accountFilter = this.statefulAccount.accounts
-      .filter(account => account.nature.includes('Cheques'));
+      .filter(account => account.nature.includes('Cheques') || account.nature.includes('Débito'));
 
     const manualAccountFilter = this.statefulAccount.manualAccounts
       .filter(account =>
