@@ -14,7 +14,6 @@ import {Subscription} from 'rxjs';
 import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
 import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
 import {CredentialService} from '@services/credentials/credential.service';
-import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-credential',
@@ -50,7 +49,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
     private accountService: AccountService,
     private credentialService: CredentialService,
     private checkDataCredentialService: CheckDataCredentialService,
-    public matDialog:                       MatDialog,
     private methodCredentialService: MethodCredentialService,
     private pollingCredentialService: PollingCredentialService,
     private statefulAccountsService: StatefulAccountsService,
@@ -141,7 +139,7 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
   getCredentials() {
 
-    if (this.statefulCredentialsService.credentials) {
+    if ( this.statefulCredentialsService.credentials ) {
 
       this.credentials = this.statefulCredentialsService.credentials;
 
