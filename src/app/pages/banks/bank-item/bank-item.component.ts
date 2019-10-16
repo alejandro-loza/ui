@@ -8,9 +8,9 @@ import {InstitutionInterface} from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 import {OAuthOptionsModel} from '@model/oAuth/oAuth.options.model';
-import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {HttpResponse} from '@angular/common/http';
 import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
-import {CredentialUpdateModel} from '@model/credential/credential-update.model';
+import {ToastService} from '@services/toast/toast.service';
 
 @Component({
   selector: 'app-bank-item',
@@ -27,6 +27,7 @@ export class BankItemComponent implements OnInit, AfterViewInit {
     private route: Router,
     private statefulInstitution: StatefulInstitutionService,
     private oauthService: OauthService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit() {}
@@ -68,28 +69,16 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
   private validateCredential( institution: InstitutionInterface ) {
 
+    this.toastService.setCode = 200;
+    this.toastService.setMessage = `Estamos conectándonos con ${ institution.name }`;
+    this.toastService.toastGeneral();
+
     this.oauthService.validateCredential( institution ).subscribe(
 
-      res => this.createOauth( res ),
-      ( error: HttpErrorResponse ) => {
+      res => this.oauthService.createPopUp( res )
 
-        if ( error.status === 400 ) {
+    );
 
-          // const oAuthCredential: CredentialUpdateModel = new CredentialUpdateModel();
-
-        }
-
-      });
-  }
-
-  private createOauth( res: HttpResponse<CredentialOauth> ) {
-
-    const oAuthOption = new OAuthOptionsModel(res.body.authorizationUri, 'Finerio_/_Connect_With_BanRegio', 'location=0,status=0,centerscreen=1,width=1000,height=1000', res.body);
-
-    const window = this.oauthService.createOAuth( oAuthOption );
-
-    this.oauthService.checkOauth( res.body ).subscribe(
-      auxRes => this.oauthService.statesOauth( auxRes, window ) );
   }
 
 }
