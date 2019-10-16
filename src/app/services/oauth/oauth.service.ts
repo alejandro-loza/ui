@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {HttpResponse} from '@angular/common/http';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
 
 import {InstitutionInterface} from '@interfaces/institution.interface';
@@ -17,10 +17,13 @@ import {CredentialOauthRequestService} from '@services/credentials/request/oauth
 
 import {ModalAccountSyncComponent} from '@components/modal-account-sync/component/modal-account-sync.component';
 
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {isNull} from 'util';
 import {CredentialUpdateModel} from '@model/credential/credential-update.model';
 import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
+import {catchError} from 'rxjs/operators';
+import {ToastService} from '@services/toast/toast.service';
+import {CleanerService} from '@services/cleaner/cleaner.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +36,9 @@ export class OauthService {
     private angularFirestore: AngularFirestore,
     private angularFireDatabase: AngularFireDatabase,
     private credentialOauthRequestService: CredentialOauthRequestService,
+    private cleanerService: CleanerService,
     private matDialog: MatDialog,
+    private toastService: ToastService,
     private router: Router
   ) { }
 
@@ -41,11 +46,30 @@ export class OauthService {
 
     const oAuthCredential: CredentialCreateModel = new CredentialCreateModel( institution );
 
-    return this.credentialOauthRequestService.createCredential( oAuthCredential );
+    return this.credentialOauthRequestService.createCredential( oAuthCredential )
+      .pipe(
+
+        catchError( ( error: HttpErrorResponse ) => {
+
+          if ( error.status === 400 ) {
+
+            this.toastService.setCode = 200;
+            this.toastService.setMessage = '¡No puedes tener dos cuentas de Banregio, por seguridad!';
+            this.toastService.toastGeneral();
+
+          }
+
+          return throwError( error );
+
+        })
+
+      );
 
   }
 
-  updateCredential( oAuthCredential: CredentialUpdateModel ) {
+  updateCredential( credentialInterface: CredentialInterface ) {
+
+    const oAuthCredential: CredentialUpdateModel = new CredentialUpdateModel( credentialInterface.id, credentialInterface.institution, credentialInterface.status );
 
     return this.credentialOauthRequestService.updateCredential( oAuthCredential );
 
@@ -61,6 +85,16 @@ export class OauthService {
 
     return this.angularFireDatabase.object<CredentialOauthResponse>(`/credentials/${credential.id}`).valueChanges();
 
+  }
+
+  createPopUp( res: HttpResponse<CredentialOauth> ) {
+
+    const oAuthOption = new OAuthOptionsModel(res.body.authorizationUri, 'Finerio_/_Connect_With_BanRegio', 'location=0,status=0,centerscreen=1,width=1000,height=1000', res.body);
+
+    const window = this.createOAuth( oAuthOption );
+
+    this.checkOauth( res.body ).subscribe(
+      auxRes => this.statesOauth( auxRes, window ) );
   }
 
   statesOauth( credentialOauth: CredentialOauthResponse, window: Window ) {
@@ -92,7 +126,7 @@ export class OauthService {
       disableClose: false,
       closeOnNavigation: false,
       restoreFocus: true,
-      width: '20%',
+      width: '25vw',
       panelClass: 'custom-dialog'
     };
 
@@ -129,8 +163,13 @@ export class OauthService {
         }
 
         if ( hasFinished ) {
+
+          this.cleanerService.cleanAllVariables();
+
           this.matDialogRef.componentInstance.hasFinished = hasFinished;
+
           this.router.navigate(['/app/credentials']).then();
+
         }
 
         return account;
