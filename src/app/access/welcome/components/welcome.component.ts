@@ -19,7 +19,6 @@ import {PollingCredentialService} from '@services/credentials/polling-credential
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 import {FilterAccountsService} from '@services/account/filter-accounts/filter-accounts.service';
 import {ToastCredentialService} from '@services/toast/credential/toast-credential/toast-credential.service';
-import {InstitutionInterface} from '@interfaces/institution.interface';
 import {FirebaseRequestService} from '@services/firebase/request/firebase-request.service';
 import {AngularFireAuth} from '@angular/fire/auth';
 
