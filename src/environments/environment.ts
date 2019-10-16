@@ -5,7 +5,7 @@
 export const environment = {
   envName: 'dev',
   production: false,
-  backendUrl: 'http://ec2-18-190-47-42.us-east-2.compute.amazonaws.com:8080/api',
+  backendUrl: 'http://ec2-18-190-47-42.us-east-2.compute.amazonaws.com:8081/api',
   newBackendUrl: 'https://api-v2.finerio.mx',
   xuangaUrl: 'http://ec2-18-190-47-42.us-east-2.compute.amazonaws.com:8080/api',
   apiUrl: 'https://api.finerio.mx',
