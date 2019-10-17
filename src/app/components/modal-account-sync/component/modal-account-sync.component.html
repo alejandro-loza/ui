@@ -7,13 +7,15 @@
   </li>
 </ul>
 <div *ngIf="hasFinished; else gettingData">
-  <app-bank-finished-animation></app-bank-finished-animation>
+  <app-account-data-finished (emitClick)="closeModal()"></app-account-data-finished>
 </div>
 <ng-template #gettingData>
   <app-bank-syncing-animation></app-bank-syncing-animation>
 </ng-template>
-<div class="container center-align">
-  <a (click)="closeModal()">
-    <small class="black-text">Salir y continuar sincronizando en segundo plano</small>
-  </a>
+<div class="row">
+  <div class="col s12 center-align">
+    <a (click)="closeModal()">
+      <small class="black-text">Salir y continuar sincronizando en segundo plano</small>
+    </a>
+  </div>
 </div>

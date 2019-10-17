@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 
 import {CredentialCreateModel} from '@model/credential/credential.create.model';
 import {CredentialUpdateModel} from '@model/credential/credential-update.model';
@@ -12,7 +12,9 @@ import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 import {ConfigService} from '@services/config/config.service';
 
 import {environment} from '@env/environment';
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {ToastService} from '@services/toast/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,7 @@ export class CredentialOauthRequestService implements CredentialOauthRequest {
     private configService: ConfigService,
     private configParamsService: ConfigParamsService,
     private httpClient: HttpClient,
+    private toastService: ToastService,
   ) { }
 
   createCredential( credential: CredentialCreateModel ): Observable<HttpResponse<CredentialOauth>> {
@@ -41,13 +44,31 @@ export class CredentialOauthRequestService implements CredentialOauthRequest {
 
   updateCredential( credential: CredentialUpdateModel ): Observable<HttpResponse<CredentialOauth>> {
 
+    const body = JSON.stringify( credential );
+
     const url = `${environment.xuangaUrl}/credentials/${ credential.id }`;
 
     const headers = this.configService.getHeaders;
 
     const params = this.configParamsService.getConfigParams;
 
-    return this.httpClient.put<CredentialOauth>( url, credential, { observe: 'response', headers, params } );
+    return this.httpClient.put<CredentialOauth>( url, body, { observe: 'response', headers, params } ).pipe(
+
+      catchError( ( error: HttpErrorResponse ) => {
+
+        if ( error.status === 400 ) {
+
+          this.toastService.setCode = 200;
+
+          this.toastService.setMessage = 'Tu cuenta ya se encuentra activada';
+
+          this.toastService.toastGeneral();
+
+        }
+
+        return throwError( error );
+      })
+    );
 
   }
 

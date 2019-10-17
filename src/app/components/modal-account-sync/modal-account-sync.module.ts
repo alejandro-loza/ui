@@ -6,19 +6,19 @@ import {BankSyncingAnimationModule} from '@animations/bank-syncing-animation/ban
 import { ModalAccountSyncComponent } from './component/modal-account-sync.component';
 import {SpinnerBankSyncAnimationModule} from '@animations/spinner-bank-sync-animation/spinner-bank-sync-animation.module';
 import {SpinnerBankFinishedAnimationModule} from '@animations/spinner-bank-finished-animation/spinner-bank-finished-animation.module';
-import {BankFinishedAnimationModule} from '@animations/bank-finished-animation/bank-finished-animation.module';
 import { AccountSyncingComponent } from './account-syncing/account-syncing.component';
+import { AccountDataFinishedComponent } from './account-data-finished/account-data-finished.component';
 
 @NgModule({
   declarations: [
     ModalAccountSyncComponent,
-    AccountSyncingComponent
+    AccountSyncingComponent,
+    AccountDataFinishedComponent
   ],
   imports: [
     SharedModule,
     MatDialogModule,
     BankSyncingAnimationModule,
-    BankFinishedAnimationModule,
     SpinnerBankSyncAnimationModule,
     SpinnerBankFinishedAnimationModule,
   ],

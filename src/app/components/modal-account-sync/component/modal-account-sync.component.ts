@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
 import {InstitutionInterface} from '@interfaces/institution.interface';
-import {CredentialOauthResponse} from '@interfaces/credentials/oAuth/credential-oauth-response';
 import {AccountInterface} from '@interfaces/account.interfaces';
 
 @Component({
