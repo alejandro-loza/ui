@@ -22,6 +22,7 @@ import { DateApiService } from '@services/date-api/date-api.service';
 import { StatefulAccountsService } from '@stateful/accounts/stateful-accounts.service';
 import { MethodCredentialService } from '@services/credentials/method-credential/method-credential.service';
 import {OauthService} from '@services/oauth/oauth.service';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-credential-details',
@@ -75,17 +76,13 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   getData() {
-    this.credential = this.statefulCredential.credential;
 
     this.institutions = this.statefulInstitutions.institutions;
 
-    if ( this.credential.institution.id !== 17 ) {
-      this.getFields();
-    }
+    this.getCredentials();
 
-    this.accounts = this.statefulAccounts.accounts.filter(
-      (account) => account.institution.code === this.credential.institution.code
-    );
+    this.getAccountsFromServer();
+
   }
 
   getFields() {
@@ -131,7 +128,11 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   private updateCredentialOauth( credentialInterface: CredentialInterface ) {
 
     this.oAuthService.updateCredential( credentialInterface ).subscribe(
-      res => this.oAuthService.createPopUp( res )
+      res => {
+        this.oAuthService.createPopUp( res );
+      },
+      () => {},
+      () => this.cleanerService.cleanAllVariables()
     );
   }
 
@@ -217,5 +218,35 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
         this.closeLoaderModal();
       }
     );
+  }
+
+  private getCredentials() {
+    if ( !isUndefined( this.statefulCredential.credential ) ) {
+
+      this.credential = this.statefulCredential.credential;
+
+      if ( this.credential.institution.id !== 17 ) {
+        this.getFields();
+      }
+
+    } else {
+      this.credentialService.getAllCredentials().subscribe(
+        () => this.getCredentials()
+      );
+    }
+  }
+
+  private getAccountsFromServer() {
+    if ( !isUndefined( this.statefulAccounts.accounts ) ) {
+
+      this.accounts = this.statefulAccounts.accounts.filter(
+        (account) => account.institution.code === this.credential.institution.code
+      );
+
+    } else {
+
+      this.accountService.getAccounts().subscribe( () => this.getAccountsFromServer() );
+
+    }
   }
 }

@@ -46,8 +46,7 @@ export class OauthService {
 
     const oAuthCredential: CredentialCreateModel = new CredentialCreateModel( institution );
 
-    return this.credentialOauthRequestService.createCredential( oAuthCredential )
-      .pipe(
+    return this.credentialOauthRequestService.createCredential( oAuthCredential ).pipe(
 
         catchError( ( error: HttpErrorResponse ) => {
 
@@ -71,7 +70,24 @@ export class OauthService {
 
     const oAuthCredential: CredentialUpdateModel = new CredentialUpdateModel( credentialInterface.id, credentialInterface.institution, credentialInterface.status );
 
-    return this.credentialOauthRequestService.updateCredential( oAuthCredential );
+    return this.credentialOauthRequestService.updateCredential( oAuthCredential ).pipe(
+
+      catchError( ( error: HttpErrorResponse ) => {
+
+        if ( error.status === 400 ) {
+
+          this.toastService.setCode = 200;
+
+          this.toastService.setMessage = 'Tu cuenta ya se encuentra activada';
+
+          this.toastService.toastGeneral();
+
+        }
+
+        return throwError( error );
+      })
+
+    );
 
   }
 
@@ -111,6 +127,11 @@ export class OauthService {
       this.openDialog();
     }
 
+    if ( credentialOauth.status === CredentialStatusEnum.MOVEMENTS_CREATE_END ) {
+      this.cleanerService.cleanAllVariables();
+    }
+
+
     if ( this.matDialogRef ) {
 
       this.setDataToModal( credentialOauth );
@@ -145,6 +166,11 @@ export class OauthService {
     let auxAccount = credential.account;
 
     auxAccount = { ...auxAccount, status: credential.status };
+
+    if ( isNull( this.matDialogRef.componentInstance ) ) {
+      this.cleanerService.cleanAllVariables();
+      return;
+    }
 
     const accounts = this.matDialogRef.componentInstance.accounts;
 

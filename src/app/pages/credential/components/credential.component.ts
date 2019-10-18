@@ -14,6 +14,7 @@ import {Subscription} from 'rxjs';
 import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
 import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
 import {CredentialService} from '@services/credentials/credential.service';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-credential',
@@ -68,8 +69,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
     this.getAccounts();
 
-    this.getCredentials();
-
   }
 
   ngAfterViewInit(): void { }
@@ -106,12 +105,18 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
   emptyStateProcess() {
 
-    if ( this.accounts && this.manualAccounts ) {
-      this.showEmptyState = this.credentials.length === 0 && ( this.accounts.length === 0 && this.manualAccounts.length === 0 );
-    } else if ( this.accounts || this.manualAccounts ) {
-      this.showEmptyState = this.credentials.length === 0 && ( this.accounts.length === 0 || this.manualAccounts.length === 0 );
+    if ( this.accounts.length <= 1 ) {
+
+      if (  this.credentials.length === 0 && this.manualAccounts.length === 0 ) {
+
+        this.showEmptyState = false;
+
+      }
+
     } else {
-      this.showEmptyState = this.credentials.length === 0;
+
+      this.showEmptyState = false;
+
     }
 
     this.showSpinner = false;
@@ -158,10 +163,12 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
   getAccounts() {
 
-    if ( this.statefulAccountsService.accounts && this.statefulAccountsService.manualAccounts ) {
+    if ( !isUndefined( this.statefulAccountsService.accounts ) && !isUndefined( this.statefulAccountsService.manualAccounts ) ) {
 
       this.accounts = this.statefulAccountsService.accounts;
       this.manualAccounts = this.statefulAccountsService.manualAccounts;
+
+      this.getCredentials();
 
     } else {
       this.accountService.getAccounts().subscribe( () => this.getAccounts());

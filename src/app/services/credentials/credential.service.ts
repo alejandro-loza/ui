@@ -13,8 +13,6 @@ import {Response} from '@interfaces/response.interface';
 
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {CredentialCreateModel} from '@app/model/credential/credential.create.model';
-import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 
 @Injectable({
   providedIn: 'root'
@@ -50,14 +48,8 @@ export class CredentialService {
       }
     ).pipe(
         map( res => {
-
-            if ( res.body.data[0] ) {
-              console.log(res.body.data[0].id);
-            }
-
             this.statefulCredentialsService.credentials = res.body.data;
             return res;
-
         })
 
       );

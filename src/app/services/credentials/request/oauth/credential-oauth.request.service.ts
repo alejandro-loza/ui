@@ -24,8 +24,7 @@ export class CredentialOauthRequestService implements CredentialOauthRequest {
   constructor(
     private configService: ConfigService,
     private configParamsService: ConfigParamsService,
-    private httpClient: HttpClient,
-    private toastService: ToastService,
+    private httpClient: HttpClient
   ) { }
 
   createCredential( credential: CredentialCreateModel ): Observable<HttpResponse<CredentialOauth>> {
@@ -52,23 +51,7 @@ export class CredentialOauthRequestService implements CredentialOauthRequest {
 
     const params = this.configParamsService.getConfigParams;
 
-    return this.httpClient.put<CredentialOauth>( url, body, { observe: 'response', headers, params } ).pipe(
-
-      catchError( ( error: HttpErrorResponse ) => {
-
-        if ( error.status === 400 ) {
-
-          this.toastService.setCode = 200;
-
-          this.toastService.setMessage = 'Tu cuenta ya se encuentra activada';
-
-          this.toastService.toastGeneral();
-
-        }
-
-        return throwError( error );
-      })
-    );
+    return this.httpClient.put<CredentialOauth>( url, body, { observe: 'response', headers, params } );
 
   }
 
