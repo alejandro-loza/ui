@@ -12,6 +12,8 @@ import {HttpResponse} from '@angular/common/http';
 import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 import {ToastService} from '@services/toast/toast.service';
 import {CleanerService} from '@services/cleaner/cleaner.service';
+import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
+import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
 
 @Component({
   selector: 'app-bank-item',
@@ -27,6 +29,7 @@ export class BankItemComponent implements OnInit, AfterViewInit {
   constructor(
     private route: Router,
     private statefulInstitution: StatefulInstitutionService,
+    private statefulCredentialsService: StatefulCredentialsService,
     private oauthService: OauthService,
     private toastService: ToastService,
     private cleanService: CleanerService
@@ -46,11 +49,19 @@ export class BankItemComponent implements OnInit, AfterViewInit {
   institutionClick( institution: InstitutionInterface ) {
 
     const initTooltip = new M.Tooltip(this.elementTooltip.nativeElement);
+
     initTooltip.destroy();
 
-    if (institution.status === 'ACTIVE') {
+    if ( institution.status === 'ACTIVE' ) {
 
       this.statefulInstitution.institution = institution;
+
+      const auxCredential = this.statefulCredentialsService.credentials
+        .find( credential => credential.institution.id === institution.id );
+
+      if ( auxCredential ) {
+        return this.route.navigate( [ '/app', 'credentials', auxCredential.id ] );
+      }
 
       if ( institution.code === 'BANREGIO' ) {
 
@@ -59,6 +70,7 @@ export class BankItemComponent implements OnInit, AfterViewInit {
         return;
 
       }
+
       return this.route.navigate(['/app', 'banks', institution.code]);
 
     } else {
@@ -79,7 +91,6 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
       res => {
 
-        this.cleanService.cleanAllVariables();
         this.oauthService.createPopUp( res );
 
       },
