@@ -81,7 +81,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
     this.getCredentials();
 
-    this.getAccountsFromServer();
+    this.getAccounts();
 
   }
 
@@ -188,7 +188,16 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   getAccounts() {
-    this.accountService.getAccounts().subscribe(() => this.router.navigate([ '/app', 'credentials' ]));
+
+    if ( !isUndefined( this.statefulAccounts.accounts ) ) {
+
+      this.accounts = this.statefulAccounts.accounts.filter( account => account.institution.code === this.credential.institution.code );
+
+    } else {
+
+      this.accountService.getAccounts().subscribe( () => this.getAccounts() );
+
+    }
   }
 
   cantUpdateToast() {
@@ -201,11 +210,12 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     this.openLoaderModal();
     this.accountService.deleteAccount(this.account).subscribe(
       (res) => {
-        this.getAccounts();
 
         this.cleanerService.cleanAllVariables();
 
         this.toastService.setCode = res.status;
+
+        this.accountService.getAccounts().subscribe(() => this.router.navigate([ '/app', 'credentials' ]));
       },
       (error) => {
         this.toastService.setCode = error.status;
@@ -221,6 +231,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private getCredentials() {
+
     if ( !isUndefined( this.statefulCredential.credential ) ) {
 
       this.credential = this.statefulCredential.credential;
@@ -236,17 +247,4 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private getAccountsFromServer() {
-    if ( !isUndefined( this.statefulAccounts.accounts ) ) {
-
-      this.accounts = this.statefulAccounts.accounts.filter(
-        (account) => account.institution.code === this.credential.institution.code
-      );
-
-    } else {
-
-      this.accountService.getAccounts().subscribe( () => this.getAccountsFromServer() );
-
-    }
-  }
 }

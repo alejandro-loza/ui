@@ -7,13 +7,13 @@ import {OauthService} from '@services/oauth/oauth.service';
 import {InstitutionInterface} from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
-import {OAuthOptionsModel} from '@model/oAuth/oAuth.options.model';
-import {HttpResponse} from '@angular/common/http';
-import {CredentialOauth} from '@interfaces/credentials/oAuth/credential-oauth';
 import {ToastService} from '@services/toast/toast.service';
 import {CleanerService} from '@services/cleaner/cleaner.service';
 import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
 import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
+import {CredentialService} from '@services/credentials/credential.service';
+import {isUndefined} from 'util';
+import {AccountService} from '@services/account/account.service';
 
 @Component({
   selector: 'app-bank-item',
@@ -30,6 +30,9 @@ export class BankItemComponent implements OnInit, AfterViewInit {
     private route: Router,
     private statefulInstitution: StatefulInstitutionService,
     private statefulCredentialsService: StatefulCredentialsService,
+    private statefulCredential: StatefulCredentialService,
+    private credentialService: CredentialService,
+    private accountService: AccountService,
     private oauthService: OauthService,
     private toastService: ToastService,
     private cleanService: CleanerService
@@ -56,14 +59,13 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
       this.statefulInstitution.institution = institution;
 
-      const auxCredential = this.statefulCredentialsService.credentials
-        .find( credential => credential.institution.id === institution.id );
+      const auxCredential = this.getCredential( institution );
 
       if ( auxCredential ) {
-        return this.route.navigate( [ '/app', 'credentials', auxCredential.id ] );
-      }
 
-      if ( institution.code === 'BANREGIO' ) {
+        return this.route.navigate( [ '/app', 'credentials', auxCredential.id ] );
+
+      } else if ( institution.code === 'BANREGIO' ) {
 
         this.validateCredential( institution );
 
@@ -98,6 +100,35 @@ export class BankItemComponent implements OnInit, AfterViewInit {
       () => this.cleanService.cleanAllVariables()
 
     );
+
+  }
+
+  private getCredential ( institution: InstitutionInterface ) {
+
+    if ( !isUndefined( this.statefulCredentialsService.credentials ) ) {
+
+      return this.statefulCredentialsService.credentials.find( credential => credential.institution.id === institution.id );
+
+    } else {
+
+      this.credentialService.getAllCredentials().subscribe(
+        ( ) => {
+
+          const auxCredential = this.statefulCredentialsService.credentials.find( credential => credential.institution.id === institution.id );
+
+          if ( auxCredential ) {
+
+            this.accountService.getAccounts().subscribe();
+
+            this.statefulCredential.credential = auxCredential;
+
+            return this.route.navigate( [ '/app', 'credentials', auxCredential.id ] );
+
+          }
+        }
+      );
+
+    }
 
   }
 

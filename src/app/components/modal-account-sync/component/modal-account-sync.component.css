@@ -1,8 +1,3 @@
-.text-muted {
-  color: #B0B6C7;
-  margin: 2vw 0;
-}
-
 .name-account {
   margin-top: 1vw;
 }
@@ -14,4 +9,14 @@
 
 .mb-0 {
   margin-bottom: 0;
+}
+
+.text-helper {
+  color: #5D688C;
+  cursor: pointer;
+  transition: all ease-in-out 250ms;
+}
+
+.text-helper:hover {
+  color: #000000;
 }
