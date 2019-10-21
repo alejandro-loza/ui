@@ -113,7 +113,7 @@ export class OauthService {
       auxRes => this.statesOauth( auxRes, window ) );
   }
 
-  statesOauth( credentialOauth: CredentialOauthResponse, window: Window ) {
+  private statesOauth( credentialOauth: CredentialOauthResponse, window: Window ) {
 
     if ( isNull( credentialOauth ) ) {
       return;
@@ -140,11 +140,12 @@ export class OauthService {
   }
 
   private openDialog( data?: any ) {
+
     let matDialogConfig: MatDialogConfig<any>;
 
     matDialogConfig = {
       autoFocus: true,
-      disableClose: false,
+      disableClose: true,
       closeOnNavigation: false,
       restoreFocus: true,
       width: '25vw',
@@ -158,6 +159,8 @@ export class OauthService {
     if ( !this.matDialogRef ) {
       this.matDialogRef = this.matDialog.open(ModalAccountSyncComponent, matDialogConfig);
     }
+
+    this.matDialogRef.afterClosed().subscribe( () => this.matDialogRef = undefined );
 
   }
 

@@ -8,14 +8,14 @@
 </ul>
 <div *ngIf="hasFinished; else gettingData">
   <app-account-data-finished (emitClick)="closeModal()"></app-account-data-finished>
+  <div class="row">
+    <div class="col s12 center-align">
+      <a (click)="closeModal()">
+        <small class="text-helper animated fadeIn faster">Salir y continuar.</small>
+      </a>
+    </div>
+  </div>
 </div>
 <ng-template #gettingData>
   <app-bank-syncing-animation></app-bank-syncing-animation>
 </ng-template>
-<div class="row">
-  <div class="col s12 center-align">
-    <a (click)="closeModal()">
-      <small class="text-helper">Salir y continuar sincronizando en segundo plano</small>
-    </a>
-  </div>
-</div>
