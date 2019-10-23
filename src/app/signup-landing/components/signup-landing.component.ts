@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import LottieView from 'lottie-web';
+import * as M from 'materialize-css'
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-signup-landing',
@@ -31,6 +33,12 @@ export class SignupLandingComponent implements OnInit {
     const sidenav = M.Sidenav.init(this.sidenav.nativeElement, {
       'edge': 'right'
     });
+  }
+
+  procesHasBegun() {
+    this.stopIterationCauseClick = true
+    const INSTANCE = M.Sidenav.getInstance(this.sidenav.nativeElement);
+    INSTANCE.close();
   }
 
   startIterationBetweenList() {

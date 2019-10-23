@@ -1,9 +1,12 @@
 <div class="main">
   <button id="sideButtonAction" class="z-depth-5 sidenav-trigger" data-target="slide-out">
   </button>
+  <button id="signup_icon" class="sidenav-trigger" data-target="slide-out">
+    <img src="../../../assets/media/img/exit_icon.svg" alt="SIGNUP FINERIO">
+  </button>
 
   <div id="slide-out" class="sidenav" #sidenav>
-    <app-signup-form></app-signup-form>
+    <app-signup-form (procesHasBegun)="procesHasBegun()"></app-signup-form>
   </div>
 
   <div class="container">
