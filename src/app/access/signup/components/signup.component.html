@@ -3,26 +3,30 @@
     <div class="row">
       <div class="col s12 m7 card-content-inside center-align">
         <div class="hide-on-med-and-up show-on-small center-align">
-          <app-finerio-icon [svgClasses]="'widthImage'"></app-finerio-icon> 
+          <app-finerio-icon [svgClasses]="'widthImage'"></app-finerio-icon>
         </div>
         <h6>Regístrate, y comienza a tomar el control de tu dinero.</h6>
-        <app-social-media [facebookText]="'Continuar con Facebook'" [googleText]="'Continuar con Google'"></app-social-media>
+        <app-social-media [facebookText]="'Continuar con Facebook'" [googleText]="'Continuar con Google'">
+        </app-social-media>
         <hr>
         <div class="row">
           <div class="col s12 m10 offset-m1">
             <form [formGroup]="signupData" (ngSubmit)="signup()" method="POST" id="createUser">
               <div class="input-field">
-                <input required formControlName="email" name="email" class="form-control" id="email-input" type="email" class="validate" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                <input required formControlName="email" name="email" class="form-control validate" id="email-input"
+                  type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                 <label for="email-input">Correo Electrónico</label>
                 <span class="helper-text" data-error="Correo Inválido">Ej. contacto@finerio.mx</span>
               </div>
               <div class="input-field">
-                <input required formControlName="password" name="password" minlength="8" class="form-control" id="password-input" type="password" class="validate">
+                <input required formControlName="password" name="password" minlength="8" class="validate form-control"
+                  id="password-input" type="password">
                 <label for="password-input">Contraseña</label>
                 <span class="helper-text" data-error="La contraseña debe contener al menos 8 caracteres"></span>
               </div>
               <div class="input-field">
-                <input required formControlName="passwordConfirm" name="confirmPassword" class="form-control" id="confirm-input" (keyup)="passwordMatch()" type="password">
+                <input required formControlName="passwordConfirm" name="confirmPassword" class="form-control"
+                  id="confirm-input" (keyup)="passwordMatch()" type="password">
                 <label for="confirm-input">Confirmar contraseña</label>
                 <span id="passwordError" *ngIf="!passwordValidate">Las contraseñas no coinciden</span>
               </div>
@@ -30,8 +34,9 @@
                 <div class="input-field">
                   <p>
                     <label>
-                      <input name="blog" type="checkbox" class="filled-in" checked="checked" id="checkbox-blog" formControlName="blog" />
-                      <span>Acepto subscribirme al blog de finanzas personales</span>
+                      <input name="blog" type="checkbox" class="filled-in" checked="checked" id="checkbox-blog"
+                        formControlName="blog" />
+                      <span>Acepto suscribirme al (mejor) blog de finanzas personales</span>
                     </label>
                   </p>
                 </div>
@@ -41,7 +46,8 @@
                     <app-spinner></app-spinner>
                   </ng-template>
                   <ng-template #elseBlock>
-                    <button [disabled]="!signupData.valid" class="btn finerio-main-color white-text" type="submit" id="btnCreateUser" name="action">Enviar
+                    <button [disabled]="!signupData.valid" class="btn finerio-main-color white-text" type="submit"
+                      id="btnCreateUser" name="action">Enviar
                       <i class="material-icons right">send</i>
                     </button>
                   </ng-template>
@@ -49,10 +55,13 @@
                 </div>
               </div>
             </form>
-            <p id="terms"><small>Al pulsar el botón “enviar”, estás aceptando expresamente nuestros <a target="_blank" href="https://finerio.mx/terms">términos y condiciones</a> y nuestro <a target="_blank" href="https://finerio.mx/privacy">aviso de privacidad</a></small></p>
+            <p id="terms"><small>Al pulsar el botón “enviar”, estás aceptando expresamente nuestros <a target="_blank"
+                  href="https://finerio.mx/terms">términos y condiciones</a> y nuestro <a target="_blank"
+                  href="https://finerio.mx/privacy">aviso de privacidad</a></small></p>
             <div class="login-container">
               <p>¿Ya tienes cuenta en Finerio?</p>
-              <a class="waves-effect waves-teal btn finerio-accent-outline-color" routerLink="/access/login">Iniciar Sesión</a>
+              <a class="waves-effect waves-teal btn finerio-accent-outline-color" routerLink="/access/login">Iniciar
+                Sesión</a>
             </div>
           </div>
         </div>

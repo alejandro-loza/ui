@@ -1,0 +1,91 @@
+li {
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.sidenav {
+    width: 600px!important;
+}
+
+.no-marginBottom {
+    margin-bottom: 0px!important;
+}
+
+.main {
+    min-height: 100%;
+    background: transparent linear-gradient(180deg, #127AC6 0%, #1A56A9 72%, #23328C 100%) 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.active {
+    font-family: 'Ubuntu', sans-serif;
+    color: white!important;
+    font-size: 22px!important;
+}
+
+.padding-top-50 {
+    padding-top: 50px;
+}
+
+.startUsingFinerioButton {
+    height: 60px;
+    background-color: #00C3FF;
+    color: white;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 20px;
+    border-radius: 50px;
+    border: 0px;
+    width: 40%;
+    cursor: pointer;
+}
+
+#glowBackground {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    z-index: 0;
+}
+
+#mainText {
+    color: white;
+}
+
+#lottieAnimationContainer {
+    padding-top: 0px;
+}
+
+#lottieAnimation {
+    height: 350px;
+}
+
+#actionList {
+    height: 350px;
+}
+
+#footerP {
+    color: white;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 20px;
+    text-align: center;
+}
+
+#devicesImg {
+    width: 15%;
+    margin-bottom: 40px;
+}
+
+#storeFinerio {
+    width: 30%;
+    margin-top: 5px;
+}
+
+#sideButtonAction {
+    position: fixed;
+    min-height: 100%;
+    background-color: white;
+    border: 0px;
+    right: 0;
+    width: 40px;
+}

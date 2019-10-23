@@ -8,7 +8,7 @@ const AppRouting: Routes = [
   },
   {
     path: 'app',
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/pages.module').then(module => module.PagesModule)
   },
   {
@@ -17,16 +17,20 @@ const AppRouting: Routes = [
   },
   {
     path: 'first-step',
-   canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     loadChildren: () => import('./first-step/first-step.module').then(module => module.FirstStepModule)
   },
   {
     path: 'invitation/:code',
-    loadChildren: () => import('./referals/referals.module').then( module => module.ReferalsModule)
+    loadChildren: () => import('./referals/referals.module').then(module => module.ReferalsModule)
   },
   {
     path: 'invitation-success',
     loadChildren: () => import('./referals/success/success.module').then(module => module.SuccessModule)
+  },
+  {
+    path: 'signup-landing',
+    loadChildren: () => import('./signup-landing/signup-landing.module').then(module => module.SignupLandingModule)
   },
   {
     path: '',

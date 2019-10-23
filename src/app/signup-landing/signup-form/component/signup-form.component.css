@@ -1,0 +1,54 @@
+p, button {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.margin-top30 {
+    margin-top: 30px;
+}
+
+#signupTitle {
+    font-size: 18px;
+    color: #5D688C;
+}
+
+#signupButton {
+    background-color: transparent;
+    border: 2px solid #00C3FF;
+    border-radius: 30px;
+    width: 40%;
+    position: relative;
+    height: 50px;
+    color: #00C3FF;
+}
+
+#signupButton[disabled] {
+    color: #5D688C;
+    border: 2px solid #5D688C;
+}
+
+#termsP {
+    font-size: 14px;
+    color: #5D688C;
+}
+
+#loginButton {
+    background-color: transparent;
+    border: 0px;
+    color: #B0B6C7;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#promoCodeSpan {
+    color: #00C3FF;
+}
+
+#passwordError{
+    color: red;
+    font-size: 12px;
+  }
+
+[type="checkbox"].filled-in:checked+span:not(.lever):after{
+    border: 2px solid #00C3FF;
+    background-color: #00C3FF;
+  }
