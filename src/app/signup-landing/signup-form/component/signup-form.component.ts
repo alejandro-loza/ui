@@ -28,6 +28,7 @@ export class SignupFormComponent implements OnInit {
   });
   passwordValidate: boolean;
   signupButtonClicked: boolean;
+  showSignupForm: boolean;
 
   @Output() procesHasBegun: EventEmitter<boolean>;
   constructor(private signupService: SignupService,
@@ -40,9 +41,19 @@ export class SignupFormComponent implements OnInit {
     this.passwordValidate = true
     this.signupButtonClicked = false
     this.procesHasBegun = new EventEmitter();
+    this.showSignupForm = true;
   }
 
   ngOnInit() {
+  }
+
+  loginButtonEvent() {
+    this.fadeOutSignupForm()
+  }
+
+  fadeOutSignupForm() {
+    this.showSignupForm = false
+
   }
 
   signup() {
