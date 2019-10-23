@@ -2,7 +2,6 @@ li {
     padding: 10px;
     font-size: 20px;
     cursor: pointer;
-    z-index: 1000;
 }
 
 .sidenav {
@@ -81,7 +80,7 @@ li {
     margin-top: 5px;
 }
 
-#signup_icon {
+#signupIconButton {
     border: 0px;
     background-color: white;
     width: 60px;
@@ -90,9 +89,10 @@ li {
     position: fixed;
     height: 50px;
     top: 70px;
+    cursor: pointer;
 }
 
-#signup_icon img {
+#signupIconButton img {
     margin-right: 10px;
 }
 
@@ -103,4 +103,50 @@ li {
     border: 0px;
     right: 0;
     width: 35px;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 1330px) and (min-width: 992px) {
+    #devicesImg {
+        margin-bottom: 30px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+
+    li {
+        text-align: center;
+    }
+
+    .startUsingFinerioButton {
+        width: 70%;
+    }
+
+    .sidenav {
+        width: 90%!important;
+    }
+    
+    #signupIconButton {
+        display: none;
+    }
+
+    #actionList {
+        height: auto;
+    }
+
+    #sideButtonAction {
+        display: none;
+    }
+
+    #devicesImg {
+        display: none;
+    }
+
+    #storeFinerio {
+        width: 50%;
+    }
+
+    #lottieAnimation {
+        height: 250px;
+    }
 }
