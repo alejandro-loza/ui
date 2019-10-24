@@ -28,7 +28,10 @@ export class SignupFormComponent implements OnInit {
   });
   passwordValidate: boolean;
   signupButtonClicked: boolean;
+  formTitle: string;
   showSignupForm: boolean;
+  sendButtonText: string;
+  anotherFormText: string;
 
   @Output() procesHasBegun: EventEmitter<boolean>;
   constructor(private signupService: SignupService,
@@ -42,25 +45,48 @@ export class SignupFormComponent implements OnInit {
     this.signupButtonClicked = false
     this.procesHasBegun = new EventEmitter();
     this.showSignupForm = true;
+    this.formTitle = "o Regístrate con tu correo electrónico:"
+    this.sendButtonText = "Registrarme";
+    this.anotherFormText = '¿Ya tienes cuenta en Finerio? Inicia sesión aquí';
   }
 
   ngOnInit() {
   }
 
-  loginButtonEvent() {
-    this.fadeOutSignupForm()
+  anotherFormClicked() {
+    this.showSignupForm == false ?
+      this.showSignForm() :
+      this.showLoginForm()
   }
 
-  fadeOutSignupForm() {
-    this.showSignupForm = false
+  showSignForm() {
+    document.getElementById('actionForm').classList.remove('topAnimation');
+    document.getElementById('actionForm').classList.add('resetAnimation');
 
+    this.showSignupForm = true;
+    this.formTitle = "o Regístrate con tu correo electrónico:"
+    this.sendButtonText = "Registrarme";
+    this.anotherFormText = '¿Ya tienes cuenta en Finerio? Inicia sesión aquí';
+  }
+
+  showLoginForm() {
+    document.getElementById('actionForm').classList.add('topAnimation');
+    document.getElementById('actionForm').classList.remove('resetAnimation');
+
+    this.showSignupForm = false;
+    this.formTitle = "o con tu correo electrónico:"
+    this.sendButtonText = 'Entrar';
+    this.anotherFormText = '¿Aún no tienes cuenta en Finerio? Registrate aquí';
+  }
+
+  submitFormAction() {
+    this.showSignupForm ? this.signup() : this.login()
   }
 
   signup() {
     this.passwordMatch();
-    this.signupButtonClicked = true
     if (!this.passwordValidate) { return }
-
+    this.signupButtonClicked = true
     this.signupService.signup(this.signupData.value).subscribe(res => {
       this.analyticsEvents(res);
       this.toast.setCode = res.status
@@ -83,14 +109,16 @@ export class SignupFormComponent implements OnInit {
   }
 
   login() {
+    this.signupButtonClicked = true
     this.user.email = this.signupData.value.email;
     this.user.password = this.signupData.value.password;
     this.loginService.login(this.user).subscribe(
-      (res) => res,
-      (err) => {
+      (res) => {
+      }, (err) => {
         return err;
       },
       () => {
+        this.procesHasBegun.emit();
         return this.router.navigate(['/access/welcome']);
       }
     );
