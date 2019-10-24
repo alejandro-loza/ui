@@ -1,0 +1,80 @@
+<div id="actionForm">
+  <div class="container">
+    <div class="row margin-top30 center">
+      <app-social-media [facebookText]="'Continuar con Facebook'" [googleText]="'Continuar con Google'">
+      </app-social-media>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col s12 center">
+        <p id="signupTitle">{{ formTitle }}</p>
+      </div>
+      <form [formGroup]="signupData" (ngSubmit)="submitFormAction()">
+        <div class="input-field col s12">
+          <input required formControlName="email" name="email" class="form-control validate" id="email" type="email"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Correo electrónico">
+          <span class="helper-text" data-error="Correo Inválido">Ej. contacto@finerio.mx</span>
+        </div>
+        <div class="input-field col s12">
+          <input required minlength="8" formControlName="password" name="password" id="passwordInput" type="password"
+            class="validate form-control" placeholder="Contraseña">
+          <span class="helper-text" data-error="La contraseña debe contener al menos 8 caracteres"></span>
+        </div>
+        <div *ngIf="showSignupForm" class="hideForLogin">
+          <div class="input-field col s12">
+            <input formControlName="passwordConfirm" name="passwordConfirm" id="confirmPasswordInput"
+              (keyup)="passwordMatch()" type="password" class="validate" placeholder="Confirmar contraseña">
+            <span id="passwordError" *ngIf="!passwordValidate">Las contraseñas no coinciden</span>
+          </div>
+          <div class="input-field col s12">
+            <span id="promoCodeSpan">Si tienes un código promocional aplícalo aquí:</span>
+            <input formControlName="promoCode" placeholder="Código promocional (opcional)" id="promoCodeInput"
+              type="text">
+          </div>
+          <div class="input-field col s12">
+            <p>
+              <label>
+                <input name="blog" type="checkbox" class="filled-in" checked="checked" id="checkbox-blog"
+                  formControlName="blog" />
+                <span>Acepto suscribirme al (mejor) blog de finanzas personales</span>
+              </label>
+            </p>
+          </div>
+        </div>
+        <div class="col s12 center">
+          <div *ngIf="showSignupForm == false" class="row">
+            <div class="col s12 center">
+              <a href="https://app.finerio.mx/access/forgot" target="_blank" class="secondaryButton"><u>¿Olvidaste tu
+                  contraseña?</u>
+              </a>
+            </div>
+          </div>
+          <div *ngIf="signupButtonClicked; then showSpinner else showButton"></div>
+          <ng-template #showSpinner>
+            <app-spinner></app-spinner>
+          </ng-template>
+          <ng-template #showButton>
+            <button [disabled]="!signupData.valid" type="submit" name="action"
+              id="signupButton">{{ sendButtonText }}</button>
+          </ng-template>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="showSignupForm" class="hideForLogin">
+      <div class="row">
+        <div class="col s12 center">
+          <span id="termsP">
+            Al pulsar el botón <b>Registrarme</b>, estás aceptando expresamente nuestros <a target="_blank"
+              href="https://finerio.mx/terms">términos y condiciones</a> y nuestro
+            <a target="_blank" href="https://finerio.mx/privacy">aviso de privacidad.</a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 center">
+        <button (click)="anotherFormClicked()" class="secondaryButton"><u>{{ anotherFormText }}</u></button>
+      </div>
+    </div>
+  </div>
+</div>
