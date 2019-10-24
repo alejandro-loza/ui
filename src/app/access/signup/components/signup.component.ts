@@ -8,6 +8,7 @@ import { SignupService } from '@services/signup/signup.service';
 import { LoginService } from '@services/login/login.service';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { FirebaseAnalyticsService } from '@services/firebase/firebase-analytics/firebase-analytics.service';
+import { FacebookService } from "@services/facebook/facebook.service";
 import { User } from '@app/interfaces/user.interface';
 import { isNullOrUndefined } from 'util';
 import { MobileService } from '@services/mobile/mobile.service';
@@ -15,7 +16,7 @@ import { MobileService } from '@services/mobile/mobile.service';
 @Component({
 	selector: 'app-signup',
 	templateUrl: './signup.component.html',
-	styleUrls: [ './signup.component.css' ]
+	styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
 	passwordValidate: boolean = true;
@@ -38,15 +39,16 @@ export class SignupComponent implements OnInit {
 		private loginService: LoginService,
 		private mixpanelService: MixpanelService,
 		private firebaseAnalyticsService: FirebaseAnalyticsService,
+		private facebookService: FacebookService,
 		private mobileService: MobileService
 	) {
 		this.isButtonAvailable = false;
 		if (this.mobileService.mobilecheck()) {
-			this.router.navigate([ 'mobile' ]);
+			this.router.navigate(['mobile']);
 		}
 	}
 
-	ngOnInit() {}
+	ngOnInit() { }
 
 	signup() {
 		this.passwordMatch();
@@ -55,8 +57,7 @@ export class SignupComponent implements OnInit {
 			this.showSpinner = true;
 			this.signupService.signup(this.signupData.value).subscribe(
 				(res) => {
-					this.mixpanelEvent(res.body.id);
-					this.firebaseAnalyticsService.trackEvent('sign_up');
+					this.analyticsEvents(res);
 					this.toastService.setCode = res.status;
 				},
 				(error) => {
@@ -68,7 +69,7 @@ export class SignupComponent implements OnInit {
 						this.toastService.setMessage = error.error.message;
 					}
 					this.toastService.toastGeneral();
-					return this.router.navigate([ '/access', 'signup' ]);
+					return this.router.navigate(['/access', 'signup']);
 				},
 				() => {
 					this.toastService.setMessage = '¡Se creó tu cuenta!';
@@ -88,9 +89,15 @@ export class SignupComponent implements OnInit {
 				return err;
 			},
 			() => {
-				return this.router.navigate([ '/access/welcome' ]);
+				return this.router.navigate(['/access/welcome']);
 			}
 		);
+	}
+
+	analyticsEvents(response: any) {
+		this.mixpanelEvent(response.body.id);
+		this.firebaseAnalyticsService.trackEvent('sign_up');
+		this.facebookService.trackEvent("sign_up");
 	}
 
 	mixpanelEvent(id: string) {

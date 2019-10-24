@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 import { FirebaseAnalyticsService } from '@services/firebase/firebase-analytics/firebase-analytics.service';
+import { FacebookService } from "@services/facebook/facebook.service";
+
 import { CredentialInterface } from '@interfaces/credentials/credential.interface';
 import { isUndefined } from 'util';
 
@@ -8,11 +10,14 @@ import { isUndefined } from 'util';
 	providedIn: 'root'
 })
 export class TrackingCredentialService {
-	constructor(private mixpanel: MixpanelService, private firebaseAnalyticsService: FirebaseAnalyticsService) {}
+	constructor(private mixpanel: MixpanelService,
+		private firebaseAnalyticsService: FirebaseAnalyticsService,
+		private facebookService: FacebookService) { }
 
 	createCredential(credential: CredentialInterface) {
 		const create = 'Create Credential';
 		this.firebaseAnalyticsService.trackEvent('create_credential');
+		this.facebookService.trackEvent('create_credential');
 		this.mixpanelEvent(credential, create);
 	}
 
@@ -41,8 +46,6 @@ export class TrackingCredentialService {
 
 	private mixpanelEvent(credential: CredentialInterface, event: string) {
 		this.mixpanel.setIdentify();
-		this.mixpanel.setSuperProperties();
-		this.mixpanel.setPeopleProperties();
 		this.mixpanel.setTrackEvent(event, { bank: credential.institution.code });
 	}
 }

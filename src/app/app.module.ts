@@ -28,7 +28,7 @@ import { ModalTokenComponent } from '@components/modal-token/component/modal-tok
 import { ModalTokenModule } from '@components/modal-token/modal-token.module';
 
 @NgModule({
-	declarations: [ AppComponent ],
+	declarations: [AppComponent],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
@@ -51,7 +51,7 @@ import { ModalTokenModule } from '@components/modal-token/modal-token.module';
 		ToastService,
 		InterceptorProvider
 	],
-	entryComponents: [ ModalTokenComponent ],
-	bootstrap: [ AppComponent ]
+	entryComponents: [ModalTokenComponent],
+	bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

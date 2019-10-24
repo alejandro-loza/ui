@@ -10,6 +10,7 @@ import { CategoriesBeanService } from '@services/categories/categories-bean.serv
 import { CategoriesHelperService } from '@services/categories/categories-helper.service';
 import { StatefulMovementsService } from '@services/stateful/movements/stateful-movements.service';
 import { FirebaseAnalyticsService } from '@services/firebase/firebase-analytics/firebase-analytics.service';
+import { FacebookService } from "@services/facebook/facebook.service";
 
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ModalCategoriesComponent } from '@components/modal-categories/component/modal-categories.component';
@@ -29,8 +30,9 @@ import { DateApiService } from '@services/date-api/date-api.service';
 @Component({
 	selector: 'app-detail-movement',
 	templateUrl: './detail-movement.component.html',
-	styleUrls: [ './detail-movement.component.css' ]
+	styleUrls: ['./detail-movement.component.css']
 })
+
 export class DetailMovementComponent implements OnInit, AfterViewInit {
 	@ViewChild('datepicker', { static: false })
 	elDatePickker: ElementRef;
@@ -77,7 +79,8 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
 		private editMovementListService: EditMovementListService,
 		private renderer: Renderer2,
 		private router: Router,
-		private firebaseAnalyticsService: FirebaseAnalyticsService
+		private firebaseAnalyticsService: FirebaseAnalyticsService,
+		private facebookService: FacebookService
 	) {
 		this.movement = { customDate: new Date(), type: 'charge' };
 		this.activatedRoute.params.subscribe((res) => (this.id = res.id));
@@ -126,7 +129,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
 			categoryId = res.body.categoryId;
 			if (isNullOrUndefined(categoryId)) {
 				this.fillNoPreCat();
-				this.movement.concepts = [ {} ];
+				this.movement.concepts = [{}];
 				this.movement.concepts[0].category = this.category;
 			} else {
 				this.getEntireCategory(categoryId);
@@ -169,7 +172,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
 
 	getEntireCategory(categoryId: string) {
 		this.categoriesService.getCategoriesInfo().subscribe((res) => {
-			this.movement.concepts = [ {} ];
+			this.movement.concepts = [{}];
 			this.categoriesList = res.body;
 			this.movement.concepts[0].category = this.categoriesHelperService.getCategoryById(categoryId, res.body);
 			this.category = this.movement.concepts[0].category;
@@ -182,7 +185,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
 	saveData(ngForm: NgForm) {
 		this.canShowSpinner = true;
 		if (this.id === 'new-movement') {
-			this.triggerFirebaseEvent();
+			this.triggerAnalyticsEvents();
 			this.manualAccount === undefined ? this.createMovement() : this.createManualAccountMovement();
 		} else {
 			this.editMovement();
@@ -244,7 +247,7 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
 	}
 
 	createManualAccountMovement() {
-		this.movement.concepts = [ {} ];
+		this.movement.concepts = [{}];
 		this.movement.concepts[0].category = this.category;
 		this.movementService.createManualAccountMovement(this.movement, this.manualAccount.id).subscribe(
 			(res) => {
@@ -270,8 +273,9 @@ export class DetailMovementComponent implements OnInit, AfterViewInit {
 		);
 	}
 
-	triggerFirebaseEvent() {
+	triggerAnalyticsEvents() {
 		this.firebaseAnalyticsService.trackEvent('create_movement');
+		this.facebookService.trackEvent('create_movement');
 	}
 
 	createMovement() {
