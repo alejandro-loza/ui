@@ -36,6 +36,15 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/_linux
+/codestyles
+/colors
+colors.scheme.xml
+debugger.xml
+editor.xml
+filetypes.xml
+ide.general.xml
+material_theme.xml
 
 # System Files
 .DS_Store
