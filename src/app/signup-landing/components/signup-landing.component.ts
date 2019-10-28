@@ -13,6 +13,7 @@ export class SignupLandingComponent implements OnInit {
   lottieAnimations: string[];
   stopIterationCauseClick: Boolean;
   unorderedList: HTMLCollection;
+  lottieAnimation: any;
 
   @ViewChild('lottieElement', { static: false }) lottieElement: ElementRef;
   @ViewChild('sidenav', { static: false }) sidenav: ElementRef;
@@ -70,12 +71,13 @@ export class SignupLandingComponent implements OnInit {
 
   itemSelectedEvent(index: number) {
     this.stopIterationCauseClick = true
+    this.lottieAnimation.destroy();
     this.setAllInactiveState(this.unorderedList.length);
     this.setActiveState(index);
   }
 
   setupLottieAnimation(index: number) {
-    const lottieAnimation = LottieView.loadAnimation({
+    this.lottieAnimation = LottieView.loadAnimation({
       container: this.renderer.selectRootElement(this.lottieElement.nativeElement),
       path: `../../../assets/animations/${this.lottieAnimations[index]}.json`,
       renderer: 'svg',
@@ -83,7 +85,7 @@ export class SignupLandingComponent implements OnInit {
       autoplay: true,
       name: this.lottieAnimations[index]
     });
-    lottieAnimation.play();
+    this.lottieAnimation.play();
   }
 
 }
