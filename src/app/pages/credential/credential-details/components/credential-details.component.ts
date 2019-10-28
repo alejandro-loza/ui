@@ -72,7 +72,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     const modal = new M.Modal(this.elModal.nativeElement);
     const modal2 = new M.Modal(this.elModal2.nativeElement);
-    const modal3 = new M.Modal(this.elModal3.nativeElement);
+    const modal3 = new M.Modal(this.elModal3.nativeElement, { dismissible: false });
   }
 
   getData() {
