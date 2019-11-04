@@ -1,0 +1,10 @@
+<templateSet group="user">
+  <template name="forIn" value="for (const $key$ in $object$) {&#10;      if ($object$.hasOwnProperty($key$)) {&#10;        const element = $object$[$key$];&#10;        $END$&#10;      }&#10;    }" description="For-In Loop (TypeScript Language Basics)" toReformat="true" toShortenFQNames="true">
+    <variable name="key" expression="" defaultValue="&quot;key&quot;" alwaysStopAt="true" />
+    <variable name="object" expression="" defaultValue="&quot;object&quot;" alwaysStopAt="true" />
+    <context>
+      <option name="JS_STATEMENT" value="true" />
+      <option name="TS_STATEMENT" value="true" />
+    </context>
+  </template>
+</templateSet>
