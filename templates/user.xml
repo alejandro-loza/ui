@@ -7,4 +7,13 @@
       <option name="TS_STATEMENT" value="true" />
     </context>
   </template>
+  <template name="conditionOneLine" value="if ( $props$ ) { $assing$ = $props$; }&#10;$end$" description="It's just to see an if in one line" toReformat="false" toShortenFQNames="true">
+    <variable name="props" expression="" defaultValue="&quot;props&quot;" alwaysStopAt="true" />
+    <variable name="assing" expression="" defaultValue="&quot;assign&quot;" alwaysStopAt="true" />
+    <variable name="end" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JS_STATEMENT" value="true" />
+      <option name="TS_STATEMENT" value="true" />
+    </context>
+  </template>
 </templateSet>
