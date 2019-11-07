@@ -175,11 +175,9 @@ export class OauthService {
       return;
     }
 
-    const accounts = this.matDialogRef.componentInstance.accounts;
+    let accounts = this.matDialogRef.componentInstance.accounts;
 
     const hasAccount = accounts.find( account => account.id === auxAccount.id );
-
-    const hasFinished = accounts.find( account => account.status === CredentialStatusEnum.MOVEMENTS_CREATE_END );
 
     if ( hasAccount ) {
 
@@ -191,19 +189,23 @@ export class OauthService {
 
         }
 
-        if ( hasFinished ) {
-
-          this.cleanerService.cleanAllVariables();
-
-          this.matDialogRef.componentInstance.hasFinished = hasFinished;
-
-          this.router.navigate(['/app/credentials']).then();
-
-        }
-
         return account;
 
       });
+
+      accounts = this.matDialogRef.componentInstance.accounts;
+
+      const hasFinished = accounts.find( acc => acc.status === CredentialStatusEnum.MOVEMENTS_CREATE_END );
+
+      if ( hasFinished ) {
+
+        this.cleanerService.cleanAllVariables();
+
+        this.matDialogRef.componentInstance.hasFinished = hasFinished;
+
+        this.router.navigate(['/app/credentials']).then();
+
+      }
 
     } else if (auxAccount.id) {
 
