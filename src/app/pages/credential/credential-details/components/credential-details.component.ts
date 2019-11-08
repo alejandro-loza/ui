@@ -189,13 +189,17 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
   getAccounts() {
 
-    if ( !isUndefined( this.statefulAccounts.accounts ) ) {
+    if ( !isUndefined( this.statefulAccounts.accounts ) && this.statefulAccounts.accounts.length > 0 ) {
 
       this.accounts = this.statefulAccounts.accounts.filter( account => account.institution.code === this.credential.institution.code );
 
     } else {
 
-      this.accountService.getAccounts().subscribe( () => this.getAccounts() );
+      this.accountService.getAccounts().subscribe( res => {
+
+        this.accounts = res.body.data.filter( account => account.institution.code === this.credential.institution.code );
+
+      });
 
     }
   }

@@ -5,9 +5,9 @@
 export const environment = {
   envName: 'dev',
   production: false,
-  backendUrl: 'http://ec2-18-190-47-42.us-east-2.compute.amazonaws.com:8081/api',
+  backendUrl: 'https://charanko.finerio.mx/api',
   newBackendUrl: 'https://api-v2.finerio.mx',
-  xuangaUrl: 'http://ec2-18-190-47-42.us-east-2.compute.amazonaws.com:8080/api',
+  xuangaUrl: 'https://charanko.finerio.mx/api',
   apiUrl: 'https://api.finerio.mx',
   firebaseConfig: {
     apiKey: 'AIzaSyC3dN2i9Sy2aSxR0Q0bW7G0238PvQPq-lI',

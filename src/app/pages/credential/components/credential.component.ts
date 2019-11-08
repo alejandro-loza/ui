@@ -109,7 +109,7 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
       if (  this.credentials.length === 0 && this.manualAccounts.length === 0 ) {
 
-        this.showEmptyState = false;
+        this.showEmptyState = true;
 
       }
 
