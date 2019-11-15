@@ -25,7 +25,7 @@ export class InstitutionService {
 
   getAllInstitutions(): Observable<HttpResponse<Response<InstitutionInterface>>> {
     return this.httpClient.get<Response<InstitutionInterface>>(
-      `${environment.xuangaUrl}/institutions`,
+      `${environment.backendUrl}/institutions`,
       {
         observe: 'response',
         headers: this.configService.getHeaders

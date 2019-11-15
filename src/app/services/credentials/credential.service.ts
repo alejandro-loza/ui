@@ -38,7 +38,7 @@ export class CredentialService {
 
   getAllCredentials( ): Observable<HttpResponse<Response<CredentialInterface>>> {
     const id = this.configService.getUser.id;
-    const url = `${environment.xuangaUrl}/users/${ id }/credentials`;
+    const url = `${environment.backendUrl}/users/${ id }/credentials`;
     return this.httpClient.get<Response<CredentialInterface>>(
       url,
       {

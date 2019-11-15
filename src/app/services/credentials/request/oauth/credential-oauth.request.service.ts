@@ -31,7 +31,7 @@ export class CredentialOauthRequestService implements CredentialOauthRequest {
 
     const id = this.configService.getUser.id;
 
-    const url = `${environment.xuangaUrl}/users/${ id }/credentials`;
+    const url = `${environment.backendUrl}/users/${ id }/credentials`;
 
     const headers = this.configService.getHeaders;
 
@@ -45,7 +45,7 @@ export class CredentialOauthRequestService implements CredentialOauthRequest {
 
     const body = JSON.stringify( credential );
 
-    const url = `${environment.xuangaUrl}/credentials/${ credential.id }`;
+    const url = `${environment.backendUrl}/credentials/${ credential.id }`;
 
     const headers = this.configService.getHeaders;
 
