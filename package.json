@@ -1,6 +1,6 @@
 {
   "name": "finerio-ui",
-  "version": "2.4.0",
+  "version": "2.4.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -27,7 +27,7 @@
     "@ng-idle/core": "^6.0.0-beta.5",
     "@ng-idle/keepalive": "^6.0.0-beta.5",
     "animate.css": "^3.7.2",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.1",
     "core-js": "^2.6.9",
     "firebase": "^7.1.0",
     "hammerjs": "^2.0.8",
@@ -54,11 +54,11 @@
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~1.7.1",
     "karma-chrome-launcher": "~2.2.0",
-    "karma-coverage-istanbul-reporter": "^2.0.4",
+    "karma-coverage-istanbul-reporter": "^2.1.0",
     "karma-jasmine": "^1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "^5.4.2",
     "ts-node": "~5.0.1",
-    "typescript": "^3.4.5"
+    "typescript": "~3.4.5"
   }
 }

@@ -1,0 +1,22 @@
+.name-account {
+  margin-top: 1vw;
+}
+
+.bank-logo {
+  width: 12vw;
+  margin: 1vw 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.text-helper {
+  color: #5D688C;
+  cursor: pointer;
+  transition: all ease-in-out 250ms;
+}
+
+.text-helper:hover {
+  color: #000000;
+}
