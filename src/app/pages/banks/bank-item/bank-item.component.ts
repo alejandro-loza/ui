@@ -1,8 +1,19 @@
-import {Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
-import { Router } from '@angular/router';
-import { InstitutionInterface } from '@interfaces/institution.interface';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+
 import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
+import {OauthService} from '@services/oauth/oauth.service';
+
+import {InstitutionInterface} from '@interfaces/institution.interface';
+
 import * as M from 'materialize-css/dist/js/materialize';
+import {ToastService} from '@services/toast/toast.service';
+import {CleanerService} from '@services/cleaner/cleaner.service';
+import {StatefulCredentialService} from '@stateful/credential/stateful-credential.service';
+import {StatefulCredentialsService} from '@stateful/credentials/stateful-credentials.service';
+import {CredentialService} from '@services/credentials/credential.service';
+import {isUndefined} from 'util';
+import {AccountService} from '@services/account/account.service';
 
 @Component({
   selector: 'app-bank-item',
@@ -17,7 +28,14 @@ export class BankItemComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: Router,
-    private statefulInstitution: StatefulInstitutionService
+    private statefulInstitution: StatefulInstitutionService,
+    private statefulCredentialsService: StatefulCredentialsService,
+    private statefulCredential: StatefulCredentialService,
+    private credentialService: CredentialService,
+    private accountService: AccountService,
+    private oauthService: OauthService,
+    private toastService: ToastService,
+    private cleanService: CleanerService
   ) {}
 
   ngOnInit() {}
@@ -34,11 +52,31 @@ export class BankItemComponent implements OnInit, AfterViewInit {
   institutionClick( institution: InstitutionInterface ) {
 
     const initTooltip = new M.Tooltip(this.elementTooltip.nativeElement);
+
     initTooltip.destroy();
 
-    if (institution.status === 'ACTIVE') {
+    if ( institution.status === 'ACTIVE' ) {
 
       this.statefulInstitution.institution = institution;
+
+      const auxCredential = this.getCredential( institution );
+
+      if ( auxCredential ) {
+
+        this.statefulCredential.credential = auxCredential;
+
+        return this.route.navigate( [ '/app', 'credentials', auxCredential.id ] );
+
+      }
+
+      if ( institution.code === 'BANREGIO' ) {
+
+        this.validateCredential( institution );
+
+        return;
+
+      }
+
       return this.route.navigate(['/app', 'banks', institution.code]);
 
     } else {
@@ -46,5 +84,32 @@ export class BankItemComponent implements OnInit, AfterViewInit {
       this.bankOutOfService.emit(true);
 
     }
+
   }
+
+  private validateCredential( institution: InstitutionInterface ) {
+
+    this.toastService.setCode = 200;
+    this.toastService.setMessage = `Estamos conectándonos con ${ institution.name }`;
+    this.toastService.toastGeneral();
+
+    this.oauthService.validateCredential( institution ).subscribe(
+
+      res => {
+
+        this.credentialService.getAllCredentials().subscribe();
+        this.oauthService.createPopUp( res );
+
+      },
+      () => {},
+      () => this.cleanService.cleanAllVariables()
+
+    );
+
+  }
+
+  private getCredential ( institution: InstitutionInterface ) {
+    return this.statefulCredentialsService.credentials.find( credential => credential.institution.id === institution.id );
+  }
+
 }

@@ -12,37 +12,43 @@ import { CredentialUpdateResponse } from '@interfaces/credentials/credential-upd
 import { Subscription } from 'rxjs';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class MethodCredentialService implements CredentialUpdateResponse {
-	constructor(
-		private credentialsService: CredentialService,
-		private dateApiService: DateApiService,
-		private checkDataCredentialService: CheckDataCredentialService,
-		private pollingCredentialService: PollingCredentialService,
-		private trackingCredentialService: TrackingCredentialService
-	) {}
+  constructor(
+    private credentialsService: CredentialService,
+    private dateApiService: DateApiService,
+    private checkDataCredentialService: CheckDataCredentialService,
+    private pollingCredentialService: PollingCredentialService,
+    private trackingCredentialService: TrackingCredentialService
+  ) {}
 
-	updateCredential(credential: CredentialInterface) {
-		if (this.dateApiService.hasMoreThanEightHours(credential.lastUpdated) || credential.status === 'INVALID') {
-			this.credentialsService.updateCredential(credential).subscribe((res) => {
-				if (credential.password) {
-					this.trackingCredentialService.editCredential(res.body);
-				}
+  updateCredential(credential: CredentialInterface) {
 
-				this.checkDataCredentialService.checkData(res.body, this);
-			});
-		}
-	}
+    if ( credential.institution.code === 'BANREGIO' ) {
+      return;
+    }
 
-	createCredential(credential: CreateCredentialInterface) {
-		this.credentialsService.createCredential(credential).subscribe((res) => {
-			this.trackingCredentialService.createCredential(res.body);
-			this.checkDataCredentialService.checkData(res.body, this);
-		});
-	}
+    if (( this.dateApiService.hasMoreThanEightHours(credential.lastUpdated) || credential.status === 'INVALID') ) {
 
-	checkCredentialSyncing(credential: CredentialInterface, subscription: Subscription) {
-		this.pollingCredentialService.unsubscribeFromProcessing(credential, subscription);
-	}
+      this.credentialsService.updateCredential(credential).subscribe((res) => {
+        if (credential.password) {
+          this.trackingCredentialService.editCredential(res.body);
+        }
+
+        this.checkDataCredentialService.checkData(res.body, this);
+      });
+    }
+  }
+
+  createCredential(credential: CreateCredentialInterface) {
+    this.credentialsService.createCredential(credential).subscribe((res) => {
+      this.trackingCredentialService.createCredential(res.body);
+      this.checkDataCredentialService.checkData(res.body, this);
+    });
+  }
+
+  checkCredentialSyncing(credential: CredentialInterface, subscription: Subscription) {
+    this.pollingCredentialService.unsubscribeFromProcessing(credential, subscription);
+  }
 }

@@ -14,7 +14,7 @@ import {Subscription} from 'rxjs';
 import {CheckDataCredentialService} from '@services/credentials/check-data/check-data-credential.service';
 import {CredentialUpdateResponse} from '@interfaces/credentials/credential-update-response';
 import {CredentialService} from '@services/credentials/credential.service';
-import {MatDialog} from '@angular/material';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-credential',
@@ -50,7 +50,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
     private accountService: AccountService,
     private credentialService: CredentialService,
     private checkDataCredentialService: CheckDataCredentialService,
-    public matDialog:                       MatDialog,
     private methodCredentialService: MethodCredentialService,
     private pollingCredentialService: PollingCredentialService,
     private statefulAccountsService: StatefulAccountsService,
@@ -69,8 +68,6 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   ngOnInit() {
 
     this.getAccounts();
-
-    this.getCredentials();
 
   }
 
@@ -108,12 +105,18 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
 
   emptyStateProcess() {
 
-    if ( this.accounts && this.manualAccounts ) {
-      this.showEmptyState = this.credentials.length === 0 && ( this.accounts.length === 0 && this.manualAccounts.length === 0 );
-    } else if ( this.accounts || this.manualAccounts ) {
-      this.showEmptyState = this.credentials.length === 0 && ( this.accounts.length === 0 || this.manualAccounts.length === 0 );
+    if ( this.accounts.length <= 1 ) {
+
+      if (  this.credentials.length === 0 && this.manualAccounts.length === 0 ) {
+
+        this.showEmptyState = true;
+
+      }
+
     } else {
-      this.showEmptyState = this.credentials.length === 0;
+
+      this.showEmptyState = false;
+
     }
 
     this.showSpinner = false;
@@ -140,7 +143,9 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
   }
 
   getCredentials() {
-    if (this.statefulCredentialsService.credentials) {
+
+    if ( this.statefulCredentialsService.credentials ) {
+
       this.credentials = this.statefulCredentialsService.credentials;
 
       this.credentials.forEach( credential => this.checkDataCredentialService.checkData( credential, this ));
@@ -152,18 +157,18 @@ export class CredentialComponent implements OnInit, AfterViewInit, CredentialUpd
       this.fillInformationForEmptyState();
 
     } else {
-      this.credentialService.getAllCredentials().subscribe( res => {
-        this.getCredentials();
-      });
+      this.credentialService.getAllCredentials().subscribe( () => this.getCredentials() );
     }
   }
 
   getAccounts() {
 
-    if ( this.statefulAccountsService.accounts && this.statefulAccountsService.manualAccounts ) {
+    if ( !isUndefined( this.statefulAccountsService.accounts ) && !isUndefined( this.statefulAccountsService.manualAccounts ) ) {
 
       this.accounts = this.statefulAccountsService.accounts;
       this.manualAccounts = this.statefulAccountsService.manualAccounts;
+
+      this.getCredentials();
 
     } else {
       this.accountService.getAccounts().subscribe( () => this.getAccounts());

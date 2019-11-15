@@ -14,4 +14,5 @@ export interface AccountInterface {
     number?: string;
     type?: string;
     user?: User;
+    status?: string;
 }
