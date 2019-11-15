@@ -52,6 +52,7 @@ ul{
   border: 2px solid red!important;
   background-color: red!important;
 }
+
 #passwordError{
   color: red;
   font-size: 12px;

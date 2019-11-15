@@ -1,8 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {NgForm} from '@angular/forms';
-import {InteractiveFieldService} from '@services/interactive-field/interactive-field.service';
-import {CredentialInterface} from '@interfaces/credentials/credential.interface';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { NgForm } from '@angular/forms';
+import { InteractiveFieldService } from '@services/interactive-field/interactive-field.service';
+import { CredentialInterface } from '@interfaces/credentials/credential.interface';
 
 @Component({
   selector: 'app-modal-token',

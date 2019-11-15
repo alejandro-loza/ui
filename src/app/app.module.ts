@@ -61,4 +61,4 @@ import {ModalAccountSyncComponent} from '@components/modal-account-sync/componen
   ],
   bootstrap: [ AppComponent ]
 })
-export class AppModule {}
+export class AppModule { }
