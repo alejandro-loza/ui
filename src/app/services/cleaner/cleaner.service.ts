@@ -98,11 +98,6 @@ export class CleanerService {
     this.statefulCredential.credential = undefined;
   }
 
-  // Cleans institutions data service
-  cleanInstitutions() {
-    this.statefulInstitutions.institutions = undefined;
-  }
-
   cleanAccounts() {
     this.statefulAccounts.accounts = undefined;
     this.statefulAccounts.manualAccounts = undefined;

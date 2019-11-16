@@ -25,6 +25,7 @@
       "@directives/*": ["app/directives/*"],
       "@env/*": ["environments/*"],
       "@guards/*": ["app/guards/*"],
+      "@model/*": ["app/model/*"],
       "@pages/*": ["app/pages/*"],
       "@params/*": ["app/params/*"],
       "@shared/*": ["app/shared/*"],

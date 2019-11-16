@@ -27,9 +27,10 @@ export class CredentialItemComponent implements OnInit {
   }
 
   showSyncButton() {
-    if (this.credential.status === 'INVALID' || this.dateApiService.hasMoreThanEightHours(this.credential.lastUpdated)) {
-      this.showButton = true;
-    }
+    const showButton =
+      ( this.credential.status === 'INVALID' || this.dateApiService.hasMoreThanEightHours( this.credential.lastUpdated ) ) &&
+      this.credential.institution.code !== 'BANREGIO';
+    if ( showButton ) { this.showButton = true; }
   }
 
   syncButton(event: Event) {
