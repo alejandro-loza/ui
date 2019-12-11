@@ -1,15 +1,12 @@
 import {Component, OnInit, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HelpTexts } from '@services/banks/help-texts';
 
 import { FieldService } from '@services/field/field.service';
-import { CredentialService } from '@services/credentials/credential.service';
 import { Patterns } from '@services/banks/patterns.service';
-import { ConfigService } from '@services/config/config.service';
 import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
-import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
 import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
 
 import { CreateCredentialInterface } from '@interfaces/credentials/createCredential.interface';
@@ -38,14 +35,10 @@ export class BankFormComponent implements OnInit, AfterViewInit {
   elModal: ElementRef;
 
   constructor(
-    private activated: ActivatedRoute,
-    private configService: ConfigService,
-    private credentialService: CredentialService,
     private cleanerService: CleanerService,
     private field: FieldService,
     private methodCredential: MethodCredentialService,
     private patterns: Patterns,
-    private pollingCredentialService: PollingCredentialService,
     private router: Router,
     private statefulInstitutions: StatefulInstitutionsService,
     private statefulInstitution: StatefulInstitutionService,
@@ -84,13 +77,9 @@ export class BankFormComponent implements OnInit, AfterViewInit {
     this.field.findAllFieldsByInstitution(this.institution.code)
       .subscribe(res => {
         this.institutionField = res.body;
-        this.institutionField = this.institutionField.filter(field => field.name !== 'sec_code');
         this.institutionField.forEach(field => this.getErrorMessage(field));
-
         this.showSpinner = !(this.institutionField.length > 0);
-
         this.openBBVAModal();
-
       }
     );
   }

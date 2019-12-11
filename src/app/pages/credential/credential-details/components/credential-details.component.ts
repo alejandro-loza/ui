@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 import { AccountService } from '@services/account/account.service';
@@ -14,7 +14,6 @@ import { InstitutionFieldInterface } from '@interfaces/institutionField';
 import { CredentialInterface } from '@interfaces/credentials/credential.interface';
 import { AccountInterface } from '@interfaces/account.interfaces';
 import { InstitutionInterface } from '@app/interfaces/institution.interface';
-import { MixpanelService } from '@services/mixpanel/mixpanel.service';
 
 import * as M from 'materialize-css/dist/js/materialize';
 import { StatefulCredentialService } from '@stateful/credential/stateful-credential.service';
@@ -46,14 +45,12 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   elModal3: ElementRef;
 
   constructor(
-    private activated: ActivatedRoute,
     private accountService: AccountService,
     private cleanerService: CleanerService,
     private credentialService: CredentialService,
     private dateApi: DateApiService,
     private fieldService: FieldService,
     private methodCredential: MethodCredentialService,
-    private mixpanelService: MixpanelService,
     private oAuthService: OauthService,
     private router: Router,
     private statefulAccounts: StatefulAccountsService,
