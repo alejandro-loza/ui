@@ -1,15 +1,12 @@
 import {Component, OnInit, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HelpTexts } from '@services/banks/help-texts';
 
 import { FieldService } from '@services/field/field.service';
-import { CredentialService } from '@services/credentials/credential.service';
 import { Patterns } from '@services/banks/patterns.service';
-import { ConfigService } from '@services/config/config.service';
 import {StatefulInstitutionsService} from '@stateful/institutions/stateful-institutions.service';
 import {MethodCredentialService} from '@services/credentials/method-credential/method-credential.service';
-import {PollingCredentialService} from '@services/credentials/polling-credential/polling-credential.service';
 import {StatefulInstitutionService} from '@stateful/institution/stateful-institution.service';
 
 import { CreateCredentialInterface } from '@interfaces/credentials/createCredential.interface';
@@ -18,6 +15,7 @@ import { InstitutionInterface } from '@interfaces/institution.interface';
 
 import * as M from 'materialize-css/dist/js/materialize';
 import {CleanerService} from '@services/cleaner/cleaner.service';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-bank-form',
@@ -34,45 +32,35 @@ export class BankFormComponent implements OnInit, AfterViewInit {
   usernameErrorMessage: string;
   passwordErrorMessage: string;
 
-  @ViewChild('modal', { static: false })
-  elModal: ElementRef;
+  @ViewChild('modal', { static: false }) elModal: ElementRef;
 
   constructor(
-    private activated: ActivatedRoute,
-    private configService: ConfigService,
-    private credentialService: CredentialService,
     private cleanerService: CleanerService,
     private field: FieldService,
     private methodCredential: MethodCredentialService,
     private patterns: Patterns,
-    private pollingCredentialService: PollingCredentialService,
     private router: Router,
     private statefulInstitutions: StatefulInstitutionsService,
     private statefulInstitution: StatefulInstitutionService,
     private helpTexts: HelpTexts,
   ) {
+    this.institution = this.statefulInstitution.institution;
     this.showSpinner = true;
     this.showVideos  = false;
+    this.usernameErrorMessage = '';
+    this.passwordErrorMessage = '';
     this.credential = {
       institution: null,
       password: null,
       securityCode: null,
       username: null
     };
-    this.usernameErrorMessage = '';
-    this.passwordErrorMessage = '';
   }
 
   ngOnInit() {
-
-    this.institution = this.statefulInstitution.institution;
-
     this.settingTexts();
-
     this.showvideoBBVA();
-
     this.getFields();
-
   }
 
   ngAfterViewInit() {
@@ -81,18 +69,14 @@ export class BankFormComponent implements OnInit, AfterViewInit {
 
   getFields() {
 
-    this.field.findAllFieldsByInstitution(this.institution.code)
-      .subscribe(res => {
+    this.field.findAllFieldsByInstitution(this.institution.code).subscribe( res => {
         this.institutionField = res.body;
-        this.institutionField = this.institutionField.filter(field => field.name !== 'sec_code');
         this.institutionField.forEach(field => this.getErrorMessage(field));
-
         this.showSpinner = !(this.institutionField.length > 0);
-
         this.openBBVAModal();
-
       }
     );
+
   }
 
   submit(form: NgForm) {
@@ -100,15 +84,11 @@ export class BankFormComponent implements OnInit, AfterViewInit {
     this.showSpinner = true;
 
     this.credential.username = form.value.username;
-
     this.credential.password = form.value.password;
-
-    this.credential.securityCode = form.value.sec_code;
-
+    this.credential.securityCode = this.getFormattedDate( form.value.sec_code );
     this.credential.institution = this.findCurrentInstitution();
 
     this.methodCredential.createCredential(this.credential);
-
     this.cleanerService.cleanAllVariables();
 
     M.toast({
@@ -120,6 +100,26 @@ export class BankFormComponent implements OnInit, AfterViewInit {
       return this.router.navigate(['/app', 'credentials']);
     }, 1000);
 
+  }
+
+  getFormattedDate( date: string ): string { 
+
+    if ( isNullOrUndefined( date ) ) { return }  
+
+    let newDate = new Date( new Date( date ).getTime() + 
+                            new Date( date ).getTimezoneOffset() * 
+                            60 * 
+                            1000 );
+    
+    let year = newDate.getFullYear().toString();
+    let month = ( newDate.getMonth() + 1 ).toString();
+    let day = newDate.getDate().toString();
+   
+    if ( newDate.getDate() < 10 ) {
+      day = "0" + day
+    }
+
+    return year + month + day;
   }
 
 
@@ -139,19 +139,13 @@ export class BankFormComponent implements OnInit, AfterViewInit {
   }
 
   settingTexts() {
-
     this.helpText = this.helpTexts.getText(this.institution.code);
-
   }
 
   showvideoBBVA() {
-
     if (this.institution.code === 'BBVA') {
-
       this.showVideos = true;
-
     }
-
   }
 
   openBBVAModal() {

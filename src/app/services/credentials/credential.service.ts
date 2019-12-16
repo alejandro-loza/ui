@@ -13,6 +13,7 @@ import {Response} from '@interfaces/response.interface';
 
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import { UpdateCredential } from '@app/interfaces/credentials/updateCredential.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -72,7 +73,7 @@ export class CredentialService {
     );
   }
 
-  updateCredential( credential: CredentialInterface ): Observable<HttpResponse<CredentialInterface>> {
+  updateCredential( credential: any ): Observable<HttpResponse<CredentialInterface>> {
     const postBody = JSON.stringify(credential);
     const url = `${environment.backendUrl}/credentials/${credential.id}`;
     return this.httpClient.put<CredentialInterface>(url, postBody, {

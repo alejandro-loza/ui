@@ -19,16 +19,19 @@
     <div class="row"> 
         <div *ngIf="!showSpinner" class="col s10 offset-s1 m6 offset-m3 center">
             <form #bank="ngForm" (ngSubmit)="submit(bank)">
-                <div class="input-field s10 m6" *ngFor="let field of institutionField; let i = index">
+                <div class="input-field s10 m6" *ngFor="let field of institutionField; let last = last">
                         <input
                         ngModel
-                        type="{{ field.type }}"
+                        autocomplete="new-password"
+                        type="{{ field.name == 'sec_code' ? 'date' : field.type }}"
                         class="{{ field.institutionId }} validate"
                         placeholder="{{ field.friendlyName }}"
                         name="{{ field.name }}"
                         [pattern]="getPattern( field )"
-                        [required]="field.name != 'sec_code'">
-                        <span class="helper-text" [attr.data-error]="field.name == 'username' ? usernameErrorMessage : passwordErrorMessage"></span>
+                        required >
+                        <span class="helper-text" [attr.data-error]="field.name == 'username' ? 
+                        usernameErrorMessage : 
+                        field.name != 'sec_code' ? passwordErrorMessage : 'Necesitamos tu fecha de nacimiento.'"></span>
                 </div>
                 <button class="mt-10 btn background" [disabled]="!bank.valid" type="submit" id="newCredentials">
                     Agregar
