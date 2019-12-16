@@ -21,7 +21,8 @@ import { DateApiService } from '@services/date-api/date-api.service';
 import { StatefulAccountsService } from '@stateful/accounts/stateful-accounts.service';
 import { MethodCredentialService } from '@services/credentials/method-credential/method-credential.service';
 import {OauthService} from '@services/oauth/oauth.service';
-import {isUndefined} from 'util';
+import {isUndefined, isNullOrUndefined} from 'util';
+import { UpdateCredential } from '@app/interfaces/credentials/updateCredential.interface';
 
 @Component({
   selector: 'app-credential-details',
@@ -73,18 +74,12 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   getData() {
-
     this.institutions = this.statefulInstitutions.institutions;
-
     this.getCredentials();
-
     this.getAccounts();
-
   }
 
   getFields() {
-    // Obtenemos los campos a mostrar de la institución mostrada y borramos el primer campo
-    // que en todos los casos es el username.
     this.fieldService.findAllFieldsByInstitution(this.credential.institution.code).subscribe(
       (res) => {
         this.fields = res.body
@@ -100,26 +95,26 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     );
   }
 
-  updateCredential(credential: CredentialInterface, data: NgForm) {
-
-    if ( credential.institution.code === 'BANREGIO' ) {
-
-      this.updateCredentialOauth( credential );
-
+  submit( data: NgForm ) {
+    if ( this.credential.institution.code === 'BANREGIO' ) {
+      this.updateCredentialOauth( this.credential );
     } else {
-
-      this.updateCredentialProcess( credential, data );
-
+      this.updateCredentialProcess( this.credential, data );
     }
-
   }
 
   private updateCredentialProcess( credential: CredentialInterface, data: NgForm ) {
-    this.dateApi.hasMoreThanEightHours(credential.lastUpdated) || credential.status === 'INVALID'
-      ? credential.status === 'ACTIVE'
-      ? this.activeCredential(credential)
-      : this.invalidCredential(credential, data)
-      : this.cantUpdateToast();
+    if (this.dateApi.hasMoreThanEightHours(credential.lastUpdated) || credential.status === 'INVALID') {
+
+      if ( credential.status === 'ACTIVE' ) {
+        this.activeCredential(credential)
+      } else {
+        this.invalidCredential(credential, data)
+      }
+
+    } else {
+      this.cantUpdateToast();
+    }
   }
 
   private updateCredentialOauth( credentialInterface: CredentialInterface ) {
@@ -135,9 +130,34 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
 
   invalidCredential(credential: CredentialInterface, data: NgForm) {
     this.openLoaderModal();
-    const auxCredential = { ...credential, password: data.value.password };
-    this.methodCredential.updateCredential(auxCredential);
+    let auxCredential: UpdateCredential = {
+      id : this.credential.id,
+      password: data.value.password,
+      securityCode: this.getFormattedDate( data.value.sec_code )
+    };
+
+    this.methodCredential.updateCredential(credential, auxCredential);
     this.closeLoaderModal();
+  }
+
+  getFormattedDate( date: string ): string { 
+
+    if ( isNullOrUndefined( date ) ) { return }  
+
+    let newDate = new Date( new Date( date ).getTime() + 
+                            new Date( date ).getTimezoneOffset() * 
+                            60 * 
+                            1000 );
+    
+    let year = newDate.getFullYear().toString();
+    let month = ( newDate.getMonth() + 1 ).toString();
+    let day = newDate.getDate().toString();
+   
+    if ( newDate.getDate() < 10 ) {
+      day = "0" + day
+    }
+
+    return year + month + day;
   }
 
   activeCredential(credential: CredentialInterface) {
@@ -174,6 +194,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   closeLoaderModal() {
     const instanceModal = M.Modal.getInstance(this.elModal3.nativeElement);
     instanceModal.close();
+    this.cleanerService.cleanAllVariables();
     this.router.navigateByUrl('/app/credentials');
   }
 

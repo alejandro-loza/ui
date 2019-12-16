@@ -10,6 +10,8 @@ import { TrackingCredentialService } from '@services/credentials/tracking-creden
 import { CheckDataCredentialService } from '@services/credentials/check-data/check-data-credential.service';
 import { CredentialUpdateResponse } from '@interfaces/credentials/credential-update-response';
 import { Subscription } from 'rxjs';
+import { UpdateCredential } from '@app/interfaces/credentials/updateCredential.interface';
+import { isNullOrUndefined } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,7 @@ export class MethodCredentialService implements CredentialUpdateResponse {
     private trackingCredentialService: TrackingCredentialService
   ) {}
 
-  updateCredential(credential: CredentialInterface) {
+  updateCredential(credential: CredentialInterface, updateCredential?: UpdateCredential) {
 
     if ( credential.institution.code === 'BANREGIO' ) {
       return;
@@ -31,7 +33,7 @@ export class MethodCredentialService implements CredentialUpdateResponse {
 
     if (( this.dateApiService.hasMoreThanEightHours(credential.lastUpdated) || credential.status === 'INVALID') ) {
 
-      this.credentialsService.updateCredential(credential).subscribe((res) => {
+      this.credentialsService.updateCredential( isNullOrUndefined(updateCredential.id) ? credential : updateCredential ).subscribe((res) => {
         if (credential.password) {
           this.trackingCredentialService.editCredential(res.body);
         }
