@@ -87,7 +87,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     // que en todos los casos es el username.
     this.fieldService.findAllFieldsByInstitution(this.credential.institution.code).subscribe(
       (res) => {
-        this.fields = res.body.filter((field) => field.name !== 'sec_code');
+        this.fields = res.body
         this.fields.shift();
       },
       (err) => {
