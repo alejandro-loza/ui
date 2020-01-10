@@ -31,6 +31,7 @@ export class BankFormComponent implements OnInit, AfterViewInit {
   helpText: string;
   usernameErrorMessage: string;
   passwordErrorMessage: string;
+  showHsbcErrorMessage: boolean;
 
   @ViewChild('modal', { static: false }) elModal: ElementRef;
 
@@ -47,6 +48,7 @@ export class BankFormComponent implements OnInit, AfterViewInit {
     this.institution = this.statefulInstitution.institution;
     this.showSpinner = true;
     this.showVideos  = false;
+    this.showHsbcErrorMessage = false;
     this.usernameErrorMessage = '';
     this.passwordErrorMessage = '';
     this.credential = {
@@ -81,8 +83,14 @@ export class BankFormComponent implements OnInit, AfterViewInit {
 
   submit(form: NgForm) {
 
-    this.showSpinner = true;
-
+    if( this.validHsbcDate( form.value.sec_code ) ) {
+      this.showSpinner = true;
+      this.showHsbcErrorMessage = false;
+    } else {
+      this.showHsbcErrorMessage = true;
+      return
+    }
+    
     this.credential.username = form.value.username;
     this.credential.password = form.value.password;
     this.credential.securityCode = this.getFormattedDate( form.value.sec_code );
@@ -100,6 +108,17 @@ export class BankFormComponent implements OnInit, AfterViewInit {
       return this.router.navigate(['/app', 'credentials']);
     }, 1000);
 
+  }
+
+  validHsbcDate( date:string ): boolean {
+    let currentDate = new Date()
+    let currentYear = new Date( date ).getFullYear();
+
+    if( currentYear == currentDate.getFullYear() ) {
+      return false
+    }
+    
+    return true
   }
 
   getFormattedDate( date: string ): string { 

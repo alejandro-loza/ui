@@ -37,6 +37,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   account: AccountInterface;
   institutions: InstitutionInterface[];
   credential: CredentialInterface;
+  showHsbcErrorMessage: boolean;
 
   @ViewChild('modal', { static: false })
   elModal: ElementRef;
@@ -60,6 +61,7 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
     private toastService: ToastService
   ) {
     this.showSpinner = true;
+    this.showHsbcErrorMessage = false;
   }
 
   ngOnInit() {
@@ -96,11 +98,30 @@ export class CredentialDetailsComponent implements OnInit, AfterViewInit {
   }
 
   submit( data: NgForm ) {
+    if( this.validHsbcDate( data.value.sec_code ) ) {
+      this.showSpinner = true;
+      this.showHsbcErrorMessage = false;
+    } else {
+      this.showHsbcErrorMessage = true;
+      return
+    }
+
     if ( this.credential.institution.code === 'BANREGIO' ) {
       this.updateCredentialOauth( this.credential );
     } else {
       this.updateCredentialProcess( this.credential, data );
     }
+  }
+
+  validHsbcDate( date:string ): boolean {
+    let currentDate = new Date()
+    let currentYear = new Date( date ).getFullYear();
+
+    if( currentYear == currentDate.getFullYear() ) {
+      return false
+    }
+    
+    return true
   }
 
   private updateCredentialProcess( credential: CredentialInterface, data: NgForm ) {

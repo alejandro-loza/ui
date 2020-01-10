@@ -37,6 +37,7 @@
                     Agregar
                 </button>
             </form>
+            <small *ngIf="showHsbcErrorMessage" id="red-text">Tu fecha de nacimiento no puede ser de este mismo año.</small>
         </div>
     </div>
     <div *ngIf="showVideos" class="row" id="videosRow">
