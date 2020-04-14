@@ -30,6 +30,7 @@ export class UserService {
       return throwError(new HttpErrorResponse({}));
     }
     const url = `${environment.backendUrl}/users/${this.configService.getUser.id}`;
+    alert(JSON.stringify(environment));
     return this.httpClient.put<User>(
       url,
       JSON.stringify(user),

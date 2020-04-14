@@ -40,6 +40,9 @@ export class LoginService {
   }
 
   login(user: User): Observable<HttpResponse<JWT>> {
+
+      alert(JSON.stringify(environment));
+
     return this.httpClient
       .post<JWT>(this.url, JSON.stringify({ username: user.email, password: user.password }), {
         observe: 'response',
