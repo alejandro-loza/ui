@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  envName: 'dev',
+  envName: 'default',
   production: false,
   backendUrl: 'https://api.finerio.mx/api',
   newBackendUrl: 'https://api-v2.finerio.mx',
